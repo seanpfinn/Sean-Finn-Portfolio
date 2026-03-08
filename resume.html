@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume – Sean Finn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .resume-content {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .resume-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .resume-name {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #2b2b2b;
+    }
+
+    .resume-title {
+      font-size: 15px;
+      color: #888;
+    }
+
+    .resume-contact {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .resume-contact a {
+      font-size: 13px;
+      color: #999;
+      transition: color 0.2s;
+    }
+
+    .resume-contact a:hover {
+      color: #ff401a;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid #ebebeb;
+    }
+
+    .resume-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-heading {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #bbb;
+    }
+
+    .resume-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px 16px;
+      align-items: start;
+    }
+
+    .ri-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .ri-role {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2b2b2b;
+    }
+
+    .ri-company {
+      font-size: 14px;
+      color: #777;
+    }
+
+    .ri-desc {
+      font-size: 13.5px;
+      color: #888;
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+
+    .ri-date {
+      font-size: 12.5px;
+      color: #bbb;
+      white-space: nowrap;
+      margin-top: 3px;
+    }
+
+    .skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-badge {
+      font-size: 13px;
+      color: #666;
+      background: #f4f4f2;
+      border: 1px solid #ebebeb;
+      padding: 5px 14px;
+      border-radius: 40px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 20px;
+      background: #2b2b2b;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      transition: background 0.2s ease;
+      width: fit-content;
+    }
+
+    .download-btn:hover {
+      background: #ff401a;
+    }
+
+    @media (max-width: 560px) {
+      .resume-item {
+        grid-template-columns: 1fr;
+      }
+
+      .ri-date {
+        color: #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE HEADER -->
+  <div class="mobile-header">
+    <a href="index.html" class="name-link">Sean Finn</a>
+    <nav class="mobile-nav">
+      <a href="index.html#work" class="nav-link">Work</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="resume.html" class="nav-link" style="color:#2b2b2b;">Resume</a>
+    </nav>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-top">
+          <div class="identity">
+            <a href="index.html" class="name-link">Sean Finn</a>
+            <p class="tagline">Product designer based in<br />Brooklyn, NY</p>
+          </div>
+          <nav class="nav">
+            <a href="index.html#work" class="nav-link">Work</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="resume.html" class="nav-link" style="color:#2b2b2b;">Resume</a>
+          </nav>
+        </div>
+        <div class="sidebar-bottom">
+          <div class="social-links">
+            <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+            <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+            <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://cal.com/seanpfinn" class="social-link" target="_blank" rel="noopener">Cal</a>
+          </div>
+          <p class="available">
+            <span class="dot"></span>
+            Available for new projects
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <div class="resume-content">
+
+        <!-- HEADER -->
+        <div class="resume-header">
+          <h1 class="resume-name">Sean Finn</h1>
+          <p class="resume-title">Senior Product Designer · Brooklyn, NY</p>
+          <div class="resume-contact">
+            <a href="mailto:sean@seanpfinn.com">sean@seanpfinn.com</a>
+            <a href="https://www.seanpfinn.com" target="_blank">seanpfinn.com</a>
+            <a href="https://linkedin.com/in/seanpfinn" target="_blank">LinkedIn</a>
+            <a href="https://x.com/seanpfinn" target="_blank">@seanpfinn</a>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- EXPERIENCE -->
+        <div class="resume-section">
+          <p class="section-heading">Experience</p>
+
+          <div class="resume-item">
+            <div class="ri-left">
+              <span class="ri-role">Senior Product Designer</span>
+              <span class="ri-company">CLEAR</span>
+              <p class="ri-desc">Shaping identity verification products and design systems that power seamless, secure user experiences at scale.</p>
+            </div>
+            <span class="ri-date">2023–Present</span>
+          </div>
+
+          <div class="resume-item">
+            <div class="ri-left">
+              <span class="ri-role">Head of UX</span>
+              <span class="ri-company">Becoming You Labs</span>
+              <p class="ri-desc">Led UX strategy and execution for an AI-powered wellness platform, building the design function from the ground up.</p>
+            </div>
+            <span class="ri-date">2022–2023</span>
+          </div>
+
+          <div class="resume-item">
+            <div class="ri-left">
+              <span class="ri-role">Product Designer</span>
+              <span class="ri-company">Recur</span>
+              <p class="ri-desc">Designed the Recur Forever NFT marketplace, onboarding mainstream users into Web3 via branded digital collectibles with Paramount, Hello Kitty, and 20+ brands.</p>
+            </div>
+            <span class="ri-date">2021–2022</span>
+          </div>
+
+          <div class="resume-item">
+            <div class="ri-left">
+              <span class="ri-role">Founder &amp; Designer</span>
+              <span class="ri-company">Finrez</span>
+              <p class="ri-desc">Running a boutique design studio delivering brand identity, product design, and web experiences for startups and growing companies.</p>
+            </div>
+            <span class="ri-date">2020–Present</span>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- SKILLS -->
+        <div class="resume-section">
+          <p class="section-heading">Skills</p>
+          <div class="skills-row">
+            <span class="skill-badge">Figma</span>
+            <span class="skill-badge">Product Design</span>
+            <span class="skill-badge">Design Systems</span>
+            <span class="skill-badge">Prototyping</span>
+            <span class="skill-badge">UX Research</span>
+            <span class="skill-badge">User Flows</span>
+            <span class="skill-badge">Interaction Design</span>
+            <span class="skill-badge">Brand Identity</span>
+            <span class="skill-badge">Framer</span>
+            <span class="skill-badge">Webflow</span>
+            <span class="skill-badge">0→1 Product</span>
+            <span class="skill-badge">Cross-functional</span>
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <!-- DOWNLOAD -->
+        <div>
+          <a href="#" class="download-btn">Download PDF ↓</a>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>
