@@ -4,287 +4,238 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resume – Sean Finn</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    .resume-content {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .resume-header {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .resume-name {
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #2b2b2b;
-    }
-
-    .resume-title {
-      font-size: 15px;
-      color: #888;
-    }
-
-    .resume-contact {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-
-    .resume-contact a {
-      font-size: 13px;
-      color: #999;
-      transition: color 0.2s;
-    }
-
-    .resume-contact a:hover {
-      color: #ff401a;
-    }
-
-    .section-divider {
-      border: none;
-      border-top: 1px solid #ebebeb;
-    }
-
-    .resume-section {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .section-heading {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #bbb;
-    }
-
-    .resume-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 4px 16px;
-      align-items: start;
-    }
-
-    .ri-left {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .ri-role {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2b2b2b;
-    }
-
-    .ri-company {
-      font-size: 14px;
-      color: #777;
-    }
-
-    .ri-desc {
-      font-size: 13.5px;
-      color: #888;
-      line-height: 1.6;
-      margin-top: 4px;
-    }
-
-    .ri-date {
-      font-size: 12.5px;
-      color: #bbb;
-      white-space: nowrap;
-      margin-top: 3px;
-    }
-
-    .skills-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-badge {
-      font-size: 13px;
-      color: #666;
-      background: #f4f4f2;
-      border: 1px solid #ebebeb;
-      padding: 5px 14px;
-      border-radius: 40px;
-    }
-
-    .download-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 20px;
-      background: #2b2b2b;
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #fff;
-      transition: background 0.2s ease;
-      width: fit-content;
-    }
-
-    .download-btn:hover {
-      background: #ff401a;
-    }
-
-    @media (max-width: 560px) {
-      .resume-item {
-        grid-template-columns: 1fr;
-      }
-
-      .ri-date {
-        color: #ccc;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="resume.css" />
 </head>
-<body>
+<body class="resume-body">
 
-  <!-- MOBILE HEADER -->
-  <div class="mobile-header">
-    <a href="index.html" class="name-link">Sean Finn</a>
-    <nav class="mobile-nav">
-      <a href="index.html#work" class="nav-link">Work</a>
+  <!-- MOBILE NAV -->
+  <header class="mobile-nav-bar">
+    <a href="/" class="nav-home">Sean Finn</a>
+    <div class="nav-links">
       <a href="about.html" class="nav-link">About</a>
-      <a href="resume.html" class="nav-link" style="color:#2b2b2b;">Resume</a>
-    </nav>
-  </div>
+      <a href="resume.html" class="nav-link nav-link--active">Resume</a>
+    </div>
+  </header>
 
-  <div class="page-wrapper">
+  <div class="resume-page">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-inner">
-        <div class="sidebar-top">
-          <div class="identity">
-            <a href="index.html" class="name-link">Sean Finn</a>
-            <p class="tagline">Product designer based in<br />Brooklyn, NY</p>
-          </div>
-          <nav class="nav">
-            <a href="index.html#work" class="nav-link">Work</a>
-            <a href="about.html" class="nav-link">About</a>
-            <a href="resume.html" class="nav-link" style="color:#2b2b2b;">Resume</a>
-          </nav>
-        </div>
-        <div class="sidebar-bottom">
-          <div class="social-links">
-            <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-            <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-            <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="https://cal.com/seanpfinn" class="social-link" target="_blank" rel="noopener">Cal</a>
-          </div>
-          <p class="available">
-            <span class="dot"></span>
-            Available for new projects
-          </p>
+    <!-- NAV -->
+    <nav class="resume-nav">
+      <div class="resume-nav-inner">
+        <a href="/" class="nav-home">Sean Finn</a>
+        <div class="nav-links">
+          <a href="about.html" class="nav-link">About</a>
+          <a href="resume.html" class="nav-link nav-link--active">Resume</a>
         </div>
       </div>
-    </aside>
+    </nav>
 
-    <!-- MAIN CONTENT -->
-    <main class="content">
-      <div class="resume-content">
+    <!-- CONTENT ROW -->
+    <div class="resume-content">
 
-        <!-- HEADER -->
+      <!-- LEFT: Experience -->
+      <main class="resume-main">
+
         <div class="resume-header">
           <h1 class="resume-name">Sean Finn</h1>
-          <p class="resume-title">Senior Product Designer · Brooklyn, NY</p>
-          <div class="resume-contact">
-            <a href="mailto:sean@seanpfinn.com">sean@seanpfinn.com</a>
-            <a href="https://www.seanpfinn.com" target="_blank">seanpfinn.com</a>
-            <a href="https://linkedin.com/in/seanpfinn" target="_blank">LinkedIn</a>
-            <a href="https://x.com/seanpfinn" target="_blank">@seanpfinn</a>
-          </div>
+          <p class="resume-bio">A product designer living in Brooklyn, NY. With 10+ years across tech, startups, and brand systems. I specialize in turning ambiguous concepts into user-validated products, scalable design systems, and high-impact digital experiences.</p>
         </div>
 
-        <hr class="section-divider" />
+        <section class="resume-section">
+          <h2 class="resume-section-title">Experience</h2>
 
-        <!-- EXPERIENCE -->
-        <div class="resume-section">
-          <p class="section-heading">Experience</p>
-
-          <div class="resume-item">
-            <div class="ri-left">
-              <span class="ri-role">Senior Product Designer</span>
-              <span class="ri-company">CLEAR</span>
-              <p class="ri-desc">Shaping identity verification products and design systems that power seamless, secure user experiences at scale.</p>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Senior Product Designer</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">CLEAR</span>
             </div>
-            <span class="ri-date">2023–Present</span>
+            <span class="resume-entry-dates">January 2026 - Present</span>
+            <p class="resume-entry-desc">Focusing on leveraging identity and trust to create seamless digital travel experiences that reduce friction and delight members across web and mobile platforms.</p>
           </div>
 
-          <div class="resume-item">
-            <div class="ri-left">
-              <span class="ri-role">Head of UX</span>
-              <span class="ri-company">Becoming You Labs</span>
-              <p class="ri-desc">Led UX strategy and execution for an AI-powered wellness platform, building the design function from the ground up.</p>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Lead Designer</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">Finrez</span>
             </div>
-            <span class="ri-date">2022–2023</span>
+            <span class="resume-entry-dates">October 2023 - Present</span>
+            <p class="resume-entry-desc">Founder and lead designer helping early-stage startups define their brand identity, design systems, and product vision from zero to launch.</p>
           </div>
 
-          <div class="resume-item">
-            <div class="ri-left">
-              <span class="ri-role">Product Designer</span>
-              <span class="ri-company">Recur</span>
-              <p class="ri-desc">Designed the Recur Forever NFT marketplace, onboarding mainstream users into Web3 via branded digital collectibles with Paramount, Hello Kitty, and 20+ brands.</p>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Product Designer IV</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">Meta</span>
             </div>
-            <span class="ri-date">2021–2022</span>
+            <span class="resume-entry-dates">June 2022 - June 2024</span>
+            <p class="resume-entry-desc">Designed XR tools and AI-driven interfaces for Reality Labs, including simulation platforms, codec avatar workspaces, and AR hearable experiences across research and consumer teams.</p>
           </div>
 
-          <div class="resume-item">
-            <div class="ri-left">
-              <span class="ri-role">Founder &amp; Designer</span>
-              <span class="ri-company">Finrez</span>
-              <p class="ri-desc">Running a boutique design studio delivering brand identity, product design, and web experiences for startups and growing companies.</p>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Product Designer</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">RECUR Forever</span>
             </div>
-            <span class="ri-date">2020–Present</span>
+            <span class="resume-entry-dates">July 2021 - June 2022</span>
+            <p class="resume-entry-desc">Joined as the second designer to build a cross-platform NFT marketplace from the ground up, including a gamified collector experience and multi-brand licensing integrations.</p>
           </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Various</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">VICE Media Group</span>
+            </div>
+            <span class="resume-entry-dates">July 2018 - July 2021</span>
+
+            <div class="resume-subentry">
+              <div class="resume-entry-header">
+                <span class="resume-entry-role">Product Designer</span>
+              </div>
+              <span class="resume-entry-dates">February 2021 - July 2021</span>
+            </div>
+
+            <div class="resume-subentry">
+              <div class="resume-entry-header">
+                <span class="resume-entry-role">Design Manager, Ad Products</span>
+              </div>
+              <span class="resume-entry-dates">December 2019 - February 2021</span>
+            </div>
+
+            <div class="resume-subentry">
+              <div class="resume-entry-header">
+                <span class="resume-entry-role">Sr. Interactive Designer, Ad Products</span>
+              </div>
+              <span class="resume-entry-dates">July 2018 - December 2019</span>
+            </div>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <span class="resume-entry-role">Designer</span>
+              <span class="resume-entry-sep">—</span>
+              <span class="resume-entry-company">Merkley + Partners</span>
+            </div>
+            <span class="resume-entry-dates">April 2017 - July 2018</span>
+          </div>
+
+        </section>
+      </main>
+
+      <!-- RIGHT: Info sidebar -->
+      <aside class="resume-info">
+
+        <div class="resume-contact-block">
+          <a href="mailto:sean@seanpfinn.com" class="resume-contact-link">sean@seanpfinn.com</a>
+          <a href="https://linkedin.com/in/seanpfinn" class="resume-contact-link" target="_blank" rel="noopener">www.linkedin.com/in/seanpfinn</a>
         </div>
 
-        <hr class="section-divider" />
-
-        <!-- SKILLS -->
-        <div class="resume-section">
-          <p class="section-heading">Skills</p>
-          <div class="skills-row">
-            <span class="skill-badge">Figma</span>
-            <span class="skill-badge">Product Design</span>
-            <span class="skill-badge">Design Systems</span>
-            <span class="skill-badge">Prototyping</span>
-            <span class="skill-badge">UX Research</span>
-            <span class="skill-badge">User Flows</span>
-            <span class="skill-badge">Interaction Design</span>
-            <span class="skill-badge">Brand Identity</span>
-            <span class="skill-badge">Framer</span>
-            <span class="skill-badge">Webflow</span>
-            <span class="skill-badge">0→1 Product</span>
-            <span class="skill-badge">Cross-functional</span>
-          </div>
+        <div class="resume-info-group">
+          <h3 class="resume-info-title">Skills</h3>
+          <ul class="resume-info-list">
+            <li>Accessibility (a11y)</li>
+            <li>Brand Design</li>
+            <li>Design Systems</li>
+            <li>Interaction Design</li>
+            <li>Prototyping</li>
+            <li>Product Strategy</li>
+            <li>Responsive Design</li>
+            <li>User Research</li>
+            <li>UI/UX Design</li>
+            <li>UX Writing</li>
+            <li>QA Testing</li>
+            <li>Wireframing</li>
+          </ul>
         </div>
 
-        <hr class="section-divider" />
-
-        <!-- DOWNLOAD -->
-        <div>
-          <a href="#" class="download-btn">Download PDF ↓</a>
+        <div class="resume-info-group">
+          <h3 class="resume-info-title">Tools</h3>
+          <ul class="resume-info-list">
+            <li>After Effects</li>
+            <li>Claude Code</li>
+            <li>CSS</li>
+            <li>Cursor</li>
+            <li>Figma</li>
+            <li>Flora</li>
+            <li>Framer</li>
+            <li>HTML</li>
+            <li>Illustrator</li>
+            <li>Jitter</li>
+            <li>Midjourney</li>
+            <li>Paper</li>
+            <li>Pencil</li>
+            <li>Photoshop</li>
+            <li>Rive</li>
+            <li>Webflow</li>
+          </ul>
         </div>
 
+        <div class="resume-info-group">
+          <h3 class="resume-info-title">Collaboration</h3>
+          <ul class="resume-info-list">
+            <li>Agile Teams</li>
+            <li>Brand Development</li>
+            <li>Design Leadership</li>
+            <li>Stakeholder Comms</li>
+            <li>MVP Planning</li>
+          </ul>
+        </div>
+
+        <div class="resume-info-group">
+          <h3 class="resume-info-title">Education</h3>
+          <ul class="resume-info-list">
+            <li>Boston University</li>
+            <li>College of Communications</li>
+            <li>BS, Advertising</li>
+            <li>May 2013</li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="resume-footer">
+      <div class="resume-footer-social">
+        <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+        <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+        <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
       </div>
-    </main>
+      <div class="resume-footer-meta">
+        <p class="last-updated">Last updated: February 25th, 2026</p>
+        <p class="weather">
+          <span>New York &bull; <span id="clock">3:27:21 PM</span>, 47&deg;F, Clear</span>
+          <img src="assets/5b9dd5c7734d65e68e5467f34daa5d39a6dcdfdd.png" alt="Clear" class="weather-icon" />
+        </p>
+      </div>
+    </footer>
 
   </div>
+
+  <!-- FLOATING DOWNLOAD BUTTON -->
+  <a href="#" class="resume-download-btn">Download</a>
+
+  <script>
+    function tick() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      const d = new Date();
+      let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
 </body>
 </html>
