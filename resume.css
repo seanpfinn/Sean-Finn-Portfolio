@@ -1,0 +1,340 @@
+/* ================================
+   RESUME PAGE
+   ================================ */
+
+/* Override body for resume — same bg, no overflow issues */
+.resume-body {
+  min-height: 100vh;
+}
+
+/* Outer page wrapper */
+.resume-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100vh;
+}
+
+/* ================================
+   NAV
+   ================================ */
+.resume-nav {
+  background: rgba(250, 249, 247, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.resume-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 184px;
+}
+
+/* ================================
+   CONTENT ROW
+   ================================ */
+.resume-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  flex: 1;
+  padding-bottom: 20px;
+}
+
+/* ================================
+   MAIN (left column)
+   ================================ */
+.resume-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.resume-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resume-name {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+.resume-bio {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+/* ================================
+   SECTION
+   ================================ */
+.resume-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resume-section-title {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+/* ================================
+   EXPERIENCE ENTRIES
+   ================================ */
+.resume-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resume-entry-header {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.resume-entry-role {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+.resume-entry-sep {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  color: #262626;
+}
+
+.resume-entry-company {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+.resume-entry-dates {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #757575;
+}
+
+.resume-entry-desc {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+  margin-top: 4px;
+}
+
+/* VICE sub-entries */
+.resume-subentry {
+  margin-top: 8px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ================================
+   INFO SIDEBAR (right column)
+   ================================ */
+.resume-info {
+  width: 195px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.resume-contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resume-contact-link {
+  font-family: var(--font);
+  font-size: 14.4px;
+  line-height: 20.16px;
+  letter-spacing: -0.576px;
+  color: #2b2b2b;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.resume-contact-link:hover {
+  opacity: 0.7;
+}
+
+.resume-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resume-info-title {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+.resume-info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.resume-info-list li {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: -0.64px;
+  color: #262626;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+.resume-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 4px;
+}
+
+.resume-footer-social {
+  display: flex;
+  gap: 30px;
+}
+
+.resume-footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+/* ================================
+   FLOATING DOWNLOAD BUTTON
+   ================================ */
+.resume-download-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 40px;
+  background: #171717;
+  border-radius: 32px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.64px;
+  color: #faf9f7;
+  cursor: pointer;
+  z-index: 100;
+  transition: opacity 0.2s;
+}
+
+.resume-download-btn:hover {
+  opacity: 0.85;
+}
+
+/* active state on resume nav link */
+.nav-link--active {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* ================================
+   MOBILE
+   ================================ */
+@media (max-width: 809px) {
+  .resume-nav {
+    display: none;
+  }
+
+  .resume-page {
+    padding: 0;
+    gap: 0;
+  }
+
+  .resume-content {
+    flex-direction: column;
+    padding: 20px;
+    gap: 32px;
+  }
+
+  .resume-info {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px;
+  }
+
+  /* Contact block spans full width on mobile */
+  .resume-contact-block {
+    grid-column: 1 / -1;
+  }
+
+  .resume-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .resume-footer-meta {
+    align-items: flex-start;
+  }
+
+  .resume-download-btn {
+    bottom: 16px;
+    right: 16px;
+  }
+}
