@@ -19,25 +19,6 @@
 }
 
 /* ================================
-   NAV
-   ================================ */
-.resume-nav {
-  background: rgba(250, 249, 247, 0.65);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.resume-nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 184px;
-}
-
-/* ================================
    CONTENT ROW
    ================================ */
 .resume-content {
@@ -280,7 +261,7 @@
    MOBILE
    ================================ */
 @media (max-width: 809px) {
-  .resume-nav {
+  .resume-page .nav {
     display: none;
   }
 
