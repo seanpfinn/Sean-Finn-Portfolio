@@ -89,7 +89,6 @@ body {
   position: sticky;
   top: var(--pad);
   height: calc(100vh - var(--pad) * 2);
-  padding-bottom: 28px;
 }
 
 /* ================================
