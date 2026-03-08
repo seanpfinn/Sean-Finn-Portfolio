@@ -23,17 +23,18 @@
    ================================ */
 .resume-content {
   display: flex;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 0;
   flex: 1;
-  padding-bottom: 20px;
+  padding-bottom: 80px;
 }
 
 /* ================================
    MAIN (left column)
    ================================ */
 .resume-main {
-  flex: 1;
+  flex: 0 0 65%;
+  width: 65%;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -42,7 +43,7 @@
 .resume-header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 
 .resume-name {
