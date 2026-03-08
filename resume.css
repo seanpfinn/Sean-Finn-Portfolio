@@ -237,21 +237,8 @@
    ================================ */
 .resume-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 4px;
-}
-
-.resume-footer-social {
-  display: flex;
-  gap: 30px;
-}
-
-.resume-footer-meta {
-  display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
+  gap: 32px;
 }
 
 /* ================================
@@ -324,21 +311,8 @@
   }
 
   .resume-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
     padding: 20px;
     border-top: 1px solid var(--border);
-  }
-
-  .resume-footer-social {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0;
-  }
-
-  .resume-footer-meta {
-    align-items: flex-start;
   }
 
   .resume-download-btn {
