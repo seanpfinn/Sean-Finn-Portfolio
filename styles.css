@@ -37,6 +37,19 @@ body {
   font-family: var(--font);
   line-height: 1.5;
   min-height: 100vh;
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #FF401A;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s;
 }
 
 /* ================================
