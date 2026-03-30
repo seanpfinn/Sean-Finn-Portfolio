@@ -27,13 +27,11 @@
     <p class="hero-body">With 10+ years across tech, startups, and brand systems. I specialize in turning ambiguous concepts into user-validated products, scalable design systems, and high-impact digital experiences.</p>
     <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong></p>
     <a href="mailto:sean@seanpfinn.com" class="cta-btn">Let's work together</a>
-    <div class="github-graph" style="margin-top:16px">
-      <canvas id="github-graph-mobile" class="github-graph-canvas"></canvas>
-    </div>
     <div class="social-links" style="margin-top:8px">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
       <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
     </div>
   </section>
 
@@ -60,13 +58,11 @@
       </div>
 
       <div class="sidebar-bottom">
-        <div class="github-graph">
-          <canvas id="github-graph-sidebar" class="github-graph-canvas"></canvas>
-        </div>
         <div class="social-links">
           <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
           <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
           <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
         </div>
         <div class="sidebar-meta">
           <p class="last-updated">Last updated: February 25th, 2026</p>
@@ -212,77 +208,6 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-  </script>
-
-  <script>
-    (async function renderGithubGraphs() {
-      const CELL = 11, GAP = 3, STEP = 11 + 3, RADIUS = 2;
-      const COLORS = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'];
-
-      function roundRect(ctx, x, y, w, h, r) {
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.lineTo(x + w - r, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-        ctx.lineTo(x + w, y + h - r);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        ctx.lineTo(x + r, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-        ctx.lineTo(x, y + r);
-        ctx.quadraticCurveTo(x, y, x + r, y);
-        ctx.closePath();
-      }
-
-      function drawGraph(canvas, weeks) {
-        const dpr = window.devicePixelRatio || 1;
-        const logicalW = weeks.length * STEP - GAP;
-        const logicalH = 7 * STEP - GAP;
-        canvas.width = logicalW * dpr;
-        canvas.height = logicalH * dpr;
-        canvas.style.width = '100%';
-        canvas.style.height = 'auto';
-        const ctx = canvas.getContext('2d');
-        ctx.scale(dpr, dpr);
-        weeks.forEach((week, col) => {
-          week.forEach((day, row) => {
-            ctx.fillStyle = day ? COLORS[day.level] : COLORS[0];
-            roundRect(ctx, col * STEP, row * STEP, CELL, CELL, RADIUS);
-            ctx.fill();
-          });
-        });
-      }
-
-      try {
-        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=last');
-        const data = await res.json();
-
-        const today = new Date();
-        const cutoff = new Date(today);
-        cutoff.setMonth(cutoff.getMonth() - 6);
-
-        const days = data.contributions.filter(d => new Date(d.date + 'T12:00:00') >= cutoff);
-        if (!days.length) return;
-
-        // Pad to the nearest Sunday before the first day
-        const firstDow = new Date(days[0].date + 'T12:00:00').getDay();
-        const padded = Array(firstDow).fill(null).concat(days);
-
-        // Group into 7-day week columns
-        const weeks = [];
-        for (let i = 0; i < padded.length; i += 7) {
-          const week = padded.slice(i, i + 7);
-          while (week.length < 7) week.push(null);
-          weeks.push(week);
-        }
-
-        ['github-graph-sidebar', 'github-graph-mobile'].forEach(id => {
-          const canvas = document.getElementById(id);
-          if (canvas) drawGraph(canvas, weeks);
-        });
-      } catch (e) {
-        document.querySelectorAll('.github-graph').forEach(el => el.remove());
-      }
-    })();
   </script>
 
   <script>
