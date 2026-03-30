@@ -226,12 +226,11 @@ body {
   width: 100%;
 }
 
-.github-graph-img {
+.github-graph-canvas {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
   opacity: 0.85;
-  border-radius: 4px;
 }
 
 .social-links {
