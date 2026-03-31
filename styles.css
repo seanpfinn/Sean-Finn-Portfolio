@@ -35,6 +35,12 @@ a { text-decoration: none; color: inherit; }
   background: rgba(17,17,16,0.65);
 }
 
+.dark .nav-home,
+.dark .weather,
+.dark .last-updated {
+  color: var(--text);
+}
+
 .dark {
   --bg:          #111110;
   --bg-card:     #1a1a18;
