@@ -22,7 +22,7 @@ a { text-decoration: none; color: inherit; }
   --shadow-card: 0 0 4px rgba(0,0,0,0.12);
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
-  --sidebar-w:   497px;
+  --sidebar-w:   30%;
   --content-w:   913px;
   --gap:         10px;
   --pad:         10px;
@@ -95,6 +95,7 @@ body {
    ================================ */
 .sidebar {
   width: var(--sidebar-w);
+  max-width: var(--sidebar-w);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
