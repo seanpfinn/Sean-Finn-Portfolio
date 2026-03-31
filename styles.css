@@ -24,8 +24,24 @@ a { text-decoration: none; color: inherit; }
   --mono:        'Geist Mono', 'Menlo', monospace;
   --sidebar-w:   30%;
   --content-w:   913px;
-  --gap:         10px;
+  --gap:         35px;
   --pad:         10px;
+}
+
+/* ================================
+   DARK MODE TOKENS
+   ================================ */
+.dark {
+  --bg:          #111110;
+  --bg-card:     #1a1a18;
+  --bg-card-out: #161615;
+  --text:        #e8e6e1;
+  --text-dim:    #888880;
+  --text-muted:  #999;
+  --badge-bg:    #2a2a28;
+  --border:      #2a2a28;
+  --border-sub:  rgba(60,60,55,0.4);
+  --shadow-card: 0 0 4px rgba(0,0,0,0.4);
 }
 
 /* ================================
@@ -50,6 +66,21 @@ body {
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: opacity 0.2s;
+}
+
+/* ================================
+   DARK MODE TOGGLE
+   ================================ */
+.dark-toggle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text);
+  border: none;
+  padding: 0;
+  cursor: none;
+  flex-shrink: 0;
+  transition: background 0.2s;
 }
 
 /* ================================

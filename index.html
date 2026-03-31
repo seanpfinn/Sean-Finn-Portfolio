@@ -18,6 +18,7 @@
     <div class="nav-links">
       <a href="about.html" class="nav-link">About</a>
       <a href="resume.html" class="nav-link">Resume</a>
+      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
     </div>
   </header>
 
@@ -46,6 +47,7 @@
           <div class="nav-links">
             <a href="about.html" class="nav-link">About</a>
             <a href="resume.html" class="nav-link">Resume</a>
+            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
           </div>
         </div>
       </nav>
@@ -199,6 +201,18 @@
 
     </main>
   </div>
+
+  <script>
+    (function() {
+      if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
+      document.querySelectorAll('.dark-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const on = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('dark', on ? '1' : '0');
+        });
+      });
+    })();
+  </script>
 
   <script>
     const cursor = document.createElement('div');
