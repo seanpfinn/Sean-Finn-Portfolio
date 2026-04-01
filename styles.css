@@ -90,8 +90,8 @@ body {
    DARK MODE TOGGLE
    ================================ */
 .dark-toggle {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--text);
   border: none;
