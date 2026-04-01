@@ -41,6 +41,10 @@ a { text-decoration: none; color: inherit; }
   color: var(--text);
 }
 
+.dark .weather-icon {
+  filter: invert(1);
+}
+
 .dark {
   --bg:          #111110;
   --bg-card:     #1a1a18;
@@ -86,8 +90,8 @@ body {
    DARK MODE TOGGLE
    ================================ */
 .dark-toggle {
-  width: 10px;
-  height: 10px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: var(--text);
   border: none;
@@ -554,6 +558,9 @@ body {
   position: absolute;
   top: 19px;
   left: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
   right: 0;
   bottom: 0;
   display: flex;
@@ -562,15 +569,12 @@ body {
 }
 
 .recur-phone {
-  position: absolute;
+  position: static;
   height: 556px;
   width: auto;
   object-fit: contain;
+  flex-shrink: 1;
 }
-
-.recur-phone:nth-child(1) { left: 21px; }
-.recur-phone:nth-child(2) { left: calc(21px + 268px + 23px); }
-.recur-phone:nth-child(3) { right: 20px; }
 
 /* ================================
    CARD COPY
@@ -673,7 +677,6 @@ body {
 
   .recur-phone:nth-child(3) { display: none; }
   .recur-phone { height: 320px; }
-  .recur-phone:nth-child(2) { left: calc(21px + 160px + 14px); }
 
   .media-ui--dune   { left: 10%; width: 80%; }
   .media-ui--metasim { left: 8%; width: 84%; top: 14px; }

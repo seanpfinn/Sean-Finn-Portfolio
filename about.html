@@ -4,219 +4,189 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About – Sean Finn</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .about-content {
+    .about-photo-container {
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      flex: 1;
+      border-radius: 10px;
+    }
+
+    .about-photo {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 100%;
+      width: auto;
+      max-width: none;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .about-heading {
+      font-family: var(--mono);
+      font-size: 28.8px;
+      font-weight: 500;
+      line-height: 34.56px;
+      letter-spacing: -1.152px;
+      color: #080808;
+      margin-bottom: 20px;
+    }
+
+    .about-copy {
       display: flex;
       flex-direction: column;
-      gap: 40px;
-    }
-
-    .about-hero {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .about-headline {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-      color: #2b2b2b;
-      max-width: 480px;
-    }
-
-    .about-body {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .about-body p {
-      font-size: 15px;
-      color: #555;
-      line-height: 1.75;
-    }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #bbb;
-      margin-bottom: 16px;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .skill-item {
-      font-size: 14px;
-      color: #555;
-      padding: 10px 14px;
-      border: 1px solid #ebebeb;
-      border-radius: 8px;
-      background: #fff;
+    .about-copy p {
+      font-family: var(--font);
+      font-size: 14.4px;
+      font-weight: 400;
+      line-height: 20.16px;
+      letter-spacing: -0.576px;
+      color: var(--text-dim);
     }
 
-    .experience-list {
+    .about-copy strong {
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .about-copy a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-skip-ink: none;
+      text-underline-offset: 2px;
+    }
+
+    .sidebar-about-body {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-
-    .exp-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding: 16px;
-      border: 1px solid #ebebeb;
-      border-radius: 12px;
-      background: #fff;
-    }
-
-    .exp-role {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2b2b2b;
-    }
-
-    .exp-company {
-      font-size: 14px;
-      color: #777;
-    }
-
-    .exp-date {
-      font-size: 12px;
-      color: #aaa;
-    }
-
-    .card-section {
-      padding: 28px;
-      border: 1px solid #ebebeb;
-      border-radius: 16px;
-      background: #fff;
+      gap: 10px;
+      overflow: hidden;
     }
 
     @media (max-width: 809px) {
-      .about-headline {
-        font-size: 22px;
-      }
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
+      .about-photo-container { display: none; }
+      .about-heading { font-size: 22px; line-height: 28px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- MOBILE HEADER -->
-  <div class="mobile-header">
-    <a href="index.html" class="name-link">Sean Finn</a>
-    <nav class="mobile-nav">
-      <a href="index.html#work" class="nav-link">Work</a>
-      <a href="about.html" class="nav-link" style="color:#2b2b2b;">About</a>
+  <!-- MOBILE NAV -->
+  <header class="mobile-nav-bar">
+    <a href="/" class="nav-home">Sean Finn</a>
+    <div class="nav-links">
+      <a href="about.html" class="nav-link">About</a>
       <a href="resume.html" class="nav-link">Resume</a>
-    </nav>
-  </div>
+      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
+    </div>
+  </header>
 
-  <div class="page-wrapper">
+  <!-- MOBILE HERO -->
+  <section class="mobile-hero">
+    <p class="hero-title">A product designer based in Brooklyn, NY</p>
+    <div class="about-copy" style="margin-top:12px">
+      <p>With 10+ years of experience shaping early-stage ideas into clear, intuitive digital products. My background spans startups, big tech, and cross-functional teams working in AI, cybersecurity, AR/VR, wellness, and consumer applications.</p>
+      <p>My strength is in <strong>simplifying complex systems</strong> — translating research into actionable product insight, structuring flows that reduce friction, and building design systems that scale as teams move from 0→1 and into growth.</p>
+      <p>I care about clarity, precision, and momentum. I work closely with product, engineering, and leadership to define problems, validate direction, and move teams toward solutions that are both user-centered and business-meaningful.</p>
+      <p>Outside of product work, I lead <a href="https://www.finrez.xyz" target="_blank" rel="noopener">Finrez</a>, a design studio offering brand, product, and web design services.</p>
+    </div>
+    <div class="social-links" style="margin-top:16px">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
 
-    <!-- SIDEBAR -->
+  <div class="page">
+
+    <!-- LEFT SIDEBAR -->
     <aside class="sidebar">
-      <div class="sidebar-inner">
-        <div class="sidebar-top">
-          <div class="identity">
-            <a href="index.html" class="name-link">Sean Finn</a>
-            <p class="tagline">Product designer based in<br />Brooklyn, NY</p>
-          </div>
-          <nav class="nav">
-            <a href="index.html#work" class="nav-link">Work</a>
-            <a href="about.html" class="nav-link" style="color:#2b2b2b;">About</a>
+
+      <nav class="nav">
+        <div class="nav-inner">
+          <a href="/" class="nav-home">Sean Finn</a>
+          <div class="nav-links">
+            <a href="about.html" class="nav-link">About</a>
             <a href="resume.html" class="nav-link">Resume</a>
-          </nav>
-        </div>
-        <div class="sidebar-bottom">
-          <div class="social-links">
-            <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-            <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-            <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="https://cal.com/seanpfinn" class="social-link" target="_blank" rel="noopener">Cal</a>
+            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
           </div>
-          <p class="available">
-            <span class="dot"></span>
-            Available for new projects
+        </div>
+      </nav>
+
+      <div class="sidebar-hero">
+        <h1 class="about-heading">A product designer based in<br>Brooklyn, NY</h1>
+        <div class="about-copy">
+          <p>With 10+ years of experience shaping early-stage ideas into clear, intuitive digital products. My background spans startups, big tech, and cross-functional teams working in AI, cybersecurity, AR/VR, wellness, and consumer applications.</p>
+          <p>My strength is in <strong>simplifying complex systems</strong> — translating research into actionable product insight, structuring flows that reduce friction, and building design systems that scale as teams move from 0→1 and into growth.</p>
+          <p>I care about clarity, precision, and momentum. I work closely with product, engineering, and leadership to define problems, validate direction, and move teams toward solutions that are both user-centered and business-meaningful.</p>
+          <p>Outside of product work, I lead <a href="https://www.finrez.xyz" target="_blank" rel="noopener">Finrez</a>, a design studio offering brand, product, and web design services.</p>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="social-links">
+          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div class="sidebar-meta">
+          <p class="last-updated">Last updated: February 25th, 2026</p>
+          <p class="weather">
+            <span>New York &bull; <span id="clock">3:27:21 PM</span>, 47&deg;F, Foggy</span>
+            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
           </p>
         </div>
       </div>
+
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="content">
-      <div class="about-content">
-
-        <!-- HERO -->
-        <div class="about-hero">
-          <h1 class="about-headline">A product designer based in Brooklyn, NY</h1>
-          <div class="about-body">
-            <p>Over a decade of experience transforming early-stage concepts into user-friendly digital products. I've worked across startups, major tech companies, and collaborative teams—focused on AI, cybersecurity, AR/VR, wellness, and consumer applications.</p>
-            <p>I specialize in simplifying complex systems, converting research into product strategy, and creating streamlined user flows that minimize friction. I develop scalable design systems for growing teams, and I'm comfortable working across the full product lifecycle—from 0→1 to scaling phase.</p>
-            <p>Outside of client and company work, I run <a href="https://www.finrez.xyz" target="_blank" rel="noopener" style="color:#2b2b2b; text-decoration:underline; text-underline-offset:3px;">Finrez</a>, a design studio delivering brand identity, product design, and web design services.</p>
-          </div>
-        </div>
-
-        <!-- SKILLS -->
-        <div class="card-section">
-          <p class="section-label">Core Skills</p>
-          <div class="skills-grid">
-            <div class="skill-item">Product Design</div>
-            <div class="skill-item">Design Systems</div>
-            <div class="skill-item">UX Research</div>
-            <div class="skill-item">Interaction Design</div>
-            <div class="skill-item">Prototyping</div>
-            <div class="skill-item">0→1 Product Dev</div>
-            <div class="skill-item">User Flows</div>
-            <div class="skill-item">Brand Identity</div>
-          </div>
-        </div>
-
-        <!-- EXPERIENCE -->
-        <div class="card-section">
-          <p class="section-label">Experience</p>
-          <div class="experience-list">
-            <div class="exp-item">
-              <span class="exp-role">Senior Product Designer</span>
-              <span class="exp-company">CLEAR</span>
-              <span class="exp-date">Present</span>
-            </div>
-            <div class="exp-item">
-              <span class="exp-role">Head of UX</span>
-              <span class="exp-company">Becoming You Labs</span>
-              <span class="exp-date">2023–2024</span>
-            </div>
-            <div class="exp-item">
-              <span class="exp-role">Product Designer</span>
-              <span class="exp-company">Recur</span>
-              <span class="exp-date">2021–2022</span>
-            </div>
-            <div class="exp-item">
-              <span class="exp-role">Founder &amp; Designer</span>
-              <span class="exp-company">Finrez</span>
-              <span class="exp-date">2020–Present</span>
-            </div>
-          </div>
-        </div>
-
+    <!-- RIGHT: PHOTO -->
+    <main class="content" style="padding:0; overflow:hidden; border-radius:10px;">
+      <div class="about-photo-container">
+        <img src="assets/054b61a615a5581d1bab6b61f91684d65b40943c.png" alt="Sean Finn" class="about-photo" />
       </div>
     </main>
 
   </div>
+
+  <script>
+    (function() {
+      if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
+      document.querySelectorAll('.dark-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const on = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('dark', on ? '1' : '0');
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    function tick() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      const d = new Date();
+      let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
 </body>
 </html>
