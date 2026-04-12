@@ -90,13 +90,13 @@ body {
    DARK MODE TOGGLE
    ================================ */
 .dark-toggle {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--text);
   border: none;
   padding: 0;
-  cursor: none;
+  cursor: pointer;
   flex-shrink: 0;
   transition: background 0.2s;
 }
@@ -642,6 +642,9 @@ body {
    ================================ */
 @media (max-width: 809px) {
   .mobile-nav-bar { display: flex; }
+
+  body { cursor: auto; }
+  .custom-cursor { display: none; }
 
   .page {
     flex-direction: column;
