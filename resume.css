@@ -18,6 +18,15 @@
   min-height: 100vh;
 }
 
+/* Nav matches sidebar nav on other pages — sticky, left-constrained, same width */
+.resume-page .nav {
+  position: sticky;
+  top: var(--pad);
+  z-index: 100;
+  max-width: var(--sidebar-w);
+  padding-bottom: 0;
+}
+
 /* ================================
    CONTENT ROW
    ================================ */
