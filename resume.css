@@ -52,7 +52,7 @@
   font-weight: 600;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 .resume-bio {
@@ -61,7 +61,7 @@
   font-weight: 400;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 /* ================================
@@ -79,7 +79,7 @@
   font-weight: 600;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 /* ================================
@@ -104,14 +104,14 @@
   font-weight: 600;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 .resume-entry-sep {
   font-family: var(--font);
   font-size: 16px;
   font-weight: 400;
-  color: #262626;
+  color: var(--text);
 }
 
 .resume-entry-company {
@@ -120,7 +120,7 @@
   font-weight: 400;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 .resume-entry-dates {
@@ -129,7 +129,7 @@
   font-weight: 400;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #757575;
+  color: var(--text-dim);
 }
 
 .resume-entry-desc {
@@ -138,7 +138,7 @@
   font-weight: 400;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
   margin-top: 4px;
 }
 
@@ -174,7 +174,7 @@
   font-size: 14.4px;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: #2b2b2b;
+  color: var(--text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -195,7 +195,7 @@
   font-weight: 600;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 .resume-info-list {
@@ -211,7 +211,7 @@
   font-weight: 400;
   line-height: 22.4px;
   letter-spacing: -0.64px;
-  color: #262626;
+  color: var(--text);
 }
 
 /* ================================
@@ -255,7 +255,7 @@
 
 /* active state on resume nav link */
 .nav-link--active {
-  color: #1a1a1a;
+  color: var(--text);
   font-weight: 500;
 }
 
