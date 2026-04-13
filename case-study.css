@@ -85,6 +85,27 @@
 }
 
 /* ================================
+   DYNAMIC CONTENT TRANSITIONS
+   ================================ */
+.cs-dynamic-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+}
+
+.cs-dynamic-content.is-exiting {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.cs-dynamic-content.is-entering {
+  animation: blurIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ================================
    CONTENT AREA
    ================================ */
 .cs-content {

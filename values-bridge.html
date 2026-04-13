@@ -68,24 +68,9 @@
         <h1 class="cs-title blur-in" style="animation-delay:0.1s">The Values Bridge</h1>
         <p class="cs-subtitle blur-in" style="animation-delay:0.15s">A guided framework for turning personal values into actionable insights.</p>
 
-        <div class="cs-section blur-in" style="animation-delay:0.2s">
-          <span class="cs-meta-label">Context</span>
-          <p class="cs-context-body">Over 8 weeks, I designed a calm, system-driven assessment that helps high-achieving adults turn abstract values into concrete decisions.</p>
-        </div>
-
-        <div class="cs-meta-grid blur-in" style="animation-delay:0.25s">
-          <div class="cs-meta-item">
-            <span class="cs-meta-label">Company</span>
-            <span class="cs-meta-value">Becoming You Labs</span>
-          </div>
-          <div class="cs-meta-item">
-            <span class="cs-meta-label">Timeframe</span>
-            <span class="cs-meta-value">2025</span>
-          </div>
-          <div class="cs-meta-item cs-meta-item--full">
-            <span class="cs-meta-label">Platforms</span>
-            <span class="cs-meta-value">Desktop and mobile web</span>
-          </div>
+        <!-- Dynamic content block — swapped on scroll -->
+        <div class="cs-dynamic-content blur-in" style="animation-delay:0.2s">
+          <!-- Populated by JS from slides[] -->
         </div>
       </div>
 
@@ -109,7 +94,7 @@
     <!-- RIGHT CONTENT -->
     <main class="content cs-content">
 
-      <div class="cs-card blur-in" style="animation-delay:0.1s">
+      <div class="cs-card blur-in" style="animation-delay:0.1s" data-slide="0">
         <div class="card-media card-media--values-bridge">
           <div class="vb-stage">
             <img src="assets/36a0c93d5caedc0c10567232c1f778f8fdef8c6c.png" alt="" class="vb-desktop" />
@@ -119,7 +104,27 @@
         </div>
       </div>
 
-      <div class="cs-card blur-in" style="animation-delay:0.3s">
+      <div class="cs-card blur-in" style="animation-delay:0.3s" data-slide="1">
+        <div class="card-media card-media--values-bridge">
+          <div class="vb-stage">
+            <img src="assets/36a0c93d5caedc0c10567232c1f778f8fdef8c6c.png" alt="" class="vb-desktop" />
+            <img src="assets/a78ef5c4d1889f79d43b2b7e7d4463fc9e703427.png" alt="" class="vb-mobile" />
+          </div>
+          <div class="card-inset-border card-inset-border--subtle"></div>
+        </div>
+      </div>
+
+      <div class="cs-card blur-in" style="animation-delay:0.5s" data-slide="2">
+        <div class="card-media card-media--values-bridge">
+          <div class="vb-stage">
+            <img src="assets/36a0c93d5caedc0c10567232c1f778f8fdef8c6c.png" alt="" class="vb-desktop" />
+            <img src="assets/a78ef5c4d1889f79d43b2b7e7d4463fc9e703427.png" alt="" class="vb-mobile" />
+          </div>
+          <div class="card-inset-border card-inset-border--subtle"></div>
+        </div>
+      </div>
+
+      <div class="cs-card blur-in" style="animation-delay:0.7s" data-slide="3">
         <div class="card-media card-media--values-bridge">
           <div class="vb-stage">
             <img src="assets/36a0c93d5caedc0c10567232c1f778f8fdef8c6c.png" alt="" class="vb-desktop" />
@@ -167,6 +172,105 @@
     }
     tick();
     setInterval(tick, 1000);
+  </script>
+
+  <script>
+    // ── Slide content data ──────────────────────────────────────────────────
+    const slides = [
+      {
+        label: 'Context',
+        body: 'Over 8 weeks, I designed a calm, system-driven assessment that helps high-achieving adults turn abstract values into concrete decisions.',
+        meta: [
+          { label: 'Company',   value: 'Becoming You Labs' },
+          { label: 'Timeframe', value: '2025' },
+          { label: 'Platforms', value: 'Desktop and mobile web', full: true },
+        ]
+      },
+      {
+        label: 'Discovery',
+        body: 'Through user interviews and competitive analysis, I identified a gap between values-clarification tools and actionable outcomes. Most tools stop at awareness — this one goes further.',
+        meta: [
+          { label: 'Research methods', value: 'User interviews, diary studies' },
+          { label: 'Participants',     value: '12 adults, ages 28–45' },
+        ]
+      },
+      {
+        label: 'Design',
+        body: 'I created a multi-step assessment framework with branching logic, a visual values map, and a prioritization matrix — all designed to feel calm and reflective, not clinical.',
+        meta: [
+          { label: 'Deliverables', value: 'Flow diagrams, hi-fi prototype' },
+          { label: 'Iterations',   value: '4 rounds of user testing' },
+        ]
+      },
+      {
+        label: 'Outcome',
+        body: 'The final product launched to a waitlist of 600+ users. Completion rates exceeded 80%, with users reporting meaningful clarity around career and personal decisions.',
+        meta: [
+          { label: 'Completion rate', value: '82%' },
+          { label: 'Waitlist',        value: '600+ users at launch' },
+        ]
+      },
+    ];
+
+    // ── Render helpers ──────────────────────────────────────────────────────
+    function renderSlide(slide) {
+      const metaItems = slide.meta.map(m => `
+        <div class="cs-meta-item${m.full ? ' cs-meta-item--full' : ''}">
+          <span class="cs-meta-label">${m.label}</span>
+          <span class="cs-meta-value">${m.value}</span>
+        </div>`).join('');
+
+      return `
+        <div class="cs-section">
+          <span class="cs-meta-label">${slide.label}</span>
+          <p class="cs-context-body">${slide.body}</p>
+        </div>
+        <div class="cs-meta-grid">${metaItems}</div>`;
+    }
+
+    // ── Swap with blur-out → swap → blur-in ─────────────────────────────────
+    const dynamicEl = document.querySelector('.cs-dynamic-content');
+    let activeSlide = -1;
+    let swapping = false;
+
+    function setSlide(index) {
+      if (index === activeSlide || swapping) return;
+      swapping = true;
+
+      dynamicEl.classList.add('is-exiting');
+
+      setTimeout(() => {
+        dynamicEl.innerHTML = renderSlide(slides[index]);
+        activeSlide = index;
+        dynamicEl.classList.remove('is-exiting');
+        dynamicEl.classList.add('is-entering');
+
+        // Remove entering class after animation completes
+        setTimeout(() => {
+          dynamicEl.classList.remove('is-entering');
+          swapping = false;
+        }, 500);
+      }, 300); // matches CSS transition duration
+    }
+
+    // Seed with slide 0 immediately (no transition needed)
+    dynamicEl.innerHTML = renderSlide(slides[0]);
+    activeSlide = 0;
+
+    // ── IntersectionObserver — fires when card center hits viewport center ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = parseInt(entry.target.dataset.slide, 10);
+          setSlide(idx);
+        }
+      });
+    }, {
+      rootMargin: '-45% 0px -45% 0px',
+      threshold: 0,
+    });
+
+    document.querySelectorAll('.cs-card[data-slide]').forEach(card => observer.observe(card));
   </script>
 
 </body>
