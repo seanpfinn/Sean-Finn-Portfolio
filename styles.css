@@ -45,6 +45,11 @@ a { text-decoration: none; color: inherit; }
   filter: invert(1);
 }
 
+.dark .cta-btn {
+  background: #ffffff;
+  color: #000000;
+}
+
 .dark {
   --bg:          #111110;
   --bg-card:     #1a1a18;
