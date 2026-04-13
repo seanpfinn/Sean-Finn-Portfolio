@@ -59,6 +59,26 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ================================
+   BLUR-IN ANIMATION
+   ================================ */
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.blur-in {
+  animation: blurIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ================================
    BASE
    ================================ */
 *, *::before, *::after {
