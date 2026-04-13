@@ -32,16 +32,12 @@
 
     .about-heading {
       font-family: var(--font);
-      font-size: 28.8px;
+      font-size: 18px;
       font-weight: 400;
-      line-height: 34.56px;
-      letter-spacing: -1.152px;
-      color: #080808;
-      margin-bottom: 10px;
-    }
-
-    .dark .about-heading {
+      line-height: 22px;
+      letter-spacing: -0.72px;
       color: var(--text);
+      margin-bottom: 10px;
     }
 
     .about-copy {
@@ -85,7 +81,7 @@
 
     @media (max-width: 809px) {
       .about-photo-container { display: none; }
-      .about-heading { font-size: 22px; line-height: 28px; }
+      .about-heading { font-size: 18px; line-height: 22px; }
     }
   </style>
 </head>
@@ -163,7 +159,7 @@
     </aside>
 
     <!-- RIGHT: PHOTO -->
-    <main class="content" style="padding:0; overflow:hidden; border-radius:10px;">
+    <main class="content blur-in" style="animation-delay:0.2s" style="padding:0; overflow:hidden; border-radius:10px;">
       <div class="about-photo-container">
         <img src="assets/054b61a615a5581d1bab6b61f91684d65b40943c.png" alt="Sean Finn" class="about-photo" />
       </div>
