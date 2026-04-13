@@ -1,0 +1,113 @@
+/* ================================
+   CASE STUDY — SIDEBAR CONTENT
+   ================================ */
+
+.cs-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 12px;
+}
+
+/* ================================
+   TITLE
+   ================================ */
+.cs-title {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+
+/* ================================
+   SUBTITLE
+   ================================ */
+.cs-subtitle {
+  font-family: var(--font);
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 20.16px;
+  letter-spacing: -0.576px;
+  color: var(--text);
+}
+
+/* ================================
+   CONTEXT BLOCK
+   ================================ */
+.cs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cs-context-body {
+  font-family: var(--font);
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 20.16px;
+  letter-spacing: -0.576px;
+  color: var(--text);
+}
+
+/* ================================
+   META LABELS + VALUES
+   ================================ */
+.cs-meta-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.cs-meta-value {
+  display: block;
+  font-family: var(--font);
+  font-size: 14.4px;
+  font-weight: 400;
+  line-height: 20.16px;
+  letter-spacing: -0.576px;
+  color: var(--text);
+}
+
+.cs-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+
+.cs-meta-item--full {
+  grid-column: 1 / -1;
+}
+
+/* ================================
+   CONTENT AREA
+   ================================ */
+.cs-content {
+  gap: 10px;
+}
+
+.cs-card {
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cs-card .card-media--values-bridge {
+  height: auto;
+  aspect-ratio: 893 / 484.66;
+  border-radius: 12px;
+}
+
+/* ================================
+   MOBILE
+   ================================ */
+@media (max-width: 809px) {
+  .cs-title {
+    font-size: 22px;
+  }
+}
