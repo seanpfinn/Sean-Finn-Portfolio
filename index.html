@@ -202,6 +202,23 @@
     </main>
   </div>
 
+  <!-- MOBILE FOOTER -->
+  <footer class="mobile-footer">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: April 13th, 2026</p>
+      <p class="weather">
+        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
+      </p>
+    </div>
+  </footer>
+
   <script>
     (function() {
       if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
@@ -226,13 +243,15 @@
 
   <script>
     function tick() {
-      const el = document.getElementById('clock');
-      if (!el) return;
       const d = new Date();
       let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
       const ampm = h >= 12 ? 'PM' : 'AM';
       h = h % 12 || 12;
-      el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+      const str = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
+      ['clock', 'clock-mobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = str;
+      });
     }
     tick();
     setInterval(tick, 1000);
