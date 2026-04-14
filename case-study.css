@@ -84,6 +84,19 @@
   grid-column: 1 / -1;
 }
 
+/* Mobile-only dynamic block — hidden on desktop */
+.cs-dynamic-content--mobile {
+  display: none;
+}
+
+@media (max-width: 809px) {
+  .cs-dynamic-content--mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
 /* ================================
    DYNAMIC CONTENT TRANSITIONS
    ================================ */
@@ -140,7 +153,7 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 8px 16px 8px;
+    padding: 8px 20px 8px;
     gap: 10px;
     width: 100%;
     box-sizing: border-box;

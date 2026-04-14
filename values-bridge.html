@@ -27,25 +27,8 @@
   <section class="mobile-hero blur-in" style="animation-delay:0.1s">
     <h1 class="cs-title">The Values Bridge</h1>
     <p class="cs-subtitle">A guided framework for turning personal values into actionable insights.</p>
-    <div class="cs-meta-grid">
-      <div class="cs-meta-item">
-        <span class="cs-meta-label">Company</span>
-        <span class="cs-meta-value">Becoming You Labs</span>
-      </div>
-      <div class="cs-meta-item">
-        <span class="cs-meta-label">Timeframe</span>
-        <span class="cs-meta-value">2025</span>
-      </div>
-      <div class="cs-meta-item cs-meta-item--full">
-        <span class="cs-meta-label">Platforms</span>
-        <span class="cs-meta-value">Desktop and mobile web</span>
-      </div>
-    </div>
-    <div class="social-links" style="margin-top:8px">
-      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-    </div>
+    <!-- Dynamic content — swapped on carousel scroll -->
+    <div class="cs-dynamic-content cs-dynamic-content--mobile"></div>
   </section>
 
   <div class="page">
@@ -139,7 +122,7 @@
   </div>
 
   <!-- MOBILE FOOTER -->
-  <footer class="mobile-footer">
+  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -247,8 +230,9 @@
         <div class="cs-meta-grid">${metaItems}</div>`;
     }
 
-    // ── Swap with blur-out → swap → blur-in ─────────────────────────────────
-    const dynamicEl = document.querySelector('.cs-dynamic-content');
+    // ── All dynamic content elements (sidebar + mobile hero) ────────────────
+    const dynamicEls = document.querySelectorAll('.cs-dynamic-content');
+
     let activeSlide = -1;
     let swapping = false;
 
@@ -256,32 +240,32 @@
       if (index === activeSlide || swapping) return;
       swapping = true;
 
-      dynamicEl.classList.add('is-exiting');
+      dynamicEls.forEach(el => el.classList.add('is-exiting'));
 
       setTimeout(() => {
-        dynamicEl.innerHTML = renderSlide(slides[index]);
+        dynamicEls.forEach(el => {
+          el.innerHTML = renderSlide(slides[index]);
+          el.classList.remove('is-exiting');
+          el.classList.add('is-entering');
+        });
         activeSlide = index;
-        dynamicEl.classList.remove('is-exiting');
-        dynamicEl.classList.add('is-entering');
 
-        // Remove entering class after animation completes
         setTimeout(() => {
-          dynamicEl.classList.remove('is-entering');
+          dynamicEls.forEach(el => el.classList.remove('is-entering'));
           swapping = false;
         }, 500);
-      }, 300); // matches CSS transition duration
+      }, 300);
     }
 
     // Seed with slide 0 immediately (no transition needed)
-    dynamicEl.innerHTML = renderSlide(slides[0]);
+    dynamicEls.forEach(el => { el.innerHTML = renderSlide(slides[0]); });
     activeSlide = 0;
 
-    // ── IntersectionObserver — fires when card center hits viewport center ──
-    const observer = new IntersectionObserver((entries) => {
+    // ── Desktop: IntersectionObserver on vertical scroll ────────────────────
+    const desktopObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const idx = parseInt(entry.target.dataset.slide, 10);
-          setSlide(idx);
+          setSlide(parseInt(entry.target.dataset.slide, 10));
         }
       });
     }, {
@@ -289,7 +273,24 @@
       threshold: 0,
     });
 
-    document.querySelectorAll('.cs-card[data-slide]').forEach(card => observer.observe(card));
+    // ── Mobile: IntersectionObserver scoped to the horizontal scroll root ────
+    const carouselEl = document.querySelector('.cs-content');
+    const mobileObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setSlide(parseInt(entry.target.dataset.slide, 10));
+        }
+      });
+    }, {
+      root: carouselEl,
+      rootMargin: '0px -40% 0px -40%',
+      threshold: 0,
+    });
+
+    document.querySelectorAll('.cs-card[data-slide]').forEach(card => {
+      desktopObserver.observe(card);
+      mobileObserver.observe(card);
+    });
   </script>
 
 </body>
