@@ -758,7 +758,7 @@ body {
   .mobile-footer {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 20px;
     padding: 8px 20px 32px;
     background: var(--bg);
   }
