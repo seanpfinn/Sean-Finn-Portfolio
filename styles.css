@@ -382,7 +382,7 @@ body {
   background: var(--bg-card);
   border-radius: 18px;
   padding: 10px;
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -390,11 +390,7 @@ body {
 
 /* outer border overlay */
 .card-outer-border {
-  position: absolute;
-  inset: -0.85px -0.02px 0.85px 0.02px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  pointer-events: none;
+  display: none;
 }
 
 /* ================================
@@ -410,15 +406,11 @@ body {
 
 /* inset border overlay on image */
 .card-inset-border {
-  position: absolute;
-  inset: -0.85px -0.02px 0.85px 0.02px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  pointer-events: none;
+  display: none;
 }
 
 .card-inset-border--subtle {
-  border-color: var(--border-sub);
+  display: none;
 }
 
 /* shared background image style */
@@ -681,15 +673,30 @@ body {
     display: none;
   }
 
+  /* ── Horizontal carousel ── */
   .content {
-    padding: 16px;
-    gap: 12px;
+    flex-direction: row;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 16px 20px;
+    gap: 10px;
+    /* allow cards to overflow without page growing wide */
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  /* mobile hero injected after nav via JS or static section */
-  .content::before {
-    content: '';
-    display: none;
+  .content::-webkit-scrollbar { display: none; }
+
+  .content > .card {
+    flex: 0 0 80vw;
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  .content > .card--featured {
+    flex: 0 0 88vw;
   }
 
   .card { border-radius: 16px; }
@@ -697,8 +704,8 @@ body {
   .card-inner { border-radius: 12px; }
   .card-outer-border { border-radius: 12px; }
 
-  .card-media { height: 240px; }
-  .card-media--values-bridge { aspect-ratio: auto; height: 240px; }
+  .card-media { height: 220px; }
+  .card-media--values-bridge { aspect-ratio: auto; height: 220px; }
 
   .vb-desktop { width: 75%; left: 20px; bottom: 30px; }
   .vb-mobile  { width: 16%; right: 16px; bottom: 28px; }
