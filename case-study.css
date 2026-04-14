@@ -131,4 +131,31 @@
   .cs-title {
     font-size: 22px;
   }
+
+  .page { min-height: 0; }
+
+  .cs-content {
+    flex-direction: row;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 16px 8px;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .cs-content::-webkit-scrollbar { display: none; }
+
+  .cs-content > .cs-card {
+    flex: 0 0 88vw;
+    scroll-snap-align: start;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .cs-card .card-media { height: 220px; border-radius: 6px; }
+  .cs-card .card-media--values-bridge { aspect-ratio: auto; height: 220px; }
+  .cs-card .card-inset-border { border-radius: 6px; }
 }
