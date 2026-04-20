@@ -230,41 +230,7 @@
   <!-- FLOATING DOWNLOAD BUTTON -->
   <a href="#" class="resume-download-btn">Download</a>
 
-  <script>
-    (function() {
-      if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
-      document.querySelectorAll('.dark-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const on = document.documentElement.classList.toggle('dark');
-          localStorage.setItem('dark', on ? '1' : '0');
-        });
-      });
-    })();
-  </script>
-
-  <script>
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-  </script>
-
-  <script>
-    function tick() {
-      const el = document.getElementById('clock');
-      if (!el) return;
-      const d = new Date();
-      let h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12 || 12;
-      el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ampm}`;
-    }
-    tick();
-    setInterval(tick, 1000);
-  </script>
+  <script src="main.js"></script>
 
 </body>
 </html>
