@@ -2,7 +2,7 @@
    RESET
    ================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
 
@@ -288,6 +288,43 @@ body {
   border-radius: 64px;
   margin-top: 4px;
   cursor: pointer;
+}
+
+/* ================================
+   SECONDARY CTAs
+   ================================ */
+.cta-secondary-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.cta-secondary {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.4px;
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s, opacity 0.15s;
+  white-space: nowrap;
+}
+
+.cta-secondary:hover {
+  color: var(--text);
+}
+
+/* ================================
+   SECTION LABEL
+   ================================ */
+.section-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  padding: 8px 0 2px;
 }
 
 /* ================================
