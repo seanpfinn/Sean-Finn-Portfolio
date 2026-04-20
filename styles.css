@@ -22,7 +22,7 @@ a { text-decoration: none; color: inherit; }
   --shadow-card: 0 0 4px rgba(0,0,0,0.12);
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
-  --sidebar-w:   30%;
+  --sidebar-w:   25%;
   --content-w:   913px;
   --gap:         35px;
   --pad:         10px;
