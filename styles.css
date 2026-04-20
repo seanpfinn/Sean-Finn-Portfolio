@@ -330,17 +330,6 @@ body {
   color: var(--text);
 }
 
-/* ================================
-   SECTION LABEL
-   ================================ */
-.section-label {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: var(--text-dim);
-  padding: 8px 0 2px;
-}
 
 /* ================================
    SIDEBAR BOTTOM
