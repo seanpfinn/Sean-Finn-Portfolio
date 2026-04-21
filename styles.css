@@ -26,6 +26,11 @@ a { text-decoration: none; color: inherit; }
   --content-w:   913px;
   --gap:         35px;
   --pad:         10px;
+  --gh-cell-0:   rgba(0,0,0,0.07);
+  --gh-cell-1:   #bfd4f2;
+  --gh-cell-2:   #7aaee0;
+  --gh-cell-3:   #3d7ec8;
+  --gh-cell-4:   #1a56a8;
 }
 
 /* ================================
@@ -63,6 +68,11 @@ a { text-decoration: none; color: inherit; }
   --border:      #2a2a28;
   --border-sub:  rgba(60,60,55,0.4);
   --shadow-card: 0 0 4px rgba(0,0,0,0.4);
+  --gh-cell-0:   rgba(255,255,255,0.06);
+  --gh-cell-1:   #1a3a6b;
+  --gh-cell-2:   #2a5699;
+  --gh-cell-3:   #3d7ec8;
+  --gh-cell-4:   #6aaaf0;
 }
 
 /* ================================
@@ -897,3 +907,76 @@ body {
    SELECTION
    ================================ */
 ::selection { background: rgba(43,43,43,0.1); }
+
+/* ================================
+   GITHUB TOOLTIP
+   ================================ */
+.gh-tooltip {
+  position: absolute;
+  z-index: 1000;
+  width: 360px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.gh-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gh-tip-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gh-tip-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gh-tip-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gh-tip-user {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.gh-tip-stat {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.gh-tip-graph {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gh-cell--0 { fill: var(--gh-cell-0); }
+.gh-cell--1 { fill: var(--gh-cell-1); }
+.gh-cell--2 { fill: var(--gh-cell-2); }
+.gh-cell--3 { fill: var(--gh-cell-3); }
+.gh-cell--4 { fill: var(--gh-cell-4); }
+
+@media (max-width: 809px) {
+  .gh-tooltip { display: none; }
+}

@@ -64,4 +64,81 @@
     const el = document.getElementById(id);
     if (el) sectionObserver.observe(el);
   });
+
+  // ── GitHub tooltip ───────────────────────────────────────────────────────
+  const ghLinks = document.querySelectorAll('a[href="https://github.com/seanpfinn"]');
+  if (ghLinks.length) {
+    const CELL = 8, GAP = 2, COLS = 52, ROWS = 7;
+    const W = COLS * (CELL + GAP) - GAP;
+    const H = ROWS * (CELL + GAP) - GAP;
+
+    const tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+    tip.innerHTML = `
+      <div class="gh-tip-header">
+        <img class="gh-tip-avatar" src="https://avatars.githubusercontent.com/u/193159120?v=4" alt="" />
+        <div class="gh-tip-meta">
+          <span class="gh-tip-user">seanpfinn</span>
+          <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions this year</span>
+        </div>
+      </div>
+      <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"></svg>
+    `;
+    document.body.appendChild(tip);
+
+    const svg = tip.querySelector('.gh-tip-graph');
+
+    function renderGraph(contributions) {
+      svg.innerHTML = '';
+      if (!contributions.length) return;
+      const firstDate = new Date(contributions[0].date + 'T00:00:00');
+      const startSunday = new Date(firstDate);
+      startSunday.setDate(firstDate.getDate() - firstDate.getDay());
+      contributions.forEach(c => {
+        const date = new Date(c.date + 'T00:00:00');
+        const col = Math.floor(Math.round((date - startSunday) / 86400000) / 7);
+        const row = date.getDay();
+        if (col >= COLS) return;
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', col * (CELL + GAP));
+        rect.setAttribute('y', row * (CELL + GAP));
+        rect.setAttribute('width', CELL);
+        rect.setAttribute('height', CELL);
+        rect.setAttribute('rx', 2);
+        rect.setAttribute('class', `gh-cell--${c.level}`);
+        svg.appendChild(rect);
+      });
+    }
+
+    let fetched = false;
+    async function loadGH() {
+      if (fetched) return;
+      fetched = true;
+      try {
+        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=last');
+        const data = await res.json();
+        tip.querySelector('.gh-tip-count').textContent = (data.total.lastYear || 0).toLocaleString();
+        renderGraph(data.contributions || []);
+      } catch (e) {}
+    }
+
+    function positionTip(link) {
+      const r = link.getBoundingClientRect();
+      const tw = tip.offsetWidth, th = tip.offsetHeight;
+      let left = r.left + r.width / 2 - tw / 2 + window.scrollX;
+      left = Math.max(8 + window.scrollX, Math.min(left, window.scrollX + window.innerWidth - tw - 8));
+      tip.style.left = left + 'px';
+      tip.style.top  = (r.top + window.scrollY - th - 10) + 'px';
+    }
+
+    loadGH();
+
+    ghLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        tip.classList.add('is-visible');
+        positionTip(link);
+      });
+      link.addEventListener('mouseleave', () => tip.classList.remove('is-visible'));
+    });
+  }
 })();
