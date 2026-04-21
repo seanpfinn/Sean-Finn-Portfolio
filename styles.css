@@ -94,11 +94,11 @@ a { text-decoration: none; color: inherit; }
 @keyframes cardDeal {
   from {
     opacity: 0;
-    transform: translateX(32px) rotate(3deg) scale(0.97);
+    transform: translateX(100vw) rotate(4deg);
   }
   to {
     opacity: 1;
-    transform: translateX(0) rotate(0deg) scale(1);
+    transform: translateX(0) rotate(0deg);
   }
 }
 
