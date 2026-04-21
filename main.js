@@ -131,16 +131,22 @@
         svg.appendChild(t);
       });
 
-      // Month labels at first week of each month
+      // Month labels — collect distinct months then space evenly
+      const monthsFound = [];
       let lastMonth = -1;
       for (let col = 0; col < usedCols; col++) {
         const d = new Date(startSunday);
         d.setDate(startSunday.getDate() + col * 7);
         if (d.getMonth() !== lastMonth) {
           lastMonth = d.getMonth();
-          svg.appendChild(mkText(MONTHS[lastMonth], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label'));
+          monthsFound.push(MONTHS[lastMonth]);
         }
       }
+      const graphW = usedCols * STEP - GAP;
+      monthsFound.forEach((label, i) => {
+        const x = LABEL_L + (i / Math.max(monthsFound.length - 1, 1)) * graphW;
+        svg.appendChild(mkText(label, i === 0 ? x : x - 10, LABEL_T - 3, 'gh-axis-label'));
+      });
 
       // Contribution cells
       recent.forEach(c => {

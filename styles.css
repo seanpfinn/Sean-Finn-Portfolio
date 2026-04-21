@@ -2,7 +2,7 @@
    RESET
    ================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; height: 100%; overflow: hidden; }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
 
@@ -122,7 +122,8 @@ body {
   color: var(--text);
   font-family: var(--font);
   line-height: 1.5;
-  min-height: 100vh;
+  height: 100%;
+  overflow: hidden;
   cursor: none;
 }
 
@@ -187,8 +188,9 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 var(--pad);
-  min-height: 100vh;
+  height: 100vh;
   gap: var(--gap);
+  overflow: hidden;
 }
 
 /* ================================
@@ -371,7 +373,7 @@ body {
   mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.3s ease;
-  animation: ai-shimmer 8s ease-in-out infinite;
+  animation: ai-shimmer 3s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -482,7 +484,11 @@ body {
   padding: var(--pad) 0;
   min-height: 0;
   align-content: start;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
+
+.content::-webkit-scrollbar { display: none; }
 
 #ai-playground {
   grid-column: 1 / -1;
@@ -825,7 +831,8 @@ body {
     display: none;
   }
 
-  .page { min-height: 0; }
+  .page { height: auto; overflow: visible; }
+  html, body { height: auto; overflow: auto; }
 
   /* ── Horizontal carousel ── */
   .content {
