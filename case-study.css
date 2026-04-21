@@ -168,7 +168,7 @@
     overflow: visible;
   }
 
-  .cs-card .card-media { height: 253px; border-radius: 6px; }
-  .cs-card .card-media--values-bridge { aspect-ratio: auto; height: 253px; }
+  .cs-card .card-media { height: 220px; border-radius: 6px; }
+  .cs-card .card-media--values-bridge { aspect-ratio: auto; height: 220px; }
   .cs-card .card-inset-border { border-radius: 6px; }
 }
