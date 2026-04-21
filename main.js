@@ -47,4 +47,21 @@
   }
   tick();
   setInterval(tick, 1000);
+  // ── Secondary CTA active state ───────────────────────────────────────────
+  const sectionMap = {
+    'select-projects': '[href="#select-projects"]',
+    'ai-playground':   '[href="#ai-playground"]',
+  };
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector(sectionMap[entry.target.id]);
+      if (link) link.classList.toggle('is-active', entry.isIntersecting);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -60% 0px' });
+
+  Object.keys(sectionMap).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObserver.observe(el);
+  });
 })();
