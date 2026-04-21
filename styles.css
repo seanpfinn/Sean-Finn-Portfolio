@@ -2,7 +2,7 @@
    RESET
    ================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; height: 100%; overflow: hidden; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
 
@@ -122,8 +122,6 @@ body {
   color: var(--text);
   font-family: var(--font);
   line-height: 1.5;
-  height: 100%;
-  overflow: hidden;
   cursor: none;
 }
 
@@ -188,9 +186,7 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 var(--pad);
-  height: 100vh;
   gap: var(--gap);
-  overflow: hidden;
 }
 
 /* ================================
@@ -482,13 +478,8 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   padding: var(--pad) 0;
-  min-height: 0;
   align-content: start;
-  overflow-y: auto;
-  scrollbar-width: none;
 }
-
-.content::-webkit-scrollbar { display: none; }
 
 #ai-playground {
   grid-column: 1 / -1;
@@ -831,8 +822,7 @@ body {
     display: none;
   }
 
-  .page { height: auto; overflow: visible; }
-  html, body { height: auto; overflow: auto; }
+  .page { min-height: 0; }
 
   /* ── Horizontal carousel ── */
   .content {
