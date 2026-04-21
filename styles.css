@@ -355,6 +355,7 @@ body {
 .cta-secondary:active::before,
 .cta-secondary.is-active::before {
   opacity: 1;
+  padding: 2px;
 }
 
 .cta-secondary:hover,
@@ -529,9 +530,7 @@ body {
    Values Bridge
    -------------------------------- */
 .card-media--values-bridge {
-  /* aspect ratio matches Figma: 893/484.66 ≈ 1.843 */
-  height: auto;
-  aspect-ratio: 893 / 484.66;
+  height: 400px;
   background-color: #bfba9d;
   overflow: hidden;
 }
@@ -564,6 +563,13 @@ body {
   max-height: 330px;
   object-fit: contain;
   object-position: bottom right;
+}
+
+/* --------------------------------
+   CLEAR Vault
+   -------------------------------- */
+.card-media--clear-vault {
+  background: #0a0f1a;
 }
 
 /* --------------------------------
@@ -766,7 +772,6 @@ body {
   .card--featured .card-outer-border { border-radius: 36px; }
   .card-media                    { border-radius: 7px; height: 300px; }
   .card-inset-border             { border-radius: 7px; }
-  .card-media--values-bridge     { height: auto; }
 }
 
 /* ================================

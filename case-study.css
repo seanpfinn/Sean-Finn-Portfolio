@@ -132,8 +132,7 @@
 }
 
 .cs-card .card-media--values-bridge {
-  height: auto;
-  aspect-ratio: 893 / 484.66;
+  height: 400px;
   border-radius: 12px;
 }
 
