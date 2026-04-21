@@ -936,7 +936,7 @@ body {
 .gh-tooltip {
   position: absolute;
   z-index: 1000;
-  width: 360px;
+  width: 420px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 16px;

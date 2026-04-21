@@ -112,7 +112,8 @@
         COLS
       );
 
-      const W = LABEL_L + usedCols * STEP - GAP;
+      const LABEL_R = 14;
+      const W = LABEL_L + usedCols * STEP - GAP + LABEL_R;
       const H = LABEL_T + ROWS * STEP - GAP;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
@@ -145,7 +146,10 @@
       const graphW = usedCols * STEP - GAP;
       monthsFound.forEach((label, i) => {
         const x = LABEL_L + (i / Math.max(monthsFound.length - 1, 1)) * graphW;
-        svg.appendChild(mkText(label, i === 0 ? x : x - 10, LABEL_T - 3, 'gh-axis-label'));
+        const t = mkText(label, x, LABEL_T - 3, 'gh-axis-label');
+        const anchor = i === 0 ? 'start' : i === monthsFound.length - 1 ? 'end' : 'middle';
+        t.setAttribute('text-anchor', anchor);
+        svg.appendChild(t);
       });
 
       // Contribution cells
