@@ -68,10 +68,6 @@
   // ── GitHub tooltip ───────────────────────────────────────────────────────
   const ghLinks = document.querySelectorAll('a[href="https://github.com/seanpfinn"]');
   if (ghLinks.length) {
-    const CELL = 8, GAP = 2, COLS = 52, ROWS = 7;
-    const W = COLS * (CELL + GAP) - GAP;
-    const H = ROWS * (CELL + GAP) - GAP;
-
     const tip = document.createElement('div');
     tip.className = 'gh-tooltip';
     tip.innerHTML = `
@@ -82,26 +78,79 @@
           <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions this year</span>
         </div>
       </div>
-      <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"></svg>
+      <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg"></svg>
     `;
     document.body.appendChild(tip);
 
     const svg = tip.querySelector('.gh-tip-graph');
+    const NS = 'http://www.w3.org/2000/svg';
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     function renderGraph(contributions) {
       svg.innerHTML = '';
       if (!contributions.length) return;
-      const firstDate = new Date(contributions[0].date + 'T00:00:00');
+
+      const CELL = 10, GAP = 2, STEP = 12;
+      const COLS = 13, ROWS = 7;
+      const LABEL_L = 26, LABEL_T = 14;
+
+      // Filter to last 13 weeks
+      const today = new Date(); today.setHours(0,0,0,0);
+      const cutoff = new Date(today);
+      cutoff.setDate(today.getDate() - COLS * 7);
+      const recent = contributions.filter(c => new Date(c.date + 'T00:00:00') >= cutoff);
+      if (!recent.length) return;
+
+      // Find start Sunday
+      const firstDate = new Date(recent[0].date + 'T00:00:00');
       const startSunday = new Date(firstDate);
       startSunday.setDate(firstDate.getDate() - firstDate.getDay());
-      contributions.forEach(c => {
+
+      const lastDate = new Date(recent[recent.length - 1].date + 'T00:00:00');
+      const usedCols = Math.min(
+        Math.floor(Math.round((lastDate - startSunday) / 86400000) / 7) + 1,
+        COLS
+      );
+
+      const W = LABEL_L + usedCols * STEP - GAP;
+      const H = LABEL_T + ROWS * STEP - GAP;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+      function mkText(content, x, y, cls) {
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', x); t.setAttribute('y', y);
+        t.setAttribute('class', cls);
+        t.textContent = content;
+        return t;
+      }
+
+      // Day labels: Mon, Wed, Fri
+      [[1,'Mon'],[3,'Wed'],[5,'Fri']].forEach(([row, label]) => {
+        const t = mkText(label, 0, LABEL_T + row * STEP + CELL / 2, 'gh-axis-label');
+        t.setAttribute('dominant-baseline', 'middle');
+        svg.appendChild(t);
+      });
+
+      // Month labels at first week of each month
+      let lastMonth = -1;
+      for (let col = 0; col < usedCols; col++) {
+        const d = new Date(startSunday);
+        d.setDate(startSunday.getDate() + col * 7);
+        if (d.getMonth() !== lastMonth) {
+          lastMonth = d.getMonth();
+          svg.appendChild(mkText(MONTHS[lastMonth], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label'));
+        }
+      }
+
+      // Contribution cells
+      recent.forEach(c => {
         const date = new Date(c.date + 'T00:00:00');
         const col = Math.floor(Math.round((date - startSunday) / 86400000) / 7);
         const row = date.getDay();
-        if (col >= COLS) return;
-        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        rect.setAttribute('x', col * (CELL + GAP));
-        rect.setAttribute('y', row * (CELL + GAP));
+        if (col >= usedCols) return;
+        const rect = document.createElementNS(NS, 'rect');
+        rect.setAttribute('x', LABEL_L + col * STEP);
+        rect.setAttribute('y', LABEL_T + row * STEP);
         rect.setAttribute('width', CELL);
         rect.setAttribute('height', CELL);
         rect.setAttribute('rx', 2);
