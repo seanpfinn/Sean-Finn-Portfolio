@@ -319,7 +319,28 @@ body {
   transition: opacity 0.15s;
 }
 
-.cta-secondary:hover { opacity: 0.6; }
+.cta-secondary:hover,
+.cta-secondary:focus {
+  background: linear-gradient(135deg, #ede9fe, #dbeafe, #d1fae5, #fce7f3, #ede9fe);
+  background-size: 300% 300%;
+  animation: ai-shimmer 3s ease infinite;
+  border-color: transparent;
+  opacity: 1;
+}
+
+.dark .cta-secondary:hover,
+.dark .cta-secondary:focus {
+  background: linear-gradient(135deg, #3b1f6e, #1e3a5f, #0f4a3a, #4a1a3f, #3b1f6e);
+  background-size: 300% 300%;
+  animation: ai-shimmer 3s ease infinite;
+  border-color: transparent;
+}
+
+@keyframes ai-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
 .dark .cta-secondary { border-color: var(--border); }
 
