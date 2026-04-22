@@ -665,9 +665,10 @@ body {
 }
 
 .media-ui--metasim {
-  top: 19px;
-  left: 12.5%;
-  width: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  width: 84%;
   height: auto;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
   border-radius: 8px;
@@ -682,9 +683,10 @@ body {
 }
 
 .media-ui--xr {
-  top: 18px;
-  left: 12.5%;
-  width: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  width: 84%;
   height: auto;
   box-shadow: 0 0 6px rgba(0,0,0,0.2);
   object-fit: cover;
@@ -700,12 +702,11 @@ body {
 .media-bg--ugl {
   object-position: center;
   object-fit: cover;
-  /* Figma: h=240%, top=-70%, left=-3.75%, w=107.5% */
   inset: auto;
-  top: -70%;
+  top: -20%;
   left: -3.75%;
   width: 107.5%;
-  height: 240%;
+  height: 150%;
 }
 
 /* --------------------------------
@@ -732,7 +733,7 @@ body {
 
 .recur-phone {
   position: static;
-  height: 556px;
+  height: 380px;
   width: auto;
   object-fit: contain;
   flex-shrink: 1;
