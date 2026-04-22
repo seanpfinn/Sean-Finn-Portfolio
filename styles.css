@@ -27,10 +27,10 @@ a { text-decoration: none; color: inherit; }
   --gap:         35px;
   --pad:         10px;
   --gh-cell-0:   rgba(0,0,0,0.07);
-  --gh-cell-1:   #bfd4f2;
-  --gh-cell-2:   #7aaee0;
-  --gh-cell-3:   #3d7ec8;
-  --gh-cell-4:   #1a56a8;
+  --gh-cell-1:   #b6e8c0;
+  --gh-cell-2:   #6cc97a;
+  --gh-cell-3:   #2ea84a;
+  --gh-cell-4:   #1a7a32;
 }
 
 /* ================================
@@ -69,10 +69,10 @@ a { text-decoration: none; color: inherit; }
   --border-sub:  rgba(60,60,55,0.4);
   --shadow-card: 0 0 4px rgba(0,0,0,0.4);
   --gh-cell-0:   rgba(255,255,255,0.06);
-  --gh-cell-1:   #1a3a6b;
-  --gh-cell-2:   #2a5699;
-  --gh-cell-3:   #3d7ec8;
-  --gh-cell-4:   #6aaaf0;
+  --gh-cell-1:   #14361e;
+  --gh-cell-2:   #1e6b32;
+  --gh-cell-3:   #2ea84a;
+  --gh-cell-4:   #4dd668;
 }
 
 /* ================================
@@ -534,7 +534,7 @@ body {
    ================================ */
 .card-media {
   position: relative;
-  height: 400px;
+  height: 260px;
   border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
@@ -568,7 +568,7 @@ body {
    Values Bridge
    -------------------------------- */
 .card-media--values-bridge {
-  height: 400px;
+  height: 260px;
   background-color: #bfba9d;
   overflow: hidden;
 }
@@ -809,7 +809,7 @@ body {
   .card-inner                    { border-radius: 14px; padding: 8px; }
   .card-outer-border             { border-radius: 14px; }
   .card--featured .card-outer-border { border-radius: 36px; }
-  .card-media                    { border-radius: 7px; height: 300px; }
+  .card-media                    { border-radius: 7px; height: 200px; }
   .card-inset-border             { border-radius: 7px; }
 }
 
@@ -868,9 +868,9 @@ body {
   .card-inner                    { border-radius: 12px; }
   .card-outer-border             { border-radius: 12px; }
   .card--featured .card-outer-border { border-radius: 24px; }
-  .card-media                    { border-radius: 6px; height: 220px; }
+  .card-media                    { border-radius: 6px; height: 160px; }
   .card-inset-border             { border-radius: 6px; }
-  .card-media--values-bridge     { aspect-ratio: auto; height: 220px; }
+  .card-media--values-bridge     { aspect-ratio: auto; height: 160px; }
 
   .vb-desktop { width: 75%; left: 20px; bottom: 30px; }
   .vb-mobile  { width: 16%; right: 16px; bottom: 28px; }
