@@ -824,7 +824,7 @@ body {
   .custom-cursor { display: none; }
 
   .cta-secondary-row { flex-direction: row; }
-  .cta-secondary { flex: 1; }
+  .cta-secondary { flex: 1; justify-content: center; }
 
   .page {
     flex-direction: column;
@@ -836,8 +836,9 @@ body {
     display: none;
   }
 
-  .page { height: auto; overflow: visible; }
+  .page { height: auto; overflow: visible; flex: 1; }
   html, body { height: auto; overflow: auto; }
+  body { display: flex; flex-direction: column; min-height: 100dvh; }
 
   /* ── Horizontal carousel ── */
   .content {
@@ -847,7 +848,7 @@ body {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 8px 16px 8px;
+    padding: 24px 16px 8px;
     gap: 10px;
     /* allow cards to overflow without page growing wide */
     width: 100%;
@@ -900,7 +901,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 24px 20px 20px;
+    padding: 24px 20px 0;
     background: var(--bg);
   }
 }
