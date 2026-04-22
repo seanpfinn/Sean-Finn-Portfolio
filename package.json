@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@web-kits/audio": "^0.1.0"
+  }
+}
