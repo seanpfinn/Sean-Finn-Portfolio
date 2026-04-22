@@ -822,6 +822,9 @@ body {
   body { cursor: auto; }
   .custom-cursor { display: none; }
 
+  .cta-secondary-row { flex-direction: row; }
+  .cta-secondary { flex: 1; }
+
   .page {
     flex-direction: column;
     padding: 0;

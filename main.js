@@ -53,10 +53,26 @@
     'ai-playground':   '[href="#ai-playground"]',
   };
 
+  let selectedCtaHref = null;
+
+  document.querySelectorAll('.cta-secondary').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedCtaHref = btn.getAttribute('href');
+      document.querySelectorAll('.cta-secondary').forEach(b => b.classList.remove('is-active'));
+      document.querySelectorAll(`.cta-secondary[href="${selectedCtaHref}"]`).forEach(b => b.classList.add('is-active'));
+    });
+  });
+
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      const link = document.querySelector(sectionMap[entry.target.id]);
-      if (link) link.classList.toggle('is-active', entry.isIntersecting);
+      const links = document.querySelectorAll(sectionMap[entry.target.id]);
+      links.forEach(link => {
+        if (entry.isIntersecting) {
+          link.classList.add('is-active');
+        } else if (link.getAttribute('href') !== selectedCtaHref) {
+          link.classList.remove('is-active');
+        }
+      });
     });
   }, { threshold: 0, rootMargin: '0px 0px -60% 0px' });
 
