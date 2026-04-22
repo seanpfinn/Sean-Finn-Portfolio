@@ -532,6 +532,8 @@ body {
 .card {
   background: var(--bg-card-out);
   border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
 
 .card--featured {
@@ -544,7 +546,6 @@ body {
   background: var(--bg-card);
   border-radius: 18px;
   padding: 10px;
-  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -834,8 +835,8 @@ body {
    TABLET (810px – 1099px)
    ================================ */
 @media (min-width: 810px) and (max-width: 1099px) {
-  .card                          { border-radius: 20px; }
-  .card--featured                { border-radius: 36px; }
+  .card                          { border-radius: 20px; overflow: hidden; }
+  .card--featured                { border-radius: 36px; overflow: hidden; }
   .card-inner                    { border-radius: 14px; padding: 8px; }
   .card-outer-border             { border-radius: 14px; }
   .card--featured .card-outer-border { border-radius: 36px; }
@@ -896,8 +897,8 @@ body {
     grid-column: auto;
   }
 
-  .card                          { border-radius: 16px; overflow: visible; }
-  .card--featured                { border-radius: 24px; overflow: visible; }
+  .card                          { border-radius: 16px; overflow: hidden; }
+  .card--featured                { border-radius: 24px; overflow: hidden; }
   .card-inner                    { border-radius: 12px; }
   .card-outer-border             { border-radius: 12px; }
   .card--featured .card-outer-border { border-radius: 24px; }
