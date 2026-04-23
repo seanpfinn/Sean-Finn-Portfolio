@@ -47,38 +47,47 @@
   }
   tick();
   setInterval(tick, 1000);
-  // ── Secondary CTA active state ───────────────────────────────────────────
-  const sectionMap = {
-    'select-projects': '[href="#select-projects"]',
-    'ai-playground':   '[href="#ai-playground"]',
-  };
+  // ── Secondary CTA section switching ─────────────────────────────────────
+  const SECTION_CTA = { projects: '#select-projects', ai: '#ai-playground' };
+  let activeSection = 'projects';
 
-  let selectedCtaHref = null;
+  function setCtaActive(href) {
+    document.querySelectorAll('.cta-secondary').forEach(btn => {
+      btn.classList.toggle('is-active', btn.getAttribute('href') === href);
+    });
+  }
+
+  function switchSection(next) {
+    if (next === activeSection) return;
+
+    // Hide current section cards
+    document.querySelectorAll(`.card[data-section="${activeSection}"]`).forEach(card => {
+      card.hidden = true;
+      card.classList.remove('card-reveal');
+    });
+
+    // Show and animate incoming cards with stagger
+    document.querySelectorAll(`.card[data-section="${next}"]`).forEach((card, i) => {
+      card.hidden = false;
+      card.style.animationDelay = `${i * 0.07}s`;
+      card.classList.remove('card-reveal');
+      void card.offsetWidth; // force reflow to restart animation
+      card.classList.add('card-reveal');
+    });
+
+    activeSection = next;
+    setCtaActive(SECTION_CTA[next]);
+  }
+
+  // Initialise: Select Projects is active by default
+  setCtaActive(SECTION_CTA.projects);
 
   document.querySelectorAll('.cta-secondary').forEach(btn => {
-    btn.addEventListener('click', () => {
-      selectedCtaHref = btn.getAttribute('href');
-      document.querySelectorAll('.cta-secondary').forEach(b => b.classList.remove('is-active'));
-      document.querySelectorAll(`.cta-secondary[href="${selectedCtaHref}"]`).forEach(b => b.classList.add('is-active'));
+    btn.addEventListener('click', e => {
+      const href = btn.getAttribute('href');
+      if (href === '#select-projects') { e.preventDefault(); switchSection('projects'); }
+      else if (href === '#ai-playground') { e.preventDefault(); switchSection('ai'); }
     });
-  });
-
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const links = document.querySelectorAll(sectionMap[entry.target.id]);
-      links.forEach(link => {
-        if (entry.isIntersecting) {
-          link.classList.add('is-active');
-        } else if (link.getAttribute('href') !== selectedCtaHref) {
-          link.classList.remove('is-active');
-        }
-      });
-    });
-  }, { threshold: 0, rootMargin: '0px 0px -60% 0px' });
-
-  Object.keys(sectionMap).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) sectionObserver.observe(el);
   });
 
   // ── GitHub tooltip ───────────────────────────────────────────────────────

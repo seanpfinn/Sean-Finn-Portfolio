@@ -614,12 +614,12 @@ body {
 }
 
 .media-ui--clear-vault {
-  height: 118%;
+  height: 145%;
   width: auto;
   position: absolute;
-  bottom: -8px;
+  top: 16px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-46%);
   object-fit: contain;
 }
 
