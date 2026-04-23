@@ -490,11 +490,13 @@ body {
 
 .content::-webkit-scrollbar { display: none; }
 
-#ai-playground {
-  grid-column: 1 / -1;
-  height: 0;
-  margin: 0;
-  padding: 0;
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.card-reveal {
+  animation: cardReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 
@@ -748,6 +750,29 @@ body {
   width: auto;
   object-fit: contain;
   flex-shrink: 1;
+}
+
+/* ================================
+   AI PLAYGROUND CARD BACKGROUNDS
+   ================================ */
+.card-media--ai-identity {
+  background: radial-gradient(ellipse at 60% 40%, #1a3a7a 0%, #091d52 60%, #050f2a 100%);
+}
+
+.card-media--ai-genui {
+  background: radial-gradient(ellipse at 40% 60%, #2a1050 0%, #120827 60%, #08041a 100%);
+}
+
+.card-media--ai-research {
+  background: radial-gradient(ellipse at 50% 30%, #0f2d18 0%, #07140a 60%, #030a05 100%);
+}
+
+.card-media--ai-motion {
+  background: radial-gradient(ellipse at 70% 50%, #3a1e06 0%, #1a0f04 60%, #0d0602 100%);
+}
+
+.card-media--ai-color {
+  background: radial-gradient(ellipse at 30% 70%, #081a30 0%, #04101f 60%, #020810 100%);
 }
 
 /* ================================

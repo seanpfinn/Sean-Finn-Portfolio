@@ -88,8 +88,10 @@
     <!-- RIGHT CONTENT -->
     <main class="content">
 
+      <!-- ── SELECT PROJECTS ───────────────────────────────── -->
+
       <!-- 1. CLEAR Vault -->
-      <article id="select-projects" class="card card-deal" style="animation-delay:0.1s">
+      <article id="select-projects" class="card card-deal" data-section="projects" style="animation-delay:0.1s">
         <div class="card-inner">
           <div class="card-media card-media--clear-vault">
             <img src="assets/clear-vault-mockup.png" alt="CLEAR Vault app mockup" class="media-ui media-ui--clear-vault" />
@@ -107,7 +109,7 @@
       </article>
 
       <!-- 2. Dune Security -->
-      <article class="card card-deal" style="animation-delay:0.2s">
+      <article class="card card-deal" data-section="projects" style="animation-delay:0.2s">
         <div class="card-inner">
           <div class="card-media card-media--dune">
             <img src="assets/bd951666945f34613a1372a61fe9eb731b345d94.png" alt="" class="media-bg" />
@@ -124,8 +126,8 @@
         </div>
       </article>
 
-      <!-- 5. MetaSim Platform -->
-      <article class="card card-deal" style="animation-delay:0.3s">
+      <!-- 3. MetaSim Platform -->
+      <article class="card card-deal" data-section="projects" style="animation-delay:0.3s">
         <div class="card-inner">
           <div class="card-media card-media--metasim">
             <img src="assets/fb104d1fc9295e3d02c6d9029e7d8bb618b69768.png" alt="" class="media-bg" />
@@ -143,8 +145,8 @@
         </div>
       </article>
 
-      <!-- 6. XR Simulator -->
-      <article class="card card-deal" style="animation-delay:0.4s">
+      <!-- 4. XR Simulator -->
+      <article class="card card-deal" data-section="projects" style="animation-delay:0.4s">
         <div class="card-inner">
           <div class="card-media card-media--xr">
             <img src="assets/9a5d15226ed10edb2af48dba5542fc7225e2c765.png" alt="" class="media-bg" />
@@ -162,8 +164,8 @@
         </div>
       </article>
 
-      <!-- 7. User Guided Localization -->
-      <article class="card card-deal" style="animation-delay:0.5s">
+      <!-- 5. User Guided Localization -->
+      <article class="card card-deal" data-section="projects" style="animation-delay:0.5s">
         <div class="card-inner">
           <div class="card-media card-media--ugl">
             <img src="assets/28f61171ad6057c90325cbe051013907680dc088.png" alt="" class="media-bg media-bg--ugl" />
@@ -180,8 +182,8 @@
         </div>
       </article>
 
-      <!-- 8. Recur Forever Platform -->
-      <article class="card card-deal" style="animation-delay:0.6s">
+      <!-- 6. Recur Forever Platform -->
+      <article class="card card-deal" data-section="projects" style="animation-delay:0.6s">
         <div class="card-inner">
           <div class="card-media card-media--recur">
             <img src="assets/77fdde650a706851576ae5a3fd5f5662feaaab24.png" alt="" class="media-bg" />
@@ -203,8 +205,92 @@
         </div>
       </article>
 
-      <!-- AI Playground section anchor -->
-      <div id="ai-playground"></div>
+      <!-- ── AI PLAYGROUND ──────────────────────────────────── -->
+
+      <!-- AI 1. CLEAR AI Identity -->
+      <article class="card" data-section="ai" hidden>
+        <div class="card-inner">
+          <div class="card-media card-media--ai-identity">
+            <div class="card-inset-border card-inset-border--subtle"></div>
+          </div>
+          <div class="card-copy">
+            <div class="card-copy-top">
+              <span class="card-title">CLEAR AI Identity</span>
+              <span class="card-badge">Concept</span>
+            </div>
+            <p class="card-desc">Exploring AI-generated biometric visualizations as a new layer of dynamic identity for CLEAR members.</p>
+          </div>
+          <div class="card-outer-border"></div>
+        </div>
+      </article>
+
+      <!-- AI 2. Generative UI System -->
+      <article class="card" data-section="ai" hidden>
+        <div class="card-inner">
+          <div class="card-media card-media--ai-genui">
+            <div class="card-inset-border card-inset-border--subtle"></div>
+          </div>
+          <div class="card-copy">
+            <div class="card-copy-top">
+              <span class="card-title">Generative UI System</span>
+              <span class="card-badge">Exploration</span>
+            </div>
+            <p class="card-desc">A design system where components are generated from semantic intent using large language models.</p>
+          </div>
+          <div class="card-outer-border"></div>
+        </div>
+      </article>
+
+      <!-- AI 3. AI Research Synthesis -->
+      <article class="card" data-section="ai" hidden>
+        <div class="card-inner">
+          <div class="card-media card-media--ai-research">
+            <div class="card-inset-border card-inset-border--subtle"></div>
+          </div>
+          <div class="card-copy">
+            <div class="card-copy-top">
+              <span class="card-title">AI Research Synthesis</span>
+              <span class="card-badge">Prototype</span>
+            </div>
+            <p class="card-desc">Transforming raw user interview transcripts into structured insight maps through AI-assisted analysis.</p>
+          </div>
+          <div class="card-outer-border"></div>
+        </div>
+      </article>
+
+      <!-- AI 4. Motion Intelligence -->
+      <article class="card" data-section="ai" hidden>
+        <div class="card-inner">
+          <div class="card-media card-media--ai-motion">
+            <div class="card-inset-border card-inset-border--subtle"></div>
+          </div>
+          <div class="card-copy">
+            <div class="card-copy-top">
+              <span class="card-title">Motion Intelligence</span>
+              <span class="card-badge">Concept</span>
+            </div>
+            <p class="card-desc">Procedural micro-interaction concepts generated from behavioral and interaction pattern data.</p>
+          </div>
+          <div class="card-outer-border"></div>
+        </div>
+      </article>
+
+      <!-- AI 5. Neural Color Systems -->
+      <article class="card" data-section="ai" hidden>
+        <div class="card-inner">
+          <div class="card-media card-media--ai-color">
+            <div class="card-inset-border card-inset-border--subtle"></div>
+          </div>
+          <div class="card-copy">
+            <div class="card-copy-top">
+              <span class="card-title">Neural Color Systems</span>
+              <span class="card-badge">Exploration</span>
+            </div>
+            <p class="card-desc">Generative color palette evolution using aesthetic preference learning across brand and product systems.</p>
+          </div>
+          <div class="card-outer-border"></div>
+        </div>
+      </article>
 
     </main>
   </div>
