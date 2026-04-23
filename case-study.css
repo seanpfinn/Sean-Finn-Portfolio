@@ -137,6 +137,20 @@
 }
 
 /* ================================
+   CLEAR VAULT — case study card media
+   ================================ */
+.cs-card .card-media--clear-vault {
+  height: 400px;
+  border-radius: 12px;
+}
+
+.cs-card .media-ui--clear-vault {
+  height: 108%;
+  top: 20px;
+  transform: translateX(-46%);
+}
+
+/* ================================
    MOBILE
    ================================ */
 @media (max-width: 809px) {
@@ -169,5 +183,11 @@
 
   .cs-card .card-media { height: 220px; border-radius: 6px; }
   .cs-card .card-media--values-bridge { aspect-ratio: auto; height: 220px; }
+  .cs-card .card-media--clear-vault { height: 220px; border-radius: 6px; }
   .cs-card .card-inset-border { border-radius: 6px; }
+
+  .cs-card .media-ui--clear-vault {
+    height: 112%;
+    top: 12px;
+  }
 }

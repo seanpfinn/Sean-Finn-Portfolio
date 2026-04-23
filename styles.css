@@ -185,9 +185,9 @@ body {
    ================================ */
 .page {
   display: flex;
+  width: 95%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 var(--pad);
   height: 100vh;
   gap: var(--gap);
   overflow: hidden;
