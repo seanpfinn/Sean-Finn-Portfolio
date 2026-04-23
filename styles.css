@@ -611,6 +611,16 @@ body {
   background: #041A55;
 }
 
+.media-ui--clear-vault {
+  height: 118%;
+  width: auto;
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: contain;
+}
+
 /* --------------------------------
    Dune Security
    -------------------------------- */
