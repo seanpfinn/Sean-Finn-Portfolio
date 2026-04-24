@@ -944,6 +944,12 @@ body {
   .media-ui--dune   { left: 10%; width: 80%; }
   .media-ui--metasim { left: 8%; width: 84%; top: 14px; }
   .media-ui--xr      { left: 8%; width: 84%; top: 14px; }
+
+  .card-deal {
+    animation-name: cardDealMobile;
+    animation-duration: 0.55s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 /* ================================
