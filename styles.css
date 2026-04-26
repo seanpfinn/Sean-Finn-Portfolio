@@ -246,7 +246,7 @@ body {
 
 .nav-home {
   font-family: var(--mono);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   line-height: 20.16px;
   letter-spacing: -0.576px;
   color: #080808;
@@ -261,7 +261,7 @@ body {
 
 .nav-link {
   font-family: var(--mono);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   line-height: 20.16px;
   letter-spacing: -0.576px;
   color: var(--text);
@@ -293,7 +293,7 @@ body {
 
 .hero-body {
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
@@ -303,7 +303,7 @@ body {
 
 .hero-current {
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
@@ -324,7 +324,7 @@ body {
   box-shadow: 0 0 18px 4px rgba(250, 249, 247, 0.18) inset, 0 4px 8px 0 rgba(0, 0, 0, 0.25);
   color: #fff;
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: -0.288px;
   border-radius: 64px;
@@ -352,7 +352,7 @@ body {
   border: 1px solid transparent;
   border-radius: 24px;
   font-family: var(--font);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 22px;
   letter-spacing: -0.72px;
@@ -420,7 +420,7 @@ body {
 
 .social-link {
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.576px;
@@ -440,7 +440,7 @@ body {
 
 .last-updated {
   font-family: var(--mono);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.576px;
@@ -452,7 +452,7 @@ body {
   align-items: center;
   gap: 2px;
   font-family: var(--mono);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.288px;
@@ -800,7 +800,7 @@ body {
 
 .card-title {
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 17.28px;
   letter-spacing: -0.576px;
@@ -829,7 +829,7 @@ body {
 
 .card-desc {
   font-family: var(--font);
-  font-size: 14.4px;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
