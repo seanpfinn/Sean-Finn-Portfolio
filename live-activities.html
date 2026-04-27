@@ -157,7 +157,6 @@
   <script src="main.js"></script>
 
   <script>
-    const DI_VIEWS  = ['minimal', 'compact', 'expanded'];
     const ALL_VIEWS = ['minimal', 'compact', 'expanded', 'lockscreen'];
     const SRCS = {
       minimal:    'assets/la-minimal.png',
@@ -165,63 +164,44 @@
       expanded:   'assets/la-expanded.png',
       lockscreen: 'assets/la-lockscreen.png',
     };
-    const SPRING      = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
-    const SPRING_SOFT = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
     const wrap  = document.querySelector('.la-screen-wrap');
     const btns  = document.querySelectorAll('.la-view-btn');
     let current = 'minimal';
     let busy    = false;
 
-    function transitionType(from, to) {
-      if (to   === 'lockscreen') return 'to-lock';
-      if (from === 'lockscreen') return 'from-lock';
-      return DI_VIEWS.indexOf(to) > DI_VIEWS.indexOf(from) ? 'expand' : 'contract';
-    }
+    // Preload all screens so transitions don't stall on image load
+    ALL_VIEWS.forEach(v => { const i = new Image(); i.src = SRCS[v]; });
 
     function setView(to) {
       if (to === current || busy) return;
       busy = true;
 
-      const type  = transitionType(current, to);
       const outEl = wrap.querySelector('.la-phone-screen');
-
-      // Build incoming image — CSS makes it position:absolute/inset:0 automatically
-      const inEl = document.createElement('img');
+      const inEl  = document.createElement('img');
       inEl.src       = SRCS[to];
       inEl.alt       = `Live Activities – ${to}`;
       inEl.className = 'la-phone-screen';
 
-      let dur, outAnim, inAnim;
+      const dur = 320;
+      let outAnim, inAnim;
 
-      if (type === 'expand') {
-        dur     = 400;
-        // inEl naturally sits on top (later in DOM); expand from DI pill
-        inAnim  = `la-expand-in ${dur}ms ${SPRING} both`;
-        outAnim = `la-fade-out ${Math.round(dur * 0.5)}ms ease both`;
-
-      } else if (type === 'contract') {
-        dur     = 340;
-        // outEl must stay on top — raise it above the incoming image
-        outEl.style.zIndex = '1';
-        outAnim = `la-contract-out ${dur}ms ${SPRING} both`;
-        inAnim  = `la-fade-in ${Math.round(dur * 0.55)}ms ease ${Math.round(dur * 0.35)}ms both`;
-
-      } else if (type === 'to-lock') {
-        dur     = 460;
-        outAnim = `la-pan-down-out ${dur}ms ${SPRING_SOFT} both`;
-        inAnim  = `la-pan-down-in  ${dur}ms ${SPRING_SOFT} both`;
-
-      } else { // from-lock
-        dur     = 400;
-        outAnim = `la-pan-up-out ${dur}ms ${SPRING_SOFT} both`;
-        inAnim  = `la-pan-up-in  ${dur}ms ${SPRING_SOFT} both`;
+      if (to === 'lockscreen' || current === 'lockscreen') {
+        // Instant cut to/from lock screen
+        wrap.appendChild(inEl);
+        outEl.remove();
+        btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
+        current = to;
+        busy = false;
+        return;
       }
 
-      // Append before animating so the element is in the DOM
+      outAnim = `la-fade-out ${dur}ms ease both`;
+      inAnim  = `la-fade-in  ${dur}ms ease both`;
+
       wrap.appendChild(inEl);
 
-      // Double rAF: first tick registers the element, second tick starts animation
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           outEl.style.animation = outAnim;
@@ -235,7 +215,6 @@
       setTimeout(() => {
         outEl.remove();
         inEl.style.animation = '';
-        inEl.style.zIndex    = '';
         busy = false;
       }, dur + 60);
     }
