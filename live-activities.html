@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLEAR Live Activities – Sean Finn</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="live-activities.css" />
+</head>
+<body>
+
+  <!-- MOBILE NAV -->
+  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
+    <a href="/" class="nav-home">Sean Finn</a>
+    <div class="nav-links">
+      <a href="about.html" class="nav-link">About</a>
+      <a href="resume.html" class="nav-link">Resume</a>
+      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
+    </div>
+  </header>
+
+  <!-- MOBILE HERO -->
+  <section class="mobile-hero blur-in" style="animation-delay:0.1s">
+    <h1 class="cs-title">CLEAR Live Activities</h1>
+    <p class="cs-subtitle">Real-time travel status and biometric checkpoint updates surfaced through iOS Live Activities.</p>
+    <div class="la-meta-grid">
+      <div class="la-meta-item">
+        <span class="cs-meta-label">Company</span>
+        <span class="cs-meta-value">CLEAR</span>
+      </div>
+      <div class="la-meta-item">
+        <span class="cs-meta-label">Timeframe</span>
+        <span class="cs-meta-value">Q2 2026</span>
+      </div>
+      <div class="la-meta-item">
+        <span class="cs-meta-label">Platform</span>
+        <span class="cs-meta-value">iOS</span>
+      </div>
+    </div>
+    <div class="cs-section">
+      <span class="cs-meta-label">Context</span>
+      <p class="cs-context-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
+    </div>
+  </section>
+
+  <div class="page">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar blur-in" style="animation-delay:0s">
+
+      <nav class="nav">
+        <div class="nav-inner">
+          <a href="/" class="nav-home">Sean Finn</a>
+          <div class="nav-links">
+            <a href="about.html" class="nav-link">About</a>
+            <a href="resume.html" class="nav-link">Resume</a>
+            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="sidebar-hero cs-sidebar-content">
+        <h1 class="cs-title">CLEAR Live Activities</h1>
+        <p class="cs-subtitle">Real-time travel status and biometric checkpoint updates surfaced through iOS Live Activities.</p>
+
+        <div class="la-meta-grid">
+          <div class="la-meta-item">
+            <span class="cs-meta-label">Company</span>
+            <span class="cs-meta-value">CLEAR</span>
+          </div>
+          <div class="la-meta-item">
+            <span class="cs-meta-label">Timeframe</span>
+            <span class="cs-meta-value">Q2 2026</span>
+          </div>
+          <div class="la-meta-item">
+            <span class="cs-meta-label">Platform</span>
+            <span class="cs-meta-value">iOS</span>
+          </div>
+        </div>
+
+        <div class="cs-section">
+          <span class="cs-meta-label">Context</span>
+          <p class="cs-context-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="social-links">
+          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="sidebar-meta">
+          <p class="last-updated">Last updated: April 26th, 2026</p>
+          <p class="weather">
+            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 53&deg;F, Clear sky</span>
+            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Clear sky" class="weather-icon" />
+          </p>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT CONTENT -->
+    <main class="content la-content blur-in" style="animation-delay:0.1s">
+
+      <!-- Visual -->
+      <div class="la-visual">
+        <div class="la-phone-wrap">
+          <img src="assets/la-phone-frame.png" alt="" class="la-phone-frame" />
+          <img src="assets/la-minimal.png" alt="Live Activities – Minimal view" class="la-phone-screen" id="la-screen" />
+        </div>
+      </div>
+
+      <!-- View switcher -->
+      <div class="la-switcher">
+        <button class="la-view-btn is-active" data-view="minimal" data-src="assets/la-minimal.png">Minimal</button>
+        <button class="la-view-btn" data-view="compact" data-src="assets/la-compact.png">Compact</button>
+        <button class="la-view-btn" data-view="expanded" data-src="assets/la-expanded.png">Expanded</button>
+        <button class="la-view-btn" data-view="lockscreen" data-src="assets/la-lockscreen.png">Lock Screen</button>
+        <button class="la-icon-btn" id="la-shuffle" aria-label="Shuffle views">
+          <img src="assets/la-shuffle.svg" alt="" />
+        </button>
+        <button class="la-icon-btn" id="la-repeat" aria-label="Cycle views">
+          <img src="assets/la-repeat.svg" alt="" />
+        </button>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- MOBILE FOOTER -->
+  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: April 26th, 2026</p>
+      <p class="weather">
+        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 53&deg;F, Clear sky</span>
+        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Clear sky" class="weather-icon" />
+      </p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+
+  <script>
+    const views = ['minimal', 'compact', 'expanded', 'lockscreen'];
+    const screen = document.getElementById('la-screen');
+    const btns = document.querySelectorAll('.la-view-btn');
+
+    function setView(view) {
+      const btn = document.querySelector(`.la-view-btn[data-view="${view}"]`);
+      if (!btn) return;
+      btns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      screen.style.opacity = '0';
+      setTimeout(() => {
+        screen.src = btn.dataset.src;
+        screen.style.opacity = '1';
+      }, 180);
+    }
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => setView(btn.dataset.view));
+    });
+
+    // Shuffle: pick a random different view
+    document.getElementById('la-shuffle').addEventListener('click', () => {
+      const active = document.querySelector('.la-view-btn.is-active');
+      const others = views.filter(v => v !== active?.dataset.view);
+      setView(others[Math.floor(Math.random() * others.length)]);
+    });
+
+    // Repeat: cycle through views in order
+    document.getElementById('la-repeat').addEventListener('click', () => {
+      const active = document.querySelector('.la-view-btn.is-active');
+      const idx = views.indexOf(active?.dataset.view ?? views[0]);
+      setView(views[(idx + 1) % views.length]);
+    });
+
+    screen.style.transition = 'opacity 0.18s ease';
+  </script>
+
+  <script type="module" src="sound.js"></script>
+
+</body>
+</html>

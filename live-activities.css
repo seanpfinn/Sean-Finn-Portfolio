@@ -1,0 +1,173 @@
+/* ================================
+   LIVE ACTIVITIES — META GRID
+   ================================ */
+.la-meta-grid {
+  display: flex;
+  gap: 24px;
+}
+
+.la-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ================================
+   CONTENT LAYOUT
+   ================================ */
+.la-content {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding: var(--pad) 0;
+  grid-template-columns: none !important;
+}
+
+/* ================================
+   VISUAL — iPhone container
+   ================================ */
+.la-visual {
+  flex: 1;
+  min-height: 0;
+  border-radius: 8px;
+  background: #e7e7e7;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 913 / 605;
+}
+
+.la-phone-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.la-phone-frame {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96%;
+  max-width: 920px;
+  pointer-events: none;
+}
+
+.la-phone-screen {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(96% * 0.924);
+  max-width: 850px;
+  pointer-events: none;
+}
+
+/* ================================
+   VIEW SWITCHER
+   ================================ */
+.la-switcher {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.la-view-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid transparent;
+  border-radius: 24px;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.72px;
+  color: var(--text);
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.07), inset 0 0 10px rgba(0,0,0,0.35);
+  transition: filter 0.3s ease;
+}
+
+/* Iridescent glow — matches .cta-secondary */
+.la-view-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: conic-gradient(from 0deg, #a78bfa, #60a5fa, #34d399, #fbbf24, #f472b6, #a78bfa);
+  opacity: 0;
+  filter: blur(12px) hue-rotate(0deg);
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  animation: iridescent-spin 6s linear infinite;
+}
+
+.la-view-btn:hover::after,
+.la-view-btn.is-active::after {
+  opacity: 0.18;
+}
+
+.la-icon-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.la-icon-btn:hover { opacity: 0.6; }
+
+.la-icon-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.dark .la-icon-btn {
+  border-color: var(--border);
+  filter: invert(1);
+}
+
+/* ================================
+   MOBILE
+   ================================ */
+@media (max-width: 809px) {
+  .la-content {
+    flex-direction: column !important;
+    overflow-x: hidden;
+    overflow-y: visible;
+    padding: 16px 20px 20px;
+    gap: 12px;
+  }
+
+  .la-visual {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    flex: none;
+  }
+
+  .la-switcher {
+    flex-wrap: wrap;
+  }
+
+  .la-view-btn {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+  }
+}
