@@ -185,20 +185,50 @@
       inEl.className = 'la-phone-screen';
 
       const dur = 320;
-      let outAnim, inAnim;
 
       if (to === 'lockscreen' || current === 'lockscreen') {
-        // Instant cut to/from lock screen
-        wrap.appendChild(inEl);
-        outEl.remove();
-        btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
-        current = to;
-        busy = false;
+        const phoneWrap = document.querySelector('.la-phone-wrap');
+        const half = 180;
+        const exitY  = to === 'lockscreen' ? '60px'  : '-60px';
+        const enterY = to === 'lockscreen' ? '-40px' : '40px';
+
+        // Phase 1: pan entire phone out
+        phoneWrap.style.transition = `transform ${half}ms ease-in, opacity ${half}ms ease-in`;
+        phoneWrap.style.transform  = `translateY(${exitY})`;
+        phoneWrap.style.opacity    = '0';
+
+        setTimeout(() => {
+          // Swap screen content while phone is invisible
+          wrap.appendChild(inEl);
+          outEl.remove();
+
+          // Snap to enter position (no transition)
+          phoneWrap.style.transition = 'none';
+          phoneWrap.style.transform  = `translateY(${enterY})`;
+          phoneWrap.style.opacity    = '0';
+          void phoneWrap.offsetHeight;
+
+          // Phase 2: pan entire phone in
+          phoneWrap.style.transition = `transform ${half}ms ${EASE}, opacity ${half}ms ${EASE}`;
+          phoneWrap.style.transform  = '';
+          phoneWrap.style.opacity    = '';
+
+          btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
+          current = to;
+
+          setTimeout(() => {
+            phoneWrap.style.transition = '';
+            phoneWrap.style.transform  = '';
+            phoneWrap.style.opacity    = '';
+            busy = false;
+          }, half + 60);
+        }, half + 20);
+
         return;
       }
 
-      outAnim = `la-fade-out ${dur}ms ease both`;
-      inAnim  = `la-fade-in  ${dur}ms ease both`;
+      const outAnim = `la-fade-out ${dur}ms ease both`;
+      const inAnim  = `la-fade-in  ${dur}ms ease both`;
 
       wrap.appendChild(inEl);
 
