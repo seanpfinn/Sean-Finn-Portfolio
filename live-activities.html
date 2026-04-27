@@ -111,9 +111,11 @@
 
       <!-- Visual -->
       <div class="la-visual">
-        <div class="la-phone-wrap">
+        <div class="la-phone-wrap" id="la-phone-wrap">
           <img src="assets/la-phone-frame.png" alt="" class="la-phone-frame" />
-          <img src="assets/la-minimal.png" alt="Live Activities – Minimal view" class="la-phone-screen" id="la-screen" />
+          <div class="la-screen-wrap">
+            <img src="assets/la-minimal.png" alt="Live Activities – Minimal view" class="la-phone-screen" id="la-screen" />
+          </div>
         </div>
       </div>
 
@@ -155,41 +157,132 @@
   <script src="main.js"></script>
 
   <script>
-    const views = ['minimal', 'compact', 'expanded', 'lockscreen'];
-    const screen = document.getElementById('la-screen');
-    const btns = document.querySelectorAll('.la-view-btn');
+    const DI_VIEWS   = ['minimal', 'compact', 'expanded'];
+    const ALL_VIEWS  = ['minimal', 'compact', 'expanded', 'lockscreen'];
+    const SRCS = {
+      minimal:    'assets/la-minimal.png',
+      compact:    'assets/la-compact.png',
+      expanded:   'assets/la-expanded.png',
+      lockscreen: 'assets/la-lockscreen.png',
+    };
 
-    function setView(view) {
-      const btn = document.querySelector(`.la-view-btn[data-view="${view}"]`);
-      if (!btn) return;
-      btns.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      screen.style.opacity = '0';
-      setTimeout(() => {
-        screen.src = btn.dataset.src;
-        screen.style.opacity = '1';
-      }, 180);
+    // Timing: approximate iOS spring (tension 260, damping 20 → ~9% overshoot)
+    const SPRING      = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+    const SPRING_SOFT = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+    const wrap  = document.querySelector('.la-screen-wrap');
+    const btns  = document.querySelectorAll('.la-view-btn');
+    let current = 'minimal';
+    let busy    = false;
+
+    function transitionType(from, to) {
+      if (to   === 'lockscreen') return 'to-lock';
+      if (from === 'lockscreen') return 'from-lock';
+      return DI_VIEWS.indexOf(to) > DI_VIEWS.indexOf(from) ? 'expand' : 'contract';
     }
 
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => setView(btn.dataset.view));
-    });
+    function setView(to) {
+      if (to === current || busy) return;
+      busy = true;
 
-    // Shuffle: pick a random different view
+      const type = transitionType(current, to);
+
+      // Existing screen becomes "out" layer
+      const outEl = wrap.querySelector('.la-phone-screen');
+      outEl.style.position = 'absolute';
+      outEl.style.inset    = '0';
+      outEl.style.width    = '100%';
+      outEl.style.height   = '100%';
+      outEl.style.objectFit = 'cover';
+
+      // New screen is the "in" layer
+      const inEl  = document.createElement('img');
+      inEl.src    = SRCS[to];
+      inEl.alt    = `Live Activities – ${to}`;
+      inEl.className = 'la-phone-screen';
+
+      let dur, outAnim, inAnim;
+
+      if (type === 'expand') {
+        // Incoming emerges from DI pill at top, sits above outgoing
+        dur     = 400;
+        inEl.style.position = 'absolute';
+        inEl.style.inset    = '0';
+        inEl.style.width    = '100%';
+        inEl.style.height   = '100%';
+        inEl.style.objectFit = 'cover';
+        inEl.style.zIndex   = '2';
+        outEl.style.zIndex  = '1';
+        inAnim  = `la-expand-in  ${dur}ms ${SPRING} both`;
+        outAnim = `la-fade-out   ${dur * 0.5}ms ease both`;
+
+      } else if (type === 'contract') {
+        // Outgoing shrinks back into DI pill, revealing incoming beneath
+        dur     = 340;
+        inEl.style.position = 'absolute';
+        inEl.style.inset    = '0';
+        inEl.style.width    = '100%';
+        inEl.style.height   = '100%';
+        inEl.style.objectFit = 'cover';
+        outEl.style.zIndex  = '2';
+        inEl.style.zIndex   = '1';
+        inAnim  = `la-fade-in    ${dur * 0.6}ms ease ${dur * 0.35}ms both`;
+        outAnim = `la-contract-out ${dur}ms ${SPRING} both`;
+
+      } else if (type === 'to-lock') {
+        // Pan everything downward — DI exits down, Lock Screen arrives from above
+        dur     = 460;
+        inEl.style.position = 'absolute';
+        inEl.style.inset    = '0';
+        inEl.style.width    = '100%';
+        inEl.style.height   = '100%';
+        inEl.style.objectFit = 'cover';
+        inEl.style.zIndex   = '1';
+        outEl.style.zIndex  = '2';
+        inAnim  = `la-pan-down-in  ${dur}ms ${SPRING_SOFT} both`;
+        outAnim = `la-pan-down-out ${dur}ms ${SPRING_SOFT} both`;
+
+      } else { // from-lock — pan upward back to DI view
+        dur     = 400;
+        inEl.style.position = 'absolute';
+        inEl.style.inset    = '0';
+        inEl.style.width    = '100%';
+        inEl.style.height   = '100%';
+        inEl.style.objectFit = 'cover';
+        inEl.style.zIndex   = '1';
+        outEl.style.zIndex  = '2';
+        inAnim  = `la-pan-up-in  ${dur}ms ${SPRING_SOFT} both`;
+        outAnim = `la-pan-up-out ${dur}ms ${SPRING_SOFT} both`;
+      }
+
+      wrap.appendChild(inEl);
+      // Trigger in same frame to avoid flash
+      requestAnimationFrame(() => {
+        outEl.style.animation = outAnim;
+        inEl.style.animation  = inAnim;
+      });
+
+      // Update buttons
+      btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
+      current = to;
+
+      setTimeout(() => {
+        outEl.remove();
+        inEl.style.cssText = '';  // reset all inline styles
+        busy = false;
+      }, dur + 40);
+    }
+
+    btns.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+
     document.getElementById('la-shuffle').addEventListener('click', () => {
-      const active = document.querySelector('.la-view-btn.is-active');
-      const others = views.filter(v => v !== active?.dataset.view);
+      const others = ALL_VIEWS.filter(v => v !== current);
       setView(others[Math.floor(Math.random() * others.length)]);
     });
 
-    // Repeat: cycle through views in order
     document.getElementById('la-repeat').addEventListener('click', () => {
-      const active = document.querySelector('.la-view-btn.is-active');
-      const idx = views.indexOf(active?.dataset.view ?? views[0]);
-      setView(views[(idx + 1) % views.length]);
+      setView(ALL_VIEWS[(ALL_VIEWS.indexOf(current) + 1) % ALL_VIEWS.length]);
     });
-
-    screen.style.transition = 'opacity 0.18s ease';
   </script>
 
   <script type="module" src="sound.js"></script>

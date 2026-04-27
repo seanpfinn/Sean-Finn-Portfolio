@@ -40,12 +40,10 @@
 .la-phone-wrap {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
   overflow: hidden;
 }
 
+/* Phone frame — always on top */
 .la-phone-frame {
   position: absolute;
   top: 30px;
@@ -54,16 +52,95 @@
   width: 96%;
   max-width: 920px;
   pointer-events: none;
+  z-index: 3;
 }
 
-.la-phone-screen {
+/* Screen wrap — centered container, clips transition animations */
+.la-screen-wrap {
   position: absolute;
   top: 56px;
   left: 50%;
   transform: translateX(-50%);
   width: calc(96% * 0.924);
   max-width: 850px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Phone screen images inside the wrap */
+.la-phone-screen {
+  display: block;
+  width: 100%;
   pointer-events: none;
+}
+
+/* ================================
+   TRANSITION KEYFRAMES
+   ================================ */
+
+/*
+  DI expand: incoming emerges from the Dynamic Island pill at the top.
+  Pill coordinates (iPhone 16 Pro proportions):
+    top ~1.5%, side insets ~34%, bottom inset ~94%, radius 20px
+*/
+@keyframes la-expand-in {
+  from {
+    clip-path: inset(1.5% 34% 94% 34% round 20px);
+    opacity: 0.5;
+  }
+  to {
+    clip-path: inset(0% 0% 0% 0% round 0px);
+    opacity: 1;
+  }
+}
+
+/* DI contract: outgoing collapses back into the Dynamic Island pill */
+@keyframes la-contract-out {
+  from {
+    clip-path: inset(0% 0% 0% 0% round 0px);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(1.5% 34% 94% 34% round 20px);
+    opacity: 0;
+  }
+}
+
+/* Simple crossfade helpers */
+@keyframes la-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes la-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/*
+  Lock Screen — pan down.
+  The Lock Screen lives "below" the DI interface in iOS.
+  Current DI view exits downward; Lock Screen arrives from above, panning down.
+*/
+@keyframes la-pan-down-in {
+  from { transform: translateY(-14%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes la-pan-down-out {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(14%);  opacity: 0; }
+}
+
+/* From Lock Screen — pan upward back to DI */
+@keyframes la-pan-up-in {
+  from { transform: translateY(14%);  opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes la-pan-up-out {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(-14%); opacity: 0; }
 }
 
 /* ================================
