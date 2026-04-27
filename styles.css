@@ -623,10 +623,35 @@ body {
    CLEAR Live Activities
    -------------------------------- */
 .card-media--clear-live {
-  background:
-    radial-gradient(ellipse 60% 50% at 70% 30%, rgba(0, 200, 130, 0.18) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 60% at 30% 80%, rgba(99, 149, 255, 0.14) 0%, transparent 60%),
-    #001530;
+  background: #dfdfdf;
+}
+
+.la-card-phone {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  transform: translateX(-50%);
+  width: 392px;
+  height: 811px;
+}
+
+.la-card-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.la-card-screen {
+  position: absolute;
+  top: 11px;
+  left: 13px;
+  width: 363px;
+  height: 786px;
+  object-fit: cover;
+  pointer-events: none;
 }
 
 /* --------------------------------
