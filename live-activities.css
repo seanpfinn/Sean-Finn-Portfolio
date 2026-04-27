@@ -28,7 +28,8 @@
    VISUAL — iPhone container
    ================================ */
 .la-visual {
-  width: 100%;
+  flex: 1;
+  min-height: 0;
   border-radius: 8px;
   background: #e7e7e7;
   overflow: hidden;
