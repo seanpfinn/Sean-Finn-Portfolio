@@ -63,14 +63,19 @@
   transform: translateX(-50%);
   width: calc(96% * 0.924);
   max-width: 850px;
+  /* iPhone screen aspect ratio keeps the wrap sized even when children are absolute */
+  aspect-ratio: 393 / 852;
   overflow: hidden;
   z-index: 1;
 }
 
-/* Phone screen images inside the wrap */
+/* All screen images sit absolutely inside the wrap */
 .la-phone-screen {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   pointer-events: none;
 }
 
