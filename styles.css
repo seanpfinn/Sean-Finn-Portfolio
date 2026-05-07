@@ -13,7 +13,8 @@ a { text-decoration: none; color: inherit; }
   --bg:          #faf9f7;
   --bg-card:     #faf9f7;
   --bg-card-out: #f9f9f9;
-  --text:        #2b2b2b;
+  --text:        #323232;
+  --text-body:   #707070;
   --text-dim:    #757575;
   --text-muted:  #666;
   --badge-bg:    #ebebeb;
@@ -62,6 +63,7 @@ a { text-decoration: none; color: inherit; }
   --bg-card:     #1a1a18;
   --bg-card-out: #161615;
   --text:        #e8e6e1;
+  --text-body:   #8a8882;
   --text-dim:    #888880;
   --text-muted:  #999;
   --badge-bg:    #2a2a28;
@@ -249,7 +251,7 @@ body {
   font-size: 0.875rem;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: #080808;
+  color: var(--text);
   white-space: nowrap;
 }
 
@@ -297,7 +299,7 @@ body {
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: var(--text);
+  color: var(--text-body);
   max-width: 380px;
 }
 
@@ -307,7 +309,7 @@ body {
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: var(--text);
+  color: var(--text-body);
 }
 
 .hero-current strong {
@@ -444,7 +446,7 @@ body {
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.576px;
-  color: var(--text);
+  color: var(--text-body);
 }
 
 .weather {
@@ -456,7 +458,7 @@ body {
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.288px;
-  color: #1e1e1e;
+  color: var(--text-body);
   white-space: nowrap;
 }
 
@@ -858,7 +860,7 @@ body {
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: var(--text);
+  color: var(--text-body);
 }
 
 .card-desc--lg {
