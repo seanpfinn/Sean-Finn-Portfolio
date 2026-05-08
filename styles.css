@@ -14,7 +14,7 @@ a { text-decoration: none; color: inherit; }
   --bg-card:     #faf9f7;
   --bg-card-out: #f9f9f9;
   --text:        #323232;
-  --text-body:   #707070;
+  --text-body:   #727272;
   --text-dim:    #757575;
   --text-muted:  #666;
   --badge-bg:    #ebebeb;
@@ -426,7 +426,7 @@ body {
   font-weight: 400;
   line-height: 17.28px;
   letter-spacing: -0.576px;
-  color: var(--text);
+  color: var(--text-body);
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: opacity 0.15s;
