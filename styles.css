@@ -475,12 +475,29 @@ body {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 10px;
   padding: var(--pad) 0;
   min-height: 0;
   align-content: start;
   overflow-y: auto;
   scrollbar-width: none;
+}
+
+/* Clickable card cover link */
+.card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:has(.card-link:hover) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card), 0 8px 20px rgba(0,0,0,0.08);
 }
 
 
@@ -1043,7 +1060,7 @@ body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding: 24px 16px 8px;
-    gap: 32px;
+    gap: 10px;
     /* allow cards to overflow without page growing wide */
     width: 100%;
     box-sizing: border-box;
