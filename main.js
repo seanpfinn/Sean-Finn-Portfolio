@@ -47,9 +47,9 @@
   }
   tick();
   setInterval(tick, 1000);
-  // ── Secondary CTA section switching ─────────────────────────────────────
-  const SECTION_CTA = { projects: '#select-projects', ai: '#ai-playground' };
-  let activeSection = 'projects';
+  // ── Secondary CTA filter switching ─────────────────────────────────────
+  const FILTER_CTA = { all: '#all-projects', apps: '#apps', 'case-studies': '#case-studies' };
+  let activeFilter = 'all';
 
   function setCtaActive(href) {
     document.querySelectorAll('.cta-secondary').forEach(btn => {
@@ -57,36 +57,44 @@
     });
   }
 
-  function switchSection(next) {
-    if (next === activeSection) return;
+  function applyFilter(next) {
+    if (next === activeFilter) return;
 
-    // Hide current section cards
-    document.querySelectorAll(`.card[data-section="${activeSection}"]`).forEach(card => {
-      card.hidden = true;
-      card.classList.remove('card-reveal');
+    const allCards = document.querySelectorAll('.card[data-section="projects"]');
+    let visibleIndex = 0;
+
+    allCards.forEach(card => {
+      const tags = (card.dataset.tags || '').split(',');
+      const show = next === 'all'
+        || (next === 'apps' && tags.includes('app'))
+        || (next === 'case-studies' && tags.includes('case-study'));
+
+      if (show) {
+        card.hidden = false;
+        card.style.animationDelay = `${visibleIndex * 0.07}s`;
+        card.classList.remove('card-reveal');
+        void card.offsetWidth;
+        card.classList.add('card-reveal');
+        visibleIndex++;
+      } else {
+        card.hidden = true;
+        card.classList.remove('card-reveal');
+      }
     });
 
-    // Show and animate incoming cards with stagger
-    document.querySelectorAll(`.card[data-section="${next}"]`).forEach((card, i) => {
-      card.hidden = false;
-      card.style.animationDelay = `${i * 0.07}s`;
-      card.classList.remove('card-reveal');
-      void card.offsetWidth; // force reflow to restart animation
-      card.classList.add('card-reveal');
-    });
-
-    activeSection = next;
-    setCtaActive(SECTION_CTA[next]);
+    activeFilter = next;
+    setCtaActive(FILTER_CTA[next]);
   }
 
-  // Initialise: Select Projects is active by default
-  setCtaActive(SECTION_CTA.projects);
+  // Initialise: All projects is active by default
+  setCtaActive(FILTER_CTA.all);
 
   document.querySelectorAll('.cta-secondary').forEach(btn => {
     btn.addEventListener('click', e => {
       const href = btn.getAttribute('href');
-      if (href === '#select-projects') { e.preventDefault(); switchSection('projects'); }
-      else if (href === '#ai-playground') { e.preventDefault(); switchSection('ai'); }
+      if (href === '#all-projects') { e.preventDefault(); applyFilter('all'); }
+      else if (href === '#apps') { e.preventDefault(); applyFilter('apps'); }
+      else if (href === '#case-studies') { e.preventDefault(); applyFilter('case-studies'); }
     });
   });
 

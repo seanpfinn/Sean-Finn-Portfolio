@@ -611,6 +611,8 @@ body {
     #041A55;
 }
 
+.card-media--clear-vault .clear-trio { top: 20.93px; }
+
 .media-ui--clear-vault {
   height: 145%;
   width: auto;
@@ -619,6 +621,124 @@ body {
   left: 50%;
   transform: translateX(-46%);
   object-fit: contain;
+}
+
+/* --------------------------------
+   ClaudeWatch
+   -------------------------------- */
+.card-media--claudewatch {
+  background:
+    radial-gradient(ellipse at 50% 52.5%, rgba(99,149,255,0.22) 0%, transparent 85%),
+    #000a26;
+}
+
+.claudewatch-bg {
+  position: absolute;
+  left: 0;
+  top: -18.4%;
+  width: 100%;
+  height: 136.8%;
+  object-fit: cover;
+}
+
+.claudewatch-ui {
+  position: absolute;
+  left: 50%;
+  top: 67.5%;
+  transform: translate(-50%, -50%);
+  width: 91.9%;
+  height: auto;
+}
+
+/* --------------------------------
+   Helm
+   -------------------------------- */
+.card-media--helm {
+  background:
+    radial-gradient(ellipse 60% 55% at 51% 80%, rgba(255,255,255,0.24) 0%, transparent 85%),
+    #000;
+}
+
+.helm-phone-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  width: 50.3%;
+}
+
+.helm-phone-frame {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.helm-phone-screen {
+  position: absolute;
+  left: 3.61%;
+  top: 1.42%;
+  width: 92.1%;
+  height: 96.9%;
+  object-fit: cover;
+}
+
+/* --------------------------------
+   CLEAR+ Terminal Guide
+   -------------------------------- */
+.card-media--terminal-guide {
+  background: #000a26;
+  border: 1px solid rgba(94,94,94,0.25);
+}
+
+/* --------------------------------
+   CLEAR+ Location Details
+   -------------------------------- */
+.card-media--location-details {
+  background: #c0d1ff;
+}
+
+.card-media--location-details .clear-trio { top: 31.25px; }
+
+/* --------------------------------
+   CLEAR+ Trio mockup (shared)
+   -------------------------------- */
+.clear-trio {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80.8%;
+}
+
+.clear-trio-frame {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.clear-trio-screen {
+  position: absolute;
+  object-fit: cover;
+}
+
+.clear-trio-screen--1 {
+  left: 3.47%;
+  top: 4.60%;
+  width: 33.84%;
+  height: 93.9%;
+}
+
+.clear-trio-screen--2 {
+  left: 42.19%;
+  top: 1.22%;
+  width: 23.74%;
+  height: 87.85%;
+}
+
+.clear-trio-screen--3 {
+  left: 70.85%;
+  top: 7.21%;
+  width: 28.67%;
+  height: 87.32%;
 }
 
 /* --------------------------------
@@ -823,6 +943,15 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
+}
+
+.card-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .card-title {
