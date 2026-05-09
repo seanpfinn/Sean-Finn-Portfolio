@@ -20,12 +20,12 @@ a { text-decoration: none; color: inherit; }
   --badge-bg:    #ebebeb;
   --border:      #ebebeb;
   --border-sub:  rgba(219,219,219,0.25);
-  --shadow-card: 0 0 4px rgba(0,0,0,0.12);
+  --shadow-card: 0 0 2px rgba(0,0,0,0.12);
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
-  --sidebar-w:   25%;
+  --sidebar-w:   350px;
   --content-w:   913px;
-  --gap:         35px;
+  --gap:         20px;
   --pad:         10px;
   --gh-cell-0:   rgba(0,0,0,0.07);
   --gh-cell-1:   #b6e8c0;
@@ -69,7 +69,7 @@ a { text-decoration: none; color: inherit; }
   --badge-bg:    #2a2a28;
   --border:      #2a2a28;
   --border-sub:  rgba(60,60,55,0.4);
-  --shadow-card: 0 0 4px rgba(0,0,0,0.4);
+  --shadow-card: 0 0 2px rgba(0,0,0,0.4);
   --gh-cell-0:   rgba(255,255,255,0.06);
   --gh-cell-1:   #14361e;
   --gh-cell-2:   #1e6b32;
@@ -202,9 +202,10 @@ body {
    ================================ */
 .page {
   display: flex;
-  width: 95%;
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 10px;
   height: 100vh;
   gap: var(--gap);
   overflow: hidden;
@@ -517,6 +518,9 @@ body {
 .card {
   background: var(--bg-card-out);
   border-radius: 24px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  height: 350px;
   box-shadow: var(--shadow-card);
 }
 
@@ -527,22 +531,18 @@ body {
 /* ---- Inner card ---- */
 .card-inner {
   position: relative;
-  background: var(--bg-card);
-  border-radius: 18px;
+  background: transparent;
   padding: 10px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  height: 100%;
+  justify-content: space-between;
 }
 
-/* outer border overlay */
+/* outer border overlay — moved to .card border */
 .card-outer-border {
-  position: absolute;
-  inset: -0.85px -0.02px 0.85px 0.02px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  pointer-events: none;
+  display: none;
 }
 
 /* ================================
@@ -550,10 +550,10 @@ body {
    ================================ */
 .card-media {
   position: relative;
-  height: 260px;
+  flex: 1;
+  min-height: 0;
   border-radius: 8px;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 /* inset border overlay on image */
@@ -1017,12 +1017,10 @@ body {
    TABLET (810px – 1099px)
    ================================ */
 @media (min-width: 810px) and (max-width: 1099px) {
-  .card                          { border-radius: 20px; overflow: hidden; }
-  .card--featured                { border-radius: 36px; overflow: hidden; }
-  .card-inner                    { border-radius: 14px; padding: 8px; }
-  .card-outer-border             { border-radius: 14px; }
-  .card--featured .card-outer-border { border-radius: 36px; }
-  .card-media                    { border-radius: 7px; height: 200px; }
+  .card                          { border-radius: 20px; }
+  .card--featured                { border-radius: 36px; }
+  .card-inner                    { padding: 8px; }
+  .card-media                    { border-radius: 7px; flex: none; height: 200px; }
   .card-inset-border             { border-radius: 7px; }
 }
 
@@ -1079,12 +1077,9 @@ body {
     grid-column: auto;
   }
 
-  .card                          { border-radius: 16px; overflow: hidden; }
-  .card--featured                { border-radius: 24px; overflow: hidden; }
-  .card-inner                    { border-radius: 12px; }
-  .card-outer-border             { border-radius: 12px; }
-  .card--featured .card-outer-border { border-radius: 24px; }
-  .card-media                    { border-radius: 6px; height: 160px; }
+  .card                          { border-radius: 16px; height: auto; }
+  .card--featured                { border-radius: 24px; }
+  .card-media                    { border-radius: 6px; flex: none; height: 160px; }
   .card-inset-border             { border-radius: 6px; }
   .card-media--values-bridge     { aspect-ratio: auto; height: 160px; }
 
