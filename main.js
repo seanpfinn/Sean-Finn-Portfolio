@@ -50,10 +50,24 @@
   // ── Tab navigation filter switching ────────────────────────────────────
   let activeFilter = 'all';
 
+  function updateThumb() {
+    const thumb = document.getElementById('tab-nav-thumb');
+    const activeBtn = document.querySelector('.tab-item--active');
+    const nav = document.querySelector('.tab-nav');
+    if (!thumb || !activeBtn || !nav) return;
+    const navRect = nav.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    thumb.style.left   = (btnRect.left - navRect.left) + 'px';
+    thumb.style.top    = (btnRect.top  - navRect.top)  + 'px';
+    thumb.style.width  = btnRect.width  + 'px';
+    thumb.style.height = btnRect.height + 'px';
+  }
+
   function setTabActive(filter) {
     document.querySelectorAll('.tab-item').forEach(item => {
       item.classList.toggle('tab-item--active', item.dataset.filter === filter);
     });
+    updateThumb();
   }
 
   function applyFilter(next) {
@@ -85,7 +99,13 @@
     setTabActive(next);
   }
 
+  // Initial thumb placement (no transition on first render)
+  const thumb = document.getElementById('tab-nav-thumb');
+  if (thumb) thumb.style.transition = 'none';
   setTabActive('all');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (thumb) thumb.style.transition = '';
+  }));
 
   document.querySelectorAll('.tab-item').forEach(item => {
     item.addEventListener('click', () => applyFilter(item.dataset.filter));

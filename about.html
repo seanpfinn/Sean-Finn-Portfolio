@@ -10,26 +10,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .about-photo-container {
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-      flex: 1;
-      border-radius: 10px;
-    }
-
-    .about-photo {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 100%;
-      width: auto;
-      max-width: none;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-
     .about-heading {
       font-family: var(--font);
       font-size: 18px;
@@ -52,36 +32,136 @@
       font-weight: 400;
       line-height: 20.16px;
       letter-spacing: -0.576px;
-      color: var(--text);
+      color: var(--text-body);
     }
 
-    .about-copy strong {
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .about-copy a {
-      color: var(--text);
-      text-decoration: underline;
-      text-decoration-skip-ink: none;
-      text-underline-offset: 2px;
-    }
-
-    .sidebar-about-body {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      overflow: hidden;
-    }
+    .about-copy strong { font-weight: 700; color: var(--text); }
+    .about-copy a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
 
     .sidebar .sidebar-hero {
       overflow-y: auto;
+      scrollbar-width: none;
       padding-top: 12px;
     }
+    .sidebar .sidebar-hero::-webkit-scrollbar { display: none; }
 
+    /* ── ISOMETRIC GRID ── */
+    .iso-wrap {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+    }
+
+    .iso-wrap:hover .iso-track {
+      animation-play-state: paused;
+    }
+
+    .iso-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 30px 0;
+      animation: isoScroll 50s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes isoScroll {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-50%); }
+    }
+
+    .iso-tile {
+      background: var(--bg-card-out);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow-card);
+      user-select: none;
+    }
+
+    .iso-tile:hover,
+    .iso-tile.is-active {
+      transform: translateY(-3px);
+      border-color: var(--text-dim);
+    }
+
+    .iso-svg { width: 100%; height: auto; display: block; }
+
+    .iso-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* ── POPUP ── */
+    .iso-popup {
+      position: fixed;
+      z-index: 600;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      width: 220px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .iso-popup.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .iso-popup-emoji {
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .iso-popup-body { display: flex; flex-direction: column; gap: 3px; }
+
+    .iso-popup-name {
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      display: block;
+    }
+
+    .iso-popup-desc {
+      font-family: var(--font);
+      font-size: 12px;
+      line-height: 15px;
+      letter-spacing: -0.1px;
+      color: var(--text-body);
+    }
+
+    /* ── MOBILE ── */
     @media (max-width: 809px) {
-      .about-photo-container { display: none; }
-      .about-heading { font-size: 18px; line-height: 22px; }
+      .iso-wrap { overflow-x: hidden; }
+      .iso-track { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px 16px 16px; }
+      .iso-tile { padding: 14px 8px 8px; border-radius: 12px; }
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -109,9 +189,8 @@
   <section class="mobile-hero blur-in" style="animation-delay:0.1s">
     <p class="hero-title">A product designer based in Brooklyn, NY</p>
     <div class="about-copy" style="margin-top:12px">
-      <p>With 10+ years of experience shaping early-stage ideas into clear, intuitive digital products. My background spans startups, big tech, and cross-functional teams working in AI, cybersecurity, AR/VR, wellness, and consumer applications.</p>
-      <p>My strength is in <strong>simplifying complex systems</strong> — translating research into actionable product insight, structuring flows that reduce friction, and building design systems that scale as teams move from 0→1 and into growth.</p>
-      <p>I care about clarity, precision, and momentum. I work closely with product, engineering, and leadership to define problems, validate direction, and move teams toward solutions that are both user-centered and business-meaningful.</p>
+      <p>With 10+ years of experience shaping early-stage ideas into clear, intuitive digital products.</p>
+      <p>My strength is in <strong>simplifying complex systems</strong> — translating research into actionable product insight and building design systems that scale.</p>
       <p>Outside of product work, I lead <a href="https://www.finrez.xyz" target="_blank" rel="noopener">Finrez</a>, a design studio offering brand, product, and web design services.</p>
     </div>
     <div class="social-links" style="margin-top:16px">
@@ -156,9 +235,9 @@
           <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
         </div>
         <div class="sidebar-meta">
-          <p class="last-updated">Last updated: April 19th, 2026</p>
+          <p class="last-updated">Last updated: May 10th, 2026</p>
           <p class="weather">
-            <span>New York &bull; <span id="clock">3:27:21 PM</span>, 47&deg;F, Foggy</span>
+            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
             <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
           </p>
         </div>
@@ -166,27 +245,259 @@
 
     </aside>
 
-    <!-- RIGHT: PHOTO -->
-    <main class="content blur-in" style="animation-delay:0.2s" style="padding:0; overflow:hidden; border-radius:10px;">
-      <div class="about-photo-container">
-        <img src="assets/054b61a615a5581d1bab6b61f91684d65b40943c.png" alt="Sean Finn" class="about-photo" />
+    <!-- RIGHT: ISOMETRIC GRID -->
+    <main class="right-col blur-in" style="animation-delay:0.1s">
+      <div class="iso-wrap">
+        <div class="iso-track" id="iso-track"></div>
       </div>
     </main>
 
   </div>
 
-  <script>
-    const cursor = document.createElement('div');
-    cursor.className = 'custom-cursor';
-    document.body.appendChild(cursor);
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-  </script>
+  <!-- GLOBAL POPUP (outside overflow-hidden containers) -->
+  <div class="iso-popup" id="iso-popup" role="tooltip" aria-hidden="true">
+    <span class="iso-popup-emoji" id="iso-popup-emoji"></span>
+    <div class="iso-popup-body">
+      <strong class="iso-popup-name" id="iso-popup-name"></strong>
+      <p class="iso-popup-desc" id="iso-popup-desc"></p>
+    </div>
+  </div>
+
+  <!-- MOBILE FOOTER -->
+  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: May 10th, 2026</p>
+      <p class="weather">
+        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
+      </p>
+    </div>
+  </footer>
 
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>
+
+  <script>
+  (function () {
+    const ITEMS = [
+      {
+        emoji: '☕', name: 'Coffee',
+        desc: 'Strong opinions. Stronger espresso. My morning ritual since forever.',
+        top: '#E8C55A', left: '#B8952A', right: '#7A6010'
+      },
+      {
+        emoji: '🎵', name: 'Vinyl',
+        desc: 'Currently spinning whatever makes the apartment feel bigger.',
+        top: '#525252', left: '#333333', right: '#222222'
+      },
+      {
+        emoji: '📷', name: 'Camera',
+        desc: 'Shooting on a Leica M6. Documenting Brooklyn one roll at a time.',
+        top: '#6B7280', left: '#374151', right: '#1F2937'
+      },
+      {
+        emoji: '✏️', name: 'Figma',
+        desc: "My main creative environment. I've probably spent more time here than anywhere else.",
+        top: '#C4B5FD', left: '#7C3AED', right: '#4C1D95'
+      },
+      {
+        emoji: '🌿', name: 'Plants',
+        desc: 'My apartment is slowly becoming a jungle. Zero regrets.',
+        top: '#6EE7B7', left: '#059669', right: '#064E3B'
+      },
+      {
+        emoji: '👟', name: 'Sneakers',
+        desc: 'Air Maxes, New Balances, and an embarrassing number of Salomons.',
+        top: '#E5E7EB', left: '#9CA3AF', right: '#4B5563'
+      },
+      {
+        emoji: '🚲', name: 'Cycling',
+        desc: 'My main mode of transportation through Brooklyn. Helmet always.',
+        top: '#FCD34D', left: '#D97706', right: '#92400E'
+      },
+      {
+        emoji: '🎧', name: 'Headphones',
+        desc: 'Sony WH-1000XM5. The only way to survive open-plan offices.',
+        top: '#71717A', left: '#3F3F46', right: '#27272A'
+      },
+      {
+        emoji: '📚', name: 'Books',
+        desc: 'Design, philosophy, fiction. Currently: Thinking in Systems.',
+        top: '#7DD3FC', left: '#0369A1', right: '#0C4A6E'
+      },
+      {
+        emoji: '🎬', name: 'Film',
+        desc: 'Scorsese, Villeneuve, Nolan. Watching everything. Missing nothing.',
+        top: '#6B7280', left: '#374151', right: '#111827'
+      },
+      {
+        emoji: '⌨️', name: 'Keyboards',
+        desc: 'HHKB Professional Hybrid. Quiet switches. Loud opinions.',
+        top: '#9CA3AF', left: '#4B5563', right: '#1F2937'
+      },
+      {
+        emoji: '🍕', name: 'Pizza',
+        desc: 'New York pizza is the only pizza. This is not up for debate.',
+        top: '#FCA5A5', left: '#DC2626', right: '#7F1D1D'
+      },
+      {
+        emoji: '🐕', name: 'Dogs',
+        desc: 'Dog dad in my heart. Currently coveting a Vizsla.',
+        top: '#FDE68A', left: '#D97706', right: '#78350F'
+      },
+      {
+        emoji: '🏛️', name: 'Architecture',
+        desc: "Obsessed with NYC's layers — pre-war walkups, brutalist towers, glass boxes.",
+        top: '#D1D5DB', left: '#6B7280', right: '#374151'
+      },
+      {
+        emoji: '🏃', name: 'Running',
+        desc: '5am runs along the waterfront before the city wakes up.',
+        top: '#FED7AA', left: '#EA580C', right: '#7C2D12'
+      },
+      {
+        emoji: '🥃', name: 'Whiskey',
+        desc: 'Neat, please. Preferably something peaty from Islay.',
+        top: '#FCD34D', left: '#B45309', right: '#451A03'
+      },
+      {
+        emoji: '🖥️', name: 'MacBook',
+        desc: 'The machine that ships it all. Currently running way too many browser tabs.',
+        top: '#E5E7EB', left: '#9CA3AF', right: '#374151'
+      },
+      {
+        emoji: '🌆', name: 'New York',
+        desc: 'Eight years in. Still discovering new blocks. Probably never leaving.',
+        top: '#BAE6FD', left: '#0284C7', right: '#075985'
+      },
+    ];
+
+    function cubeSVG(top, left, right, emoji) {
+      // Isometric cube: viewBox 0 0 120 106
+      // Top face: diamond | Left face | Right face
+      return `<svg class="iso-svg" viewBox="0 0 120 106" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="60,8 100,30 60,52 20,30" fill="${top}"/>
+        <polygon points="20,30 60,52 60,98 20,76" fill="${left}"/>
+        <polygon points="60,52 100,30 100,76 60,98" fill="${right}"/>
+        <text x="60" y="36" text-anchor="middle" dominant-baseline="middle" font-size="24" style="user-select:none;pointer-events:none">${emoji}</text>
+      </svg>`;
+    }
+
+    function tileHTML(item) {
+      const safeDesc = item.desc.replace(/"/g, '&quot;');
+      return `<div class="iso-tile"
+        data-emoji="${item.emoji}"
+        data-name="${item.name}"
+        data-desc="${safeDesc}"
+        tabindex="0"
+        role="button"
+        aria-label="${item.name}">
+        ${cubeSVG(item.top, item.left, item.right, item.emoji)}
+        <span class="iso-label">${item.name}</span>
+      </div>`;
+    }
+
+    // Render tiles duplicated for seamless loop
+    const track = document.getElementById('iso-track');
+    if (track) {
+      const html = ITEMS.map(tileHTML).join('');
+      track.innerHTML = html + html;
+    }
+
+    // Popup elements
+    const popup      = document.getElementById('iso-popup');
+    const popupEmoji = document.getElementById('iso-popup-emoji');
+    const popupName  = document.getElementById('iso-popup-name');
+    const popupDesc  = document.getElementById('iso-popup-desc');
+
+    function showPopup(tile) {
+      popupEmoji.textContent = tile.dataset.emoji;
+      popupName.textContent  = tile.dataset.name;
+      popupDesc.textContent  = tile.dataset.desc;
+      popup.setAttribute('aria-hidden', 'false');
+
+      const rect = tile.getBoundingClientRect();
+      const pw = 220, ph = 88;
+      let left = rect.left + rect.width / 2 - pw / 2;
+      let top  = rect.top - ph - 12;
+      const pad = 8;
+      left = Math.max(pad, Math.min(left, window.innerWidth - pw - pad));
+      if (top < pad) top = rect.bottom + 12;
+
+      popup.style.left = left + 'px';
+      popup.style.top  = top + 'px';
+      popup.classList.add('is-visible');
+    }
+
+    function hidePopup() {
+      popup.classList.remove('is-visible');
+      popup.setAttribute('aria-hidden', 'true');
+    }
+
+    let activeTile = null;
+
+    if (track) {
+      // Desktop hover
+      track.addEventListener('mouseover', e => {
+        const tile = e.target.closest('.iso-tile');
+        if (!tile) return;
+        showPopup(tile);
+      });
+
+      track.addEventListener('mouseout', e => {
+        const tile = e.target.closest('.iso-tile');
+        if (!tile) return;
+        if (!tile.contains(e.relatedTarget)) hidePopup();
+      });
+
+      // Mobile tap toggle
+      track.addEventListener('touchstart', e => {
+        const tile = e.target.closest('.iso-tile');
+        if (!tile) return;
+        e.preventDefault();
+        if (activeTile === tile) {
+          hidePopup();
+          tile.classList.remove('is-active');
+          activeTile = null;
+        } else {
+          if (activeTile) activeTile.classList.remove('is-active');
+          activeTile = tile;
+          tile.classList.add('is-active');
+          showPopup(tile);
+        }
+      }, { passive: false });
+    }
+
+    // Dismiss on outside tap
+    document.addEventListener('touchstart', e => {
+      if (!e.target.closest('.iso-tile') && !e.target.closest('.iso-popup')) {
+        hidePopup();
+        if (activeTile) { activeTile.classList.remove('is-active'); activeTile = null; }
+      }
+    });
+
+    // Keyboard accessibility
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { hidePopup(); if (activeTile) { activeTile.classList.remove('is-active'); activeTile = null; } }
+    });
+    if (track) {
+      track.addEventListener('focusin', e => {
+        const tile = e.target.closest('.iso-tile');
+        if (tile) showPopup(tile);
+      });
+      track.addEventListener('focusout', e => {
+        const tile = e.target.closest('.iso-tile');
+        if (tile && !tile.contains(e.relatedTarget)) hidePopup();
+      });
+    }
+  })();
+  </script>
 
 </body>
 </html>

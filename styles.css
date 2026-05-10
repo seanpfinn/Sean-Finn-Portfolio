@@ -502,7 +502,18 @@ body {
   border-radius: 48px;
   padding: 10px;
   flex-shrink: 0;
+  position: relative;
   animation: tabNavIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tab-nav-thumb {
+  position: absolute;
+  background: #ff401a;
+  border: 1px solid #f12800;
+  border-radius: 48px;
+  box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.3);
+  pointer-events: none;
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark .tab-nav {
@@ -528,9 +539,7 @@ body {
 }
 
 .tab-item--active {
-  background: #ff401a;
-  border-color: #f12800;
-  box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.3);
+  /* visual handled by .tab-nav-thumb */
 }
 
 .tab-label {
