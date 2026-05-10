@@ -28,11 +28,6 @@
     <p class="hero-body">With 10+ years across tech, startups, and brand systems. I specialize in turning ambiguous concepts into user-validated products, scalable design systems, and high-impact digital experiences.</p>
     <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong>.</p>
     <a href="mailto:sean@seanpfinn.com" class="cta-btn">Let's work together</a>
-    <div class="cta-secondary-row">
-      <a href="#all-projects" class="cta-secondary">All projects</a>
-      <a href="#apps" class="cta-secondary">Apps</a>
-      <a href="#case-studies" class="cta-secondary">Case studies</a>
-    </div>
   </section>
 
   <div class="page">
@@ -56,11 +51,6 @@
         <p class="hero-body">With 10+ years across tech, startups, and brand systems. I specialize in turning ambiguous concepts into user-validated products, scalable design systems, and high-impact digital experiences.</p>
         <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong>.</p>
         <a href="mailto:sean@seanpfinn.com" class="cta-btn">Let's work together</a>
-        <div class="cta-secondary-row">
-          <a href="#all-projects" class="cta-secondary">All projects</a>
-          <a href="#apps" class="cta-secondary">Apps</a>
-          <a href="#case-studies" class="cta-secondary">Case studies</a>
-        </div>
       </div>
 
       <div class="sidebar-bottom">
@@ -82,7 +72,24 @@
     </aside>
 
     <!-- RIGHT CONTENT -->
-    <main class="content">
+    <main class="right-col">
+
+      <nav class="tab-nav" aria-label="Project filter">
+        <button class="tab-item tab-item--active" data-filter="all">
+          <span class="tab-label">All projects</span>
+          <div class="tab-indicator"></div>
+        </button>
+        <button class="tab-item" data-filter="apps">
+          <span class="tab-label">Apps</span>
+          <div class="tab-indicator"></div>
+        </button>
+        <button class="tab-item" data-filter="case-studies">
+          <span class="tab-label">Case Studies</span>
+          <div class="tab-indicator"></div>
+        </button>
+      </nav>
+
+      <div class="content">
 
       <!-- 1. ClaudeWatch -->
       <article class="card card-deal" data-section="projects" data-tags="app" style="animation-delay:0.1s">
@@ -210,6 +217,7 @@
         </div>
       </article>
 
+      </div><!-- /.content -->
     </main>
   </div>
 

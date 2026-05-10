@@ -47,13 +47,12 @@
   }
   tick();
   setInterval(tick, 1000);
-  // ── Secondary CTA filter switching ─────────────────────────────────────
-  const FILTER_CTA = { all: '#all-projects', apps: '#apps', 'case-studies': '#case-studies' };
+  // ── Tab navigation filter switching ────────────────────────────────────
   let activeFilter = 'all';
 
-  function setCtaActive(href) {
-    document.querySelectorAll('.cta-secondary').forEach(btn => {
-      btn.classList.toggle('is-active', btn.getAttribute('href') === href);
+  function setTabActive(filter) {
+    document.querySelectorAll('.tab-item').forEach(item => {
+      item.classList.toggle('tab-item--active', item.dataset.filter === filter);
     });
   }
 
@@ -83,19 +82,13 @@
     });
 
     activeFilter = next;
-    setCtaActive(FILTER_CTA[next]);
+    setTabActive(next);
   }
 
-  // Initialise: All projects is active by default
-  setCtaActive(FILTER_CTA.all);
+  setTabActive('all');
 
-  document.querySelectorAll('.cta-secondary').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const href = btn.getAttribute('href');
-      if (href === '#all-projects') { e.preventDefault(); applyFilter('all'); }
-      else if (href === '#apps') { e.preventDefault(); applyFilter('apps'); }
-      else if (href === '#case-studies') { e.preventDefault(); applyFilter('case-studies'); }
-    });
+  document.querySelectorAll('.tab-item').forEach(item => {
+    item.addEventListener('click', () => applyFilter(item.dataset.filter));
   });
 
   // ── GitHub tooltip ───────────────────────────────────────────────────────

@@ -470,15 +470,83 @@ body {
 }
 
 /* ================================
+   RIGHT COLUMN WRAPPER
+   ================================ */
+.right-col {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--pad) 0;
+}
+
+/* ================================
+   TAB NAVIGATION
+   ================================ */
+.tab-nav {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  border-bottom: 1px solid #bdbdbd;
+  flex-shrink: 0;
+}
+
+.dark .tab-nav {
+  border-bottom-color: #3a3a38;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  padding-bottom: 0;
+}
+
+.tab-label {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: -0.5px;
+  color: #888;
+  white-space: nowrap;
+  padding-bottom: 8px;
+  transition: color 0.15s;
+}
+
+.tab-item--active .tab-label {
+  color: var(--text);
+}
+
+.tab-indicator {
+  height: 4px;
+  width: 100%;
+  background: #ff401a;
+  border-radius: 12px 12px 0 0;
+  display: none;
+}
+
+.tab-item--active .tab-indicator {
+  display: block;
+}
+
+/* ================================
    CONTENT / PROJECT CARDS
    ================================ */
 .content {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  padding: var(--pad) 0;
-  min-height: 0;
+  padding-top: 10px;
   align-content: start;
   overflow-y: auto;
   scrollbar-width: none;
@@ -1049,6 +1117,20 @@ body {
   html, body { height: auto; overflow: auto; }
   body { display: flex; flex-direction: column; min-height: 100dvh; }
 
+  /* ── Right column ── */
+  .right-col {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    min-height: 0;
+  }
+
+  /* ── Tab nav ── */
+  .tab-nav {
+    padding: 16px 16px 0;
+  }
+
   /* ── Horizontal carousel ── */
   .content {
     display: flex;
@@ -1057,7 +1139,7 @@ body {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 24px 16px 8px;
+    padding: 10px 16px 8px;
     gap: 10px;
     /* allow cards to overflow without page growing wide */
     width: 100%;
