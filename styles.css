@@ -19,8 +19,8 @@ a { text-decoration: none; color: inherit; }
   --text-muted:  #52525b;
   --badge-bg:    #f4f4f5;
   --border:      #e4e4e7;
-  --border-sub:  rgba(228,228,231,0.5);
-  --shadow-card: none;
+  --border-sub:  rgba(94,94,94,0.25);
+  --shadow-card: 0 0 2px rgba(0,0,0,0.12);
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
   --sidebar-w:   350px;
