@@ -59,17 +59,17 @@ a { text-decoration: none; color: inherit; }
 }
 
 .dark {
-  --bg:          #111110;
-  --bg-card:     #1a1a18;
-  --bg-card-out: #161615;
-  --text:        #e8e6e1;
-  --text-body:   #8a8882;
-  --text-dim:    #888880;
-  --text-muted:  #999;
-  --badge-bg:    #2a2a28;
-  --border:      #2a2a28;
-  --border-sub:  rgba(60,60,55,0.4);
-  --shadow-card: 0 0 2px rgba(0,0,0,0.4);
+  --bg:          #09090b;
+  --bg-card:     #111113;
+  --bg-card-out: #0f0f11;
+  --text:        #fafafa;
+  --text-body:   #a1a1aa;
+  --text-dim:    #71717a;
+  --text-muted:  #71717a;
+  --badge-bg:    #27272a;
+  --border:      rgba(255,255,255,0.08);
+  --border-sub:  rgba(255,255,255,0.04);
+  --shadow-card: none;
   --gh-cell-0:   rgba(255,255,255,0.06);
   --gh-cell-1:   #14361e;
   --gh-cell-2:   #1e6b32;
@@ -140,6 +140,14 @@ body {
   cursor: none;
 }
 
+.dark body {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-attachment: fixed;
+}
+
 .custom-cursor {
   position: fixed;
   width: 12px;
@@ -175,7 +183,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(250,249,247,0.85);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
@@ -488,12 +496,8 @@ body {
   display: flex;
   gap: 24px;
   align-items: flex-end;
-  border-bottom: 1px solid #bdbdbd;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-}
-
-.dark .tab-nav {
-  border-bottom-color: #3a3a38;
 }
 
 .tab-item {
@@ -565,8 +569,13 @@ body {
 }
 
 .card:has(.card-link:hover) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-card), 0 8px 20px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+  border-color: rgba(0,0,0,0.2);
+}
+
+.dark .card:has(.card-link:hover) {
+  border-color: rgba(255,255,255,0.14);
+  box-shadow: none;
 }
 
 
@@ -585,7 +594,7 @@ body {
 /* ---- Outer card shell ---- */
 .card {
   background: var(--bg-card-out);
-  border-radius: 24px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   overflow: hidden;
   height: 350px;
@@ -593,7 +602,7 @@ body {
 }
 
 .card--featured {
-  border-radius: 44px;
+  border-radius: 20px;
 }
 
 /* ---- Inner card ---- */
@@ -620,7 +629,7 @@ body {
   position: relative;
   flex: 1;
   min-height: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -629,7 +638,7 @@ body {
   position: absolute;
   inset: -0.85px -0.02px 0.85px 0.02px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   pointer-events: none;
 }
 
@@ -1085,11 +1094,11 @@ body {
    TABLET (810px – 1099px)
    ================================ */
 @media (min-width: 810px) and (max-width: 1099px) {
-  .card                          { border-radius: 20px; }
-  .card--featured                { border-radius: 36px; }
+  .card                          { border-radius: 10px; }
+  .card--featured                { border-radius: 16px; }
   .card-inner                    { padding: 8px; }
-  .card-media                    { border-radius: 7px; flex: none; height: 200px; }
-  .card-inset-border             { border-radius: 7px; }
+  .card-media                    { border-radius: 5px; flex: none; height: 200px; }
+  .card-inset-border             { border-radius: 5px; }
 }
 
 /* ================================
@@ -1159,9 +1168,9 @@ body {
     grid-column: auto;
   }
 
-  .card                          { border-radius: 16px; height: auto; }
-  .card--featured                { border-radius: 24px; }
-  .card-media                    { border-radius: 6px; flex: none; height: 160px; }
+  .card                          { border-radius: 10px; height: auto; }
+  .card--featured                { border-radius: 16px; }
+  .card-media                    { border-radius: 5px; flex: none; height: 160px; }
   .card-inset-border             { border-radius: 6px; }
   .card-media--values-bridge     { aspect-ratio: auto; height: 160px; }
 

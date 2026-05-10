@@ -16,7 +16,7 @@
   document.querySelectorAll('.last-updated').forEach(el => el.textContent = label);
 
   // ── Dark mode toggle ─────────────────────────────────────────────────────
-  if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
+  if (localStorage.getItem('dark') !== '0') document.documentElement.classList.add('dark');
   document.querySelectorAll('.dark-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const on = document.documentElement.classList.toggle('dark');
