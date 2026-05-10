@@ -166,7 +166,7 @@ body {
 .dark-toggle {
   width: 16px;
   height: 16px;
-  border-radius: 50%;
+  border-radius: 8px;
   background: var(--text);
   border: none;
   padding: 0;
