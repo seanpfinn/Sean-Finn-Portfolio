@@ -495,7 +495,7 @@ body {
 .tab-nav {
   display: flex;
   gap: 24px;
-  align-items: flex-end;
+  align-items: flex-start;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
