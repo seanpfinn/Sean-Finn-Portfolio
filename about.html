@@ -10,27 +10,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    html, body { height: 100%; overflow: hidden; }
-    body { display: flex; flex-direction: column; }
-
-    /* ── NAV ── */
-    .ab-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      position: relative;
-      z-index: 100;
-      background: var(--bg);
-    }
-    .dark .ab-nav {
-      background: rgba(9,9,11,0.92);
-      border-bottom-color: rgba(255,255,255,0.06);
-    }
-
-    /* ── CANVAS WRAP ── */
+    /* ── CANVAS WRAP fills right-col ── */
     .ab-wrap {
       flex: 1;
       min-height: 0;
@@ -43,31 +23,29 @@
       position: absolute;
       top: 0; left: 0;
       display: grid;
-      grid-template-columns: repeat(6, 240px);
-      gap: 16px;
-      padding: 40px;
+      grid-template-columns: repeat(6, 200px);
+      gap: 14px;
+      padding: 30px;
       will-change: transform;
       touch-action: none;
     }
 
-    /* disable tile pointer events while dragging so hover doesn't fire */
     .ab-canvas.is-dragging .iso-tile { pointer-events: none; }
 
     /* ── ISO TILE ── */
     .iso-tile {
-      width: 240px;
-      height: 240px;
+      width: 200px;
+      height: 200px;
       background: var(--bg-card-out);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 24px 16px 14px;
+      padding: 20px 14px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
       box-shadow: var(--shadow-card);
       user-select: none;
-      cursor: default;
       transition: transform 0.2s ease, border-color 0.2s ease;
     }
     .iso-tile:hover,
@@ -110,31 +88,8 @@
     .iso-popup.is-visible { opacity: 1; transform: translateY(0) scale(1); }
     .iso-popup-emoji { font-size: 24px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
     .iso-popup-body  { display: flex; flex-direction: column; gap: 4px; }
-    .iso-popup-name  {
-      font-family: var(--font); font-size: 13px; font-weight: 600;
-      letter-spacing: -0.3px; color: var(--text); display: block;
-    }
-    .iso-popup-desc  {
-      font-family: var(--font); font-size: 12px; line-height: 16px;
-      letter-spacing: -0.1px; color: var(--text-body);
-    }
-
-    /* ── FOOTER ── */
-    .ab-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-      position: relative;
-      z-index: 100;
-      background: var(--bg);
-    }
-    .dark .ab-footer {
-      background: rgba(9,9,11,0.92);
-      border-top-color: rgba(255,255,255,0.06);
-    }
+    .iso-popup-name  { font-family: var(--font); font-size: 13px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); display: block; }
+    .iso-popup-desc  { font-family: var(--font); font-size: 12px; line-height: 16px; letter-spacing: -0.1px; color: var(--text-body); }
 
     /* ── DRAG HINT ── */
     .ab-hint {
@@ -142,7 +97,7 @@
       bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.5);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       color: #fff;
@@ -164,20 +119,10 @@
       100% { opacity: 0; transform: translateX(-50%) translateY(-2px); }
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1100px) {
-      .ab-canvas  { grid-template-columns: repeat(5, 200px); }
-      .iso-tile   { width: 200px; height: 200px; }
-    }
+    /* ── MOBILE ── */
     @media (max-width: 809px) {
-      body { cursor: auto; }
-      .ab-canvas  { grid-template-columns: repeat(4, 160px); gap: 12px; padding: 24px; }
-      .iso-tile   { width: 160px; height: 160px; border-radius: 14px; padding: 16px 10px 10px; }
-      .ab-footer  { flex-direction: column; align-items: flex-start; gap: 10px; padding-bottom: 24px; }
-    }
-    @media (max-width: 500px) {
-      .ab-canvas  { grid-template-columns: repeat(3, 130px); gap: 10px; padding: 16px; }
-      .iso-tile   { width: 130px; height: 130px; border-radius: 12px; padding: 12px 8px 8px; }
+      .ab-canvas { grid-template-columns: repeat(3, 150px); gap: 10px; padding: 20px; }
+      .iso-tile  { width: 150px; height: 150px; border-radius: 14px; padding: 14px 10px 10px; }
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -191,33 +136,74 @@
 </head>
 <body>
 
-  <!-- NAV -->
-  <header class="ab-nav blur-in" style="animation-delay:0s">
+  <!-- MOBILE NAV -->
+  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
     <a href="/" class="nav-home">Sean Finn</a>
     <div class="nav-links">
       <a href="about.html" class="nav-link">About</a>
       <a href="resume.html" class="nav-link">Resume</a>
-      <button class="dark-toggle" aria-label="Toggle dark mode"></button>
+      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
     </div>
   </header>
 
-  <!-- DRAGGABLE CANVAS -->
-  <div class="ab-wrap" id="ab-wrap">
-    <div class="ab-canvas" id="ab-canvas"></div>
-    <div class="ab-hint" aria-hidden="true">drag to explore</div>
+  <div class="page">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar blur-in" style="animation-delay:0s">
+
+      <nav class="nav">
+        <div class="nav-inner">
+          <a href="/" class="nav-home">Sean Finn</a>
+          <div class="nav-links">
+            <a href="about.html" class="nav-link">About</a>
+            <a href="resume.html" class="nav-link">Resume</a>
+            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- empty flex spacer so sidebar-bottom stays pinned -->
+      <div class="sidebar-hero" style="flex:1;min-height:0"></div>
+
+      <div class="sidebar-bottom">
+        <div class="social-links">
+          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div class="sidebar-meta">
+          <p class="last-updated">Last updated: May 10th, 2026</p>
+          <p class="weather">
+            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
+          </p>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT: CANVAS fills remaining space -->
+    <main class="right-col blur-in" style="animation-delay:0.1s; padding:0">
+      <div class="ab-wrap" id="ab-wrap">
+        <div class="ab-canvas" id="ab-canvas"></div>
+        <div class="ab-hint" aria-hidden="true">drag to explore</div>
+      </div>
+    </main>
+
   </div>
 
-  <!-- POPUP -->
+  <!-- POPUP (outside overflow-hidden containers) -->
   <div class="iso-popup" id="iso-popup" role="tooltip" aria-hidden="true">
     <span class="iso-popup-emoji" id="iso-popup-emoji"></span>
     <div class="iso-popup-body">
       <strong class="iso-popup-name" id="iso-popup-name"></strong>
-      <p    class="iso-popup-desc" id="iso-popup-desc"></p>
+      <p    class="iso-popup-desc"  id="iso-popup-desc"></p>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="ab-footer blur-in" style="animation-delay:0.05s">
+  <!-- MOBILE FOOTER -->
+  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -227,7 +213,7 @@
     <div class="sidebar-meta">
       <p class="last-updated">Last updated: May 10th, 2026</p>
       <p class="weather">
-        <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
         <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
       </p>
     </div>
@@ -257,9 +243,9 @@
       { emoji:'🥃', name:'Whiskey',      desc:'Neat, please. Preferably something peaty from Islay.',                                top:'#FCD34D', left:'#B45309', right:'#451A03' },
       { emoji:'💻', name:'MacBook',      desc:'The machine that ships it all. Running way too many browser tabs.',                    top:'#E5E7EB', left:'#9CA3AF', right:'#374151' },
       { emoji:'🌆', name:'New York',     desc:'Eight years in. Still discovering new blocks. Probably never leaving.',               top:'#BAE6FD', left:'#0284C7', right:'#075985' },
-      { emoji:'🎨', name:'Art',          desc:'MOMA, the Whitney, and every gallery opening in Bushwick I can find.',                top:'#FDE68A', left:'#F59E0B', right:'#78350F' },
+      { emoji:'🎨', name:'Art',          desc:'MoMA, the Whitney, and every gallery opening in Bushwick I can find.',                top:'#FDE68A', left:'#F59E0B', right:'#78350F' },
       { emoji:'🍳', name:'Cooking',      desc:'Sunday mornings, big breakfasts, too much butter. Worth it every time.',              top:'#FCA5A5', left:'#EF4444', right:'#7F1D1D' },
-      { emoji:'✈️', name:'Travel',       desc:"Slow travel. Long layovers. Getting lost on purpose.",                                top:'#BAE6FD', left:'#38BDF8', right:'#0369A1' },
+      { emoji:'✈️', name:'Travel',       desc:'Slow travel. Long layovers. Getting lost on purpose.',                                top:'#BAE6FD', left:'#38BDF8', right:'#0369A1' },
       { emoji:'🏀', name:'Basketball',   desc:'Watching the Nets suffer. Hoping annually. Somehow still a fan.',                     top:'#FED7AA', left:'#F97316', right:'#7C2D12' },
       { emoji:'🏄', name:'Surfing',      desc:'Weekend trips to Rockaway. Never getting good. Always going back.',                   top:'#6EE7F7', left:'#0891B2', right:'#164E63' },
       { emoji:'🍺', name:'Craft Beer',   desc:'Sours, IPAs, and anything from Other Half. Brooklyn biased.',                         top:'#FDE68A', left:'#D97706', right:'#78350F' },
@@ -290,15 +276,15 @@
     canvas.innerHTML = ITEMS.map(tileHTML).join('');
 
     // ── Drag / pan ──────────────────────────────────────────────────────────
-    let tx = 40, ty = 40;
+    let tx = 30, ty = 30;
     let isDragging = false, hasDragged = false;
     let startX, startY, startTx, startTy;
     let velX = 0, velY = 0, lastMX, lastMY;
     let rafId;
 
     function getBounds() {
-      const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-      const ww = wrap.offsetWidth,   wh = wrap.offsetHeight;
+      const cw = canvas.offsetWidth,  ch = canvas.offsetHeight;
+      const ww = wrap.offsetWidth,    wh = wrap.offsetHeight;
       const pad = 60;
       return {
         minX: cw > ww ? ww - cw - pad : (ww - cw) / 2,
@@ -324,8 +310,7 @@
       rafId = requestAnimationFrame(runInertia);
     }
 
-    // Set initial position: top-left with padding (shows canvas cut off right + bottom)
-    requestAnimationFrame(() => applyTransform(40, 40));
+    requestAnimationFrame(() => applyTransform(30, 30));
 
     // Mouse
     wrap.addEventListener('mousedown', e => {
@@ -353,9 +338,7 @@
       if (!isDragging) return;
       isDragging = false;
       setTimeout(() => canvas.classList.remove('is-dragging'), 30);
-      if (Math.abs(velX) > 0.5 || Math.abs(velY) > 0.5) {
-        rafId = requestAnimationFrame(runInertia);
-      }
+      if (Math.abs(velX) > 0.5 || Math.abs(velY) > 0.5) rafId = requestAnimationFrame(runInertia);
     });
 
     // Touch
@@ -404,11 +387,10 @@
       popupName.textContent  = tile.dataset.name;
       popupDesc.textContent  = tile.dataset.desc;
       popup.setAttribute('aria-hidden', 'false');
-
       const r = tile.getBoundingClientRect();
       const pw = 230, ph = 96;
-      let left = r.left + r.width  / 2 - pw / 2;
-      let top  = r.top  - ph - 12;
+      let left = r.left + r.width / 2 - pw / 2;
+      let top  = r.top - ph - 12;
       const pad = 8;
       left = Math.max(pad, Math.min(left, window.innerWidth - pw - pad));
       if (top < pad) top = r.bottom + 12;
@@ -431,7 +413,6 @@
       showPopup(tile);
     }
 
-    // Desktop hover
     canvas.addEventListener('mouseover', e => {
       if (isDragging) return;
       const tile = e.target.closest('.iso-tile');
@@ -445,7 +426,6 @@
       if (!tile.contains(e.relatedTarget)) hidePopup();
     });
 
-    // Keyboard
     canvas.addEventListener('focusin',  e => { const t = e.target.closest('.iso-tile'); if (t) showPopup(t); });
     canvas.addEventListener('focusout', e => { const t = e.target.closest('.iso-tile'); if (t && !t.contains(e.relatedTarget)) hidePopup(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') hidePopup(); });
