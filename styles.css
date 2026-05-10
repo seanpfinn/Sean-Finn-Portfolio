@@ -10,17 +10,17 @@ a { text-decoration: none; color: inherit; }
    TOKENS
    ================================ */
 :root {
-  --bg:          #faf9f7;
-  --bg-card:     #faf9f7;
-  --bg-card-out: #f9f9f9;
-  --text:        #323232;
-  --text-body:   #727272;
-  --text-dim:    #757575;
-  --text-muted:  #666;
-  --badge-bg:    #ebebeb;
-  --border:      #ebebeb;
-  --border-sub:  rgba(219,219,219,0.25);
-  --shadow-card: 0 0 2px rgba(0,0,0,0.12);
+  --bg:          #ffffff;
+  --bg-card:     #fafafa;
+  --bg-card-out: #f4f4f5;
+  --text:        #09090b;
+  --text-body:   #71717a;
+  --text-dim:    #a1a1aa;
+  --text-muted:  #52525b;
+  --badge-bg:    #f4f4f5;
+  --border:      #e4e4e7;
+  --border-sub:  rgba(228,228,231,0.5);
+  --shadow-card: none;
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
   --sidebar-w:   350px;
@@ -39,8 +39,8 @@ a { text-decoration: none; color: inherit; }
    ================================ */
 .dark .nav,
 .dark .mobile-nav-bar {
-  background: rgba(17,17,16,0.85);
-  border-bottom-color: rgba(60,60,55,0.4);
+  background: rgba(9,9,11,0.85);
+  border-bottom-color: rgba(255,255,255,0.06);
 }
 
 .dark .nav-home,
