@@ -603,7 +603,7 @@ body {
 /* ---- Outer card shell ---- */
 .card {
   background: var(--bg-card-out);
-  border-radius: 12px;
+  border-radius: 24px;
   border: 1px solid var(--border);
   overflow: hidden;
   height: 350px;
@@ -621,7 +621,7 @@ body {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   height: 100%;
   justify-content: space-between;
 }
@@ -636,9 +636,9 @@ body {
    ================================ */
 .card-media {
   position: relative;
-  flex: 1;
-  min-height: 0;
-  border-radius: 6px;
+  height: 260px;
+  flex-shrink: 0;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -647,7 +647,7 @@ body {
   position: absolute;
   inset: -0.85px -0.02px 0.85px 0.02px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   pointer-events: none;
 }
 
@@ -1037,7 +1037,7 @@ body {
 .card-copy {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex-shrink: 0;
 }
 
