@@ -720,13 +720,13 @@ body {
 /* --------------------------------
    ClaudeWatch
    -------------------------------- */
-.card-media--claudewatch {
+.card-media--claudeops {
   background:
     radial-gradient(ellipse at 50% 52.5%, rgba(99,149,255,0.22) 0%, transparent 85%),
     #000a26;
 }
 
-.claudewatch-bg {
+.claudeops-bg {
   position: absolute;
   left: 0;
   top: -18.4%;
@@ -735,7 +735,7 @@ body {
   object-fit: cover;
 }
 
-.claudewatch-ui {
+.claudeops-ui {
   position: absolute;
   left: 50%;
   top: 67.5%;
