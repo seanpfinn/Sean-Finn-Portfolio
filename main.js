@@ -111,6 +111,29 @@
     item.addEventListener('click', () => applyFilter(item.dataset.filter));
   });
 
+  // ── Mobile swipe to change tabs ──────────────────────────────────────────
+  const filterOrder = ['all', 'apps', 'case-studies'];
+
+  function shiftTab(dir) {
+    const idx = filterOrder.indexOf(activeFilter);
+    applyFilter(filterOrder[(idx + dir + filterOrder.length) % filterOrder.length]);
+  }
+
+  let swipeX = 0, swipeY = 0;
+  document.addEventListener('touchstart', e => {
+    swipeX = e.touches[0].clientX;
+    swipeY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (window.innerWidth > 809) return;
+    const dx = e.changedTouches[0].clientX - swipeX;
+    const dy = e.changedTouches[0].clientY - swipeY;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      shiftTab(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
   // ── GitHub tooltip ───────────────────────────────────────────────────────
   const ghLinks = document.querySelectorAll('a[href="https://github.com/seanpfinn"]');
   if (ghLinks.length) {

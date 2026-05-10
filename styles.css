@@ -107,12 +107,17 @@ a { text-decoration: none; color: inherit; }
 @keyframes cardDealMobile {
   from {
     opacity: 0;
-    transform: translateX(72px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
+}
+
+@keyframes cardRevealV {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .blur-in {
@@ -1165,31 +1170,26 @@ body {
     margin: 10px 16px 0;
   }
 
-  /* ── Horizontal carousel ── */
+  /* ── Vertical card list ── */
   .content {
     display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 10px 16px 8px;
+    flex-direction: column;
+    overflow: visible;
+    padding: 10px 16px 32px;
     gap: 10px;
-    /* allow cards to overflow without page growing wide */
     width: 100%;
     box-sizing: border-box;
   }
 
-  .content::-webkit-scrollbar { display: none; }
-
   .content > .card {
-    flex: 0 0 80vw;
-    scroll-snap-align: start;
+    flex: none;
+    width: 100%;
     min-width: 0;
   }
 
   .content > .card--featured {
-    flex: 0 0 88vw;
+    flex: none;
+    width: 100%;
     grid-column: auto;
   }
 
@@ -1213,6 +1213,12 @@ body {
     animation-name: cardDealMobile;
     animation-duration: 0.55s;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card-reveal {
+    animation-name: cardRevealV;
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
