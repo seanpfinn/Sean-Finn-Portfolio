@@ -1195,7 +1195,7 @@ body {
 
   .card                          { border-radius: 16px; height: auto; }
   .card--featured                { border-radius: 24px; }
-  .card-media                    { border-radius: 6px; height: 160px; }
+  .card-media                    { border-radius: 6px; height: 320px; }
   .card-inset-border             { border-radius: 6px; }
   .card-media--values-bridge     { aspect-ratio: auto; height: 160px; }
 
