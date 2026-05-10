@@ -498,6 +498,12 @@ body {
   align-items: flex-start;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  animation: tabNavIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tabNavIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .tab-item {
@@ -534,11 +540,14 @@ body {
   width: 100%;
   background: #ff401a;
   border-radius: 12px 12px 0 0;
-  display: none;
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .tab-item--active .tab-indicator {
-  display: block;
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 /* ================================
