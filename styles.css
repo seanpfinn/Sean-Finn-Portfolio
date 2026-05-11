@@ -772,34 +772,46 @@ body {
 }
 
 /* --------------------------------
-   Helm
+   Conduct
    -------------------------------- */
-.card-media--helm {
+.card-media--conduct {
   background:
     radial-gradient(ellipse 60% 55% at 51% 80%, rgba(255,255,255,0.24) 0%, transparent 85%),
     #000;
 }
 
-.helm-phone-wrapper {
+.conduct-wrapper {
   position: absolute;
   left: 50%;
-  top: 20px;
-  transform: translateX(-50%);
-  width: 50.3%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 92%;
+  aspect-ratio: 165.763 / 241.196;
 }
 
-.helm-phone-frame {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.helm-phone-screen {
+.conduct-main {
   position: absolute;
-  left: 3.61%;
-  top: 1.42%;
-  width: 92.1%;
-  height: 96.9%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.conduct-screen1 {
+  position: absolute;
+  left: 0.57%;
+  top: 1.13%;
+  width: 46.22%;
+  height: 85.96%;
+  object-fit: cover;
+}
+
+.conduct-screen2 {
+  position: absolute;
+  left: 52.78%;
+  top: 12.60%;
+  width: 46.26%;
+  height: 86.01%;
   object-fit: cover;
 }
 
