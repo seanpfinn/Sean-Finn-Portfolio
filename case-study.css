@@ -215,20 +215,17 @@
   .proj-subtitle { font-size: 14.4px; line-height: 20.16px; }
 
   .proj-content {
-    flex-direction: row;
-    overflow-x: scroll;
-    overflow-y: visible;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: 8px 16px;
+    flex-direction: column;
+    overflow: visible;
+    padding: 8px 16px 32px;
     gap: 10px;
     width: 100%;
     box-sizing: border-box;
   }
 
   .proj-content > .proj-panel {
-    flex: 0 0 88vw;
-    scroll-snap-align: start;
+    flex: none;
+    width: 100%;
     height: 380px;
   }
 }
