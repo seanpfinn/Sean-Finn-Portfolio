@@ -1226,6 +1226,15 @@ body {
   /* ── Tab nav ── */
   .tab-nav {
     margin: 10px 16px 0;
+    gap: 0;
+  }
+
+  .tab-item {
+    padding: 8px 6px;
+  }
+
+  .tab-label {
+    font-size: 13px;
   }
 
   /* ── Vertical card list ── */
