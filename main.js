@@ -74,20 +74,13 @@
     if (next === activeFilter) return;
 
     const allCards = document.querySelectorAll('.card[data-section="projects"]');
-    const playgroundEmpty = document.getElementById('playground-empty');
-    const contentGrid = document.querySelector('.content');
-    const isPlayground = next === 'playground';
     let visibleIndex = 0;
-
-    if (contentGrid) contentGrid.hidden = isPlayground;
 
     allCards.forEach(card => {
       const tags = (card.dataset.tags || '').split(',');
-      const show = !isPlayground && (
-        next === 'all'
+      const show = next === 'all'
         || (next === 'apps' && tags.includes('app'))
-        || (next === 'case-studies' && tags.includes('case-study'))
-      );
+        || (next === 'case-studies' && tags.includes('case-study'));
 
       if (show) {
         card.hidden = false;
@@ -101,8 +94,6 @@
         card.classList.remove('card-reveal');
       }
     });
-
-    if (playgroundEmpty) playgroundEmpty.hidden = !isPlayground;
 
     activeFilter = next;
     setTabActive(next);
@@ -121,7 +112,7 @@
   });
 
   // ── Mobile swipe to change tabs ──────────────────────────────────────────
-  const filterOrder = ['all', 'apps', 'case-studies', 'playground'];
+  const filterOrder = ['all', 'apps', 'case-studies'];
 
   function shiftTab(dir) {
     const idx = filterOrder.indexOf(activeFilter);

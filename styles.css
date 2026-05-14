@@ -497,7 +497,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: var(--pad) 0;
+  padding: 24px 0 var(--pad);
 }
 
 /* ================================
@@ -583,38 +583,6 @@ body {
 
 .content[hidden] { display: none; }
 
-/* ================================
-   PLAYGROUND EMPTY STATE
-   ================================ */
-.playground-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding-top: 40px;
-  text-align: center;
-}
-
-.playground-empty[hidden] { display: none; }
-
-.playground-empty-title {
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-.playground-empty-body {
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--text-body);
-  max-width: 260px;
-}
 
 /* Clickable card cover link */
 .card-link {
@@ -1225,7 +1193,7 @@ body {
 
   /* ── Tab nav ── */
   .tab-nav {
-    margin: 10px 16px 0;
+    margin: 24px 16px 0;
     gap: 0;
   }
 
@@ -1276,11 +1244,6 @@ body {
   .media-ui--dune   { left: 10%; width: 80%; }
   .media-ui--metasim { left: 8%; width: 84%; top: 14px; }
   .media-ui--xr      { left: 8%; width: 84%; top: 14px; }
-
-  .playground-empty {
-    padding: 60px 16px 32px;
-    min-height: 260px;
-  }
 
   .card-deal {
     animation-name: cardDealMobile;
