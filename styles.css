@@ -96,28 +96,40 @@ a { text-decoration: none; color: inherit; }
 @keyframes cardDeal {
   from {
     opacity: 0;
-    transform: translateX(100vw) rotate(4deg);
+    filter: blur(12px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
-    transform: translateX(0) rotate(0deg);
+    filter: blur(0);
+    transform: translateY(0);
   }
 }
 
 @keyframes cardDealMobile {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    filter: blur(12px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0);
   }
 }
 
 @keyframes cardRevealV {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 }
 
 .blur-in {
@@ -145,13 +157,6 @@ body {
   cursor: none;
 }
 
-.dark body {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  background-attachment: fixed;
-}
 
 .custom-cursor {
   position: fixed;
@@ -508,7 +513,7 @@ body {
   padding: 6px;
   flex-shrink: 0;
   position: relative;
-  animation: tabNavIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: blurIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .tab-nav-thumb {
@@ -527,10 +532,6 @@ body {
   border-color: rgba(255,255,255,0.08);
 }
 
-@keyframes tabNavIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 
 .tab-item {
   flex: 1;
@@ -644,8 +645,16 @@ body {
 .content::-webkit-scrollbar { display: none; }
 
 @keyframes cardReveal {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 }
 
 .card-reveal {
@@ -807,15 +816,15 @@ body {
 }
 
 /* --------------------------------
-   Conduct
+   Remote
    -------------------------------- */
-.card-media--conduct {
+.card-media--remote {
   background:
     radial-gradient(ellipse 60% 55% at 51% 80%, rgba(255,255,255,0.24) 0%, transparent 85%),
     #000;
 }
 
-.conduct-wrapper {
+.remote-wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -824,7 +833,7 @@ body {
   aspect-ratio: 165.763 / 241.196;
 }
 
-.conduct-main {
+.remote-main {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -832,7 +841,7 @@ body {
   object-fit: cover;
 }
 
-.conduct-screen1 {
+.remote-screen1 {
   position: absolute;
   left: 0.57%;
   top: 1.13%;
@@ -841,7 +850,7 @@ body {
   object-fit: cover;
 }
 
-.conduct-screen2 {
+.remote-screen2 {
   position: absolute;
   left: 52.78%;
   top: 12.60%;
