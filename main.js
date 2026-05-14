@@ -75,8 +75,11 @@
 
     const allCards = document.querySelectorAll('.card[data-section="projects"]');
     const playgroundEmpty = document.getElementById('playground-empty');
+    const contentGrid = document.querySelector('.content');
     const isPlayground = next === 'playground';
     let visibleIndex = 0;
+
+    if (contentGrid) contentGrid.hidden = isPlayground;
 
     allCards.forEach(card => {
       const tags = (card.dataset.tags || '').split(',');

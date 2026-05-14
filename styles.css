@@ -578,19 +578,18 @@ body {
   scrollbar-width: none;
 }
 
+.content[hidden] { display: none; }
+
 /* ================================
    PLAYGROUND EMPTY STATE
    ================================ */
 .playground-empty {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 6px;
-  padding-top: 10px;
+  padding-top: 40px;
   text-align: center;
-  min-height: 300px;
 }
 
 .playground-empty[hidden] { display: none; }
