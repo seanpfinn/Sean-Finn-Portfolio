@@ -593,6 +593,8 @@ body {
   min-height: 300px;
 }
 
+.playground-empty[hidden] { display: none; }
+
 .playground-empty-title {
   font-family: var(--font);
   font-size: 14px;
