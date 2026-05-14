@@ -553,10 +553,12 @@ body {
   font-weight: 600;
   line-height: 18px;
   letter-spacing: -0.5px;
-  color: #888;
+  color: #000;
   white-space: nowrap;
   transition: color 0.15s;
 }
+
+.dark .tab-label { color: #fff; }
 
 .tab-item--active .tab-label {
   color: #fff;
