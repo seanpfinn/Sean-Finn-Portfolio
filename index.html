@@ -20,225 +20,35 @@
 </head>
 <body>
 
-  <!-- MOBILE NAV -->
-  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
-    <a href="/" class="nav-home">Sean Finn</a>
-    <div class="nav-links">
-      <a href="about.html" class="nav-link">About</a>
-      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
+  <div class="splash-page blur-in">
+
+    <nav class="splash-nav">
+      <a href="/" class="nav-home">Sean Finn</a>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+    </nav>
+
+    <div class="splash-hero">
+      <p class="hero-title">A product designer based in New York, NY.</p>
+      <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong>.</p>
     </div>
-  </header>
 
-  <!-- MOBILE HERO (sidebar content on small screens) -->
-  <section class="mobile-hero blur-in" style="animation-delay:0.1s">
-    <p class="hero-title">A design engineer based in New York, NY.</p>
-    <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong>.</p>
-  </section>
-
-  <div class="page">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar blur-in" style="animation-delay:0s">
-
-      <nav class="nav">
-        <div class="nav-inner">
-          <a href="/" class="nav-home">Sean Finn</a>
-          <div class="nav-links">
-            <a href="about.html" class="nav-link">About</a>
-            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
-          </div>
-        </div>
-      </nav>
-
-      <div class="sidebar-hero">
-        <p class="hero-title">A design engineer based in New York, NY.</p>
-        <p class="hero-current">Currently <strong>Senior Product Designer</strong> for digital travel experiences at <strong>CLEAR</strong>.</p>
+    <div class="splash-footer">
+      <div class="social-links">
+        <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+        <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+        <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
       </div>
-
-      <div class="sidebar-bottom">
-        <div class="social-links">
-          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="sidebar-meta">
-          <p class="last-updated">Last updated: April 19th, 2026</p>
-          <p class="weather">
-            <span>New York &bull; <span id="clock">3:27:21 PM</span>, 47&deg;F, Foggy</span>
-            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
-          </p>
-        </div>
+      <div class="sidebar-meta">
+        <p class="last-updated">Last updated: May 9th, 2026</p>
+        <p class="weather">
+          <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+          <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
+        </p>
       </div>
+    </div>
 
-    </aside>
-
-    <!-- RIGHT CONTENT -->
-    <main class="right-col">
-
-      <nav class="tab-nav" aria-label="Project filter">
-        <div class="tab-nav-thumb" id="tab-nav-thumb" aria-hidden="true"></div>
-        <button class="tab-item tab-item--active" data-filter="all">
-          <span class="tab-label">All</span>
-        </button>
-        <button class="tab-item" data-filter="apps">
-          <span class="tab-label">Apps</span>
-        </button>
-        <button class="tab-item" data-filter="case-studies">
-          <span class="tab-label">Case studies</span>
-        </button>
-      </nav>
-
-      <div class="content">
-
-      <!-- 1. ClaudeOps -->
-      <article class="card card-deal" data-section="projects" data-tags="app" style="animation-delay:0.1s">
-        <a href="claudeops.html" class="card-link" aria-label="View ClaudeOps project"></a>
-        <div class="card-inner">
-          <div class="card-media card-media--claudeops">
-            <img src="assets/claudeops-bg.png" alt="" class="claudeops-bg" />
-            <img src="assets/claudeops-ui.png" alt="ClaudeOps app" class="claudeops-ui" />
-            <div class="card-inset-border card-inset-border--subtle"></div>
-          </div>
-          <div class="card-copy">
-            <div class="card-copy-top">
-              <span class="card-title">ClaudeOps</span>
-              <div class="card-badges">
-                <span class="card-badge">App</span>
-              </div>
-            </div>
-            <p class="card-desc">A macOS app that monitors Claude token usage and provides real-time insights.</p>
-          </div>
-          <div class="card-outer-border"></div>
-        </div>
-      </article>
-
-      <!-- 2. Remote -->
-      <article class="card card-deal" data-section="projects" data-tags="app,case-study" style="animation-delay:0.2s">
-        <a href="remote.html" class="card-link" aria-label="View Remote project"></a>
-        <div class="card-inner">
-          <div class="card-media card-media--remote">
-            <div class="remote-wrapper">
-              <img src="assets/remote-main.png" alt="" class="remote-main" />
-              <img src="assets/remote-screen1.png" alt="" class="remote-screen1" />
-              <img src="assets/remote-screen2.png" alt="" class="remote-screen2" />
-            </div>
-            <div class="card-inset-border card-inset-border--subtle"></div>
-          </div>
-          <div class="card-copy">
-            <div class="card-copy-top">
-              <span class="card-title">Remote</span>
-              <div class="card-badges">
-                <span class="card-badge">App</span>
-                <span class="card-badge">Case study</span>
-                <span class="card-badge">In progress</span>
-              </div>
-            </div>
-            <p class="card-desc">A iOS remote for controlling TVs and smart home devices.</p>
-          </div>
-          <div class="card-outer-border"></div>
-        </div>
-      </article>
-
-      <!-- 3. CLEAR+ Terminal Guide -->
-      <article class="card card-deal" data-section="projects" data-tags="app,case-study" style="animation-delay:0.3s">
-        <a href="clear-terminal-guide.html" class="card-link" aria-label="View CLEAR+ Terminal Guide project"></a>
-        <div class="card-inner">
-          <div class="card-media card-media--terminal-guide">
-            <div class="card-inset-border card-inset-border--subtle"></div>
-          </div>
-          <div class="card-copy">
-            <div class="card-copy-top">
-              <span class="card-title">CLEAR+ Terminal Guide</span>
-              <div class="card-badges">
-                <span class="card-badge">App</span>
-                <span class="card-badge">Case study</span>
-                <span class="card-badge">In progress</span>
-              </div>
-            </div>
-            <p class="card-desc">A digital identity wallet for CLEAR members to store, access, and share their credentials.</p>
-          </div>
-          <div class="card-outer-border"></div>
-        </div>
-      </article>
-
-      <!-- 4. CLEAR+ Location Details -->
-      <article class="card card-deal" data-section="projects" data-tags="app,case-study" style="animation-delay:0.4s">
-        <a href="clear-location-details.html" class="card-link" aria-label="View CLEAR+ Location Details project"></a>
-        <div class="card-inner">
-          <div class="card-media card-media--location-details">
-            <div class="clear-trio">
-              <img src="assets/clear-trio-frame.png" alt="" class="clear-trio-frame" />
-              <img src="assets/clear-trio-screen1.png" alt="" class="clear-trio-screen clear-trio-screen--1" />
-              <img src="assets/clear-trio-screen2.png" alt="" class="clear-trio-screen clear-trio-screen--2" />
-              <img src="assets/clear-trio-screen3.png" alt="" class="clear-trio-screen clear-trio-screen--3" />
-            </div>
-            <div class="card-inset-border card-inset-border--subtle"></div>
-          </div>
-          <div class="card-copy">
-            <div class="card-copy-top">
-              <span class="card-title">CLEAR+ Location Details</span>
-              <div class="card-badges">
-                <span class="card-badge">App</span>
-                <span class="card-badge">Case study</span>
-                <span class="card-badge">In progress</span>
-              </div>
-            </div>
-            <p class="card-desc">A digital identity wallet for CLEAR members to store, access, and share their credentials.</p>
-          </div>
-          <div class="card-outer-border"></div>
-        </div>
-      </article>
-
-      <!-- 5. CLEAR+ Vault -->
-      <article class="card card-deal" data-section="projects" data-tags="app,case-study" style="animation-delay:0.5s">
-        <a href="clear-vault.html" class="card-link" aria-label="View CLEAR+ Vault project"></a>
-        <div class="card-inner">
-          <div class="card-media card-media--clear-vault">
-            <div class="clear-trio">
-              <img src="assets/clear-trio-frame.png" alt="" class="clear-trio-frame" />
-              <img src="assets/clear-trio-screen1.png" alt="" class="clear-trio-screen clear-trio-screen--1" />
-              <img src="assets/clear-trio-screen2.png" alt="" class="clear-trio-screen clear-trio-screen--2" />
-              <img src="assets/clear-trio-screen3.png" alt="" class="clear-trio-screen clear-trio-screen--3" />
-            </div>
-            <div class="card-inset-border card-inset-border--subtle"></div>
-          </div>
-          <div class="card-copy">
-            <div class="card-copy-top">
-              <span class="card-title">CLEAR+ Vault</span>
-              <div class="card-badges">
-                <span class="card-badge">App</span>
-                <span class="card-badge">Case study</span>
-                <span class="card-badge">In progress</span>
-              </div>
-            </div>
-            <p class="card-desc">A digital identity wallet for CLEAR members to store, access, and share their credentials.</p>
-          </div>
-          <div class="card-outer-border"></div>
-        </div>
-      </article>
-
-      </div><!-- /.content -->
-
-    </main>
   </div>
-
-  <!-- MOBILE FOOTER -->
-  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
-    <div class="social-links">
-      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
-    </div>
-    <div class="sidebar-meta">
-      <p class="last-updated">Last updated: April 19th, 2026</p>
-      <p class="weather">
-        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
-        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
-      </p>
-    </div>
-  </footer>
 
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>

@@ -489,6 +489,83 @@ body {
 }
 
 /* ================================
+   SPLASH PAGE (homepage)
+   ================================ */
+.splash-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--pad) 10px;
+  height: 100vh;
+}
+
+.splash-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 125px;
+  width: 100%;
+  padding-bottom: 20px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.dark .splash-nav {
+  background: rgba(9,9,11,0.85);
+}
+
+.splash-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.splash-hero .hero-title,
+.splash-hero .hero-current {
+  text-align: center;
+}
+
+.splash-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+}
+
+.splash-footer .social-links {
+  justify-content: center;
+}
+
+.splash-footer .sidebar-meta {
+  align-items: center;
+}
+
+.splash-footer .weather {
+  justify-content: center;
+}
+
+@media (max-width: 809px) {
+  .splash-page {
+    height: 100dvh;
+  }
+
+  .splash-nav {
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+/* ================================
    RIGHT COLUMN WRAPPER
    ================================ */
 .right-col {
