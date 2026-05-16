@@ -336,6 +336,15 @@ body {
   font-weight: 600;
 }
 
+.hero-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.15s;
+}
+
+.hero-link:hover { opacity: 0.55; }
+
 .cta-btn {
   display: flex;
   align-items: center;
@@ -557,11 +566,6 @@ body {
 @media (max-width: 809px) {
   .splash-page {
     height: 100dvh;
-  }
-
-  .splash-nav {
-    justify-content: space-between;
-    gap: 0;
   }
 }
 
