@@ -43,9 +43,7 @@ a { text-decoration: none; color: inherit; }
   border-bottom-color: rgba(255,255,255,0.06);
 }
 
-.dark .nav-home,
-.dark .weather,
-.dark .last-updated {
+.dark .nav-home {
   color: var(--text);
 }
 
