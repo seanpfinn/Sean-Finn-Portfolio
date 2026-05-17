@@ -123,6 +123,13 @@
     @media (max-width: 809px) {
       .ab-canvas { grid-template-columns: repeat(3, 150px); gap: 10px; padding: 20px; }
       .iso-tile  { width: 150px; height: 150px; border-radius: 14px; padding: 14px 10px 10px; }
+
+      /* Lock the viewport so the canvas doesn't scroll the page */
+      html, body   { height: 100% !important; overflow: hidden !important; }
+      body         { display: flex; flex-direction: column; }
+      .page        { flex: 1 !important; min-height: 0 !important; height: auto !important; overflow: hidden !important; }
+      .right-col   { flex: 1 !important; min-height: 0 !important; }
+      .mobile-footer { display: none !important; }
     }
   </style>
   <!-- Google tag (gtag.js) -->
