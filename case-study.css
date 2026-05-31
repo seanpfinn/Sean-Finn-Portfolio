@@ -241,7 +241,6 @@
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  overflow-x: hidden;
 }
 
 /* Nav reuse: proj-page uses the same splash-nav, just make it sticky */
@@ -262,7 +261,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
-  padding: 10px 0 60px;
+  padding: 10px 0 80px;
   flex: 1;
 }
 
@@ -382,9 +381,22 @@
   object-fit: cover;
 }
 
-/* Footer for new layout */
+/* Footer for new layout — fixed to bottom like homepage */
 .proj-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 0 10px 10px;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.proj-footer .social-links,
+.proj-footer .sidebar-meta,
+.proj-footer a,
+.proj-footer p {
+  pointer-events: auto;
 }
 
 @media (max-width: 809px) {
