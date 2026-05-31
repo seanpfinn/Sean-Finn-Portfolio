@@ -295,7 +295,7 @@ body {
 .hero-title {
   font-family: var(--font);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 22px;
   letter-spacing: -0.5px;
   color: var(--text);
@@ -501,9 +501,8 @@ body {
 
 .splash-nav {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
   padding-bottom: 20px;
   flex-shrink: 0;
@@ -514,6 +513,45 @@ body {
 
 .dark .splash-nav {
   background: rgba(9,9,11,0.85);
+}
+
+.splash-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.splash-nav-link {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20.16px;
+  letter-spacing: -0.576px;
+  color: var(--text-body);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.splash-nav-link:hover { opacity: 0.55; }
+
+.splash-nav-work {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.splash-nav-caret {
+  color: var(--text-body);
+  flex-shrink: 0;
+}
+
+.splash-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 64px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 0 4px rgba(0,0,0,0.25);
 }
 
 .splash-hero {
@@ -533,27 +571,31 @@ body {
 
 .splash-footer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
   flex-shrink: 0;
 }
 
-.splash-footer .social-links {
-  justify-content: center;
-}
-
 .splash-footer .sidebar-meta {
-  align-items: center;
+  align-items: flex-end;
+  text-align: right;
 }
 
 .splash-footer .weather {
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 @media (max-width: 809px) {
   .splash-page {
     height: 100dvh;
+  }
+  .splash-nav {
+    justify-content: center;
+  }
+  .splash-nav-links {
+    display: none;
   }
   .splash-page .hero-title {
     font-weight: 700;
@@ -561,8 +603,20 @@ body {
   .splash-page .hero-current {
     max-width: 248px;
   }
+  .splash-avatar {
+    display: none;
+  }
   .splash-footer {
+    flex-direction: column;
+    align-items: center;
     gap: 31px;
+  }
+  .splash-footer .sidebar-meta {
+    align-items: center;
+    text-align: center;
+  }
+  .splash-footer .weather {
+    justify-content: center;
   }
   .dark-toggle {
     width: 14px;
