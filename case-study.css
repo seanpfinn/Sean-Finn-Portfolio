@@ -243,17 +243,36 @@
   background: var(--bg);
 }
 
-/* Nav reuse: proj-page uses the same splash-nav, just make it sticky */
+/* Nav: fixed overlay — no full-width background, glass only on the menu block */
 .proj-page .splash-nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 200;
-  width: 100%;
   padding: 10px;
   box-sizing: border-box;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-/* Centered content column */
+/* Glass lives on the menu block only */
+.proj-page .splash-nav-links {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(7.5px);
+  -webkit-backdrop-filter: blur(7.5px);
+  border-radius: 0 0 20px 0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.dark .proj-page .splash-nav-links {
+  background: rgba(20, 20, 22, 0.92);
+}
+
+/* Centered content column — top-aligns with the fixed nav */
 .proj-col {
   width: 780px;
   max-width: calc(100% - 40px);
@@ -265,15 +284,11 @@
   flex: 1;
 }
 
-/* Sticky header section */
+/* Project header */
 .proj-header {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: var(--bg);
-  z-index: 10;
   padding: 10px 0 12px;
 }
 
