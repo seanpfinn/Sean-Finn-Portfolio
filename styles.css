@@ -564,28 +564,25 @@ body {
 
 /* Expanded nav glass panel */
 .splash-nav-links.is-open {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(7.5px);
-  -webkit-backdrop-filter: blur(7.5px);
+  background: rgba(255, 255, 255, 0.82);
   border-radius: 0 0 20px 0;
   padding-bottom: 10px;
   padding-right: 10px;
 }
 
 .dark .splash-nav-links.is-open {
-  background: rgba(20, 20, 22, 0.85);
+  background: rgba(20, 20, 22, 0.92);
 }
 
 /* Work submenu */
 .nav-work-submenu-wrap {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease-in-out;
+  max-height: 0;
   overflow: hidden;
+  transition: max-height 0.35s ease-in-out;
 }
 
 .nav-work-submenu-wrap.is-open {
-  grid-template-rows: 1fr;
+  max-height: 600px;
 }
 
 .nav-work-submenu {
@@ -593,8 +590,6 @@ body {
   flex-direction: column;
   gap: 10px;
   padding-left: 16px;
-  overflow: hidden;
-  min-height: 0;
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
