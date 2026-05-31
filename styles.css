@@ -564,6 +564,13 @@ body {
   .splash-footer {
     gap: 31px;
   }
+  .dark-toggle {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    padding: 10px;
+    box-sizing: content-box;
+  }
 }
 
 /* ================================
