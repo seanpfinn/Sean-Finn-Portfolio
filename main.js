@@ -134,4 +134,30 @@
     }
   }, { passive: true });
 
+  // ── Work menu toggle ─────────────────────────────────────────────────────
+  const workBtn    = document.getElementById('nav-work-btn');
+  const workMenu   = document.getElementById('nav-work-submenu');
+  const navLinks   = document.getElementById('splash-nav-links');
+  const workCaret  = document.getElementById('nav-work-caret');
+
+  if (workBtn) {
+    workBtn.addEventListener('click', () => {
+      const isOpen = workBtn.getAttribute('aria-expanded') === 'true';
+      const next = !isOpen;
+      workBtn.setAttribute('aria-expanded', next);
+      if (workMenu)  workMenu.hidden = !next;
+      if (navLinks)  navLinks.classList.toggle('is-open', next);
+      if (workCaret) workCaret.classList.toggle('is-open', next);
+    });
+
+    document.addEventListener('click', e => {
+      if (!navLinks || !navLinks.classList.contains('is-open')) return;
+      if (navLinks.contains(e.target)) return;
+      workBtn.setAttribute('aria-expanded', 'false');
+      if (workMenu)  workMenu.hidden = true;
+      navLinks.classList.remove('is-open');
+      if (workCaret) workCaret.classList.remove('is-open');
+    });
+  }
+
 })();

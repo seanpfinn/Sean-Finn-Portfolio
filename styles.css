@@ -489,6 +489,7 @@ body {
    SPLASH PAGE (homepage)
    ================================ */
 .splash-page {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -534,16 +535,108 @@ body {
 
 .splash-nav-link:hover { opacity: 0.55; }
 
-.splash-nav-work {
+.splash-nav-work-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.splash-nav-work-btn {
   display: flex;
   align-items: center;
   gap: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .splash-nav-caret {
   color: var(--text-body);
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
+
+.splash-nav-caret.is-open {
+  transform: rotate(180deg);
+}
+
+/* Expanded nav glass panel */
+.splash-nav-links.is-open {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(7.5px);
+  -webkit-backdrop-filter: blur(7.5px);
+  border-radius: 0 0 20px 0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.dark .splash-nav-links.is-open {
+  background: rgba(20, 20, 22, 0.85);
+}
+
+/* Work submenu */
+.nav-work-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 16px;
+}
+
+.nav-work-submenu[hidden] { display: none; }
+
+.nav-company-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-company-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.nav-tree-icon {
+  flex-shrink: 0;
+  color: var(--text-body);
+  opacity: 0.5;
+  margin-top: 3px;
+}
+
+.nav-company-label {
+  font-family: var(--font);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 1.08px;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.nav-company-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 16px;
+}
+
+.nav-project-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20.17px;
+  letter-spacing: -0.576px;
+  color: var(--text-body);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.nav-project-item:hover { opacity: 0.55; }
+.nav-project-item--active { color: var(--text); }
 
 .splash-avatar {
   width: 80px;
@@ -555,11 +648,14 @@ body {
 }
 
 .splash-hero {
-  flex: 1;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 20px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 16px;
   text-align: center;
 }
@@ -576,6 +672,7 @@ body {
   justify-content: space-between;
   width: 100%;
   flex-shrink: 0;
+  margin-top: auto;
 }
 
 .splash-footer .sidebar-meta {
