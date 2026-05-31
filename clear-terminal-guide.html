@@ -19,112 +19,160 @@
     gtag('config', 'G-PC6GDRNEB8');
   </script>
 </head>
-<body>
+<body class="proj-page">
 
-  <!-- MOBILE NAV -->
-  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
-    <a href="/" class="nav-home">Sean Finn</a>
-    <div class="nav-links">
-      <a href="about.html" class="nav-link">About</a>
-      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
+  <!-- NAV -->
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+    <div class="splash-nav-links" id="splash-nav-links">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Work</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">CLEAR</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="clear-terminal-guide.html" class="nav-project-item nav-project-item--active">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Terminal Guide
+                </a>
+                <a href="clear-location-details.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Location Details &amp; Search
+                </a>
+                <a href="clear-vault.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Vault
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">DUNE SECURITY</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Design System
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">META</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  AI Hearable
+                </a>
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Codec Avatars
+                </a>
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  XR Simulator
+                </a>
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  User Guided Localization
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">RECUR FOREVER</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="#" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Builder Platform
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="about.html" class="splash-nav-link">About</a>
     </div>
-  </header>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
 
-  <!-- MOBILE HERO -->
-  <section class="mobile-hero blur-in" style="animation-delay:0.1s">
-    <h1 class="proj-title">CLEAR+ Terminal Guide</h1>
-    <p class="proj-subtitle">Step-by-step airport navigation surfacing the right credentials at every checkpoint.</p>
-    <div class="proj-meta-row">
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Company</span>
-        <span class="proj-meta-value">CLEAR</span>
+  <!-- CONTENT COLUMN -->
+  <main class="proj-col blur-in" style="animation-delay:0.05s">
+
+    <!-- Sticky header -->
+    <header class="proj-header">
+      <div class="proj-title-block">
+        <h1 class="proj-title-new">CLEAR+ Terminal Guide</h1>
+        <p class="proj-subtitle-new">A guided framework for turning personal values into actionable insights.</p>
       </div>
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Timeframe</span>
-        <span class="proj-meta-value">Q2 2026</span>
+      <div class="proj-meta-row-new">
+        <div class="proj-meta-item">
+          <span class="proj-meta-label">Company</span>
+          <span class="proj-meta-value">CLEAR</span>
+        </div>
+        <div class="proj-meta-item">
+          <span class="proj-meta-label">Timeframe</span>
+          <span class="proj-meta-value">Q2 2026</span>
+        </div>
+        <div class="proj-meta-item">
+          <span class="proj-meta-label">Platform</span>
+          <span class="proj-meta-value">iOS</span>
+        </div>
       </div>
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Platform</span>
-        <span class="proj-meta-value">iOS</span>
+      <a href="mailto:sean@seanpfinn.com" class="proj-dl-btn">Download app</a>
+      <div class="proj-context-new">
+        <span class="proj-context-label">Context</span>
+        <p class="proj-context-body">Over 8 weeks, I designed a calm, system-driven assessment that helps high-achieving adults turn abstract values into concrete decisions.</p>
+      </div>
+    </header>
+
+    <!-- Panels -->
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
       </div>
     </div>
-    <div class="proj-context">
-      <span class="proj-context-label">Context</span>
-      <p class="proj-context-body">A guided in-app experience that walks CLEAR+ members through the airport terminal step by step, automatically surfacing the correct credentials for each checkpoint — from check-in through boarding.</p>
+
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+      </div>
     </div>
-  </section>
 
-  <div class="page">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar blur-in" style="animation-delay:0s">
-
-      <nav class="nav">
-        <div class="nav-inner">
-          <a href="/" class="nav-home">Sean Finn</a>
-          <div class="nav-links">
-            <a href="about.html" class="nav-link">About</a>
-            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
-          </div>
-        </div>
-      </nav>
-
-      <div class="proj-sidebar-body">
-        <div>
-          <h1 class="proj-title">CLEAR+ Terminal Guide</h1>
-          <p class="proj-subtitle">Step-by-step airport navigation surfacing the right credentials at every checkpoint.</p>
-        </div>
-        <div class="proj-meta-row">
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Company</span>
-            <span class="proj-meta-value">CLEAR</span>
-          </div>
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Timeframe</span>
-            <span class="proj-meta-value">Q2 2026</span>
-          </div>
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Platform</span>
-            <span class="proj-meta-value">iOS</span>
-          </div>
-        </div>
-        <div class="proj-context">
-          <span class="proj-context-label">Context</span>
-          <p class="proj-context-body">A guided in-app experience that walks CLEAR+ members through the airport terminal step by step, automatically surfacing the correct credentials for each checkpoint — from check-in through boarding.</p>
-        </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
       </div>
+    </div>
 
-      <div class="sidebar-bottom">
-        <div class="social-links">
-          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="sidebar-meta">
-          <p class="last-updated">Last updated: May 9th, 2026</p>
-          <p class="weather">
-            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
-            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
-          </p>
-        </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
       </div>
+    </div>
 
-    </aside>
+  </main>
 
-    <!-- RIGHT CONTENT -->
-    <main class="proj-content blur-in" style="animation-delay:0.1s">
-
-      <div class="proj-panel proj-panel--dark"></div>
-
-      <div class="proj-panel proj-panel--dark"></div>
-
-    </main>
-
-  </div>
-
-  <!-- MOBILE FOOTER -->
-  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
+  <!-- FOOTER -->
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -134,7 +182,7 @@
     <div class="sidebar-meta">
       <p class="last-updated">Last updated: May 9th, 2026</p>
       <p class="weather">
-        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
+        <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
         <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
       </p>
     </div>
