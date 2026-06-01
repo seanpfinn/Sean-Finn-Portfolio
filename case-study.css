@@ -369,6 +369,13 @@
   margin: 0;
 }
 
+/* Panel color variants for new layout (higher specificity beats the default bg) */
+.proj-panel-new.proj-panel--dark     { background: #000a26; }
+.proj-panel-new.proj-panel--navy     { background: radial-gradient(ellipse 70% 60% at 52% 80%, rgba(99,149,255,0.22) 0%, transparent 70%), #041A55; }
+.proj-panel-new.proj-panel--blue     { background: #c0d1ff; }
+.proj-panel-new.proj-panel--claudeops { background: radial-gradient(ellipse at 50% 52.5%, rgba(99,149,255,0.22) 0%, transparent 85%), #000a26; }
+.proj-panel-new.proj-panel--remote   { background: radial-gradient(ellipse 60% 55% at 51% 80%, rgba(255,255,255,0.24) 0%, transparent 85%), #000; }
+
 /* Panels */
 .proj-panel-new {
   position: relative;
