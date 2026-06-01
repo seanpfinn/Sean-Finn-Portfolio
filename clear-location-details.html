@@ -10,135 +10,100 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
-  <!-- Google tag (gtag.js) -->
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+  </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-PC6GDRNEB8');
-  </script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
 </head>
-<body>
+<body class="proj-page">
 
-  <!-- MOBILE NAV -->
-  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
-    <a href="/" class="nav-home">Sean Finn</a>
-    <div class="nav-links">
-      <a href="about.html" class="nav-link">About</a>
-      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+    <div class="splash-nav-links" id="splash-nav-links">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Work</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">CLEAR</span></div>
+              <div class="nav-company-projects">
+                <a href="clear-terminal-guide.html" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Terminal Guide</a>
+                <a href="clear-location-details.html" class="nav-project-item nav-project-item--active"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Location Details &amp; Search</a>
+                <a href="clear-vault.html" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Vault</a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">DUNE SECURITY</span></div>
+              <div class="nav-company-projects"><a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Design System</a></div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">META</span></div>
+              <div class="nav-company-projects">
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>AI Hearable</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Codec Avatars</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>XR Simulator</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>User Guided Localization</a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">RECUR FOREVER</span></div>
+              <div class="nav-company-projects"><a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Builder Platform</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="about.html" class="splash-nav-link">About</a>
     </div>
-  </header>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
 
-  <!-- MOBILE HERO -->
-  <section class="mobile-hero blur-in" style="animation-delay:0.1s">
-    <h1 class="proj-title">CLEAR+ Location Details</h1>
-    <p class="proj-subtitle">Real-time wait times, lane availability, and entry requirements at a glance.</p>
-    <div class="proj-meta-row">
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Company</span>
-        <span class="proj-meta-value">CLEAR</span>
-      </div>
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Timeframe</span>
-        <span class="proj-meta-value">Q2 2026</span>
-      </div>
-      <div class="proj-meta-item">
-        <span class="proj-meta-label">Platform</span>
-        <span class="proj-meta-value">iOS</span>
+  <main class="proj-col blur-in" style="animation-delay:0.05s">
+    <div class="proj-title-block">
+      <h1 class="proj-title-new">Location Details &amp; Search</h1>
+      <p class="proj-subtitle-new">Real-time wait times, lane availability, and entry requirements at a glance.</p>
+    </div>
+    <div class="proj-meta-row-new">
+      <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q2 2026</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
+    </div>
+    <a href="mailto:sean@seanpfinn.com" class="proj-dl-btn">Download app</a>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">A redesigned location detail screen for the CLEAR+ app that surfaces real-time wait times, available lanes, and TSA PreCheck requirements — reducing the time members spend navigating the app at the terminal.</p>
+    </div>
+    <div class="proj-panel-new proj-panel--blue">
+      <div class="proj-trio">
+        <img src="assets/clear-trio-frame.png" alt="" class="proj-trio-frame" />
+        <img src="assets/clear-trio-screen1.png" alt="" class="proj-trio-screen proj-trio-screen--1" />
+        <img src="assets/clear-trio-screen2.png" alt="" class="proj-trio-screen proj-trio-screen--2" />
+        <img src="assets/clear-trio-screen3.png" alt="" class="proj-trio-screen proj-trio-screen--3" />
       </div>
     </div>
-    <div class="proj-context">
-      <span class="proj-context-label">Context</span>
-      <p class="proj-context-body">A redesigned location detail screen for the CLEAR+ app that surfaces real-time wait times, available lanes, and TSA PreCheck requirements — reducing the time members spend navigating the app at the terminal.</p>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">A redesigned location detail screen for the CLEAR+ app that surfaces real-time wait times, available lanes, and TSA PreCheck requirements — reducing the time members spend navigating the app at the terminal.</p>
     </div>
-  </section>
-
-  <div class="page">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar blur-in" style="animation-delay:0s">
-
-      <nav class="nav">
-        <div class="nav-inner">
-          <a href="/" class="nav-home">Sean Finn</a>
-          <div class="nav-links">
-            <a href="about.html" class="nav-link">About</a>
-            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
-          </div>
-        </div>
-      </nav>
-
-      <div class="proj-sidebar-body">
-        <div>
-          <h1 class="proj-title">CLEAR+ Location Details</h1>
-          <p class="proj-subtitle">Real-time wait times, lane availability, and entry requirements at a glance.</p>
-        </div>
-        <div class="proj-meta-row">
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Company</span>
-            <span class="proj-meta-value">CLEAR</span>
-          </div>
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Timeframe</span>
-            <span class="proj-meta-value">Q2 2026</span>
-          </div>
-          <div class="proj-meta-item">
-            <span class="proj-meta-label">Platform</span>
-            <span class="proj-meta-value">iOS</span>
-          </div>
-        </div>
-        <div class="proj-context">
-          <span class="proj-context-label">Context</span>
-          <p class="proj-context-body">A redesigned location detail screen for the CLEAR+ app that surfaces real-time wait times, available lanes, and TSA PreCheck requirements — reducing the time members spend navigating the app at the terminal.</p>
-        </div>
+    <div class="proj-panel-new proj-panel--navy">
+      <div class="proj-trio">
+        <img src="assets/clear-trio-frame.png" alt="" class="proj-trio-frame" />
+        <img src="assets/clear-trio-screen1.png" alt="" class="proj-trio-screen proj-trio-screen--1" />
+        <img src="assets/clear-trio-screen2.png" alt="" class="proj-trio-screen proj-trio-screen--2" />
+        <img src="assets/clear-trio-screen3.png" alt="" class="proj-trio-screen proj-trio-screen--3" />
       </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Summary</span>
+      <p class="proj-caption-body">A redesigned location detail screen for the CLEAR+ app that surfaces real-time wait times, available lanes, and TSA PreCheck requirements — reducing the time members spend navigating the app at the terminal.</p>
+    </div>
+  </main>
 
-      <div class="sidebar-bottom">
-        <div class="social-links">
-          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="sidebar-meta">
-          <p class="last-updated">Last updated: May 9th, 2026</p>
-          <p class="weather">
-            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span>
-            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
-          </p>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT CONTENT -->
-    <main class="proj-content blur-in" style="animation-delay:0.1s">
-
-      <div class="proj-panel proj-panel--blue">
-        <div class="proj-trio">
-          <img src="assets/clear-trio-frame.png" alt="" class="proj-trio-frame" />
-          <img src="assets/clear-trio-screen1.png" alt="" class="proj-trio-screen proj-trio-screen--1" />
-          <img src="assets/clear-trio-screen2.png" alt="" class="proj-trio-screen proj-trio-screen--2" />
-          <img src="assets/clear-trio-screen3.png" alt="" class="proj-trio-screen proj-trio-screen--3" />
-        </div>
-      </div>
-
-      <div class="proj-panel proj-panel--navy">
-        <div class="proj-trio">
-          <img src="assets/clear-trio-frame.png" alt="" class="proj-trio-frame" />
-          <img src="assets/clear-trio-screen1.png" alt="" class="proj-trio-screen proj-trio-screen--1" />
-          <img src="assets/clear-trio-screen2.png" alt="" class="proj-trio-screen proj-trio-screen--2" />
-          <img src="assets/clear-trio-screen3.png" alt="" class="proj-trio-screen proj-trio-screen--3" />
-        </div>
-      </div>
-
-    </main>
-
-  </div>
-
-  <!-- MOBILE FOOTER -->
-  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -147,15 +112,11 @@
     </div>
     <div class="sidebar-meta">
       <p class="last-updated">Last updated: May 9th, 2026</p>
-      <p class="weather">
-        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 47&deg;F, Foggy</span>
-        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" />
-      </p>
+      <p class="weather"><span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span><img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" /></p>
     </div>
   </footer>
 
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>
-
 </body>
 </html>

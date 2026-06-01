@@ -11,140 +11,119 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
   <link rel="stylesheet" href="live-activities.css" />
-  <!-- Google tag (gtag.js) -->
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+    /* Override live-activities panel styles for new layout */
+    .proj-panel-new .la-phone-wrap { position: absolute; inset: 0; overflow: hidden; }
+  </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-PC6GDRNEB8');
-  </script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
 </head>
-<body>
+<body class="proj-page">
 
-  <!-- MOBILE NAV -->
-  <header class="mobile-nav-bar blur-in" style="animation-delay:0s">
-    <a href="/" class="nav-home">Sean Finn</a>
-    <div class="nav-links">
-      <a href="about.html" class="nav-link">About</a>
-      <button class="dark-toggle" id="dark-toggle-mobile" aria-label="Toggle dark mode"></button>
-    </div>
-  </header>
-
-  <!-- MOBILE HERO -->
-  <section class="mobile-hero blur-in" style="animation-delay:0.1s">
-    <h1 class="cs-title">CLEAR Live Activities</h1>
-    <p class="cs-subtitle">Real-time travel status and biometric checkpoint updates surfaced through iOS Live Activities.</p>
-    <div class="la-meta-grid">
-      <div class="la-meta-item">
-        <span class="cs-meta-label">Company</span>
-        <span class="cs-meta-value">CLEAR</span>
-      </div>
-      <div class="la-meta-item">
-        <span class="cs-meta-label">Timeframe</span>
-        <span class="cs-meta-value">Q2 2026</span>
-      </div>
-      <div class="la-meta-item">
-        <span class="cs-meta-label">Platform</span>
-        <span class="cs-meta-value">iOS</span>
-      </div>
-    </div>
-    <div class="cs-section">
-      <span class="cs-meta-label">Context</span>
-      <p class="cs-context-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
-    </div>
-  </section>
-
-  <div class="page">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar blur-in" style="animation-delay:0s">
-
-      <nav class="nav">
-        <div class="nav-inner">
-          <a href="/" class="nav-home">Sean Finn</a>
-          <div class="nav-links">
-            <a href="about.html" class="nav-link">About</a>
-            <button class="dark-toggle" id="dark-toggle-sidebar" aria-label="Toggle dark mode"></button>
-          </div>
-        </div>
-      </nav>
-
-      <div class="sidebar-hero cs-sidebar-content">
-        <h1 class="cs-title">CLEAR Live Activities</h1>
-        <p class="cs-subtitle">Real-time travel status and biometric checkpoint updates surfaced through iOS Live Activities.</p>
-
-        <div class="la-meta-grid">
-          <div class="la-meta-item">
-            <span class="cs-meta-label">Company</span>
-            <span class="cs-meta-value">CLEAR</span>
-          </div>
-          <div class="la-meta-item">
-            <span class="cs-meta-label">Timeframe</span>
-            <span class="cs-meta-value">Q2 2026</span>
-          </div>
-          <div class="la-meta-item">
-            <span class="cs-meta-label">Platform</span>
-            <span class="cs-meta-value">iOS</span>
-          </div>
-        </div>
-
-        <div class="cs-section">
-          <span class="cs-meta-label">Context</span>
-          <p class="cs-context-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
-        </div>
-      </div>
-
-      <div class="sidebar-bottom">
-        <div class="social-links">
-          <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
-          <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
-          <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
-        </div>
-        <div class="sidebar-meta">
-          <p class="last-updated">Last updated: April 26th, 2026</p>
-          <p class="weather">
-            <span>New York &bull; <span id="clock">12:00:00 PM</span>, 53&deg;F, Clear sky</span>
-            <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Clear sky" class="weather-icon" />
-          </p>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT CONTENT -->
-    <main class="content la-content">
-
-      <!-- Visual -->
-      <div class="la-visual card-deal" style="animation-delay:0.1s">
-        <div class="la-phone-wrap" id="la-phone-wrap">
-          <img src="assets/la-phone-frame.png" alt="" class="la-phone-frame" />
-          <div class="la-screen-wrap">
-            <img src="assets/la-minimal.png" alt="Live Activities – Minimal view" class="la-phone-screen" id="la-screen" />
-          </div>
-        </div>
-      </div>
-
-      <!-- View switcher -->
-      <div class="la-switcher card-deal" style="animation-delay:0.2s">
-        <button class="la-view-btn is-active" data-view="minimal" data-src="assets/la-minimal.png">Minimal</button>
-        <button class="la-view-btn" data-view="compact" data-src="assets/la-compact.png">Compact</button>
-        <button class="la-view-btn" data-view="expanded" data-src="assets/la-expanded.png">Expanded</button>
-        <button class="la-view-btn" data-view="lockscreen" data-src="assets/la-lockscreen.png">Lock Screen</button>
-        <button class="la-icon-btn" id="la-shuffle" aria-label="Shuffle views">
-          <img src="assets/la-shuffle.svg" alt="" />
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+    <div class="splash-nav-links" id="splash-nav-links">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Work</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="la-icon-btn" id="la-repeat" aria-label="Cycle views">
-          <img src="assets/la-repeat.svg" alt="" />
-        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">CLEAR</span></div>
+              <div class="nav-company-projects">
+                <a href="clear-terminal-guide.html" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Terminal Guide</a>
+                <a href="clear-location-details.html" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Location Details &amp; Search</a>
+                <a href="clear-vault.html" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Vault</a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">DUNE SECURITY</span></div>
+              <div class="nav-company-projects"><a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Design System</a></div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">META</span></div>
+              <div class="nav-company-projects">
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>AI Hearable</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Codec Avatars</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>XR Simulator</a>
+                <a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>User Guided Localization</a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nav-company-label">RECUR FOREVER</span></div>
+              <div class="nav-company-projects"><a href="#" class="nav-project-item"><svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>Builder Platform</a></div>
+            </div>
+          </div>
+        </div>
       </div>
+      <a href="about.html" class="splash-nav-link">About</a>
+    </div>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
 
-    </main>
+  <main class="proj-col blur-in" style="animation-delay:0.05s">
+    <div class="proj-title-block">
+      <h1 class="proj-title-new">CLEAR Live Activities</h1>
+      <p class="proj-subtitle-new">Real-time travel status and biometric checkpoint updates surfaced through iOS Live Activities.</p>
+    </div>
+    <div class="proj-meta-row-new">
+      <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q2 2026</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
+    </div>
+    <a href="mailto:sean@seanpfinn.com" class="proj-dl-btn">Download app</a>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
+    </div>
 
-  </div>
+    <!-- Interactive phone panel -->
+    <div class="proj-panel-new proj-panel--dark">
+      <div class="la-phone-wrap" id="la-phone-wrap">
+        <img src="assets/la-phone-frame.png" alt="" class="la-phone-frame" />
+        <div class="la-screen-wrap">
+          <img src="assets/la-minimal.png" alt="Live Activities – Minimal view" class="la-phone-screen" id="la-screen" />
+        </div>
+      </div>
+    </div>
 
-  <!-- MOBILE FOOTER -->
-  <footer class="mobile-footer blur-in" style="animation-delay:0.3s">
+    <!-- View switcher -->
+    <div class="proj-caption">
+      <span class="proj-caption-label">View states</span>
+      <p class="proj-caption-body">Live Activities adapts across four display states depending on context and screen real estate.</p>
+    </div>
+    <div class="la-switcher">
+      <button class="la-view-btn is-active" data-view="minimal" data-src="assets/la-minimal.png">Minimal</button>
+      <button class="la-view-btn" data-view="compact" data-src="assets/la-compact.png">Compact</button>
+      <button class="la-view-btn" data-view="expanded" data-src="assets/la-expanded.png">Expanded</button>
+      <button class="la-view-btn" data-view="lockscreen" data-src="assets/la-lockscreen.png">Lock Screen</button>
+      <button class="la-icon-btn" id="la-shuffle" aria-label="Shuffle views"><img src="assets/la-shuffle.svg" alt="" /></button>
+      <button class="la-icon-btn" id="la-repeat" aria-label="Cycle views"><img src="assets/la-repeat.svg" alt="" /></button>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
+    </div>
+    <div class="proj-panel-new proj-panel--dark">
+      <div class="la-phone-wrap">
+        <img src="assets/la-phone-frame.png" alt="" class="la-phone-frame" />
+        <div class="la-screen-wrap">
+          <img src="assets/la-expanded.png" alt="Live Activities – Expanded view" class="la-phone-screen" />
+        </div>
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Summary</span>
+      <p class="proj-caption-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>
+    </div>
+  </main>
+
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -152,122 +131,13 @@
       <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="sidebar-meta">
-      <p class="last-updated">Last updated: April 26th, 2026</p>
-      <p class="weather">
-        <span>New York &bull; <span id="clock-mobile">12:00:00 PM</span>, 53&deg;F, Clear sky</span>
-        <img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Clear sky" class="weather-icon" />
-      </p>
+      <p class="last-updated">Last updated: May 9th, 2026</p>
+      <p class="weather"><span>New York &bull; <span id="clock">12:00:00 PM</span>, 47&deg;F, Foggy</span><img src="assets/7e2394484df258e1c2e95a3ae8fd9ba6113998f3.png" alt="Foggy" class="weather-icon" /></p>
     </div>
   </footer>
 
   <script src="main.js"></script>
-
-  <script>
-    const ALL_VIEWS = ['minimal', 'compact', 'expanded', 'lockscreen'];
-    const SRCS = {
-      minimal:    'assets/la-minimal.png',
-      compact:    'assets/la-compact.png',
-      expanded:   'assets/la-expanded.png',
-      lockscreen: 'assets/la-lockscreen.png',
-    };
-    const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
-
-    const wrap  = document.querySelector('.la-screen-wrap');
-    const btns  = document.querySelectorAll('.la-view-btn');
-    let current = 'minimal';
-    let busy    = false;
-
-    // Preload all screens so transitions don't stall on image load
-    ALL_VIEWS.forEach(v => { const i = new Image(); i.src = SRCS[v]; });
-
-    function setView(to) {
-      if (to === current || busy) return;
-      busy = true;
-
-      const outEl = wrap.querySelector('.la-phone-screen');
-      const inEl  = document.createElement('img');
-      inEl.src       = SRCS[to];
-      inEl.alt       = `Live Activities – ${to}`;
-      inEl.className = 'la-phone-screen';
-
-      const dur = 320;
-
-      if (to === 'lockscreen' || current === 'lockscreen') {
-        const phoneWrap = document.querySelector('.la-phone-wrap');
-        const half = 180;
-        const exitY  = to === 'lockscreen' ? '60px'  : '-60px';
-        const enterY = to === 'lockscreen' ? '-40px' : '40px';
-
-        // Phase 1: pan entire phone out
-        phoneWrap.style.transition = `transform ${half}ms ease-in, opacity ${half}ms ease-in`;
-        phoneWrap.style.transform  = `translateY(${exitY})`;
-        phoneWrap.style.opacity    = '0';
-
-        setTimeout(() => {
-          // Swap screen content while phone is invisible
-          wrap.appendChild(inEl);
-          outEl.remove();
-
-          // Snap to enter position (no transition)
-          phoneWrap.style.transition = 'none';
-          phoneWrap.style.transform  = `translateY(${enterY})`;
-          phoneWrap.style.opacity    = '0';
-          void phoneWrap.offsetHeight;
-
-          // Phase 2: pan entire phone in
-          phoneWrap.style.transition = `transform ${half}ms ${EASE}, opacity ${half}ms ${EASE}`;
-          phoneWrap.style.transform  = '';
-          phoneWrap.style.opacity    = '';
-
-          btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
-          current = to;
-
-          setTimeout(() => {
-            phoneWrap.style.transition = '';
-            phoneWrap.style.transform  = '';
-            phoneWrap.style.opacity    = '';
-            busy = false;
-          }, half + 60);
-        }, half + 20);
-
-        return;
-      }
-
-      const outAnim = `la-fade-out ${dur}ms ease both`;
-      const inAnim  = `la-fade-in  ${dur}ms ease both`;
-
-      wrap.appendChild(inEl);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          outEl.style.animation = outAnim;
-          inEl.style.animation  = inAnim;
-        });
-      });
-
-      btns.forEach(b => b.classList.toggle('is-active', b.dataset.view === to));
-      current = to;
-
-      setTimeout(() => {
-        outEl.remove();
-        inEl.style.animation = '';
-        busy = false;
-      }, dur + 60);
-    }
-
-    btns.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
-
-    document.getElementById('la-shuffle').addEventListener('click', () => {
-      const others = ALL_VIEWS.filter(v => v !== current);
-      setView(others[Math.floor(Math.random() * others.length)]);
-    });
-
-    document.getElementById('la-repeat').addEventListener('click', () => {
-      setView(ALL_VIEWS[(ALL_VIEWS.indexOf(current) + 1) % ALL_VIEWS.length]);
-    });
-  </script>
-
+  <script src="live-activities.js"></script>
   <script type="module" src="sound.js"></script>
-
 </body>
 </html>
