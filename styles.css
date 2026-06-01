@@ -519,7 +519,7 @@ body {
 .splash-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   transition: background-color 0.2s ease;
 }
 
@@ -617,6 +617,10 @@ body {
   color: var(--text-body);
   opacity: 0.5;
   margin-top: 3px;
+}
+
+.nav-project-item .nav-tree-icon {
+  margin-top: 5px;
 }
 
 .nav-company-label {
