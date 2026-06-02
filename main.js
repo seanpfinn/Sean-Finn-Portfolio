@@ -272,18 +272,17 @@
 
 })();
 
-// ── Scroll-driven looping gallery ─────────────────────────────────────────
+// ── Continuously looping gallery ──────────────────────────────────────────
 (function () {
-  const canvas = document.getElementById('gallery-canvas');
-  const track  = document.getElementById('gallery-track');
-  if (!canvas || !track) return;
+  const track = document.getElementById('gallery-track');
+  if (!track) return;
 
   const CARD_W   = 521;
   const GAP      = 24;
   const PAD      = 10;
   const MAX_ANG  = 25;    // max rotation in degrees at the edges
   const PERSP    = 1000;  // perspective distance in px
-  const LOOPS    = 3;     // how many full cycles across the scrollable canvas
+  const SPEED    = 55;    // marquee speed in px per second
 
   // Duplicate the card set so the track can wrap seamlessly
   const originals = Array.from(track.querySelectorAll('.gallery-card'));
@@ -294,14 +293,16 @@
   // Width of one full set (each card occupies width + trailing gap)
   const oneSet = N * (CARD_W + GAP);
 
-  function resize() {
-    canvas.style.height = (window.innerHeight + oneSet * LOOPS) + 'px';
-  }
+  let offset = 0;
+  let paused = false;
+  let last   = null;
 
-  function update() {
-    const top      = canvas.getBoundingClientRect().top;
-    const scrolled = Math.max(0, -top);
-    const tx       = -(scrolled % oneSet); // wraps within one set → seamless loop
+  // Pause while hovering so the clickable cards stay easy to click
+  track.addEventListener('mouseenter', () => { paused = true; });
+  track.addEventListener('mouseleave', () => { paused = false; });
+
+  function render() {
+    const tx = -(offset % oneSet); // wraps within one set → seamless loop
     track.style.transform = 'translateX(' + tx + 'px)';
 
     // Convex rotation: each card rotates based on its distance from viewport centre
@@ -319,9 +320,16 @@
     });
   }
 
-  resize();
-  update();
-  window.addEventListener('load',   () => { resize(); update(); }, { passive: true });
-  window.addEventListener('resize', () => { resize(); update(); }, { passive: true });
-  window.addEventListener('scroll', update, { passive: true });
+  function tick(now) {
+    if (last === null) last = now;
+    const dt = (now - last) / 1000;
+    last = now;
+    if (!paused) offset += SPEED * dt;
+    render();
+    requestAnimationFrame(tick);
+  }
+
+  render();
+  requestAnimationFrame(tick);
+  window.addEventListener('resize', render, { passive: true });
 })();
