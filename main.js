@@ -271,3 +271,27 @@
   }
 
 })();
+
+// ── Scroll-driven gallery ─────────────────────────────────────────────────
+(function () {
+  const section = document.getElementById('gallery-section');
+  const track   = document.getElementById('gallery-track');
+  if (!section || !track) return;
+
+  function resize() {
+    const overscroll = Math.max(0, track.scrollWidth - window.innerWidth);
+    section.style.height = (window.innerHeight + overscroll) + 'px';
+  }
+
+  function update() {
+    const top        = section.getBoundingClientRect().top;
+    const overscroll = Math.max(0, track.scrollWidth - window.innerWidth);
+    const progress   = Math.max(0, Math.min(1, -top / overscroll));
+    track.style.transform = 'translateX(' + (-progress * overscroll) + 'px)';
+  }
+
+  resize();
+  update();
+  window.addEventListener('resize', () => { resize(); update(); }, { passive: true });
+  window.addEventListener('scroll', update, { passive: true });
+})();
