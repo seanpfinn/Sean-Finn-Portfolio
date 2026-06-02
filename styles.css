@@ -1649,23 +1649,36 @@ body {
 /* ================================
    SCROLL-DRIVEN PROJECT GALLERY
    ================================ */
-.gallery-section {
+
+/* Scroll canvas — height set by JS */
+#gallery-canvas {
   position: relative;
-  /* height set by JS */
 }
 
-.gallery-sticky {
+/* Splash-page becomes the sticky viewport layer */
+#gallery-canvas .splash-page {
   position: sticky;
   top: 0;
-  height: 100vh;
   overflow: hidden;
-  display: flex;
-  align-items: center;
 }
 
+/* Footer pins to bottom of the sticky viewport */
+#gallery-canvas .splash-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  margin-top: 0;
+  width: auto;
+}
+
+/* Cards row — sits below the hero */
 .gallery-track {
+  position: absolute;
+  top: 43%;
+  left: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
   padding: 0 10px;
   will-change: transform;
