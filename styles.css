@@ -1646,3 +1646,220 @@ body {
    ================================ */
 ::selection { background: rgba(43,43,43,0.1); }
 
+/* ================================
+   SCROLL-DRIVEN PROJECT GALLERY
+   ================================ */
+.gallery-section {
+  position: relative;
+  /* height set by JS */
+}
+
+.gallery-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.gallery-track {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 10px;
+  will-change: transform;
+  flex-shrink: 0;
+}
+
+/* Card shell */
+.gallery-card {
+  flex-shrink: 0;
+  width: 640px;
+  height: 430px;
+  background: var(--bg-card);
+  border: 1.236px solid var(--border);
+  border-radius: 30px;
+  box-shadow: 0 0 2.5px rgba(0,0,0,0.12);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gallery-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+.gallery-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.gallery-card-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 24px;
+}
+
+.gallery-card-company {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.44px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.gallery-card-title {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.18px;
+  color: var(--text);
+  line-height: 24px;
+}
+
+.gallery-card-badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gallery-card-badge {
+  background: var(--badge-bg);
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 12.8px;
+  letter-spacing: -0.512px;
+  line-height: 15.36px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Visual panel */
+.gallery-card-visual {
+  flex: 1;
+  min-height: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(94,94,94,0.15);
+}
+
+/* Inset border overlay */
+.gallery-card-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(219,219,219,0.25);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Full-bleed background image */
+.gv-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Floating screenshot */
+.gv-screen {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 18px;
+  width: 92%;
+  height: auto;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  border-radius: 4px;
+}
+
+/* Vault trio */
+.gv-vault-wrap {
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  transform: translateX(-50%);
+  width: 92%;
+  height: calc(100% - 28px);
+}
+
+.gv-vault-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.gv-vault-s1 {
+  position: absolute;
+  left: 3.47%;
+  top: 4.6%;
+  width: 33.84%;
+  height: 93.9%;
+  object-fit: cover;
+}
+
+.gv-vault-s2 {
+  position: absolute;
+  left: 42.19%;
+  top: 1.22%;
+  width: 23.74%;
+  height: 87.85%;
+  object-fit: cover;
+}
+
+.gv-vault-s3 {
+  position: absolute;
+  left: 70.85%;
+  top: 7.21%;
+  width: 28.67%;
+  height: 87.32%;
+  object-fit: cover;
+}
+
+/* Recur phones */
+.gv-phones {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 16px;
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.gv-phone {
+  width: 31%;
+  height: auto;
+  flex-shrink: 0;
+}
+
+/* Hearable */
+.gv-hearable {
+  position: absolute;
+  left: -5.52%;
+  top: 0.5%;
+  width: 110.96%;
+  height: 188.83%;
+  object-fit: cover;
+  object-position: top;
+}
+
