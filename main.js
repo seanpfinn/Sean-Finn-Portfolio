@@ -272,43 +272,48 @@
 
 })();
 
-// ── Scroll-driven gallery ─────────────────────────────────────────────────
+// ── Scroll-driven looping gallery ─────────────────────────────────────────
 (function () {
   const canvas = document.getElementById('gallery-canvas');
   const track  = document.getElementById('gallery-track');
   if (!canvas || !track) return;
 
-  const cards    = track.querySelectorAll('.gallery-card');
   const CARD_W   = 521;
   const GAP      = 24;
   const PAD      = 10;
-  const MAX_ANG  = 25;   // max rotation in degrees at the edges
-  const PERSP    = 1000; // perspective distance in px
+  const MAX_ANG  = 25;    // max rotation in degrees at the edges
+  const PERSP    = 1000;  // perspective distance in px
+  const LOOPS    = 3;     // how many full cycles across the scrollable canvas
+
+  // Duplicate the card set so the track can wrap seamlessly
+  const originals = Array.from(track.querySelectorAll('.gallery-card'));
+  const N         = originals.length;
+  originals.forEach(card => track.appendChild(card.cloneNode(true)));
+  const cards     = track.querySelectorAll('.gallery-card');
+
+  // Width of one full set (each card occupies width + trailing gap)
+  const oneSet = N * (CARD_W + GAP);
 
   function resize() {
-    const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
-    canvas.style.height = (window.innerHeight + overscroll) + 'px';
+    canvas.style.height = (window.innerHeight + oneSet * LOOPS) + 'px';
   }
 
   function update() {
-    const top        = canvas.getBoundingClientRect().top;
-    const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
-    if (overscroll <= 0) return;
-
-    const progress = Math.max(0, Math.min(1, -top / overscroll));
-    const tx = -progress * overscroll;
+    const top      = canvas.getBoundingClientRect().top;
+    const scrolled = Math.max(0, -top);
+    const tx       = -(scrolled % oneSet); // wraps within one set → seamless loop
     track.style.transform = 'translateX(' + tx + 'px)';
 
     // Convex rotation: each card rotates based on its distance from viewport centre
     const vpCenter = window.innerWidth / 2;
-    const range    = vpCenter + CARD_W / 2; // distance at which full rotation is reached
+    const range    = vpCenter + CARD_W / 2;
 
     cards.forEach((card, i) => {
       const cardCenter = PAD + i * (CARD_W + GAP) + CARD_W / 2 + tx;
       const dist  = cardCenter - vpCenter;
-      const t     = dist / range; // –1 … +1 (clamped)
+      const t     = dist / range;
       const angle = Math.max(-MAX_ANG, Math.min(MAX_ANG, -t * MAX_ANG));
-      const tz    = -(t * t) * 60; // parabolic depth: 0 at centre, –60px at edges
+      const tz    = -(t * t) * 60;
       card.style.transform =
         'perspective(' + PERSP + 'px) rotateY(' + angle + 'deg) translateZ(' + tz + 'px)';
     });

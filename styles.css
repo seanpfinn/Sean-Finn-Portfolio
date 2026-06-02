@@ -1662,14 +1662,15 @@ body {
   overflow: hidden;
 }
 
-/* Footer pins to bottom of the sticky viewport */
+/* Footer pinned to viewport bottom — always the bottom-most element */
 #gallery-canvas .splash-footer {
-  position: absolute;
+  position: fixed;
   bottom: 10px;
   left: 10px;
   right: 10px;
   margin-top: 0;
   width: auto;
+  z-index: 50;
 }
 
 /* Cards row — sits below the hero */
