@@ -279,7 +279,7 @@
   if (!canvas || !track) return;
 
   const cards    = track.querySelectorAll('.gallery-card');
-  const CARD_W   = 640;
+  const CARD_W   = 521;
   const GAP      = 24;
   const PAD      = 10;
   const MAX_ANG  = 25;   // max rotation in degrees at the edges
@@ -299,7 +299,7 @@
     const tx = -progress * overscroll;
     track.style.transform = 'translateX(' + tx + 'px)';
 
-    // Concave rotation: each card rotates based on its distance from viewport centre
+    // Convex rotation: each card rotates based on its distance from viewport centre
     const vpCenter = window.innerWidth / 2;
     const range    = vpCenter + CARD_W / 2; // distance at which full rotation is reached
 
@@ -307,7 +307,7 @@
       const cardCenter = PAD + i * (CARD_W + GAP) + CARD_W / 2 + tx;
       const dist  = cardCenter - vpCenter;
       const t     = dist / range; // –1 … +1 (clamped)
-      const angle = Math.max(-MAX_ANG, Math.min(MAX_ANG, t * MAX_ANG));
+      const angle = Math.max(-MAX_ANG, Math.min(MAX_ANG, -t * MAX_ANG));
       const tz    = -(t * t) * 60; // parabolic depth: 0 at centre, –60px at edges
       card.style.transform =
         'perspective(' + PERSP + 'px) rotateY(' + angle + 'deg) translateZ(' + tz + 'px)';
