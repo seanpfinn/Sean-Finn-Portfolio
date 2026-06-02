@@ -279,19 +279,21 @@
   if (!canvas || !track) return;
 
   function resize() {
-    const overscroll = Math.max(0, track.scrollWidth - window.innerWidth);
+    const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
     canvas.style.height = (window.innerHeight + overscroll) + 'px';
   }
 
   function update() {
     const top        = canvas.getBoundingClientRect().top;
-    const overscroll = Math.max(0, track.scrollWidth - window.innerWidth);
-    const progress   = Math.max(0, Math.min(1, -top / overscroll));
+    const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
+    if (overscroll <= 0) return;
+    const progress = Math.max(0, Math.min(1, -top / overscroll));
     track.style.transform = 'translateX(' + (-progress * overscroll) + 'px)';
   }
 
   resize();
   update();
+  window.addEventListener('load',   () => { resize(); update(); }, { passive: true });
   window.addEventListener('resize', () => { resize(); update(); }, { passive: true });
   window.addEventListener('scroll', update, { passive: true });
 })();
