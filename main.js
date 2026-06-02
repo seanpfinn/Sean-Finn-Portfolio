@@ -278,6 +278,13 @@
   const track  = document.getElementById('gallery-track');
   if (!canvas || !track) return;
 
+  const cards    = track.querySelectorAll('.gallery-card');
+  const CARD_W   = 640;
+  const GAP      = 24;
+  const PAD      = 10;
+  const MAX_ANG  = 25;   // max rotation in degrees at the edges
+  const PERSP    = 1000; // perspective distance in px
+
   function resize() {
     const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
     canvas.style.height = (window.innerHeight + overscroll) + 'px';
@@ -287,8 +294,24 @@
     const top        = canvas.getBoundingClientRect().top;
     const overscroll = Math.max(0, track.offsetWidth - window.innerWidth);
     if (overscroll <= 0) return;
+
     const progress = Math.max(0, Math.min(1, -top / overscroll));
-    track.style.transform = 'translateX(' + (-progress * overscroll) + 'px)';
+    const tx = -progress * overscroll;
+    track.style.transform = 'translateX(' + tx + 'px)';
+
+    // Concave rotation: each card rotates based on its distance from viewport centre
+    const vpCenter = window.innerWidth / 2;
+    const range    = vpCenter + CARD_W / 2; // distance at which full rotation is reached
+
+    cards.forEach((card, i) => {
+      const cardCenter = PAD + i * (CARD_W + GAP) + CARD_W / 2 + tx;
+      const dist  = cardCenter - vpCenter;
+      const t     = dist / range; // –1 … +1 (clamped)
+      const angle = Math.max(-MAX_ANG, Math.min(MAX_ANG, t * MAX_ANG));
+      const tz    = -(t * t) * 60; // parabolic depth: 0 at centre, –60px at edges
+      card.style.transform =
+        'perspective(' + PERSP + 'px) rotateY(' + angle + 'deg) translateZ(' + tz + 'px)';
+    });
   }
 
   resize();

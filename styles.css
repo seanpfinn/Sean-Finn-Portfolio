@@ -1700,8 +1700,9 @@ body {
   gap: 12px;
   text-decoration: none;
   cursor: pointer;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  transform-origin: center center;
 }
 
 .gallery-card:hover {
