@@ -272,7 +272,7 @@
 
 })();
 
-// ── Continuously looping gallery ──────────────────────────────────────────
+// ── Scroll-driven infinite gallery ────────────────────────────────────────
 (function () {
   const track = document.getElementById('gallery-track');
   if (!track) return;
@@ -282,9 +282,9 @@
   const PAD      = 10;
   const MAX_ANG  = 25;    // max rotation in degrees at the edges
   const PERSP    = 1000;  // perspective distance in px
-  const SPEED    = 55;    // marquee speed in px per second
+  const EASE     = 0.12;  // how quickly motion catches up to scroll input
 
-  // Duplicate the card set so the track can wrap seamlessly
+  // Duplicate the card set so the track can wrap seamlessly in both directions
   const originals = Array.from(track.querySelectorAll('.gallery-card'));
   const N         = originals.length;
   originals.forEach(card => track.appendChild(card.cloneNode(true)));
@@ -293,11 +293,13 @@
   // Width of one full set (each card occupies width + trailing gap)
   const oneSet = N * (CARD_W + GAP);
 
-  let offset = 0;
-  let last   = null;
+  let target  = 0;   // accumulated scroll input
+  let current = 0;   // smoothed position that follows target
 
   function render() {
-    const tx = -(offset % oneSet); // wraps within one set → seamless loop
+    // Wrap into [0, oneSet) so it loops infinitely in either direction
+    const wrapped = ((current % oneSet) + oneSet) % oneSet;
+    const tx = -wrapped;
     track.style.transform = 'translateX(' + tx + 'px)';
 
     // Convex rotation: each card rotates based on its distance from viewport centre
@@ -315,16 +317,36 @@
     });
   }
 
-  function tick(now) {
-    if (last === null) last = now;
-    const dt = (now - last) / 1000;
-    last = now;
-    offset += SPEED * dt;
+  function loop() {
+    current += (target - current) * EASE; // smooth follow; settles when input stops
     render();
-    requestAnimationFrame(tick);
+    requestAnimationFrame(loop);
   }
 
+  // Wheel / trackpad drives the carousel horizontally (page itself doesn't scroll)
+  window.addEventListener('wheel', e => {
+    e.preventDefault();
+    target += Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  }, { passive: false });
+
+  // Touch drag for mobile
+  let touchX = 0, touchY = 0;
+  window.addEventListener('touchstart', e => {
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - touchX;
+    const dy = e.touches[0].clientY - touchY;
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+    // Use whichever axis dominates; drag left/up advances the carousel
+    target -= Math.abs(dx) >= Math.abs(dy) ? dx : dy;
+    e.preventDefault();
+  }, { passive: false });
+
   render();
-  requestAnimationFrame(tick);
+  requestAnimationFrame(loop);
   window.addEventListener('resize', render, { passive: true });
 })();
