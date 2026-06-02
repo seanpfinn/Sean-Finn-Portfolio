@@ -1803,14 +1803,25 @@ body {
   border-radius: 4px;
 }
 
+/* Dune Security — near-full app window over a colour background */
+.gv-dune-shot {
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  transform: translateX(-50%);
+  width: 98.5%;
+  height: auto;
+  border-radius: 8px;
+}
+
 /* Vault trio */
 .gv-vault-wrap {
   position: absolute;
   left: 50%;
-  top: 28px;
+  top: 32px;
   transform: translateX(-50%);
-  width: 92%;
-  height: calc(100% - 28px);
+  width: 88.6%;
+  aspect-ratio: 546 / 458;
 }
 
 .gv-vault-frame {
@@ -1818,7 +1829,7 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: top;
 }
 

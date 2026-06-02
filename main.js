@@ -294,12 +294,7 @@
   const oneSet = N * (CARD_W + GAP);
 
   let offset = 0;
-  let paused = false;
   let last   = null;
-
-  // Pause while hovering so the clickable cards stay easy to click
-  track.addEventListener('mouseenter', () => { paused = true; });
-  track.addEventListener('mouseleave', () => { paused = false; });
 
   function render() {
     const tx = -(offset % oneSet); // wraps within one set → seamless loop
@@ -324,7 +319,7 @@
     if (last === null) last = now;
     const dt = (now - last) / 1000;
     last = now;
-    if (!paused) offset += SPEED * dt;
+    offset += SPEED * dt;
     render();
     requestAnimationFrame(tick);
   }
