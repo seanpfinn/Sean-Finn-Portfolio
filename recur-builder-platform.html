@@ -3,6 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Password gate -->
+  <style>
+    html.sf-locked body { visibility: hidden; }
+    #sf-gate {
+      visibility: visible;
+      position: fixed; inset: 0; z-index: 100000;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+    }
+    #sf-gate form {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; width: min(300px, 80vw);
+    }
+    #sf-gate h1 {
+      font-size: 15px; font-weight: 500; color: #09090b;
+      letter-spacing: -0.3px; margin: 0 0 4px;
+    }
+    #sf-gate input {
+      width: 100%; padding: 10px 14px; box-sizing: border-box;
+      border: 1px solid #e4e4e7; border-radius: 10px;
+      font-size: 14px; font-family: inherit; text-align: center;
+      background: #fff; color: #09090b; outline: none;
+    }
+    #sf-gate input:focus { border-color: #09090b; }
+    #sf-gate button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 10px;
+      background: #09090b; color: #fff; font-size: 14px; font-weight: 500;
+      font-family: inherit; cursor: pointer;
+    }
+    #sf-gate .sf-err { font-size: 13px; color: #dc2626; height: 16px; }
+    #sf-gate.dark { background: #09090b; }
+    #sf-gate.dark h1 { color: #fafafa; }
+    #sf-gate.dark input { background: #18181b; border-color: #27272a; color: #fafafa; }
+    #sf-gate.dark input:focus { border-color: #fafafa; }
+    #sf-gate.dark button { background: #fafafa; color: #09090b; }
+  </style>
+  <script>
+    (function () {
+      if (localStorage.getItem('sf_unlocked') === '1') return;
+      document.documentElement.classList.add('sf-locked');
+      document.addEventListener('DOMContentLoaded', function () {
+        var gate = document.createElement('div');
+        gate.id = 'sf-gate';
+        if (localStorage.getItem('dark') === '1') gate.classList.add('dark');
+        gate.innerHTML =
+          '<form>' +
+            '<h1>Enter password to continue</h1>' +
+            '<input type="password" autocomplete="current-password" aria-label="Password" />' +
+            '<button type="submit">Enter</button>' +
+            '<div class="sf-err"></div>' +
+          '</form>';
+        document.body.appendChild(gate);
+        var form = gate.querySelector('form');
+        var input = gate.querySelector('input');
+        var err = gate.querySelector('.sf-err');
+        input.focus();
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (input.value === 'nspf1991') {
+            localStorage.setItem('sf_unlocked', '1');
+            document.documentElement.classList.remove('sf-locked');
+            gate.remove();
+          } else {
+            err.textContent = 'Incorrect password';
+            input.value = '';
+            input.focus();
+          }
+        });
+      });
+    })();
+  </script>
   <title>Recur Forever Builder Platform – Sean Finn</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
