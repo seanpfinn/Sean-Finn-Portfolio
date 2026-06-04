@@ -274,9 +274,8 @@
 
 /* Centered content column — top-aligns with the fixed nav */
 .proj-col {
-  width: 780px;
-  max-width: calc(100% - 40px);
-  margin: 0 auto;
+  width: auto;
+  margin: 0 10px;
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -442,9 +441,9 @@
 
 @media (max-width: 809px) {
   .proj-col {
-    padding: 10px 20px 60px;
-    width: 100%;
-    max-width: 100%;
+    padding: 10px 10px 60px;
+    margin: 0;
+    width: auto;
   }
   .proj-header {
     position: static;

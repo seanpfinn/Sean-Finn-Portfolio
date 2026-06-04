@@ -1653,13 +1653,14 @@ body {
 /* Scroll canvas — height set by JS */
 #gallery-canvas {
   position: relative;
+  overflow: clip; /* clips track at viewport edge without creating a scroll container */
 }
 
 /* Splash-page becomes the sticky viewport layer */
 #gallery-canvas .splash-page {
   position: sticky;
   top: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Footer pinned to viewport bottom — always the bottom-most element */
