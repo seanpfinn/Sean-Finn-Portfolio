@@ -293,8 +293,9 @@
   // Width of one full set (each card occupies width + trailing gap)
   const oneSet = N * (CARD_W + GAP);
 
-  let target  = 0;   // accumulated scroll input
-  let current = 0;   // smoothed position that follows target
+  // Start one card back so the last card sits to the left of the first
+  let target  = oneSet - (CARD_W + GAP);
+  let current = oneSet - (CARD_W + GAP);
 
   function render() {
     // Wrap into [0, oneSet) so it loops infinitely in either direction
