@@ -145,7 +145,18 @@
       <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q2 2026</span></div>
       <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
     </div>
-    <a href="mailto:sean@seanpfinn.com" class="proj-dl-btn">Download app</a>
+    <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
+    <script>
+      (function () {
+        var ua = navigator.userAgent;
+        var btn = document.getElementById('dl-btn');
+        if (/android/i.test(ua)) {
+          btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
+        } else if (/iphone|ipad|ipod/i.test(ua)) {
+          btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
+        }
+      })();
+    </script>
     <div class="proj-caption">
       <span class="proj-caption-label">Context</span>
       <p class="proj-caption-body">At CLEAR, I designed Live Activities — persistent iOS notifications that surface real-time travel status, checkpoint wait times, and biometric verification updates directly on the Dynamic Island and Lock Screen.</p>

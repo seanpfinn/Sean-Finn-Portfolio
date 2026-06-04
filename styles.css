@@ -1727,7 +1727,7 @@ body {
 
 .gallery-card-company {
   font-family: var(--font);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 1.44px;
   text-transform: uppercase;
@@ -1736,7 +1736,7 @@ body {
 
 .gallery-card-title {
   font-family: var(--font);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: -0.18px;
   color: var(--text);
