@@ -277,7 +277,7 @@
   const track = document.getElementById('gallery-track');
   if (!track) return;
 
-  const CARD_W   = 521;
+  const CARD_W   = 640;
   const GAP      = 24;
   const PAD      = 10;
   const MAX_ANG  = 25;    // max rotation in degrees at the edges

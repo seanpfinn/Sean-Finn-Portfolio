@@ -1690,25 +1690,22 @@ body {
 /* Card shell */
 .gallery-card {
   flex-shrink: 0;
-  width: 521px;
-  height: 350px;
-  background: var(--bg-card);
-  border: 1.236px solid var(--border);
+  width: 640px;
+  height: 430px;
+  background: transparent;
   border-radius: 24px;
-  box-shadow: 0 0 2.5px rgba(0,0,0,0.12);
-  padding: 12px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   text-decoration: none;
   cursor: pointer;
-  transition: box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
   transform-origin: center center;
 }
 
 .gallery-card:hover {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   transform: translateY(-2px);
 }
 
@@ -1723,25 +1720,26 @@ body {
 .gallery-card-label {
   display: flex;
   flex-direction: column;
-  line-height: 24px;
+  gap: 2px;
 }
 
 .gallery-card-company {
   font-family: var(--font);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1.44px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   color: var(--text);
+  line-height: 14px;
 }
 
 .gallery-card-title {
   font-family: var(--font);
   font-size: 16px;
   font-weight: 400;
-  letter-spacing: -0.18px;
+  letter-spacing: -0.16px;
   color: var(--text);
-  line-height: 24px;
+  line-height: 20px;
 }
 
 .gallery-card-badges {
@@ -1757,7 +1755,7 @@ body {
   font-size: 12.8px;
   letter-spacing: -0.512px;
   line-height: 15.36px;
-  padding: 4px 10px;
+  padding: 3px 6px;
   border-radius: 6px;
   white-space: nowrap;
 }
@@ -1766,21 +1764,10 @@ body {
 .gallery-card-visual {
   flex: 1;
   min-height: 0;
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(0,0,0,0.25);
-}
-
-/* Inset border overlay */
-.gallery-card-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(219,219,219,0.25);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 2;
+  box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.25);
 }
 
 /* Full-bleed background image */
