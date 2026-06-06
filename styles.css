@@ -668,7 +668,7 @@ body {
 
 .splash-hero {
   position: absolute;
-  top: 26%;
+  top: 18%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: calc(100% - 20px);
@@ -1677,7 +1677,7 @@ body {
 /* Cards row — sits below the hero */
 .gallery-track {
   position: absolute;
-  top: 38%;
+  top: 34%;
   left: 0;
   display: flex;
   align-items: flex-start;
