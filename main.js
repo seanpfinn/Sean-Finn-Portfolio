@@ -289,6 +289,8 @@
   const N         = originals.length;
   originals.forEach(card => track.appendChild(card.cloneNode(true)));
   const cards     = track.querySelectorAll('.gallery-card');
+  // Suppress CSS transition so JS-driven per-frame rotation is instantaneous
+  cards.forEach(card => { card.style.transition = 'none'; });
 
   // Width of one full set (each card occupies width + trailing gap)
   const oneSet = N * (CARD_W + GAP);
@@ -298,8 +300,7 @@
   let current = oneSet - (CARD_W + GAP);
 
   function render() {
-    // Wrap into [0, oneSet) so it loops infinitely in either direction
-    const wrapped = ((current % oneSet) + oneSet) % oneSet;
+    const wrapped = current; // loop() keeps current in [0, oneSet)
     const tx = -wrapped;
     track.style.transform = 'translateX(' + tx + 'px)';
 
@@ -320,6 +321,10 @@
 
   function loop() {
     current += (target - current) * EASE; // smooth follow; settles when input stops
+    // Keep current (and target by same offset) in [0, oneSet) — prevents float drift
+    // and ensures the modulo jump never causes a visible frame artifact
+    if (current >= oneSet) { current -= oneSet; target -= oneSet; }
+    else if (current < 0)  { current += oneSet; target += oneSet; }
     render();
     requestAnimationFrame(loop);
   }
