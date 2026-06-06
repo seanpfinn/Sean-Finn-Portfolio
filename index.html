@@ -29,16 +29,20 @@
     }
     #sf-gate input:focus { border-color: #09090b; }
     #sf-gate button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 10px;
-      background: #09090b; color: #fff; font-size: 14px; font-weight: 500;
-      font-family: inherit; cursor: pointer;
+      width: 100%; padding: 4px 28px; height: 40px; border: none;
+      border-radius: 64px;
+      background: #1a1a1a;
+      box-shadow: 0 0 18px 4px rgba(250,249,247,0.18) inset, 0 4px 8px 0 rgba(0,0,0,0.25);
+      color: #fff; font-size: 14.4px; font-weight: 500; letter-spacing: -0.288px;
+      font-family: inherit; cursor: pointer; transition: opacity 0.15s;
     }
+    #sf-gate button:hover { opacity: 0.8; }
     #sf-gate .sf-err { font-size: 13px; color: #dc2626; height: 16px; }
     #sf-gate.dark { background: #09090b; }
     #sf-gate.dark h1 { color: #fafafa; }
     #sf-gate.dark input { background: #18181b; border-color: #27272a; color: #fafafa; }
     #sf-gate.dark input:focus { border-color: #fafafa; }
-    #sf-gate.dark button { background: #fafafa; color: #09090b; }
+    #sf-gate.dark button { background: #ffffff; color: #000000; }
   </style>
   <script>
     (function () {
