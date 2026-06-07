@@ -1864,6 +1864,15 @@ body {
   object-fit: cover;
 }
 
+/* Video card */
+.gv-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* AI Hearable card */
 .gv-hearable {
   position: absolute;
