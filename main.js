@@ -335,6 +335,38 @@
     target += Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
   }, { passive: false });
 
+  // Mouse drag for desktop
+  let isDragging = false, mouseX = 0, dragDist = 0;
+
+  track.addEventListener('mousedown', e => {
+    isDragging = true;
+    mouseX     = e.clientX;
+    dragDist   = 0;
+    document.body.style.cursor     = 'grabbing';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - mouseX;
+    mouseX    = e.clientX;
+    dragDist += Math.abs(dx);
+    target   -= dx;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    document.body.style.cursor     = '';
+    document.body.style.userSelect = '';
+  });
+
+  // Swallow clicks that were actually drags so cards don't navigate
+  track.addEventListener('click', e => {
+    if (dragDist > 4) e.preventDefault();
+  }, true);
+
   // Touch drag for mobile
   let touchX = 0, touchY = 0;
   window.addEventListener('touchstart', e => {
