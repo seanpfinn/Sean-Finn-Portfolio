@@ -313,7 +313,7 @@ body {
 
 .hero-current {
   font-family: var(--font);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
