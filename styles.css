@@ -1269,35 +1269,6 @@ body {
   height: 150%;
 }
 
-/* --------------------------------
-   Recur Forever
-   -------------------------------- */
-.card-media--recur {
-  background: #0f0d15;
-  overflow: hidden;
-}
-
-.recur-phones {
-  position: absolute;
-  top: 19px;
-  left: 0;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  gap: 0;
-  overflow: hidden;
-}
-
-.recur-phone {
-  position: static;
-  height: 380px;
-  width: auto;
-  object-fit: contain;
-  flex-shrink: 1;
-}
 
 /* ================================
    AI PLAYGROUND CARD BACKGROUNDS
@@ -1486,8 +1457,6 @@ body {
   .vb-desktop { width: 75%; left: 20px; bottom: 30px; }
   .vb-mobile  { width: 16%; right: 16px; bottom: 28px; }
 
-  .recur-phone:nth-child(3) { display: none; }
-  .recur-phone { height: 320px; }
 
   .media-ui--dune   { left: 10%; width: 80%; }
   .media-ui--metasim { left: 8%; width: 84%; top: 14px; }
@@ -1841,23 +1810,6 @@ body {
   object-fit: cover;
 }
 
-/* Recur phones */
-.gv-phones {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 16px;
-  display: flex;
-  gap: 4px;
-  align-items: flex-start;
-  overflow: hidden;
-}
-
-.gv-phone {
-  width: 31%;
-  height: auto;
-  flex-shrink: 0;
-}
 
 /* Hearable */
 .gv-hearable {
