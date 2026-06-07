@@ -1683,8 +1683,8 @@ body {
 /* Card shell */
 .gallery-card {
   flex-shrink: 0;
-  width: 640px;
-  height: 430px;
+  width: clamp(280px, 44vw, 640px);
+  aspect-ratio: 640 / 430;
   background: transparent;
   border-radius: 24px;
   padding: 0;

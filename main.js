@@ -277,7 +277,6 @@
   const track = document.getElementById('gallery-track');
   if (!track) return;
 
-  const CARD_W   = 640;
   const GAP      = 24;
   const PAD      = 10;
   const MAX_ANG  = 25;    // max rotation in degrees at the edges
@@ -292,8 +291,9 @@
   // Suppress CSS transition so JS-driven per-frame rotation is instantaneous
   cards.forEach(card => { card.style.transition = 'none'; });
 
-  // Width of one full set (each card occupies width + trailing gap)
-  const oneSet = N * (CARD_W + GAP);
+  // Read card width from DOM so it scales with the CSS clamp()
+  let CARD_W = originals[0].offsetWidth;
+  let oneSet  = N * (CARD_W + GAP);
 
   // Start one card back so the last card sits to the left of the first
   let target  = oneSet - (CARD_W + GAP);
@@ -354,5 +354,13 @@
 
   render();
   requestAnimationFrame(loop);
-  window.addEventListener('resize', render, { passive: true });
+  window.addEventListener('resize', () => {
+    const oldOneSet = oneSet;
+    CARD_W  = originals[0].offsetWidth;
+    oneSet  = N * (CARD_W + GAP);
+    // Scale scroll position proportionally so the viewed card doesn't jump
+    current = (current / oldOneSet) * oneSet;
+    target  = (target  / oldOneSet) * oneSet;
+    render();
+  }, { passive: true });
 })();
