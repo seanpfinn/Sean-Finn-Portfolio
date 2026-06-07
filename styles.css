@@ -1765,15 +1765,72 @@ body {
 }
 
 /* Vault trio */
-.gv-vault-wrap {
+/* Terminal Guide card — grey bg, single iPhone centered */
+.gv-tg-wrap {
   position: absolute;
+  width: 53.3%;
+  top: 6.5%;
   left: 50%;
-  top: 32px;
   transform: translateX(-50%);
-  width: 88.6%;
-  aspect-ratio: 546 / 458;
+  aspect-ratio: 341 / 475;
+}
+.gv-tg-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.gv-tg-screen {
+  position: absolute;
+  left: 3.1%;
+  top: 0.5%;
+  width: 93.5%;
+  height: 92.6%;
+  object-fit: cover;
 }
 
+/* Location Search card — deep blue bg, dual iPhone */
+.gv-ls-wrap {
+  position: absolute;
+  width: 69.1%;
+  top: 6.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  aspect-ratio: 442 / 506;
+}
+.gv-ls-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.gv-ls-s1 {
+  position: absolute;
+  left: 3.9%;
+  top: 15.6%;
+  width: 48.3%;
+  height: 82.2%;
+  object-fit: cover;
+}
+.gv-ls-s2 {
+  position: absolute;
+  left: 47.2%;
+  top: 0.8%;
+  width: 48.7%;
+  height: 82.2%;
+  object-fit: cover;
+}
+
+/* Vault card — light blue bg, iPhone 17 Pro trio */
+.gv-vault-wrap {
+  position: absolute;
+  left: 2.9%;
+  top: 4.3%;
+  width: 94.2%;
+  aspect-ratio: 603 / 506;
+}
 .gv-vault-frame {
   position: absolute;
   inset: 0;
@@ -1782,7 +1839,6 @@ body {
   object-fit: contain;
   object-position: top;
 }
-
 .gv-vault-s1 {
   position: absolute;
   left: 3.47%;
@@ -1791,7 +1847,6 @@ body {
   height: 93.9%;
   object-fit: cover;
 }
-
 .gv-vault-s2 {
   position: absolute;
   left: 42.19%;
@@ -1800,7 +1855,6 @@ body {
   height: 87.85%;
   object-fit: cover;
 }
-
 .gv-vault-s3 {
   position: absolute;
   left: 70.85%;
@@ -1810,14 +1864,13 @@ body {
   object-fit: cover;
 }
 
-
-/* Hearable */
+/* AI Hearable card */
 .gv-hearable {
   position: absolute;
-  left: -5.52%;
-  top: 0.5%;
-  width: 110.96%;
-  height: 188.83%;
+  left: 5.4%;
+  top: 0;
+  width: 94.5%;
+  height: auto;
   object-fit: cover;
   object-position: top;
 }
