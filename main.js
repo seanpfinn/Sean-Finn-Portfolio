@@ -270,6 +270,27 @@
     });
   }
 
+  // ── Mobile hamburger toggle ───────────────────────────────────────────────
+  const hamburger = document.getElementById('nav-hamburger');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      const open = !hamburger.classList.contains('is-open');
+      hamburger.classList.toggle('is-open', open);
+      hamburger.setAttribute('aria-expanded', String(open));
+      navLinks.classList.toggle('mobile-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinks.addEventListener('click', e => {
+      if (e.target.closest('a')) {
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        navLinks.classList.remove('mobile-open');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
 })();
 
 // ── Scroll-driven infinite gallery ────────────────────────────────────────

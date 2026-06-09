@@ -450,6 +450,46 @@
 }
 
 @media (max-width: 809px) {
+  /* Mobile nav bar on case study pages */
+  .proj-page .splash-nav {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(4px) saturate(180%);
+    -webkit-backdrop-filter: blur(4px) saturate(180%);
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dark .proj-page .splash-nav {
+    background: rgba(18, 18, 20, 0.70);
+  }
+  /* Override the always-on glass panel → hidden overlay */
+  .proj-page .splash-nav-links,
+  .proj-page .splash-nav-links.is-open {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 299;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    margin: 0;
+    padding: 46px 20px 20px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
+    overflow-y: auto;
+    gap: 14px;
+    flex-direction: column;
+  }
+  .dark .proj-page .splash-nav-links,
+  .dark .proj-page .splash-nav-links.is-open {
+    background: rgba(18, 18, 20, 0.88);
+  }
+  .proj-page .splash-nav-links.mobile-open,
+  .proj-page .splash-nav-links.is-open.mobile-open {
+    display: flex;
+  }
+
   .proj-col {
     padding: 10px 10px 60px;
     max-width: none;

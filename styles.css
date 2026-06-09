@@ -564,6 +564,32 @@ body {
   transform: rotate(180deg);
 }
 
+/* Hamburger button (mobile only) */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 18px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-hamburger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
 /* Expanded nav glass panel */
 .splash-nav-links.is-open {
   background: rgba(255, 255, 255, 0.55);
@@ -717,12 +743,57 @@ body {
   .splash-page {
     height: 100dvh;
   }
+
+  /* Mobile nav bar */
+  .nav-hamburger {
+    display: flex;
+  }
   .splash-nav {
-    justify-content: center;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 300;
+    padding: 10px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(4px) saturate(180%);
+    -webkit-backdrop-filter: blur(4px) saturate(180%);
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
   }
-  .splash-nav-links {
+  .dark .splash-nav {
+    background: rgba(18, 18, 20, 0.70);
+  }
+
+  /* Mobile nav overlay — full screen, hidden by default */
+  .splash-nav-links,
+  .splash-nav-links.is-open {
     display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 299;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    padding: 46px 20px 20px;
+    overflow-y: auto;
+    gap: 14px;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transition: none;
+    flex-direction: column;
   }
+  .dark .splash-nav-links,
+  .dark .splash-nav-links.is-open {
+    background: rgba(18, 18, 20, 0.88);
+  }
+  .splash-nav-links.mobile-open,
+  .splash-nav-links.is-open.mobile-open {
+    display: flex;
+  }
+
   .splash-page .hero-title {
     font-weight: 700;
   }
