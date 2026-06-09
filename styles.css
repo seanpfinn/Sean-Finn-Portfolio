@@ -162,9 +162,9 @@ body {
    DARK MODE TOGGLE
    ================================ */
 .dark-toggle {
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
   background: var(--text);
   border: none;
   padding: 0;
@@ -567,28 +567,18 @@ body {
 /* Hamburger button (mobile only) */
 .nav-hamburger {
   display: none;
-  flex-direction: column;
-  gap: 2px;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   color: var(--text);
   flex-shrink: 0;
+  line-height: 0;
+  transition: opacity 0.2s ease;
 }
 
-.nav-hamburger span {
-  display: block;
-  width: 18px;
-  height: 4px;
-  background: currentColor;
-  border-radius: 2px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.nav-hamburger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
-.nav-hamburger.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.nav-hamburger svg { display: block; }
+.nav-hamburger.is-open { opacity: 0.45; }
 
 /* Expanded nav glass panel */
 .splash-nav-links.is-open {
@@ -816,9 +806,9 @@ body {
     justify-content: center;
   }
   .dark-toggle {
-    width: 14px;
-    height: 14px;
-    border-radius: 7px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
     padding: 10px;
     box-sizing: content-box;
   }
