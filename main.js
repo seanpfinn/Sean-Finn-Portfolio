@@ -270,6 +270,14 @@
     });
   }
 
+  // ── Mobile nav scroll glass ──────────────────────────────────────────────
+  const splashNav = document.querySelector('.splash-nav');
+  if (splashNav) {
+    const onScroll = () => splashNav.classList.toggle('scrolled', window.scrollY > 0);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   // ── Mobile hamburger toggle ───────────────────────────────────────────────
   const hamburger = document.getElementById('nav-hamburger');
   if (hamburger && navLinks) {

@@ -452,11 +452,20 @@
 @media (max-width: 809px) {
   /* Mobile nav bar on case study pages */
   .proj-page .splash-nav {
-    background: none;
+    background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.2s ease, backdrop-filter 0.2s ease;
+  }
+  .proj-page .splash-nav.scrolled {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+  .dark .proj-page .splash-nav.scrolled {
+    background: rgba(18, 18, 20, 0.70);
   }
   /* Override the always-on glass panel → hidden overlay */
   .proj-page .splash-nav-links,
@@ -488,7 +497,7 @@
   }
 
   .proj-col {
-    padding: 10px 10px 60px;
+    padding: 60px 10px 60px;
     max-width: none;
     margin: 0;
     width: auto;
