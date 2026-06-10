@@ -1762,28 +1762,12 @@ body {
   transform: translateY(-2px);
 }
 
-.gallery-card-header {
+.gallery-card-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-}
-
-.gallery-card-label {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.gallery-card-company {
-  font-family: var(--font);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--text);
-  line-height: 14px;
 }
 
 .gallery-card-title {
@@ -1795,22 +1779,14 @@ body {
   line-height: 20px;
 }
 
-.gallery-card-badges {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.gallery-card-badge {
-  background: var(--badge-bg);
-  color: var(--text-dim);
+.gallery-card-company {
   font-family: var(--font);
-  font-size: 12.8px;
-  letter-spacing: -0.512px;
-  line-height: 15.36px;
-  padding: 3px 6px;
-  border-radius: 6px;
-  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 14px;
 }
 
 /* Visual panel */
@@ -1835,22 +1811,23 @@ body {
 /* Floating screenshot */
 .gv-screen {
   position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 18px;
-  width: 92%;
+  left: 3.99%;
+  right: 3.98%;
+  top: 21px;
+  width: auto;
   height: auto;
+  aspect-ratio: 245.27 / 160.47;
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   border-radius: 4px;
 }
 
-/* Dune Security — near-full app window over a colour background */
+/* Dune Security — app window anchored to bottom of visual */
 .gv-dune-shot {
   position: absolute;
+  bottom: 0;
   left: 50%;
-  top: 5px;
   transform: translateX(-50%);
-  width: 98.5%;
+  width: 98.4%;
   height: auto;
   border-radius: 8px;
 }
