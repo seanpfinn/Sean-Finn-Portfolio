@@ -1305,24 +1305,8 @@ body {
   pointer-events: none;
 }
 
-/* --------------------------------
-   Dune Security
-   -------------------------------- */
-.card-media--dune {
-  background: #111;
-}
-
 .media-ui {
   position: absolute;
-}
-
-.media-ui--dune {
-  top: -0.85px;
-  left: 15%;
-  width: 70%;
-  height: 124%;
-  object-fit: cover;
-  object-position: top left;
 }
 
 /* --------------------------------
@@ -1593,7 +1577,6 @@ body {
   .vb-mobile  { width: 16%; right: 16px; bottom: 28px; }
 
 
-  .media-ui--dune   { left: 10%; width: 80%; }
   .media-ui--metasim { left: 8%; width: 84%; top: 14px; }
   .media-ui--xr      { left: 8%; width: 84%; top: 14px; }
 
@@ -1864,17 +1847,6 @@ body {
   aspect-ratio: 245.27 / 160.47;
   box-shadow: 0 0 6px rgba(0,0,0,0.4);
   border-radius: 4px;
-}
-
-/* Dune Security — app window anchored to bottom of visual */
-.gv-dune-shot {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 98.4%;
-  height: auto;
-  border-radius: 8px;
 }
 
 /* Vault trio */
