@@ -775,8 +775,8 @@ body {
     inset: 0;
     z-index: 299;
     background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(48px) saturate(180%);
-    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    backdrop-filter: blur(72px) saturate(180%);
+    -webkit-backdrop-filter: blur(72px) saturate(180%);
     padding: 20px 20px 40px;
     overflow-y: auto;
     gap: 24px;
@@ -840,14 +840,8 @@ body {
     top: 60px;
     transform: translateX(-50%);
   }
-  .splash-page .hero-title {
-    font-weight: 700;
-  }
   .splash-page .hero-current {
     max-width: 248px;
-  }
-  .splash-avatar {
-    display: none;
   }
   .splash-footer {
     flex-direction: column;
@@ -1270,41 +1264,6 @@ body {
   height: 87.32%;
 }
 
-/* --------------------------------
-   CLEAR Live Activities
-   -------------------------------- */
-.card-media--clear-live {
-  background: #dfdfdf;
-}
-
-.la-card-phone {
-  position: absolute;
-  left: 50%;
-  top: 24px;
-  transform: translateX(-50%);
-  width: 392px;
-  height: 811px;
-}
-
-.la-card-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.la-card-screen {
-  position: absolute;
-  top: 11px;
-  left: 13px;
-  width: 363px;
-  height: 786px;
-  object-fit: cover;
-  pointer-events: none;
-}
-
 .media-ui {
   position: absolute;
 }
@@ -1370,24 +1329,6 @@ body {
   box-shadow: 0 0 6px rgba(0,0,0,0.2);
   object-fit: cover;
 }
-
-/* --------------------------------
-   User Guided Localization
-   -------------------------------- */
-.card-media--ugl {
-  background: #111;
-}
-
-.media-bg--ugl {
-  object-position: center;
-  object-fit: cover;
-  inset: auto;
-  top: -20%;
-  left: -3.75%;
-  width: 107.5%;
-  height: 150%;
-}
-
 
 /* ================================
    AI PLAYGROUND CARD BACKGROUNDS
