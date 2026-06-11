@@ -531,11 +531,12 @@ body {
   font-weight: 400;
   line-height: 20.16px;
   letter-spacing: -0.576px;
-  color: var(--text-body);
+  color: #000000;
   text-decoration: none;
   transition: opacity 0.15s;
 }
 
+.dark .splash-nav-link { color: #ffffff; }
 .splash-nav-link:hover { opacity: 0.55; }
 
 .splash-nav-work-group {
@@ -555,10 +556,11 @@ body {
 }
 
 .splash-nav-caret {
-  color: var(--text-body);
+  color: #000000;
   flex-shrink: 0;
   transition: transform 0.2s ease;
 }
+.dark .splash-nav-caret { color: #ffffff; }
 
 .splash-nav-caret.is-open {
   transform: rotate(180deg);
@@ -640,10 +642,11 @@ body {
 
 .nav-tree-icon {
   flex-shrink: 0;
-  color: var(--text-body);
+  color: #000000;
   opacity: 0.5;
   margin-top: 3px;
 }
+.dark .nav-tree-icon { color: #ffffff; }
 
 .nav-project-item .nav-tree-icon {
   margin-top: 5px;
@@ -656,8 +659,9 @@ body {
   line-height: 16px;
   letter-spacing: 1.08px;
   text-transform: uppercase;
-  color: var(--text-body);
+  color: #000000;
 }
+.dark .nav-company-label { color: #ffffff; }
 
 .nav-company-projects {
   display: flex;
@@ -675,11 +679,12 @@ body {
   font-weight: 400;
   line-height: 20.17px;
   letter-spacing: -0.576px;
-  color: var(--text-body);
+  color: #000000;
   text-decoration: none;
   transition: opacity 0.15s;
 }
 
+.dark .nav-project-item { color: #ffffff; }
 .nav-project-item:hover { opacity: 0.55; }
 .nav-project-item--active { color: var(--text); }
 
