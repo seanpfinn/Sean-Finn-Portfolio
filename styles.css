@@ -774,12 +774,12 @@ body {
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(48px) saturate(180%);
     -webkit-backdrop-filter: blur(48px) saturate(180%);
-    padding: 46px 20px 20px;
+    padding: 20px 20px 40px;
     overflow-y: auto;
-    gap: 14px;
+    gap: 24px;
     margin: 0;
     border: none;
     border-radius: 0;
@@ -789,11 +789,50 @@ body {
   }
   .dark .splash-nav-links,
   .dark .splash-nav-links.is-open {
-    background: rgba(18, 18, 20, 0.88);
+    background: rgba(18, 18, 20, 0.75);
   }
   .splash-nav-links.mobile-open,
   .splash-nav-links.is-open.mobile-open {
     display: flex;
+  }
+
+  /* Mobile menu typography — large links */
+  .splash-nav-links.mobile-open .splash-nav-link {
+    font-size: 30px;
+    line-height: normal;
+  }
+  .splash-nav-links.mobile-open .nav-company-label {
+    font-size: 15px;
+    letter-spacing: 1.8px;
+    line-height: 16px;
+  }
+  .splash-nav-links.mobile-open .nav-project-item {
+    font-size: 30px;
+    line-height: normal;
+    letter-spacing: -0.576px;
+  }
+  .splash-nav-links.mobile-open .nav-work-submenu {
+    gap: 12px;
+  }
+  .splash-nav-links.mobile-open .nav-company-group {
+    gap: 6px;
+  }
+  .splash-nav-links.mobile-open .nav-company-projects {
+    gap: 6px;
+  }
+  .splash-nav-links.mobile-open .nav-project-item {
+    align-items: center;
+  }
+  .splash-nav-links.mobile-open .nav-project-item .nav-tree-icon,
+  .splash-nav-links.mobile-open .nav-company-header .nav-tree-icon {
+    margin-top: 0;
+  }
+  .splash-nav-links.mobile-open .nav-company-header {
+    align-items: center;
+  }
+  .splash-nav-links.mobile-open .splash-nav-caret {
+    width: 18px;
+    height: 18px;
   }
 
   .splash-hero {
@@ -1956,5 +1995,20 @@ body {
   height: auto;
   object-fit: cover;
   object-position: top;
+}
+
+@media (max-width: 809px) {
+  .gallery-card {
+    width: 300px;
+    aspect-ratio: unset;
+  }
+  .gallery-card-visual {
+    height: 250px;
+    flex: none;
+  }
+  .gallery-card-title {
+    font-size: 18px;
+    letter-spacing: -0.18px;
+  }
 }
 

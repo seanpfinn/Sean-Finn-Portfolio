@@ -474,26 +474,65 @@
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(48px) saturate(180%);
     -webkit-backdrop-filter: blur(48px) saturate(180%);
     margin: 0;
-    padding: 46px 20px 20px;
+    padding: 20px 20px 40px;
     border: none;
     border-radius: 0;
     box-shadow: none;
     transition: none;
     overflow-y: auto;
-    gap: 14px;
+    gap: 24px;
     flex-direction: column;
   }
   .dark .proj-page .splash-nav-links,
   .dark .proj-page .splash-nav-links.is-open {
-    background: rgba(18, 18, 20, 0.88);
+    background: rgba(18, 18, 20, 0.75);
   }
   .proj-page .splash-nav-links.mobile-open,
   .proj-page .splash-nav-links.is-open.mobile-open {
     display: flex;
+  }
+
+  /* Mobile menu typography — large links */
+  .proj-page .splash-nav-links.mobile-open .splash-nav-link {
+    font-size: 30px;
+    line-height: normal;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-company-label {
+    font-size: 15px;
+    letter-spacing: 1.8px;
+    line-height: 16px;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-project-item {
+    font-size: 30px;
+    line-height: normal;
+    letter-spacing: -0.576px;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-work-submenu {
+    gap: 12px;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-company-group {
+    gap: 6px;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-company-projects {
+    gap: 6px;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-project-item {
+    align-items: center;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-project-item .nav-tree-icon,
+  .proj-page .splash-nav-links.mobile-open .nav-company-header .nav-tree-icon {
+    margin-top: 0;
+  }
+  .proj-page .splash-nav-links.mobile-open .nav-company-header {
+    align-items: center;
+  }
+  .proj-page .splash-nav-links.mobile-open .splash-nav-caret {
+    width: 18px;
+    height: 18px;
   }
 
   .proj-col {
