@@ -774,8 +774,8 @@ body {
     inset: 0;
     z-index: 299;
     background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(72px) saturate(180%);
-    -webkit-backdrop-filter: blur(72px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
     padding: 20px 20px 40px;
     overflow-y: auto;
     gap: 24px;
@@ -858,9 +858,9 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 8px;
-    padding: 10px;
-    box-sizing: content-box;
-    background-clip: content-box;
+    padding: 0;
+    box-sizing: border-box;
+    background-clip: border-box;
   }
 }
 
@@ -1911,7 +1911,7 @@ body {
 
 @media (max-width: 809px) {
   .gallery-track {
-    gap: 12px;
+    gap: 4px;
   }
   .gallery-card {
     width: 300px;

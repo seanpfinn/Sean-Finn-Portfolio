@@ -306,7 +306,7 @@
   const track = document.getElementById('gallery-track');
   if (!track) return;
 
-  const GAP      = 24;
+  let   GAP      = parseInt(getComputedStyle(track).columnGap) || 24;
   const PAD      = 10;
   const MAX_ANG  = 25;    // max rotation in degrees at the edges
   const PERSP    = 1000;  // perspective distance in px
@@ -425,6 +425,7 @@
   requestAnimationFrame(loop);
   window.addEventListener('resize', () => {
     const oldOneSet = oneSet;
+    GAP     = parseInt(getComputedStyle(track).columnGap) || 24;
     CARD_W  = originals[0].offsetWidth;
     oneSet  = N * (CARD_W + GAP);
     // Scale scroll position proportionally so the viewed card doesn't jump
