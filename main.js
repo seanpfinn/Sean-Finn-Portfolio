@@ -297,6 +297,16 @@
         document.body.style.overflow = '';
       }
     });
+
+    const closeBtn = document.getElementById('nav-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        navLinks.classList.remove('mobile-open');
+        document.body.style.overflow = '';
+      });
+    }
   }
 
 })();

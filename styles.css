@@ -567,6 +567,26 @@ body {
   transform: rotate(180deg);
 }
 
+/* Close button (inside mobile overlay) */
+.nav-close-btn {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text);
+  line-height: 0;
+  z-index: 1;
+}
+.nav-close-btn svg { display: block; }
+
+@media (max-width: 809px) {
+  .nav-close-btn { display: block; }
+}
+
 /* Hamburger button (mobile only) */
 .nav-hamburger {
   display: none;
