@@ -474,7 +474,7 @@
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     margin: 0;
@@ -489,7 +489,7 @@
   }
   .dark .proj-page .splash-nav-links,
   .dark .proj-page .splash-nav-links.is-open {
-    background: rgba(18, 18, 20, 0.75);
+    background: rgba(18, 18, 20, 0.70);
   }
   .proj-page .splash-nav-links.mobile-open,
   .proj-page .splash-nav-links.is-open.mobile-open {
