@@ -1911,6 +1911,9 @@ body {
 }
 
 @media (max-width: 809px) {
+  .gallery-track {
+    gap: 12px;
+  }
   .gallery-card {
     width: 300px;
     aspect-ratio: unset;
