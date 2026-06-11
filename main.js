@@ -328,6 +328,14 @@
   let target  = oneSet - (CARD_W + GAP);
   let current = oneSet - (CARD_W + GAP);
 
+  // On mobile, pin the track 24px below the hero's actual bottom
+  const hero = document.querySelector('.splash-hero');
+  function positionTrack() {
+    if (window.innerWidth > 809 || !hero) return;
+    track.style.top = (hero.offsetTop + hero.offsetHeight + 24) + 'px';
+  }
+  positionTrack();
+
   function render() {
     const wrapped = current; // loop() keeps current in [0, oneSet)
     const tx = -wrapped;
@@ -422,6 +430,7 @@
     // Scale scroll position proportionally so the viewed card doesn't jump
     current = (current / oldOneSet) * oneSet;
     target  = (target  / oldOneSet) * oneSet;
+    positionTrack();
     render();
   }, { passive: true });
 })();
