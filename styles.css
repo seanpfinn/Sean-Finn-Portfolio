@@ -537,7 +537,8 @@ body {
 }
 
 .dark .splash-nav-link { color: #ffffff; }
-.splash-nav-link:hover { opacity: 0.55; }
+.splash-nav-link:hover { color: #FF401A; opacity: 1; }
+.dark .splash-nav-link:hover { color: #FF401A; }
 
 .splash-nav-work-group {
   display: flex;
@@ -685,7 +686,7 @@ body {
 }
 
 .dark .nav-project-item { color: #ffffff; }
-.nav-project-item:hover { opacity: 0.55; }
+.nav-project-item:hover { color: #FF401A; opacity: 1; }
 .nav-project-item--active { color: var(--text); }
 
 .splash-avatar {
