@@ -525,6 +525,13 @@ body {
               margin 0.25s ease, padding 0.25s ease;
 }
 
+/* Inner scroll wrapper — transparent pass-through on desktop, scrollable container on mobile */
+.nav-overlay-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .splash-nav-link {
   font-family: var(--font);
   font-size: 14px;
@@ -796,15 +803,11 @@ body {
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    padding: 56px 20px 40px;
-    overflow-y: auto;
-    gap: 24px;
     margin: 0;
     border: none;
     border-radius: 0;
     box-shadow: none;
     transition: none;
-    flex-direction: column;
   }
   .dark .splash-nav-links,
   .dark .splash-nav-links.is-open {
@@ -812,7 +815,16 @@ body {
   }
   .splash-nav-links.mobile-open,
   .splash-nav-links.is-open.mobile-open {
-    display: flex;
+    display: block;
+  }
+
+  /* Mobile overlay scroll wrapper — handles layout so backdrop-filter has no overflow conflict */
+  .nav-overlay-scroll {
+    gap: 24px;
+    padding: 56px 20px 40px;
+    overflow-y: auto;
+    height: 100%;
+    box-sizing: border-box;
   }
 
   /* Mobile menu typography — large links */

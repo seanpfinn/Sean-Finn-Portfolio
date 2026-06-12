@@ -478,14 +478,10 @@
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     margin: 0;
-    padding: 56px 20px 40px;
     border: none;
     border-radius: 0;
     box-shadow: none;
     transition: none;
-    overflow-y: auto;
-    gap: 24px;
-    flex-direction: column;
   }
   .dark .proj-page .splash-nav-links,
   .dark .proj-page .splash-nav-links.is-open {
@@ -493,7 +489,7 @@
   }
   .proj-page .splash-nav-links.mobile-open,
   .proj-page .splash-nav-links.is-open.mobile-open {
-    display: flex;
+    display: block;
   }
 
   /* Mobile menu typography — large links */
