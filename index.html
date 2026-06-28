@@ -15,11 +15,11 @@
     }
     #sf-gate form {
       display: flex; flex-direction: column; align-items: center;
-      gap: 12px; width: min(300px, 80vw);
+      gap: 12px; width: min(400px, 90vw);
     }
     #sf-gate h1 {
       font-size: 24px; font-weight: 500; color: #09090b;
-      letter-spacing: -0.3px; margin: 0 0 4px;
+      letter-spacing: -0.3px; margin: 0 0 4px; white-space: nowrap; text-align: center;
     }
     #sf-gate input {
       width: 100%; padding: 10px 14px; box-sizing: border-box;
@@ -86,7 +86,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    html { overflow: auto !important; }
+    html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -100,11 +100,10 @@
 </head>
 <body>
 
-  <div id="gallery-canvas">
   <div class="splash-page blur-in">
 
     <nav class="splash-nav">
-            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
         <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0C3.10457 0 4 0.89543 4 2Z" fill="currentColor"/>
           <path d="M11 2C11 3.10457 10.1046 4 9 4C7.89543 4 7 3.10457 7 2C7 0.89543 7.89543 0 9 0C10.1046 0 11 0.89543 11 2Z" fill="currentColor"/>
@@ -204,83 +203,80 @@
     </nav>
 
     <div class="splash-hero">
-      <img src="assets/avatar.jpg" alt="Sean Finn" class="splash-avatar" />
-      <p class="hero-title">Sean Finn is a product designer based in New York, NY.</p>
+      <div class="hero-name-row">
+        <p class="hero-title">Sean Finn</p>
+        <img src="assets/avatar.jpg" alt="Sean Finn" class="splash-avatar" />
+      </div>
+      <p class="hero-title">is a product designer based in New York, NY.</p>
       <p class="hero-current">Currently <a href="https://www.linkedin.com/in/seanpfinn" class="hero-link" target="_blank" rel="noopener"><strong>Senior Product Designer</strong></a> for digital travel experiences at <a href="https://www.clearme.com" class="hero-link" target="_blank" rel="noopener"><strong>CLEAR</strong></a>.</p>
     </div>
 
-<div class="gallery-track" id="gallery-track">
+    <div class="project-grid">
 
-        <!-- CLEAR • Terminal Guide -->
-        <a href="clear-terminal-guide.html" class="gallery-card">
-          <div class="gallery-card-visual" style="background: #E5E5E5;">
-            <div class="gv-tg-wrap">
-              <img class="gv-tg-frame" src="assets/gallery-tg-frame.png" alt="" />
-              <img class="gv-tg-screen" src="assets/gallery-tg-screen.png" alt="" />
-            </div>
+      <a href="clear-terminal-guide.html" class="gallery-card">
+        <div class="gallery-card-visual" style="background: #E5E5E5;">
+          <div class="gv-tg-wrap">
+            <img class="gv-tg-frame" src="assets/gallery-tg-frame.png" alt="" />
+            <img class="gv-tg-screen" src="assets/gallery-tg-screen.png" alt="" />
           </div>
-          <div class="gallery-card-info">
-            <span class="gallery-card-title">Terminal Guide</span>
-            <span class="gallery-card-company">CLEAR</span>
-          </div>
-        </a>
+        </div>
+        <div class="gallery-card-info">
+          <span class="gallery-card-title">Terminal Guide</span>
+          <span class="gallery-card-company">CLEAR</span>
+        </div>
+      </a>
 
-        <!-- CLEAR • Location Details -->
-        <a href="clear-location-details.html" class="gallery-card">
-          <div class="gallery-card-visual" style="background: #00598A;">
-            <div class="gv-ls-wrap">
-              <img class="gv-ls-frame" src="assets/gallery-ls-frame.png" alt="" />
-              <img class="gv-ls-s1" src="assets/gallery-ls-s1.png" alt="" />
-              <img class="gv-ls-s2" src="assets/gallery-ls-s2.png" alt="" />
-            </div>
+      <a href="clear-location-details.html" class="gallery-card">
+        <div class="gallery-card-visual" style="background: #00598A;">
+          <div class="gv-ls-wrap">
+            <img class="gv-ls-frame" src="assets/gallery-ls-frame.png" alt="" />
+            <img class="gv-ls-s1" src="assets/gallery-ls-s1.png" alt="" />
+            <img class="gv-ls-s2" src="assets/gallery-ls-s2.png" alt="" />
           </div>
-          <div class="gallery-card-info">
-            <span class="gallery-card-title">Location Details</span>
-            <span class="gallery-card-company">CLEAR</span>
-          </div>
-        </a>
+        </div>
+        <div class="gallery-card-info">
+          <span class="gallery-card-title">Location Details</span>
+          <span class="gallery-card-company">CLEAR</span>
+        </div>
+      </a>
 
-        <!-- Meta • XR Simulator -->
-        <a href="meta-xr-simulator.html" class="gallery-card">
-          <div class="gallery-card-visual" style="background: #0a0a12;">
-            <img class="gv-bg" src="assets/gallery-xr-bg.png" alt="" />
-            <img class="gv-screen" src="assets/gallery-xr-screen.png" alt="" />
+      <a href="clear-vault.html" class="gallery-card">
+        <div class="gallery-card-visual" style="background: #c0d1ff;">
+          <div class="gv-vault-wrap">
+            <img class="gv-vault-frame" src="assets/gallery-vault-frame.png" alt="" />
+            <img class="gv-vault-s1" src="assets/gallery-vault-s1.png" alt="" />
+            <img class="gv-vault-s2" src="assets/gallery-vault-s2.png" alt="" />
+            <img class="gv-vault-s3" src="assets/gallery-vault-s3.png" alt="" />
           </div>
-          <div class="gallery-card-info">
-            <span class="gallery-card-title">XR Simulator</span>
-            <span class="gallery-card-company">Meta</span>
-          </div>
-        </a>
+        </div>
+        <div class="gallery-card-info">
+          <span class="gallery-card-title">Vault</span>
+          <span class="gallery-card-company">CLEAR</span>
+        </div>
+      </a>
 
-        <!-- CLEAR • Vault -->
-        <a href="clear-vault.html" class="gallery-card">
-          <div class="gallery-card-visual" style="background: #c0d1ff;">
-            <div class="gv-vault-wrap">
-              <img class="gv-vault-frame" src="assets/gallery-vault-frame.png" alt="" />
-              <img class="gv-vault-s1" src="assets/gallery-vault-s1.png" alt="" />
-              <img class="gv-vault-s2" src="assets/gallery-vault-s2.png" alt="" />
-              <img class="gv-vault-s3" src="assets/gallery-vault-s3.png" alt="" />
-            </div>
-          </div>
-          <div class="gallery-card-info">
-            <span class="gallery-card-title">Vault</span>
-            <span class="gallery-card-company">CLEAR</span>
-          </div>
-        </a>
+      <a href="meta-xr-simulator.html" class="gallery-card">
+        <div class="gallery-card-visual" style="background: #0a0a12;">
+          <img class="gv-bg" src="assets/gallery-xr-bg.png" alt="" />
+          <img class="gv-screen" src="assets/gallery-xr-screen.png" alt="" />
+        </div>
+        <div class="gallery-card-info">
+          <span class="gallery-card-title">XR Simulator</span>
+          <span class="gallery-card-company">Meta</span>
+        </div>
+      </a>
 
+      <a href="meta-ai-hearable.html" class="gallery-card">
+        <div class="gallery-card-visual" style="background: #f6f6f6; border: 1px solid #e4e4e4;">
+          <img class="gv-hearable" src="assets/gallery-hearable.png" alt="" />
+        </div>
+        <div class="gallery-card-info">
+          <span class="gallery-card-title">AI Hearable</span>
+          <span class="gallery-card-company">Meta</span>
+        </div>
+      </a>
 
-        <!-- Meta • AI Hearable -->
-        <a href="meta-ai-hearable.html" class="gallery-card">
-          <div class="gallery-card-visual" style="background: #f6f6f6; box-shadow: 0 0 0 1px #e4e4e4;">
-            <img class="gv-hearable" src="assets/gallery-hearable.png" alt="" />
-          </div>
-          <div class="gallery-card-info">
-            <span class="gallery-card-title">AI Hearable</span>
-            <span class="gallery-card-company">Meta</span>
-          </div>
-        </a>
-
-      </div>
+    </div>
 
     <div class="splash-footer">
       <div class="social-links">
@@ -299,7 +295,6 @@
       </div>
     </div>
 
-  </div>
   </div>
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>
