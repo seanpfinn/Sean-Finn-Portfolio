@@ -496,7 +496,6 @@ body {
   align-items: flex-start;
   width: 100%;
   padding: 20px 120px;
-  min-height: 100vh;
   gap: 60px;
   box-sizing: border-box;
 }
@@ -762,7 +761,6 @@ body {
   justify-content: space-between;
   width: 100%;
   flex-shrink: 0;
-  margin-top: auto;
   padding: 0;
   box-sizing: border-box;
 }
