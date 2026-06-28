@@ -505,7 +505,7 @@ body {
    pointer-events are disabled on the bar so its transparent span never
    blocks clicks on the hero, and re-enabled on the interactive children. */
 .splash-nav {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
   right: 20px;
@@ -526,7 +526,7 @@ body {
   flex-direction: column;
   gap: 10px;
   background: rgba(255, 255, 255, 0);
-  border-radius: 0 0 24px 0;
+  border-radius: 24px;
   border-right: 1px solid transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
@@ -627,7 +627,7 @@ body {
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(48px) saturate(180%);
   -webkit-backdrop-filter: blur(48px) saturate(180%);
-  border-radius: 0 0 24px 0;
+  border-radius: 24px;
   border-right: 1px solid rgba(255, 255, 255, 0.6);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 2px 8px 32px rgba(0,0,0,0.10);
