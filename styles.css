@@ -43,7 +43,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .dark .weather-icon {
-  filter: invert(1);
+  filter: none;
 }
 
 .dark .cta-btn {
@@ -481,8 +481,8 @@ body {
 }
 
 .weather-icon {
-  width: 21.59px;
-  height: 21.59px;
+  font-size: 16px;
+  line-height: 1;
   flex-shrink: 0;
 }
 
@@ -508,7 +508,7 @@ body {
   position: fixed;
   top: 20px;
   left: 20px;
-  right: 20px;
+  right: 10px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

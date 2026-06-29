@@ -47,6 +47,42 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  // ── Live weather (New York) ──────────────────────────────────────────────
+  function weatherInfo(code, isDay) {
+    const map = {
+      0:  ['Clear',            isDay ? '☀️' : '🌙'],
+      1:  ['Mainly clear',     isDay ? '🌤️' : '🌙'],
+      2:  ['Partly cloudy',    isDay ? '⛅' : '☁️'],
+      3:  ['Overcast',         '☁️'],
+      45: ['Fog',              '🌫️'], 48: ['Fog', '🌫️'],
+      51: ['Drizzle',          '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Drizzle', '🌦️'],
+      56: ['Freezing drizzle', '🌧️'], 57: ['Freezing drizzle', '🌧️'],
+      61: ['Rain',             '🌧️'], 63: ['Rain', '🌧️'], 65: ['Heavy rain', '🌧️'],
+      66: ['Freezing rain',    '🌧️'], 67: ['Freezing rain', '🌧️'],
+      71: ['Snow',             '🌨️'], 73: ['Snow', '🌨️'], 75: ['Heavy snow', '🌨️'], 77: ['Snow grains', '🌨️'],
+      80: ['Rain showers',     '🌦️'], 81: ['Rain showers', '🌦️'], 82: ['Heavy showers', '🌧️'],
+      85: ['Snow showers',     '🌨️'], 86: ['Snow showers', '🌨️'],
+      95: ['Thunderstorm',     '⛈️'], 96: ['Thunderstorm', '⛈️'], 99: ['Thunderstorm', '⛈️'],
+    };
+    return map[code] || ['', '🌡️'];
+  }
+
+  (async function loadWeather() {
+    try {
+      const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit&timezone=America/New_York');
+      const data = await res.json();
+      const c = data.current;
+      const [label, emoji] = weatherInfo(c.weather_code, c.is_day);
+      const temp = Math.round(c.temperature_2m) + '°F';
+      document.querySelectorAll('.weather-temp').forEach(el => el.textContent = temp);
+      document.querySelectorAll('.weather-cond').forEach(el => el.textContent = label);
+      document.querySelectorAll('.weather-icon').forEach(el => {
+        el.textContent = emoji;
+        el.setAttribute('aria-label', label);
+      });
+    } catch (e) {}
+  })();
   // ── Tab navigation filter switching ────────────────────────────────────
   let activeFilter = 'all';
 
