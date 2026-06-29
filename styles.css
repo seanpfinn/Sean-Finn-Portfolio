@@ -622,17 +622,31 @@ body {
 .nav-hamburger svg { display: block; }
 .nav-hamburger.is-open { opacity: 0.45; }
 
-/* Expanded nav glass panel */
+/* Expanded nav glass panel — Liquid Glass */
 .splash-nav-links.is-open {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(48px) saturate(180%);
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
+  background: rgba(255, 255, 255, 0.40);
+  /* Fallback (Safari / no SVG-in-backdrop): plain frosted glass */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Liquid Glass (Chromium): refraction via SVG displacement map */
+  backdrop-filter: blur(5px) url(#liquid-glass) saturate(165%) brightness(1.06);
   border-radius: 24px;
-  border-right: 1px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 2px 8px 32px rgba(0,0,0,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 0 14px rgba(255, 255, 255, 0.18),
+    0 8px 32px rgba(0, 0, 0, 0.12);
   margin: calc(-1 * var(--pad)) 0 0 -10px;
   padding: var(--pad) 16px 16px 10px;
+}
+.dark .splash-nav-links.is-open {
+  background: rgba(28, 28, 32, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.18),
+    inset 0 0 14px rgba(255, 255, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.40);
 }
 
 .dark .splash-nav-links.is-open {
@@ -825,9 +839,12 @@ body {
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.45);
+    /* Fallback (Safari / no SVG-in-backdrop) */
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
+    /* Liquid Glass (Chromium) */
+    backdrop-filter: blur(8px) url(#liquid-glass) saturate(180%) brightness(1.05);
     margin: 0;
     border: none;
     border-radius: 0;
@@ -903,7 +920,7 @@ body {
     width: 40px;
     height: 40px;
   }
-  .project-grid {
+  .splash-page .project-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }

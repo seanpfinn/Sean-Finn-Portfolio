@@ -257,28 +257,34 @@
   -webkit-backdrop-filter: none;
 }
 
-/* Glass lives on the menu block only */
+/* Glass lives on the menu block only — Liquid Glass */
 .proj-page .splash-nav-links {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(48px) saturate(180%);
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
+  background: rgba(255, 255, 255, 0.40);
   border-radius: 0 0 24px 0;
-  border-right: 1px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: inset 1px 0 0 rgba(255,255,255,0.8), 2px 8px 32px rgba(0,0,0,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 0 14px rgba(255, 255, 255, 0.18),
+    2px 8px 32px rgba(0, 0, 0, 0.10);
   margin: -10px 0 0 -10px;
   padding: 10px 16px 16px 10px;
-  backdrop-filter: blur(48px) saturate(180%);
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
+  /* Fallback (Safari / no SVG-in-backdrop) */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Liquid Glass (Chromium) */
+  backdrop-filter: blur(5px) url(#liquid-glass) saturate(165%) brightness(1.06);
   transition: background 0.25s ease, backdrop-filter 0.25s ease,
               box-shadow 0.25s ease, margin 0.25s ease, padding 0.25s ease;
 }
 
 .dark .proj-page .splash-nav-links {
-  background: rgba(18, 18, 20, 0.60);
-  border-right: 1px solid rgba(255, 255, 255, 0.10);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: inset 1px 0 0 rgba(255,255,255,0.08), 2px 8px 32px rgba(0,0,0,0.35);
+  background: rgba(28, 28, 32, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.18),
+    inset 0 0 14px rgba(255, 255, 255, 0.06),
+    2px 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 /* Centered content column — top-aligns with the fixed nav */
@@ -474,9 +480,12 @@
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.45);
+    /* Fallback (Safari / no SVG-in-backdrop) */
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
+    /* Liquid Glass (Chromium) */
+    backdrop-filter: blur(8px) url(#liquid-glass) saturate(180%) brightness(1.05);
     margin: 0;
     border: none;
     border-radius: 0;
