@@ -494,8 +494,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  /* Center the block when the window is taller than the content (matches the
+     Figma artboard's justify-center). min-height (not height) means the page
+     still grows + scrolls normally when content exceeds the viewport. */
+  justify-content: center;
   width: 100%;
   padding: 20px 120px;
+  min-height: 100vh;
   gap: 60px;
   box-sizing: border-box;
 }
