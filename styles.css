@@ -770,7 +770,11 @@ body {
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  width: 100%;
+  /* Full-bleed: break out of the page's 120px gutters to span edge-to-edge
+     with a 20px inset, matching the Figma footer (w-full, px-20). */
+  align-self: stretch;
+  margin: 0 -120px;
+  padding: 0 20px;
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -907,6 +911,8 @@ body {
     gap: 20px;
   }
   .splash-footer {
+    margin: 0;
+    padding: 0;
     flex-direction: column;
     align-items: center;
     gap: 31px;
