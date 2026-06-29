@@ -1792,6 +1792,18 @@ body {
   line-height: 13px;
 }
 
+/* Client logos in card labels */
+.gallery-card-logo {
+  display: block;
+  width: auto;
+  flex-shrink: 0;
+}
+.gcl-clear { height: 18px; }
+.gcl-meta  { height: 13px; }
+.gcl-recur { height: 13px; }
+/* Dark logos need to flip to white on the dark theme */
+.dark .gallery-card-logo { filter: brightness(0) invert(1); }
+
 /* Visual panel */
 .gallery-card-visual {
   aspect-ratio: 16 / 9;
