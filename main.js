@@ -309,5 +309,22 @@
     }
   }
 
+  // ── Play videos when scrolled into view (no loop) ─────────────────────────
+  const inViewVideos = document.querySelectorAll('video[data-play-in-view]');
+  if (inViewVideos.length) {
+    const vidObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const vid = entry.target;
+        if (entry.isIntersecting) {
+          if (vid.ended) vid.currentTime = 0;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      });
+    }, { threshold: 0.4 });
+    inViewVideos.forEach(vid => vidObserver.observe(vid));
+  }
+
 })();
 
