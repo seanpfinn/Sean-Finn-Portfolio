@@ -496,7 +496,6 @@ body {
   align-items: flex-start;
   width: 100%;
   padding: 20px 120px;
-  min-height: 100vh;
   gap: 60px;
   box-sizing: border-box;
 }
