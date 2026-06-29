@@ -625,11 +625,8 @@ body {
 /* Expanded nav glass panel — Liquid Glass */
 .splash-nav-links.is-open {
   background: rgba(255, 255, 255, 0.40);
-  /* Fallback (Safari / no SVG-in-backdrop): plain frosted glass */
   backdrop-filter: blur(60px) saturate(180%);
   -webkit-backdrop-filter: blur(60px) saturate(180%);
-  /* Liquid Glass (Chromium): refraction via SVG displacement map */
-  backdrop-filter: blur(24px) url(#liquid-glass) saturate(165%) brightness(1.06);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
@@ -829,11 +826,8 @@ body {
     inset: 0;
     z-index: 299;
     background: rgba(255, 255, 255, 0.45);
-    /* Fallback (Safari / no SVG-in-backdrop) */
     backdrop-filter: blur(48px) saturate(180%);
     -webkit-backdrop-filter: blur(48px) saturate(180%);
-    /* Liquid Glass (Chromium) */
-    backdrop-filter: blur(24px) url(#liquid-glass) saturate(180%) brightness(1.05);
     margin: 0;
     border: none;
     border-radius: 0;

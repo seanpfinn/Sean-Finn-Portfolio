@@ -1,23 +1,4 @@
 (function () {
-  // ── Liquid Glass: inject SVG displacement filter for backdrop refraction ──
-  // Reproduces the Apple "Liquid Glass" look (à la liquid-dom) with a vanilla
-  // feTurbulence → feDisplacementMap filter referenced from backdrop-filter.
-  (function injectGlassFilter() {
-    if (document.getElementById('liquid-glass')) return;
-    const wrap = document.createElement('div');
-    wrap.setAttribute('aria-hidden', 'true');
-    wrap.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none';
-    wrap.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">' +
-        '<filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
-          '<feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="noise"/>' +
-          '<feGaussianBlur in="noise" stdDeviation="2" result="soft"/>' +
-          '<feDisplacementMap in="SourceGraphic" in2="soft" scale="30" xChannelSelector="R" yChannelSelector="G"/>' +
-        '</filter>' +
-      '</svg>';
-    document.body.appendChild(wrap);
-  })();
-
   // ── Last updated date ────────────────────────────────────────────────────
   const d = new Date(document.lastModified);
   const months = [
