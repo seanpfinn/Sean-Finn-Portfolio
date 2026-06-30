@@ -498,6 +498,7 @@ body {
   align-items: flex-start;
   width: 100%;
   padding: 1.25rem 7.5rem;
+  min-height: 100vh;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -764,7 +765,9 @@ body {
   align-items: flex-end;
   justify-content: space-between;
   align-self: stretch;
-  margin: 0;
+  /* Sticky footer: pins to the window bottom when content is shorter than the
+     window; collapses to 0 (footer right after the cards) when content is tall. */
+  margin-top: auto;
   padding: 0 1.25rem;
   flex-shrink: 0;
   box-sizing: border-box;
