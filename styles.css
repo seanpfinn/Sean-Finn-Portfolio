@@ -481,8 +481,8 @@ body {
 }
 
 .weather-icon {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
   color: var(--text-body);
 }
@@ -498,7 +498,7 @@ body {
   align-items: flex-start;
   width: 100%;
   /* bottom padding clears the fixed footer so the last cards aren't hidden */
-  padding: 1.25rem 7.5rem 5rem;
+  padding: 1.25rem 7.5rem 3.75rem;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -760,14 +760,13 @@ body {
 }
 
 .splash-footer {
-  /* Same as the case study footer (.proj-footer): fixed full-width at the very
-     bottom; pointer-events pass through the empty span so it never blocks the
-     cards scrolling beneath it. */
+  /* Fixed, edges mirroring the nav: left 20px (menu), right 10px (mode toggle),
+     bottom 20px. pointer-events pass through the empty span so it never blocks
+     the cards scrolling beneath it. */
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0 0.625rem 0.625rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: 0.625rem;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -1215,13 +1214,13 @@ body {
 /* --------------------------------
    ClaudeWatch
    -------------------------------- */
-.card-media--claudeops {
+.card-media--tokentracker {
   background:
     radial-gradient(ellipse at 50% 52.5%, rgba(99,149,255,0.22) 0%, transparent 85%),
     #000a26;
 }
 
-.claudeops-bg {
+.tokentracker-bg {
   position: absolute;
   left: 0;
   top: -18.4%;
@@ -1230,7 +1229,7 @@ body {
   object-fit: cover;
 }
 
-.claudeops-ui {
+.tokentracker-ui {
   position: absolute;
   left: 50%;
   top: 67.5%;
