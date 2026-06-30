@@ -464,9 +464,9 @@
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(0.5rem);
-    -webkit-backdrop-filter: blur(0.5rem);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
     margin: 0;
     border: none;
     border-radius: 0;
@@ -475,7 +475,7 @@
   }
   .dark .proj-page .splash-nav-links,
   .dark .proj-page .splash-nav-links.is-open {
-    background: rgba(28, 28, 32, 0.55);
+    background: rgba(18, 18, 20, 0.92);
   }
   .proj-page .splash-nav-links.mobile-open,
   .proj-page .splash-nav-links.is-open.mobile-open {

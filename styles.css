@@ -626,16 +626,16 @@ body {
 
 /* Expanded nav menu (desktop) — per Figma 2369:3022 */
 .splash-nav-links.is-open {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(0.5rem);
-  -webkit-backdrop-filter: blur(0.5rem);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
   border-radius: 1.25rem;
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.12);
   margin: calc(-1 * var(--pad)) 0 0 -0.625rem;
   padding: var(--pad) 1rem 1rem 0.625rem;
 }
 .dark .splash-nav-links.is-open {
-  background: rgba(28, 28, 32, 0.55);
+  background: rgba(18, 18, 20, 0.92);
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.40);
 }
 
@@ -822,9 +822,9 @@ body {
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(0.5rem);
-    -webkit-backdrop-filter: blur(0.5rem);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(0.75rem);
+    -webkit-backdrop-filter: blur(0.75rem);
     margin: 0;
     border: none;
     border-radius: 0;
@@ -833,7 +833,7 @@ body {
   }
   .dark .splash-nav-links,
   .dark .splash-nav-links.is-open {
-    background: rgba(28, 28, 32, 0.55);
+    background: rgba(18, 18, 20, 0.92);
   }
   .splash-nav-links.mobile-open,
   .splash-nav-links.is-open.mobile-open {
