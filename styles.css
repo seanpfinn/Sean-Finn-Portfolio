@@ -1639,7 +1639,7 @@ body {
    GITHUB TOOLTIP
    ================================ */
 .gh-tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   width: 26.25rem;
   background: var(--bg);

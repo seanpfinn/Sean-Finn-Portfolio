@@ -199,7 +199,9 @@
       </div>
       <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg"></svg>
     `;
-    document.body.appendChild(tip);
+    // Lives above the content as a fixed overlay — never added to the page
+    // flow beneath the footer (which would extend the scroll height).
+    document.body.insertBefore(tip, document.body.firstChild);
 
     const svg = tip.querySelector('.gh-tip-graph');
     const NS = 'http://www.w3.org/2000/svg';
@@ -280,10 +282,11 @@
     function positionTip(link) {
       const r = link.getBoundingClientRect();
       const tw = tip.offsetWidth, th = tip.offsetHeight;
-      let left = r.left + r.width / 2 - tw / 2 + window.scrollX;
-      left = Math.max(8 + window.scrollX, Math.min(left, window.scrollX + window.innerWidth - tw - 8));
+      // Fixed positioning is viewport-relative, matching getBoundingClientRect.
+      let left = r.left + r.width / 2 - tw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
       tip.style.left = left + 'px';
-      tip.style.top  = (r.top + window.scrollY - th - 10) + 'px';
+      tip.style.top  = (r.top - th - 10) + 'px';
     }
 
     loadGH();
