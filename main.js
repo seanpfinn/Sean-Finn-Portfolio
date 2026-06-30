@@ -49,23 +49,37 @@
   setInterval(tick, 1000);
 
   // ── Live weather (New York) ──────────────────────────────────────────────
+  // Minimal line icons matching the original "Foggy" mark (thin monochrome
+  // strokes, currentColor so they adapt to light/dark automatically).
+  const _wx = (paths) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
+  const WX_ICONS = {
+    sun:   _wx('<circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/>'),
+    moon:  _wx('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'),
+    cloud: _wx('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>'),
+    fog:   _wx('<path d="M7.5 6h9M4.5 9.5h12M6.5 13h13M3.5 16.5h12M8 20h9"/>'),
+    rain:  _wx('<path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><path d="M8 14v5M16 14v5M12 16v5"/>'),
+    snow:  _wx('<path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/><path d="M8 16v.01M8 20v.01M12 18v.01M12 22v.01M16 16v.01M16 20v.01"/>'),
+    storm: _wx('<path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><path d="M13 11l-4 6h6l-4 6"/>'),
+  };
+
   function weatherInfo(code, isDay) {
+    const clear = isDay ? 'sun' : 'moon';
     const map = {
-      0:  ['Clear',            isDay ? '☀️' : '🌙'],
-      1:  ['Mainly clear',     isDay ? '🌤️' : '🌙'],
-      2:  ['Partly cloudy',    isDay ? '⛅' : '☁️'],
-      3:  ['Overcast',         '☁️'],
-      45: ['Fog',              '🌫️'], 48: ['Fog', '🌫️'],
-      51: ['Drizzle',          '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Drizzle', '🌦️'],
-      56: ['Freezing drizzle', '🌧️'], 57: ['Freezing drizzle', '🌧️'],
-      61: ['Rain',             '🌧️'], 63: ['Rain', '🌧️'], 65: ['Heavy rain', '🌧️'],
-      66: ['Freezing rain',    '🌧️'], 67: ['Freezing rain', '🌧️'],
-      71: ['Snow',             '🌨️'], 73: ['Snow', '🌨️'], 75: ['Heavy snow', '🌨️'], 77: ['Snow grains', '🌨️'],
-      80: ['Rain showers',     '🌦️'], 81: ['Rain showers', '🌦️'], 82: ['Heavy showers', '🌧️'],
-      85: ['Snow showers',     '🌨️'], 86: ['Snow showers', '🌨️'],
-      95: ['Thunderstorm',     '⛈️'], 96: ['Thunderstorm', '⛈️'], 99: ['Thunderstorm', '⛈️'],
+      0:  ['Clear',            clear],
+      1:  ['Mainly clear',     clear],
+      2:  ['Partly cloudy',    'cloud'],
+      3:  ['Overcast',         'cloud'],
+      45: ['Fog',              'fog'], 48: ['Fog', 'fog'],
+      51: ['Drizzle',          'rain'], 53: ['Drizzle', 'rain'], 55: ['Drizzle', 'rain'],
+      56: ['Freezing drizzle', 'rain'], 57: ['Freezing drizzle', 'rain'],
+      61: ['Rain',             'rain'], 63: ['Rain', 'rain'], 65: ['Heavy rain', 'rain'],
+      66: ['Freezing rain',    'rain'], 67: ['Freezing rain', 'rain'],
+      71: ['Snow',             'snow'], 73: ['Snow', 'snow'], 75: ['Heavy snow', 'snow'], 77: ['Snow grains', 'snow'],
+      80: ['Rain showers',     'rain'], 81: ['Rain showers', 'rain'], 82: ['Heavy showers', 'rain'],
+      85: ['Snow showers',     'snow'], 86: ['Snow showers', 'snow'],
+      95: ['Thunderstorm',     'storm'], 96: ['Thunderstorm', 'storm'], 99: ['Thunderstorm', 'storm'],
     };
-    return map[code] || ['', '🌡️'];
+    return map[code] || ['', 'cloud'];
   }
 
   (async function loadWeather() {
@@ -73,12 +87,12 @@
       const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit&timezone=America/New_York');
       const data = await res.json();
       const c = data.current;
-      const [label, emoji] = weatherInfo(c.weather_code, c.is_day);
+      const [label, iconKey] = weatherInfo(c.weather_code, c.is_day);
       const temp = Math.round(c.temperature_2m) + '°F';
       document.querySelectorAll('.weather-temp').forEach(el => el.textContent = temp);
       document.querySelectorAll('.weather-cond').forEach(el => el.textContent = label);
       document.querySelectorAll('.weather-icon').forEach(el => {
-        el.textContent = emoji;
+        el.innerHTML = WX_ICONS[iconKey] || WX_ICONS.cloud;
         el.setAttribute('aria-label', label);
       });
     } catch (e) {}
