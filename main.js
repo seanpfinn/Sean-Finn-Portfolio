@@ -272,9 +272,9 @@
     async function loadGH() {
       if (fetched) return; fetched = true;
       try {
-        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=last');
+        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=2026');
         const data = await res.json();
-        tip.querySelector('.gh-tip-count').textContent = (data.total.lastYear || 0).toLocaleString();
+        tip.querySelector('.gh-tip-count').textContent = (data.total[2026] || 0).toLocaleString();
         renderGraph(data.contributions || []);
       } catch (e) {}
     }
