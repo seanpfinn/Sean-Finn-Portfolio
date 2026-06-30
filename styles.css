@@ -497,8 +497,8 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  /* bottom padding clears the fixed footer so the last cards aren't hidden */
-  padding: 1.25rem 7.5rem 3.75rem;
+  /* 40px below the cards, then the in-flow footer */
+  padding: 1.25rem 7.5rem 2.5rem;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -760,27 +760,16 @@ body {
 }
 
 .splash-footer {
-  /* Fixed, edges mirroring the nav: left 20px (menu), right 10px (mode toggle),
-     bottom 20px. pointer-events pass through the empty span so it never blocks
-     the cards scrolling beneath it. */
-  position: fixed;
-  bottom: 1.25rem;
-  left: 1.25rem;
-  right: 0.625rem;
+  /* In-flow at the end of the page (40px below the cards via .splash-page
+     padding). Edges mirror the nav: left 20px (menu), right 10px (toggle),
+     20px below. With the content taller than the window it lands at the
+     bottom when scrolled, with no extra scroll space. */
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  z-index: 100;
-  pointer-events: none;
+  padding: 0 0.625rem 1.25rem 1.25rem;
   box-sizing: border-box;
-}
-.splash-footer .social-links,
-.splash-footer .sidebar-meta,
-.splash-footer a,
-.splash-footer p,
-.splash-footer .weather-icon {
-  pointer-events: auto;
 }
 
 .splash-footer .sidebar-meta {
