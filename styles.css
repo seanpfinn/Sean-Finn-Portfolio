@@ -497,8 +497,8 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding: 1.25rem 7.5rem;
-  min-height: 100vh;
+  /* bottom padding clears the fixed footer so the last cards aren't hidden */
+  padding: 1.25rem 7.5rem 5rem;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -760,17 +760,28 @@ body {
 }
 
 .splash-footer {
+  /* Same as the case study footer (.proj-footer): fixed full-width at the very
+     bottom; pointer-events pass through the empty span so it never blocks the
+     cards scrolling beneath it. */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 0.625rem 0.625rem;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  align-self: stretch;
-  /* Sticky footer: pins to the window bottom when content is shorter than the
-     window; collapses to 0 (footer right after the cards) when content is tall. */
-  margin-top: auto;
-  padding: 0 1.25rem;
-  flex-shrink: 0;
+  z-index: 100;
+  pointer-events: none;
   box-sizing: border-box;
+}
+.splash-footer .social-links,
+.splash-footer .sidebar-meta,
+.splash-footer a,
+.splash-footer p,
+.splash-footer .weather-icon {
+  pointer-events: auto;
 }
 
 .splash-footer .sidebar-meta {
@@ -905,8 +916,11 @@ body {
     gap: 1.25rem;
   }
   .splash-footer {
+    position: static;
+    inset: auto;
     margin: 0;
-    padding: 0;
+    padding: 2.5rem 1.25rem 1.25rem;
+    pointer-events: auto;
     flex-direction: column;
     align-items: center;
     gap: 1.9375rem;
