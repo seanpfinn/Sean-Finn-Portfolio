@@ -213,20 +213,22 @@
       const CELL = 10, GAP = 2, STEP = 12;
       const COLS = 13, ROWS = 7;
       const LABEL_L = 26, LABEL_T = 14;
+
+      // Build date→level lookup
+      const byDate = {};
+      contributions.forEach(c => { byDate[c.date] = c.level; });
+
+      // Always anchor to today — grid ends at the current week
       const today = new Date(); today.setHours(0,0,0,0);
-      const cutoff = new Date(today);
-      cutoff.setDate(today.getDate() - COLS * 7);
-      const recent = contributions.filter(c => new Date(c.date + 'T00:00:00') >= cutoff);
-      if (!recent.length) return;
-      const firstDate = new Date(recent[0].date + 'T00:00:00');
-      const startSunday = new Date(firstDate);
-      startSunday.setDate(firstDate.getDate() - firstDate.getDay());
-      const lastDate = new Date(recent[recent.length - 1].date + 'T00:00:00');
-      const usedCols = Math.min(Math.floor(Math.round((lastDate - startSunday) / 86400000) / 7) + 1, COLS);
-      const LABEL_R = 14;
-      const W = LABEL_L + usedCols * STEP - GAP + LABEL_R;
+      const endSunday = new Date(today);
+      endSunday.setDate(today.getDate() - today.getDay());
+      const startSunday = new Date(endSunday);
+      startSunday.setDate(endSunday.getDate() - (COLS - 1) * 7);
+
+      const W = LABEL_L + COLS * STEP - GAP + 4;
       const H = LABEL_T + ROWS * STEP - GAP;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
       function mkText(content, x, y, cls) {
         const t = document.createElementNS(NS, 'text');
         t.setAttribute('x', x); t.setAttribute('y', y);
@@ -234,38 +236,45 @@
         t.textContent = content;
         return t;
       }
+
+      // Day-of-week labels
       [[1,'Mon'],[3,'Wed'],[5,'Fri']].forEach(([row, label]) => {
         const t = mkText(label, 0, LABEL_T + row * STEP + CELL / 2, 'gh-axis-label');
         t.setAttribute('dominant-baseline', 'middle');
         svg.appendChild(t);
       });
-      const monthsFound = [];
+
+      // Month labels — pinned to the column where each month first appears
       let lastMonth = -1;
-      for (let col = 0; col < usedCols; col++) {
+      for (let col = 0; col < COLS; col++) {
         const d = new Date(startSunday);
         d.setDate(startSunday.getDate() + col * 7);
-        if (d.getMonth() !== lastMonth) { lastMonth = d.getMonth(); monthsFound.push(MONTHS[lastMonth]); }
+        const m = d.getMonth();
+        if (m !== lastMonth) {
+          lastMonth = m;
+          const t = mkText(MONTHS[m], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label');
+          t.setAttribute('text-anchor', 'start');
+          svg.appendChild(t);
+        }
       }
-      const graphW = usedCols * STEP - GAP;
-      monthsFound.forEach((label, i) => {
-        const x = LABEL_L + (i / Math.max(monthsFound.length - 1, 1)) * graphW;
-        const t = mkText(label, x, LABEL_T - 3, 'gh-axis-label');
-        t.setAttribute('text-anchor', i === 0 ? 'start' : i === monthsFound.length - 1 ? 'end' : 'middle');
-        svg.appendChild(t);
-      });
-      recent.forEach(c => {
-        const date = new Date(c.date + 'T00:00:00');
-        const col = Math.floor(Math.round((date - startSunday) / 86400000) / 7);
-        const row = date.getDay();
-        if (col >= usedCols) return;
-        const rect = document.createElementNS(NS, 'rect');
-        rect.setAttribute('x', LABEL_L + col * STEP);
-        rect.setAttribute('y', LABEL_T + row * STEP);
-        rect.setAttribute('width', CELL); rect.setAttribute('height', CELL);
-        rect.setAttribute('rx', 2);
-        rect.setAttribute('class', `gh-cell--${c.level}`);
-        svg.appendChild(rect);
-      });
+
+      // Cells — render every day in the grid; level-0 for days with no contributions
+      for (let col = 0; col < COLS; col++) {
+        for (let row = 0; row < ROWS; row++) {
+          const d = new Date(startSunday);
+          d.setDate(startSunday.getDate() + col * 7 + row);
+          if (d > today) continue;
+          const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          const level = byDate[dateStr] ?? 0;
+          const rect = document.createElementNS(NS, 'rect');
+          rect.setAttribute('x', LABEL_L + col * STEP);
+          rect.setAttribute('y', LABEL_T + row * STEP);
+          rect.setAttribute('width', CELL); rect.setAttribute('height', CELL);
+          rect.setAttribute('rx', 2);
+          rect.setAttribute('class', `gh-cell--${level}`);
+          svg.appendChild(rect);
+        }
+      }
     }
 
     let fetched = false;
