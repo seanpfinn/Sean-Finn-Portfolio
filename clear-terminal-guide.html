@@ -75,7 +75,7 @@
       });
     })();
   </script>
-  <title>CLEAR+ Terminal Guide – Sean Finn</title>
+  <title>Terminal Guide – Sean Finn</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
@@ -200,12 +200,12 @@
   <main class="proj-col blur-in" style="animation-delay:0.05s">
     <div class="proj-title-block">
       <h1 class="proj-title-new">Terminal Guide</h1>
-      <p class="proj-subtitle-new">A step-by-step in-app guide that surfaces the right credential at every checkpoint — from check-in to boarding.</p>
+      <p class="proj-subtitle-new">A step-by-step in-app guide that helps CLEAR+ Members navigate to their terminal's CLEAR Lane.</p>
     </div>
     <div class="proj-meta-row-new">
       <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
-      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">2024–Present</span></div>
-      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q2 2026</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS, Android</span></div>
     </div>
     <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
     <script>
@@ -214,33 +214,25 @@
         var btn = document.getElementById('dl-btn');
         if (/android/i.test(ua)) {
           btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
-        } else if (/iphone|ipad|ipod/i.test(ua)) {
-          btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
         }
       })();
     </script>
+
     <div class="proj-caption">
       <span class="proj-caption-label">Context</span>
-      <p class="proj-caption-body">A guided in-app experience that walks CLEAR+ members through the airport terminal step by step, automatically surfacing the correct credential for each checkpoint — from check-in through the biometric lane and on to boarding.</p>
+      <p class="proj-caption-body">A guided in-app experience that walks CLEAR+ Members through the airport terminal step-by-step with detailed directions and accompanying imagery.</p>
     </div>
 
-    <div class="proj-panel-new">
-      <div class="proj-phone-new">
-        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
-        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+    <div class="proj-panel-new proj-panel-new--tg-hero">
+      <div class="proj-tg-hero-wrap">
+        <img class="proj-tg-hero-frame" src="assets/gallery-tg-frame.png" alt="" />
+        <img class="proj-tg-hero-screen" src="assets/gallery-tg-screen.png" alt="" />
       </div>
     </div>
 
     <div class="proj-caption">
-      <span class="proj-caption-label">Context</span>
-      <p class="proj-caption-body">A guided in-app experience that walks CLEAR+ members through the airport terminal step by step, automatically surfacing the correct credential for each checkpoint — from check-in through the biometric lane and on to boarding.</p>
-    </div>
-
-    <div class="proj-panel-new">
-      <div class="proj-phone-new">
-        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
-        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
-      </div>
+      <span class="proj-caption-label">Problem</span>
+      <p class="proj-caption-body">Members frequently arrived at airports unable to accurately locate the CLEAR Lane, increasing user frustration and anxiety, which impacted the arrival time to their gate.</p>
     </div>
 
     <div class="proj-panel-new">
@@ -251,8 +243,8 @@
     </div>
 
     <div class="proj-caption">
-      <span class="proj-caption-label">Context</span>
-      <p class="proj-caption-body">A guided in-app experience that walks CLEAR+ members through the airport terminal step by step, automatically surfacing the correct credential for each checkpoint — from check-in through the biometric lane and on to boarding.</p>
+      <span class="proj-caption-label">Role &amp; Approach</span>
+      <p class="proj-caption-body">As lead product designer on the project, I owned the flow mapping from airport arrival to reaching the CLEAR Lane at their terminal's Security Checkpoint, drove the UI and UX for the in-terminal guide screens, and partnered with engineering to develop HALOS, an internal operations tool for updating the terminal guides.</p>
     </div>
 
     <div class="proj-panel-new">
@@ -262,16 +254,65 @@
       </div>
     </div>
 
+    <div class="proj-caption">
+      <span class="proj-caption-label">Process</span>
+      <p class="proj-caption-body">We explored a single persistent credential tray vs. a step-aware guide that changes per checkpoint. We chose the step-aware approach because testing showed members didn't reliably know which checkpoint they were at.</p>
+    </div>
+
     <div class="proj-panel-new">
       <div class="proj-phone-new">
         <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
         <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+      </div>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">User Journey</span>
+      <p class="proj-caption-body">Over 8 weeks, I designed a calm, system-driven assessment that helps high-achieving adults turn abstract values into concrete decisions.</p>
+    </div>
+
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+      </div>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Constraints</span>
+      <p class="proj-caption-body">Airport network variability, needing the guide to work in offline / low-signal environments, and coordinating with TSA / airport partners all impacted how we designed and developed the experience.</p>
+    </div>
+
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+      </div>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Before / After</span>
+      <p class="proj-caption-body">The initial experience provided users with static information, whereas the new experience offers dynamic content that changes based on closures or other airport delays.</p>
+    </div>
+
+    <div class="proj-panel-new">
+      <div class="proj-tg-before-col">
+        <span class="proj-tg-before-label">BEFORE</span>
+        <div class="proj-tg-before-phone">
+          <img class="proj-phone-new-frame" src="assets/tg-phone-frame.png" alt="" />
+          <img class="proj-phone-new-screen" src="assets/tg-phone-screen.png" alt="" />
+        </div>
       </div>
     </div>
 
     <div class="proj-caption">
       <span class="proj-caption-label">Summary</span>
-      <p class="proj-caption-body">The Terminal Guide reduced member confusion at busy checkpoints by surfacing exactly the right credential at the right moment, cutting support contacts related to in-terminal navigation by over 30%.</p>
+      <p class="proj-caption-body">The Terminal Guide reduced member confusion at busy checkpoints by surfacing exactly the right credential at the right moment, cutting support contacts related to in-terminal navigation by 30%.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Next Steps</span>
+      <p class="proj-caption-body">Live and iterating—future state versions will include an AI summary of the directions to provide more at-a-glance directions for users.</p>
     </div>
   </main>
 
@@ -284,7 +325,7 @@
       <a href="https://www.spottedinprod.com/sean" class="social-link" target="_blank" rel="noopener">SIP</a>
     </div>
     <div class="sidebar-meta">
-      <p class="last-updated">Last updated: May 9th, 2026</p>
+      <p class="last-updated">Last updated: June 29th, 2026</p>
       <p class="weather">
         <span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span>
         <span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span>
