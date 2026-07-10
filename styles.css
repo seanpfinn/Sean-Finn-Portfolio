@@ -1939,9 +1939,9 @@ body {
 .gv-vault-wrap {
   position: absolute;
   left: 50%;
-  top: 4.3%;
-  width: 94.2%;
-  aspect-ratio: 603 / 506;
+  top: 5.9%;
+  width: 91.45%;
+  aspect-ratio: 2048 / 1719;
   transform: translateX(-50%);
 }
 .gv-vault-frame {
@@ -1957,15 +1957,15 @@ body {
   left: 3.47%;
   top: 4.6%;
   width: 33.84%;
-  height: 93.9%;
+  height: 93.89%;
   object-fit: cover;
 }
 .gv-vault-s2 {
   position: absolute;
   left: 42.19%;
   top: 1.22%;
-  width: 23.74%;
-  height: 87.85%;
+  width: 23.73%;
+  height: 87.84%;
   object-fit: cover;
 }
 .gv-vault-s3 {
