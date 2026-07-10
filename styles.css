@@ -626,7 +626,7 @@ body {
 
 /* Expanded nav menu — glass blur */
 .splash-nav-links.is-open {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(1rem) saturate(180%);
   -webkit-backdrop-filter: blur(1rem) saturate(180%);
   border-radius: 1.25rem;
@@ -637,7 +637,7 @@ body {
   padding: var(--pad) 1rem 1rem 0.625rem;
 }
 .dark .splash-nav-links.is-open {
-  background: rgba(18, 18, 20, 0.55);
+  background: rgba(18, 18, 20, 0.92);
   border-right: 0.0625rem solid rgba(255, 255, 255, 0.08);
   border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.40);
@@ -815,12 +815,12 @@ body {
     transition: background 0.2s ease, backdrop-filter 0.2s ease;
   }
   .splash-nav.scrolled {
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(1rem) saturate(180%);
     -webkit-backdrop-filter: blur(1rem) saturate(180%);
   }
   .dark .splash-nav.scrolled {
-    background: rgba(18, 18, 20, 0.70);
+    background: rgba(18, 18, 20, 0.92);
   }
 
   /* Mobile nav overlay — full screen, hidden by default */
@@ -830,7 +830,7 @@ body {
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(1rem) saturate(180%);
     -webkit-backdrop-filter: blur(1rem) saturate(180%);
     margin: 0;
