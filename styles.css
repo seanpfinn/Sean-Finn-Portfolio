@@ -948,7 +948,6 @@ body {
   .gv-tg-wrap   { width: 75%; top: 5%; }
   .gv-vault-wrap { width: 110%; left: 50%; top: 3%; transform: translateX(-50%); }
   .gv-ld-wrap   { width: 42%; top: 6%; }
-  .gv-la-wrap   { width: 48%; top: -55%; }
   .splash-footer {
     position: static;
     inset: auto;
@@ -1930,8 +1929,7 @@ body {
   object-fit: cover;
 }
 
-/* Location Details / Live Activity cards — outline iPhone Air frame with video screen */
-/* Location Details: single phone, centered in card (matches Figma) */
+/* Location Details card — outline iPhone Air frame with video screen, centered (matches Figma) */
 .gv-ld-wrap {
   position: absolute;
   left: 50%;
@@ -1940,16 +1938,7 @@ body {
   aspect-ratio: 460 / 960;
   transform: translateX(-50%);
 }
-/* Live Activity: oversized phone, overflowing top of card (matches Figma) */
-.gv-la-wrap {
-  position: absolute;
-  left: 23.58%;
-  top: -75.64%;
-  width: 48.08%;
-  aspect-ratio: 460 / 960;
-}
-.gv-ld-frame,
-.gv-la-frame {
+.gv-ld-frame {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1957,8 +1946,7 @@ body {
   object-fit: contain;
   z-index: 2;
 }
-.gv-ld-screen,
-.gv-la-screen {
+.gv-ld-screen {
   position: absolute;
   left: 4.6%;
   top: 2.5%;
