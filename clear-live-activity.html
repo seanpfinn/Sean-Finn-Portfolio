@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Password gate -->
+  <style>
+    html.sf-locked body { visibility: hidden; }
+    #sf-gate {
+      visibility: visible;
+      position: fixed; inset: 0; z-index: 100000;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+    }
+    #sf-gate form {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.75rem; width: min(25rem, 90vw);
+    }
+    #sf-gate h1 {
+      font-size: 1.5rem; font-weight: 500; color: #09090b;
+      letter-spacing: -0.01875rem; margin: 0 0 0.25rem; white-space: nowrap; text-align: center;
+    }
+    #sf-gate input {
+      width: 100%; padding: 0.625rem 0.875rem; box-sizing: border-box;
+      border: 0.0625rem solid #e4e4e7; border-radius: 0.625rem;
+      font-size: 0.875rem; font-family: inherit; text-align: center;
+      background: #fff; color: #09090b; outline: none;
+    }
+    #sf-gate input:focus { border-color: #09090b; }
+    #sf-gate button {
+      width: 100%; padding: 0.625rem 0.875rem; border: none; border-radius: 0.625rem;
+      background: #09090b; color: #fff; font-size: 0.875rem; font-weight: 500;
+      font-family: inherit; cursor: pointer;
+    }
+    #sf-gate .sf-err { font-size: 0.8125rem; color: #dc2626; height: 1rem; }
+    #sf-gate.dark { background: #09090b; }
+    #sf-gate.dark h1 { color: #fafafa; }
+    #sf-gate.dark input { background: #18181b; border-color: #27272a; color: #fafafa; }
+    #sf-gate.dark input:focus { border-color: #fafafa; }
+    #sf-gate.dark button { background: #fafafa; color: #09090b; }
+  </style>
+  <script>
+    (function () {
+      if (localStorage.getItem('sf_unlocked') === '1') return;
+      document.documentElement.classList.add('sf-locked');
+      document.addEventListener('DOMContentLoaded', function () {
+        var gate = document.createElement('div');
+        gate.id = 'sf-gate';
+        if (localStorage.getItem('dark') === '1') gate.classList.add('dark');
+        gate.innerHTML =
+          '<form>' +
+            '<h1>Enter password to continue</h1>' +
+            '<input type="password" autocomplete="current-password" aria-label="Password" />' +
+            '<button type="submit">Enter</button>' +
+            '<div class="sf-err"></div>' +
+          '</form>';
+        document.body.appendChild(gate);
+        var form = gate.querySelector('form');
+        var input = gate.querySelector('input');
+        var err = gate.querySelector('.sf-err');
+        input.focus();
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (input.value === 'nspf1991') {
+            localStorage.setItem('sf_unlocked', '1');
+            document.documentElement.classList.remove('sf-locked');
+            gate.remove();
+          } else {
+            err.textContent = 'Incorrect password';
+            input.value = '';
+            input.focus();
+          }
+        });
+      });
+    })();
+  </script>
+  <title>Live Activity – Sean Finn</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="case-study.css" />
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
+</head>
+<body class="proj-page">
+
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+          <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+        <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0C3.10457 0 4 0.89543 4 2Z" fill="currentColor"/>
+          <path d="M11 2C11 3.10457 10.1046 4 9 4C7.89543 4 7 3.10457 7 2C7 0.89543 7.89543 0 9 0C10.1046 0 11 0.89543 11 2Z" fill="currentColor"/>
+          <path d="M18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2C14 0.89543 14.8954 0 16 0C17.1046 0 18 0.89543 18 2Z" fill="currentColor"/>
+          <path d="M4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6C3.10457 6 4 6.89543 4 8Z" fill="currentColor"/>
+          <path d="M11 8C11 9.10457 10.1046 10 9 10C7.89543 10 7 9.10457 7 8C7 6.89543 7.89543 6 9 6C10.1046 6 11 6.89543 11 8Z" fill="currentColor"/>
+          <path d="M18 8C18 9.10457 17.1046 10 16 10C14.8954 10 14 9.10457 14 8C14 6.89543 14.8954 6 16 6C17.1046 6 18 6.89543 18 8Z" fill="currentColor"/>
+          <path d="M4 14C4 15.1046 3.10457 16 2 16C0.89543 16 0 15.1046 0 14C0 12.8954 0.89543 12 2 12C3.10457 12 4 12.8954 4 14Z" fill="currentColor"/>
+          <path d="M11 14C11 15.1046 10.1046 16 9 16C7.89543 16 7 15.1046 7 14C7 12.8954 7.89543 12 9 12C10.1046 12 11 12.8954 11 14Z" fill="currentColor"/>
+          <path d="M18 14C18 15.1046 17.1046 16 16 16C14.8954 16 14 15.1046 14 14C14 12.8954 14.8954 12 16 12C17.1046 12 18 12.8954 18 14Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="splash-nav-links" id="splash-nav-links">
+            <button class="nav-close-btn" id="nav-close-btn" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-overlay-scroll">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Projects</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">CLEAR</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="clear-live-activity.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Live Activity
+                </a>
+                <a href="clear-terminal-guide.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Terminal Guide
+                </a>
+                <a href="clear-location-details.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Location Details
+                </a>
+                <a href="clear-vault.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Vault
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">META</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="meta-ai-hearable.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  AI Hearable
+                </a>
+                <a href="meta-codec-avatars.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Codec Avatars
+                </a>
+                <a href="meta-xr-simulator.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  XR Simulator
+                </a>
+                <a href="meta-localization.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  User Guided Localization
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="about.html" class="splash-nav-link">About</a>
+      </div>
+    </div>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
+
+  <main class="proj-col blur-in" style="animation-delay:0.05s">
+    <div class="proj-title-block">
+      <h1 class="proj-title-new">Live Activity</h1>
+      <p class="proj-subtitle-new">Placeholder — one-line description of this project.</p>
+    </div>
+    <div class="proj-meta-row-new">
+      <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Placeholder</span></div>
+      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
+    </div>
+    <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
+    <script>
+      (function () {
+        var ua = navigator.userAgent;
+        var btn = document.getElementById('dl-btn');
+        if (/android/i.test(ua)) {
+          btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
+        } else if (/iphone|ipad|ipod/i.test(ua)) {
+          btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
+        }
+      })();
+    </script>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">Placeholder — describe what this project is and the context it was built in.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-lockscreen.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Problem</span>
+      <p class="proj-caption-body">Placeholder — describe the specific problem or user pain point this project addressed.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-lockscreen.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Role &amp; Approach</span>
+      <p class="proj-caption-body">Placeholder — describe your role, responsibilities, and design approach on this project.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-expanded.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Process</span>
+      <p class="proj-caption-body">Placeholder — describe the process, exploration, or key decisions made along the way.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-compact.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">User Journey</span>
+      <p class="proj-caption-body">Placeholder — walk through the primary user journey or flow for this feature.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-minimal.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Constraints</span>
+      <p class="proj-caption-body">Placeholder — describe technical, business, or organizational constraints that shaped the design.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-card-screen.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Before / After</span>
+      <p class="proj-caption-body">Placeholder — describe how the experience changed from before to after this work.</p>
+    </div>
+    <div class="proj-panel-new">
+      <div class="proj-phone-new">
+        <img class="proj-phone-new-frame" src="assets/la-phone-frame.png" alt="" />
+        <img class="proj-phone-new-screen" src="assets/la-lockscreen.png" alt="" />
+      </div>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Summary</span>
+      <p class="proj-caption-body">Placeholder — describe the outcome and impact of this project.</p>
+    </div>
+    <div class="proj-caption">
+      <span class="proj-caption-label">Next Steps</span>
+      <p class="proj-caption-body">Placeholder — describe what's next or planned iterations for this project.</p>
+    </div>
+  </main>
+
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.spottedinprod.com/sean" class="social-link" target="_blank" rel="noopener">SIP</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: July 10th, 2026</p>
+      <p class="weather"><span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span><span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span></p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script type="module" src="sound.js"></script>
+</body>
+</html>
