@@ -947,7 +947,6 @@ body {
   /* Scale gallery card images to fill the 1:1 square frame on mobile */
   .gv-tg-wrap   { width: 75%; top: 5%; }
   .gv-vault-wrap { width: 110%; left: 50%; top: 3%; transform: translateX(-50%); }
-  .gv-ld-wrap   { width: 42%; top: 6%; }
   .splash-footer {
     position: static;
     inset: auto;
@@ -1927,32 +1926,5 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* Location Details card — outline iPhone Air frame with video screen, centered (matches Figma) */
-.gv-ld-wrap {
-  position: absolute;
-  left: 50%;
-  top: 5.41%;
-  width: 24.04%;
-  aspect-ratio: 460 / 960;
-  transform: translateX(-50%);
-}
-.gv-ld-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 2;
-}
-.gv-ld-screen {
-  position: absolute;
-  left: 4.6%;
-  top: 2.5%;
-  width: 90.6%;
-  height: 94.8%;
-  object-fit: cover;
-  z-index: 1;
 }
 
