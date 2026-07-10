@@ -947,8 +947,8 @@ body {
   /* Scale gallery card images to fill the 1:1 square frame on mobile */
   .gv-tg-wrap   { width: 75%; top: 5%; }
   .gv-vault-wrap { width: 110%; left: 50%; top: 3%; transform: translateX(-50%); }
-  .gv-ld-wrap,
-  .gv-la-wrap   { width: 42%; top: 6%; }
+  .gv-ld-wrap   { width: 42%; top: 6%; }
+  .gv-la-wrap   { width: 48%; top: -55%; }
   .splash-footer {
     position: static;
     inset: auto;
@@ -1931,14 +1931,22 @@ body {
 }
 
 /* Location Details / Live Activity cards — outline iPhone Air frame with video screen */
-.gv-ld-wrap,
-.gv-la-wrap {
+/* Location Details: single phone, centered in card (matches Figma) */
+.gv-ld-wrap {
   position: absolute;
   left: 50%;
-  top: 4%;
-  width: 24.8%;
+  top: 5.41%;
+  width: 24.04%;
   aspect-ratio: 460 / 960;
   transform: translateX(-50%);
+}
+/* Live Activity: oversized phone, overflowing top of card (matches Figma) */
+.gv-la-wrap {
+  position: absolute;
+  left: 23.58%;
+  top: -75.64%;
+  width: 48.08%;
+  aspect-ratio: 460 / 960;
 }
 .gv-ld-frame,
 .gv-la-frame {
