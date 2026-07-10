@@ -624,26 +624,23 @@ body {
 .nav-hamburger svg { display: block; }
 .nav-hamburger.is-open { opacity: 0.45; }
 
-/* Expanded nav menu (desktop) — per Figma 2369:3022 */
+/* Expanded nav menu — glass blur */
 .splash-nav-links.is-open {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(0.75rem);
-  -webkit-backdrop-filter: blur(0.75rem);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(0.75rem) saturate(180%);
+  -webkit-backdrop-filter: blur(0.75rem) saturate(180%);
   border-radius: 1.25rem;
-  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.12);
+  border-right: 0.0625rem solid rgba(255, 255, 255, 0.35);
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.10);
   margin: calc(-1 * var(--pad)) 0 0 -0.625rem;
   padding: var(--pad) 1rem 1rem 0.625rem;
 }
 .dark .splash-nav-links.is-open {
-  background: rgba(18, 18, 20, 0.92);
+  background: rgba(18, 18, 20, 0.55);
+  border-right: 0.0625rem solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.40);
-}
-
-.dark .splash-nav-links.is-open {
-  background: rgba(18, 18, 20, 0.60);
-  border-right: 0.0625rem solid rgba(255, 255, 255, 0.10);
-  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0.125rem 0.5rem 2rem rgba(0,0,0,0.35);
 }
 
 /* Work submenu */
