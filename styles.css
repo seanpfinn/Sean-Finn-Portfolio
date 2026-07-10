@@ -803,7 +803,7 @@ body {
   .splash-nav {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 300;
+    z-index: 8001;
     padding: 0.625rem 1.25rem;
     box-sizing: border-box;
     background: transparent;
@@ -829,7 +829,7 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 299;
+    z-index: 8000;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1808,7 +1808,7 @@ body {
 
 /* Visual panel */
 .gallery-card-visual {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1;
   border-radius: 1rem;
   overflow: hidden;
   position: relative;
