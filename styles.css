@@ -929,7 +929,7 @@ body {
 
   .splash-hero .hero-title {
     font-size: 1.75rem;
-    line-height: 1.625rem;
+    line-height: 2.125rem;
     letter-spacing: -0.0875rem;
   }
   .splash-hero .hero-current {
@@ -1938,10 +1938,11 @@ body {
 /* Vault card — light blue bg, iPhone 17 Pro trio */
 .gv-vault-wrap {
   position: absolute;
-  left: 2.9%;
+  left: 50%;
   top: 4.3%;
   width: 94.2%;
   aspect-ratio: 603 / 506;
+  transform: translateX(-50%);
 }
 .gv-vault-frame {
   position: absolute;
