@@ -343,7 +343,15 @@
   // ── Mobile hamburger toggle ───────────────────────────────────────────────
   const hamburger = document.getElementById('nav-hamburger');
   if (hamburger && navLinks) {
+    // Force-finish the one-time entrance animation before the overlay opens.
+    // Toggling `animation: none` on/off for the menu-open state would
+    // otherwise replay the keyframes (from -> to) every time it's re-applied,
+    // making the navbar appear to fade back in each time the menu closes.
+    const settleNavEntrance = () => { if (splashNav) splashNav.classList.remove('blur-in'); };
+    if (splashNav) splashNav.addEventListener('animationend', settleNavEntrance, { once: true });
+
     const setMenuOpen = (open) => {
+      if (open) settleNavEntrance();
       hamburger.classList.toggle('is-open', open);
       hamburger.setAttribute('aria-expanded', String(open));
       navLinks.classList.toggle('mobile-open', open);
