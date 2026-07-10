@@ -947,8 +947,8 @@ body {
   /* Scale gallery card images to fill the 1:1 square frame on mobile */
   .gv-tg-wrap   { width: 75%; top: 5%; }
   .gv-vault-wrap { width: 110%; left: 50%; top: 3%; transform: translateX(-50%); }
-  .gv-hearable  { width: 100%; height: 100%; left: 0; object-fit: cover; }
-  .gv-screen    { inset: 0; width: 100%; height: 100%; top: 0; aspect-ratio: auto; object-fit: cover; }
+  .gv-ld-wrap,
+  .gv-la-wrap   { width: 42%; top: 6%; }
   .splash-footer {
     position: static;
     inset: auto;
@@ -1853,28 +1853,6 @@ body {
   box-shadow: 0 0 0.45625rem 0 rgba(0,0,0,0.15);
 }
 
-/* Full-bleed background image */
-.gv-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Floating screenshot */
-.gv-screen {
-  position: absolute;
-  left: 3.99%;
-  right: 3.98%;
-  top: 1.3125rem;
-  width: auto;
-  height: auto;
-  aspect-ratio: 245.27 / 160.47;
-  box-shadow: 0 0 0.375rem rgba(0,0,0,0.4);
-  border-radius: 0.25rem;
-}
-
 /* Vault trio */
 /* Terminal Guide card — grey bg, single iPhone centered */
 .gv-tg-wrap {
@@ -1952,14 +1930,33 @@ body {
   object-fit: cover;
 }
 
-/* AI Hearable card */
-.gv-hearable {
+/* Location Details / Live Activity cards — outline iPhone Air frame with video screen */
+.gv-ld-wrap,
+.gv-la-wrap {
   position: absolute;
-  left: 5.4%;
-  top: 0;
-  width: 94.5%;
-  height: auto;
+  left: 50%;
+  top: 4%;
+  width: 24.8%;
+  aspect-ratio: 460 / 960;
+  transform: translateX(-50%);
+}
+.gv-ld-frame,
+.gv-la-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+}
+.gv-ld-screen,
+.gv-la-screen {
+  position: absolute;
+  left: 4.6%;
+  top: 2.5%;
+  width: 90.6%;
+  height: 94.8%;
   object-fit: cover;
-  object-position: top;
+  z-index: 1;
 }
 
