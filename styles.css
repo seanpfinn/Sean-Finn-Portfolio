@@ -627,8 +627,8 @@ body {
 /* Expanded nav menu — glass blur */
 .splash-nav-links.is-open {
   background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(0.75rem) saturate(180%);
-  -webkit-backdrop-filter: blur(0.75rem) saturate(180%);
+  backdrop-filter: blur(1rem) saturate(180%);
+  -webkit-backdrop-filter: blur(1rem) saturate(180%);
   border-radius: 1.25rem;
   border-right: 0.0625rem solid rgba(255, 255, 255, 0.35);
   border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.35);
@@ -830,9 +830,9 @@ body {
     position: fixed;
     inset: 0;
     z-index: 299;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(0.75rem);
-    -webkit-backdrop-filter: blur(0.75rem);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(1rem) saturate(180%);
+    -webkit-backdrop-filter: blur(1rem) saturate(180%);
     margin: 0;
     border: none;
     border-radius: 0;
