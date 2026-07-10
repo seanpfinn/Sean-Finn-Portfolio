@@ -891,9 +891,17 @@ body {
   .splash-nav-links.mobile-open .nav-company-header {
     align-items: center;
   }
+  .splash-nav-links.mobile-open .nav-work-submenu-wrap {
+    max-height: 50rem;
+  }
+  .splash-nav-links.mobile-open .nav-work-submenu {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .splash-nav-links.mobile-open .splash-nav-caret {
     width: 1.125rem;
     height: 1.125rem;
+    transform: rotate(180deg);
   }
 
   .splash-hero .hero-title {
@@ -912,6 +920,12 @@ body {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+  /* Scale gallery card images to fill the 1:1 square frame on mobile */
+  .gv-tg-wrap   { width: 75%; top: 5%; }
+  .gv-ls-wrap   { width: 90%; top: 4%; }
+  .gv-vault-wrap { width: 110%; left: 50%; top: 3%; transform: translateX(-50%); }
+  .gv-hearable  { width: 100%; height: 100%; left: 0; object-fit: cover; }
+  .gv-screen    { inset: 0; width: 100%; height: 100%; top: 0; aspect-ratio: auto; object-fit: cover; }
   .splash-footer {
     position: static;
     inset: auto;
