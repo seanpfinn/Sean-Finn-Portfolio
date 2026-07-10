@@ -822,6 +822,17 @@ body {
   .dark .splash-nav.scrolled {
     background: rgba(18, 18, 20, 0.92);
   }
+  /* When the overlay is open, the nav must not create a containing block
+     for fixed descendants — filter/transform/backdrop-filter all do. */
+  .splash-nav.menu-open,
+  .splash-nav.menu-open.scrolled {
+    animation: none;
+    filter: none;
+    transform: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: transparent;
+  }
 
   /* Mobile nav overlay — full screen, hidden by default */
   .splash-nav-links,
@@ -920,6 +931,7 @@ body {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+  .gallery-card-visual { aspect-ratio: 1 / 1; }
   /* Scale gallery card images to fill the 1:1 square frame on mobile */
   .gv-tg-wrap   { width: 75%; top: 5%; }
   .gv-ls-wrap   { width: 90%; top: 4%; }
@@ -1822,7 +1834,7 @@ body {
 
 /* Visual panel */
 .gallery-card-visual {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 16 / 9;
   border-radius: 1rem;
   overflow: hidden;
   position: relative;
