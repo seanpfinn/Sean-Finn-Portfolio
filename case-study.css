@@ -451,6 +451,9 @@
   object-fit: cover;
 }
 
+/* Mobile-only phone element (hidden on desktop, shows in hero panel on mobile) */
+.proj-phone-new--mobile-only { display: none; }
+
 /* Footer for new layout — fixed to bottom like homepage */
 .proj-footer {
   position: fixed;
@@ -482,12 +485,25 @@
     position: static;
   }
   .proj-panel-new {
-    height: 21.25rem;
+    height: 21.875rem;
   }
   .proj-phone-new {
-    height: 20rem;
-    width: auto;
-    aspect-ratio: 220 / 455;
+    top: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 77%;
+    height: auto;
+    aspect-ratio: 991 / 2048;
+  }
+  /* TG hero panel: revert to standard grey + iPhone Air on mobile */
+  .proj-panel-new--tg-hero {
+    background: #e7e7e7;
+  }
+  .proj-tg-hero-wrap {
+    display: none;
+  }
+  .proj-phone-new--mobile-only {
+    display: block;
   }
   .proj-footer {
     position: static;
