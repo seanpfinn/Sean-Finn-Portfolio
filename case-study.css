@@ -774,6 +774,14 @@
   .proj-panel-new {
     height: 21.875rem;
   }
+  /* Live Activity panel 4: re-anchor to top so the phone starts flush
+     with the panel edge on mobile instead of leaving a blank gap above it. */
+  .proj-la-p4-wrap {
+    top: 1.25rem;
+    left: 50%;
+    width: 77%;
+    transform: translateX(-50%);
+  }
   .proj-phone-new {
     top: 1.25rem;
     left: 50%;
