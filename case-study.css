@@ -569,10 +569,10 @@
 /* Live Activity case study — panel 7: angled iPhone 17 black mockup */
 .proj-la-p7-wrap {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 16.06%;
+  top: -23.06%;
   transform: translate(-50%, -50%) rotate(5.76deg);
-  width: 140%;
+  width: 208.98%;
   aspect-ratio: 1630.014 / 1571.117;
 }
 .proj-la-p7-frame {
