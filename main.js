@@ -390,5 +390,116 @@
     inViewVideos.forEach(vid => vidObserver.observe(vid));
   }
 
+  // ── Pan & zoom (scroll/pinch to zoom, drag to pan) ────────────────────────
+  function initPanZoom(container) {
+    const img = container.querySelector('img');
+    if (!img) return;
+
+    const minScale = 1;
+    const maxScale = 4;
+    let scale = 1;
+    let originX = 0;
+    let originY = 0;
+    const pointers = new Map();
+    let lastDist = null;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function apply() {
+      img.style.transform = `translate(-50%, -50%) translate(${originX}px, ${originY}px) scale(${scale})`;
+      container.style.cursor = scale > minScale ? (dragging ? 'grabbing' : 'grab') : 'zoom-in';
+    }
+
+    function clamp() {
+      const rect = container.getBoundingClientRect();
+      const maxX = (rect.width * (scale - 1)) / 2 + rect.width * 0.15;
+      const maxY = (rect.height * (scale - 1)) / 2 + rect.height * 0.15;
+      originX = Math.max(-maxX, Math.min(maxX, originX));
+      originY = Math.max(-maxY, Math.min(maxY, originY));
+    }
+
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const rect = container.getBoundingClientRect();
+      const cx = e.clientX - rect.left - rect.width / 2;
+      const cy = e.clientY - rect.top - rect.height / 2;
+      const prevScale = scale;
+      const delta = -e.deltaY * 0.0015;
+      scale = Math.min(maxScale, Math.max(minScale, scale * (1 + delta)));
+      const factor = scale / prevScale;
+      originX = cx - (cx - originX) * factor;
+      originY = cy - (cy - originY) * factor;
+      if (scale === minScale) { originX = 0; originY = 0; }
+      clamp();
+      apply();
+    }, { passive: false });
+
+    container.addEventListener('pointerdown', (e) => {
+      container.setPointerCapture(e.pointerId);
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 1) {
+        dragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+      } else if (pointers.size === 2) {
+        dragging = false;
+        const pts = [...pointers.values()];
+        lastDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      }
+      apply();
+    });
+
+    container.addEventListener('pointermove', (e) => {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 2) {
+        const pts = [...pointers.values()];
+        const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+        if (lastDist) {
+          const prevScale = scale;
+          scale = Math.min(maxScale, Math.max(minScale, scale * (dist / lastDist)));
+          const factor = scale / prevScale;
+          originX *= factor;
+          originY *= factor;
+        }
+        lastDist = dist;
+        clamp();
+        apply();
+      } else if (dragging && scale > minScale) {
+        originX += e.clientX - lastX;
+        originY += e.clientY - lastY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        clamp();
+        apply();
+      } else if (dragging) {
+        lastX = e.clientX;
+        lastY = e.clientY;
+      }
+    });
+
+    function endPointer(e) {
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) lastDist = null;
+      if (pointers.size === 0) dragging = false;
+      apply();
+    }
+    container.addEventListener('pointerup', endPointer);
+    container.addEventListener('pointercancel', endPointer);
+    container.addEventListener('pointerleave', (e) => { if (pointers.size <= 1) endPointer(e); });
+
+    container.addEventListener('dblclick', () => {
+      scale = scale > minScale ? minScale : 2;
+      originX = 0;
+      originY = 0;
+      apply();
+    });
+
+    container.style.touchAction = 'none';
+    apply();
+  }
+  document.querySelectorAll('.proj-panel-zoomable').forEach(initPanZoom);
+
 })();
 
