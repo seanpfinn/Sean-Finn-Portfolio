@@ -832,6 +832,10 @@ body {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: transparent;
+    /* Drop below the overlay (z-index 8000) so the hamburger/dark-toggle in
+       this fixed bar stop intercepting taps meant for the overlay's own
+       close button, which sits in the same top-right region. */
+    z-index: 1;
   }
 
   /* Mobile nav overlay — full screen, blurs in/out, hidden by default */
