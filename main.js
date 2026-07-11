@@ -392,8 +392,12 @@
 
   // ── Pan & zoom (scroll/pinch to zoom, drag to pan) ────────────────────────
   function initPanZoom(container) {
-    const img = container.querySelector('img');
-    if (!img) return;
+    // The pannable/zoomable target is the container's first child — a neutral
+    // full-bleed wrapper (.proj-zoom-target) with no transform of its own, so
+    // whatever responsive positioning lives inside it (which may differ
+    // between desktop and mobile) is untouched by the pan/zoom transform.
+    const target = container.firstElementChild;
+    if (!target) return;
 
     const minScale = 1;
     const maxScale = 4;
@@ -407,7 +411,7 @@
     let lastY = 0;
 
     function apply() {
-      img.style.transform = `translate(-50%, -50%) translate(${originX}px, ${originY}px) scale(${scale})`;
+      target.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
       container.style.cursor = scale > minScale ? (dragging ? 'grabbing' : 'grab') : 'zoom-in';
     }
 
