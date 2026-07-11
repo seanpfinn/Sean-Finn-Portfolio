@@ -591,6 +591,153 @@
   object-fit: cover;
 }
 
+/* Vault case study — panel 2: Black iPhone 16e mockup (Generating ID) */
+.proj-vault-p2-wrap {
+  position: absolute;
+  left: 11.94%;
+  top: 3.16%;
+  width: 76.11%;
+  aspect-ratio: 593.634 / 717;
+}
+.proj-vault-p2-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p2-screen {
+  position: absolute;
+  left: 5.09%;
+  top: 1.67%;
+  width: 92.48%;
+  height: 93.58%;
+  object-fit: cover;
+}
+
+/* Vault case study — panel 3: iPhone 17 Pro silver front, centered */
+.proj-vault-p3-wrap {
+  position: absolute;
+  left: 50%;
+  top: 4.21%;
+  width: 46.72%;
+  aspect-ratio: 364.448 / 747.885;
+  transform: translateX(-50%);
+}
+.proj-vault-p3-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p3-screen {
+  position: absolute;
+  left: 4.11%;
+  top: 1.66%;
+  width: 91.68%;
+  height: 96.68%;
+  object-fit: cover;
+}
+
+/* Vault case study — panel 4: iPhone 17 Pro silver bottom front, overflows top */
+.proj-vault-p4-wrap {
+  position: absolute;
+  left: 50%;
+  top: -55.97%;
+  width: 64.61%;
+  aspect-ratio: 503.98 / 700.847;
+  transform: translateX(-50%);
+}
+.proj-vault-p4-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p4-screen {
+  position: absolute;
+  left: 3.43%;
+  top: 0.78%;
+  width: 93.27%;
+  height: 92.43%;
+  object-fit: cover;
+}
+
+/* Vault case study — panel 5: iPhone 17 Pro Max silver mockup */
+.proj-vault-p5-wrap {
+  position: absolute;
+  left: 32.08%;
+  top: 4.21%;
+  width: 35.84%;
+  aspect-ratio: 279.53 / 662.59;
+}
+.proj-vault-p5-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p5-screen {
+  position: absolute;
+  left: 10.82%;
+  top: 0.85%;
+  width: 87.5%;
+  height: 96.34%;
+  object-fit: cover;
+}
+
+/* Vault case study — panel 6: iPhone 17 Pro silver front (second instance) */
+.proj-vault-p6-wrap {
+  position: absolute;
+  left: 22.4%;
+  top: 4.21%;
+  width: 55.32%;
+  aspect-ratio: 431.492 / 885.466;
+}
+.proj-vault-p6-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p6-screen {
+  position: absolute;
+  left: 4.11%;
+  top: 1.66%;
+  width: 91.68%;
+  height: 96.68%;
+  object-fit: cover;
+}
+
+/* Vault case study — panel 7: iPhone 17 Pro Max silver mockup, overflows bottom */
+.proj-vault-p7-wrap {
+  position: absolute;
+  left: 50%;
+  top: -105.05%;
+  width: 55.38%;
+  aspect-ratio: 432 / 1024;
+  transform: translateX(-50%);
+}
+.proj-vault-p7-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-vault-p7-screen {
+  position: absolute;
+  left: 10.82%;
+  top: 0.85%;
+  width: 87.5%;
+  height: 96.34%;
+  object-fit: cover;
+}
+
 /* Mobile-only phone element (hidden on desktop, shows in hero panel on mobile) */
 .proj-phone-new--mobile-only { display: none; }
 
