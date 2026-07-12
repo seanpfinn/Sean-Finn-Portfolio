@@ -564,7 +564,6 @@ body {
 .splash-nav-work-group {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
 }
 
 .splash-nav-work-btn {
@@ -647,6 +646,7 @@ body {
 .nav-work-submenu-wrap {
   max-height: 0;
   overflow: hidden;
+  padding-top: 0.375rem;
   transition: max-height 0.35s ease-in-out;
 }
 

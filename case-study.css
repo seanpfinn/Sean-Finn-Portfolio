@@ -779,6 +779,150 @@
   object-fit: cover;
 }
 
+/* Location Search case study — panel 2: iPhone 17 Pro silver right */
+.proj-ls-p2-wrap {
+  position: absolute;
+  left: 35.78%;
+  top: 4.21%;
+  width: 28.54%;
+  aspect-ratio: 222.573 / 569.787;
+}
+.proj-ls-p2-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p2-screen {
+  position: absolute;
+  left: 11.38%;
+  top: 1.68%;
+  width: 86.5%;
+  height: 96.75%;
+  object-fit: cover;
+}
+
+/* Location Search case study — panel 3: iPhone 17 Pro silver left */
+.proj-ls-p3-wrap {
+  position: absolute;
+  left: 33.46%;
+  top: 4.21%;
+  width: 33.07%;
+  aspect-ratio: 257.966 / 660.392;
+}
+.proj-ls-p3-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p3-screen {
+  position: absolute;
+  left: 2%;
+  top: 1.59%;
+  width: 86.37%;
+  height: 96.78%;
+  object-fit: cover;
+}
+
+/* Location Search case study — panel 4: iPhone 17 Pro Max silver */
+.proj-ls-p4-wrap {
+  position: absolute;
+  left: 31.21%;
+  top: 4.21%;
+  width: 37.49%;
+  aspect-ratio: 292.413 / 693.126;
+}
+.proj-ls-p4-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p4-screen {
+  position: absolute;
+  left: 10.82%;
+  top: 0.85%;
+  width: 87.5%;
+  height: 96.34%;
+  object-fit: cover;
+}
+
+/* Location Search case study — panel 5: iPhone 17 Pro silver bottom left */
+.proj-ls-p5-wrap {
+  position: absolute;
+  left: 31.01%;
+  top: 4.21%;
+  width: 38.05%;
+  aspect-ratio: 296.752 / 796.524;
+}
+.proj-ls-p5-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p5-screen {
+  position: absolute;
+  left: 2.1%;
+  top: 1.17%;
+  width: 84.93%;
+  height: 95.63%;
+  object-fit: cover;
+}
+
+/* Location Search case study — panel 6: iPhone 17 Pro silver front */
+.proj-ls-p6-wrap {
+  position: absolute;
+  left: 31.26%;
+  top: 4.21%;
+  width: 37.41%;
+  aspect-ratio: 291.822 / 598.848;
+}
+.proj-ls-p6-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p6-screen {
+  position: absolute;
+  left: 4.11%;
+  top: 1.66%;
+  width: 91.68%;
+  height: 96.68%;
+  object-fit: cover;
+}
+
+/* Location Search case study — panel 7: iPhone 17 Pro silver bottom front */
+.proj-ls-p7-wrap {
+  position: absolute;
+  left: 22.66%;
+  top: 4.21%;
+  width: 54.65%;
+  aspect-ratio: 426.275 / 592.788;
+}
+.proj-ls-p7-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-ls-p7-screen {
+  position: absolute;
+  left: 3.43%;
+  top: 0.78%;
+  width: 93.27%;
+  height: 92.43%;
+  object-fit: cover;
+}
+
 /* Mobile-only phone element (hidden on desktop, shows in hero panel on mobile) */
 .proj-phone-new--mobile-only { display: none; }
 
