@@ -886,7 +886,7 @@ body {
 
   /* Mobile menu typography — large links */
   .splash-nav-links.mobile-open .splash-nav-link {
-    font-size: 0.8rem;
+    font-size: 1rem;
     line-height: normal;
   }
   .splash-nav-links.mobile-open .nav-company-label {
@@ -895,7 +895,7 @@ body {
     line-height: 1rem;
   }
   .splash-nav-links.mobile-open .nav-project-item {
-    font-size: 0.8rem;
+    font-size: 1rem;
     line-height: normal;
     letter-spacing: -0.036rem;
   }
