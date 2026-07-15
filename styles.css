@@ -932,6 +932,10 @@ body {
     cursor: default;
     pointer-events: none;
   }
+  .splash-nav-link,
+  .nav-project-item {
+    font-size: 0.8125rem;
+  }
 
   .splash-hero .hero-title {
     font-size: 1.75rem;
