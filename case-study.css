@@ -1029,16 +1029,6 @@
     height: auto;
     aspect-ratio: 991 / 2048;
   }
-  /* TG hero panel: revert to standard grey + iPhone Air on mobile */
-  .proj-panel-new--tg-hero {
-    background: #e7e7e7;
-  }
-  .proj-tg-hero-wrap {
-    display: none;
-  }
-  .proj-phone-new--mobile-only {
-    display: block;
-  }
   /* TG per-section phone mockups: center like the generic mobile phone
      treatment, keeping each mockup's own aspect-ratio and inner frame/screen
      percentages (which are relative to the wrap itself, not the panel). */
