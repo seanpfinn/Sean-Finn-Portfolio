@@ -1854,32 +1854,6 @@ body {
   box-shadow: 0 0 0.45625rem 0 rgba(0,0,0,0.15);
 }
 
-/* Vault trio */
-/* Terminal Guide card — grey bg, single iPhone centered */
-.gv-tg-wrap {
-  position: absolute;
-  width: 53.3%;
-  top: 6.5%;
-  left: 50%;
-  transform: translateX(-50%);
-  aspect-ratio: 341 / 475;
-}
-.gv-tg-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.gv-tg-screen {
-  position: absolute;
-  left: 3.1%;
-  top: 0.5%;
-  width: 93.5%;
-  height: 92.6%;
-  object-fit: cover;
-}
-
 /* Video card (full-bleed) */
 .gv-video {
   position: absolute;
