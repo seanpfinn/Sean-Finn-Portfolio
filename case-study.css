@@ -383,71 +383,128 @@
   object-fit: cover;
 }
 
-/* TG hero panel — light blue background, iPhone 17 Pro overflowing from top */
-.proj-panel-new--tg-hero { background: #c7d9ff; }
-
-.proj-tg-hero-wrap {
+/* TG Problem panel — top-left view phone */
+.proj-tg-p2-wrap {
   position: absolute;
-  width: 62.8%;
-  top: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  aspect-ratio: 1472 / 2047;
+  left: 29.27%;
+  top: 6.32%;
+  width: 41.5%;
+  aspect-ratio: 323.696 / 629.562;
 }
-.proj-tg-hero-frame {
+.proj-tg-p2-frame {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-.proj-tg-hero-screen {
+.proj-tg-p2-screen {
   position: absolute;
-  left: 3.1%;
-  top: 0.5%;
-  width: 93.5%;
-  height: 92.6%;
+  left: 13.25%;
+  top: 4.17%;
+  width: 85.09%;
+  height: 95.07%;
   object-fit: cover;
 }
 
-/* TG before/after panel — centered column: label + smaller phone */
-.proj-tg-before-col {
+/* TG Role & Approach panel — silver left phone, centered */
+.proj-tg-p3-wrap {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
-  width: 12.5rem;
+  top: 8.42%;
+  width: 39.63%;
+  transform: translateX(-50%);
+  aspect-ratio: 309.122 / 791.352;
 }
-.proj-tg-before-label {
-  font-family: var(--font);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.0625rem;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.proj-tg-before-phone {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 991 / 2048;
-}
-.proj-tg-before-phone .proj-phone-new-frame {
+.proj-tg-p3-frame {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-.proj-tg-before-phone .proj-phone-new-screen {
+.proj-tg-p3-screen {
   position: absolute;
-  left: 3.43%;
-  top: 1.37%;
-  width: 92.44%;
-  height: 96.9%;
+  left: 2%;
+  top: 1.59%;
+  width: 86.37%;
+  height: 96.78%;
+  object-fit: cover;
+}
+
+/* TG Process panel — bottom-front phone, centered, subtle radial vignette */
+.proj-panel-new--tg-process {
+  background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(58,58,58,0.10) 0%, transparent 85%), #efefef;
+}
+.proj-tg-p4-wrap {
+  position: absolute;
+  left: 50%;
+  top: 8.42%;
+  width: 62.91%;
+  transform: translateX(-50%);
+  aspect-ratio: 490.706 / 682.387;
+}
+.proj-tg-p4-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-tg-p4-screen {
+  position: absolute;
+  left: 3.13%;
+  top: 0.54%;
+  width: 93.55%;
+  height: 92.65%;
+  object-fit: cover;
+}
+
+/* TG User Journey panel — right-view phone, overflowing top */
+.proj-tg-p5-wrap {
+  position: absolute;
+  left: 3.19%;
+  top: -9.22%;
+  width: 94.37%;
+  aspect-ratio: 736.107 / 650.563;
+}
+.proj-tg-p5-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-tg-p5-screen {
+  position: absolute;
+  left: 1.59%;
+  top: 1.02%;
+  width: 96.78%;
+  height: 94.58%;
+  object-fit: cover;
+}
+
+/* TG Before/After panel — silver-front phone, bottom-anchored, overflowing top */
+.proj-tg-p6-wrap {
+  position: absolute;
+  left: 18.05%;
+  bottom: 8.42%;
+  width: 63.97%;
+  aspect-ratio: 499 / 1024;
+}
+.proj-tg-p6-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-tg-p6-screen {
+  position: absolute;
+  left: 4.11%;
+  top: 1.66%;
+  width: 91.68%;
+  height: 96.68%;
   object-fit: cover;
 }
 
@@ -923,9 +980,6 @@
   object-fit: cover;
 }
 
-/* Mobile-only phone element (hidden on desktop, shows in hero panel on mobile) */
-.proj-phone-new--mobile-only { display: none; }
-
 /* Footer for new layout — fixed to bottom like homepage */
 .proj-footer {
   position: fixed;
@@ -984,6 +1038,20 @@
   }
   .proj-phone-new--mobile-only {
     display: block;
+  }
+  /* TG per-section phone mockups: center like the generic mobile phone
+     treatment, keeping each mockup's own aspect-ratio and inner frame/screen
+     percentages (which are relative to the wrap itself, not the panel). */
+  .proj-tg-p2-wrap,
+  .proj-tg-p3-wrap,
+  .proj-tg-p4-wrap,
+  .proj-tg-p5-wrap,
+  .proj-tg-p6-wrap {
+    top: 1.25rem;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 77%;
   }
   .proj-footer {
     position: static;
