@@ -950,8 +950,6 @@ body {
     gap: 1.25rem;
   }
   .gallery-card-visual { aspect-ratio: 1 / 1; }
-  /* Scale gallery card images to fill the 1:1 square frame on mobile */
-  .gv-tg-wrap   { width: 75%; top: 5%; }
   .splash-footer {
     position: static;
     inset: auto;
