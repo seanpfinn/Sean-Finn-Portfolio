@@ -2011,7 +2011,6 @@ body {
 
 @media (max-width: 50.5625rem) {
   .miniplayer {
-    bottom: 1rem;
     padding: 0.5rem;
     gap: 0.625rem;
   }
