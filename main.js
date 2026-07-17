@@ -683,6 +683,31 @@
     playBtn.addEventListener('click', togglePlay);
     prevBtn.addEventListener('click', () => { if (player) player.previousVideo(); });
     nextBtn.addEventListener('click', () => { if (player) player.nextVideo(); });
+
+    // ── Mobile: auto-park off-screen after 10s, swipe left (or tap the
+    // peeking edge) to bring it back ──────────────────────────────────────
+    const isMobile = () => window.matchMedia('(max-width: 50.5625rem)').matches;
+    if (isMobile()) {
+      setTimeout(() => {
+        if (isMobile()) miniplayer.classList.add('is-hidden');
+      }, 10000);
+    }
+    let touchStartX = null;
+    miniplayer.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    miniplayer.addEventListener('touchend', (e) => {
+      if (touchStartX === null || !miniplayer.classList.contains('is-hidden')) {
+        touchStartX = null;
+        return;
+      }
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      // A leftward swipe, or a plain tap on the peeking edge, both reveal it.
+      if (dx < -20 || Math.abs(dx) < 8) {
+        miniplayer.classList.remove('is-hidden');
+      }
+    }, { passive: true });
   }
 
 })();
