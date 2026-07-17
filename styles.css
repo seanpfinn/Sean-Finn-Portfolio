@@ -1942,22 +1942,40 @@ body {
   color: #fff;
 }
 
-.miniplayer-title,
+.miniplayer-title-clip {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.miniplayer-title {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.14px;
+  line-height: 1;
+}
+
+/* Only kicks in once JS measures real overflow and sets --ticker-shift/
+   --ticker-duration — short titles just sit still. */
+.miniplayer-title-clip.is-ticking .miniplayer-title {
+  animation: miniplayer-ticker var(--ticker-duration, 6s) ease-in-out infinite;
+}
+
+@keyframes miniplayer-ticker {
+  0%, 15%  { transform: translateX(0); }
+  45%, 60% { transform: translateX(var(--ticker-shift, 0px)); }
+  90%, 100% { transform: translateX(0); }
+}
+
 .miniplayer-artist {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--font);
   line-height: 1;
-}
-
-.miniplayer-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: -0.14px;
-}
-
-.miniplayer-artist {
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: -0.12px;
