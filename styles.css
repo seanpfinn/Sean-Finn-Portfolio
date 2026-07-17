@@ -973,21 +973,6 @@ body {
     align-items: center;
     gap: 1.25rem;
   }
-  /* On mobile the miniplayer breaks out of .footer-stack and becomes an
-     independent floating dock near the bottom of the viewport — the footer
-     stays static in the page flow below it, they no longer move together. */
-  .miniplayer {
-    position: fixed;
-    left: 1rem;
-    right: 1rem;
-    bottom: 2.25rem;
-    z-index: 100;
-    max-width: none;
-    padding: 0.625rem;
-  }
-  .miniplayer-controls {
-    display: flex;
-  }
   .splash-footer {
     width: auto;
     margin: 0;
