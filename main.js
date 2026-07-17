@@ -505,5 +505,90 @@
   }
   document.querySelectorAll('.proj-panel-zoomable').forEach(initPanZoom);
 
+  // ── Miniplayer (homepage only) ──────────────────────────────────────────
+  // To connect a YouTube Music playlist: paste its playlist ID below.
+  // Find it in the playlist's share URL, e.g.
+  //   https://music.youtube.com/playlist?list=PLxxxxxxxxxxxxxxxx
+  //                                            ^^^^^^^^^^^^^^^^^^ this part
+  // YouTube Music playlists share the same catalog/IDs as youtube.com, so
+  // the IFrame Player API (no API key needed) can play it directly.
+  const YT_PLAYLIST_ID = '';
+
+  const miniplayer = document.getElementById('miniplayer');
+  if (miniplayer) {
+    const artEl    = miniplayer.querySelector('.miniplayer-art');
+    const imgEl    = document.getElementById('miniplayer-artwork');
+    const titleEl  = document.getElementById('miniplayer-title');
+    const artistEl = document.getElementById('miniplayer-artist');
+    const host     = document.getElementById('miniplayer-yt-host');
+
+    let player = null;
+    let ready = false;
+
+    function setMeta(title, artist, videoId) {
+      titleEl.textContent = title || 'Music';
+      artistEl.textContent = artist || '';
+      if (videoId) {
+        imgEl.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+        artEl.classList.add('has-art');
+      }
+    }
+
+    function refreshFromPlayer() {
+      if (!player || typeof player.getVideoData !== 'function') return;
+      const data = player.getVideoData();
+      if (data && data.video_id) setMeta(data.title, data.author, data.video_id);
+    }
+
+    function setPlaying(isPlaying) {
+      miniplayer.classList.toggle('is-playing', isPlaying);
+      miniplayer.setAttribute('aria-pressed', String(isPlaying));
+    }
+
+    if (YT_PLAYLIST_ID) {
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player(host, {
+          host: 'https://www.youtube.com',
+          playerVars: {
+            listType: 'playlist',
+            list: YT_PLAYLIST_ID,
+            controls: 0,
+            disablekb: 1,
+            modestbranding: 1,
+            playsinline: 1,
+          },
+          events: {
+            onReady: function () {
+              ready = true;
+              player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
+            },
+            onStateChange: function (e) {
+              refreshFromPlayer();
+              setPlaying(e.data === YT.PlayerState.PLAYING);
+            },
+          },
+        });
+      };
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+
+      miniplayer.addEventListener('click', () => {
+        if (!ready || !player) return;
+        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+          player.pauseVideo();
+        } else {
+          player.playVideo();
+        }
+      });
+      miniplayer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          miniplayer.click();
+        }
+      });
+    }
+  }
+
 })();
 
