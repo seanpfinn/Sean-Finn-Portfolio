@@ -1868,12 +1868,12 @@ body {
    Injected by main.js so it's a single source of truth across all pages.
    ================================ */
 .miniplayer {
-  /* Fills the width between the same gutters the nav/footer use, rather
-     than hugging its own content — stays inset from the edges (including
-     on mobile) instead of going edge-to-edge. */
+  /* Fixed width, centered — on mobile (media query below) it switches to
+     filling the container between margins instead. */
   position: fixed;
-  left: 1.25rem;
-  right: 0.625rem;
+  left: 50%;
+  width: 22.5rem; /* 360px */
+  transform: translateX(-50%);
   bottom: 1.25rem;
   z-index: 200;
   display: flex;
@@ -2016,6 +2016,8 @@ body {
   .miniplayer {
     left: 1rem;
     right: 1rem;
+    width: auto;
+    transform: none;
     padding: 0.5rem;
     gap: 0.625rem;
   }
