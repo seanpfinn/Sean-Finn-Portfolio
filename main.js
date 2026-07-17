@@ -505,7 +505,7 @@
   }
   document.querySelectorAll('.proj-panel-zoomable').forEach(initPanZoom);
 
-  // ── Miniplayer (homepage only) ──────────────────────────────────────────
+  // ── Miniplayer (every page) ─────────────────────────────────────────────
   // To connect a YouTube Music playlist: paste its playlist ID below.
   // Find it in the playlist's share URL, e.g.
   //   https://music.youtube.com/playlist?list=PLxxxxxxxxxxxxxxxx
@@ -514,20 +514,50 @@
   // the IFrame Player API (no API key needed) can play it directly.
   const YT_PLAYLIST_ID = 'PL_KxoM8I-cz7nPee_o0DMZTuaVbrwKQOl';
 
-  const miniplayer = document.getElementById('miniplayer');
-  if (miniplayer) {
-    const artEl      = miniplayer.querySelector('.miniplayer-art');
-    const imgEl      = document.getElementById('miniplayer-artwork');
-    const titleEl    = document.getElementById('miniplayer-title');
-    const artistEl   = document.getElementById('miniplayer-artist');
-    const toggleEl   = document.getElementById('miniplayer-toggle');
-    const playBtn    = document.getElementById('miniplayer-playpause');
-    const prevBtn    = document.getElementById('miniplayer-prev');
-    const nextBtn    = document.getElementById('miniplayer-next');
-    const host       = document.getElementById('miniplayer-yt-host');
+  if (YT_PLAYLIST_ID && !document.getElementById('miniplayer')) {
+    const miniplayer = document.createElement('div');
+    miniplayer.className = 'miniplayer';
+    miniplayer.id = 'miniplayer';
+    miniplayer.innerHTML = `
+      <div class="miniplayer-main">
+        <span class="miniplayer-art">
+          <img id="miniplayer-artwork" class="miniplayer-artwork" src="" alt="" />
+        </span>
+        <span class="miniplayer-meta">
+          <span class="miniplayer-title" id="miniplayer-title">Music</span>
+          <span class="miniplayer-artist" id="miniplayer-artist">Connecting…</span>
+        </span>
+      </div>
+      <div class="miniplayer-controls">
+        <button class="miniplayer-btn" id="miniplayer-prev" aria-label="Previous track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="miniplayer-btn miniplayer-btn--play" id="miniplayer-playpause" aria-label="Play" aria-pressed="false" type="button">
+          <svg class="icon-play" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <button class="miniplayer-btn" id="miniplayer-next" aria-label="Next track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    `;
+    document.body.appendChild(miniplayer);
+
+    const host = document.createElement('div');
+    host.id = 'miniplayer-yt-host';
+    host.className = 'miniplayer-yt-host';
+    host.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(host);
+
+    const artEl    = miniplayer.querySelector('.miniplayer-art');
+    const imgEl    = document.getElementById('miniplayer-artwork');
+    const titleEl  = document.getElementById('miniplayer-title');
+    const artistEl = document.getElementById('miniplayer-artist');
+    const playBtn  = document.getElementById('miniplayer-playpause');
+    const prevBtn  = document.getElementById('miniplayer-prev');
+    const nextBtn  = document.getElementById('miniplayer-next');
 
     let player = null;
-    let ready = false;
 
     function setMeta(title, artist, videoId) {
       // Many uploads report no channel/author via the player API but follow
@@ -554,14 +584,15 @@
 
     function setPlaying(isPlaying) {
       miniplayer.classList.toggle('is-playing', isPlaying);
-      const pressed = String(isPlaying);
-      toggleEl.setAttribute('aria-pressed', pressed);
-      playBtn.setAttribute('aria-pressed', pressed);
+      playBtn.setAttribute('aria-pressed', String(isPlaying));
       playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
     }
 
+    // The IFrame API queues playVideo/pauseVideo/next/previousVideo calls
+    // internally until the player is actually ready, so these are safe to
+    // call as soon as `player` exists — no separate "ready" gate needed.
     function togglePlay() {
-      if (!ready || !player) return;
+      if (!player) return;
       if (player.getPlayerState() === YT.PlayerState.PLAYING) {
         player.pauseVideo();
       } else {
@@ -569,45 +600,35 @@
       }
     }
 
-    if (YT_PLAYLIST_ID) {
-      window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player(host, {
-          host: 'https://www.youtube.com',
-          playerVars: {
-            listType: 'playlist',
-            list: YT_PLAYLIST_ID,
-            controls: 0,
-            disablekb: 1,
-            modestbranding: 1,
-            playsinline: 1,
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player(host, {
+        host: 'https://www.youtube.com',
+        playerVars: {
+          listType: 'playlist',
+          list: YT_PLAYLIST_ID,
+          controls: 0,
+          disablekb: 1,
+          modestbranding: 1,
+          playsinline: 1,
+        },
+        events: {
+          onReady: function () {
+            player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
           },
-          events: {
-            onReady: function () {
-              ready = true;
-              player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
-            },
-            onStateChange: function (e) {
-              refreshFromPlayer();
-              setPlaying(e.data === YT.PlayerState.PLAYING);
-            },
+          onStateChange: function (e) {
+            refreshFromPlayer();
+            setPlaying(e.data === YT.PlayerState.PLAYING);
           },
-        });
-      };
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-
-      toggleEl.addEventListener('click', togglePlay);
-      toggleEl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          togglePlay();
-        }
+        },
       });
-      playBtn.addEventListener('click', togglePlay);
-      prevBtn.addEventListener('click', () => { if (ready && player) player.previousVideo(); });
-      nextBtn.addEventListener('click', () => { if (ready && player) player.nextVideo(); });
-    }
+    };
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(tag);
+
+    playBtn.addEventListener('click', togglePlay);
+    prevBtn.addEventListener('click', () => { if (player) player.previousVideo(); });
+    nextBtn.addEventListener('click', () => { if (player) player.nextVideo(); });
   }
 
 })();
