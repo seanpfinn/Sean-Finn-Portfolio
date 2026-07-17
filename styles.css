@@ -497,8 +497,9 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  /* bottom clearance keeps a ~40px gap between the last cards and the fixed footer */
-  padding: 1.25rem 7.5rem 6.25rem;
+  /* bottom clearance keeps a gap between the last cards and the fixed footer-stack
+     (footer + miniplayer) */
+  padding: 1.25rem 7.5rem 9.375rem;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -756,20 +757,34 @@ body {
   margin-top: 0.5rem;
 }
 
-.splash-footer {
-  /* Fixed to the window. Edges mirror the nav: left 20px (menu), right 10px
-     (toggle), 20px below. pointer-events pass through the empty middle so it
-     never blocks the cards scrolling beneath it. .splash-page reserves bottom
-     clearance so the last cards keep a ~40px gap above it. */
+/* .footer-stack pins both the footer and the miniplayer to the window as one
+   unit — the miniplayer sits directly above the footer regardless of the
+   footer's rendered height, instead of a hand-tuned offset that could drift
+   out of sync with it. */
+.footer-stack {
   position: fixed;
   bottom: 1.25rem;
   left: 1.25rem;
   right: 0.625rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.splash-footer {
+  /* Edges mirror the nav: left 20px (menu), right 10px (toggle). Position is
+     inherited from .footer-stack; pointer-events pass through the empty
+     middle so it never blocks the cards scrolling beneath it. .splash-page
+     reserves bottom clearance so the last cards keep a gap above the stack. */
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  z-index: 100;
   pointer-events: none;
   box-sizing: border-box;
 }
@@ -950,11 +965,18 @@ body {
     gap: 1.25rem;
   }
   .gallery-card-visual { aspect-ratio: 1 / 1; }
-  .splash-footer {
+  .footer-stack {
     position: static;
     inset: auto;
     margin: 0;
-    padding: 2.5rem 1.25rem 1.25rem;
+    padding: 0 1.25rem;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .splash-footer {
+    width: auto;
+    margin: 0;
+    padding: 2.5rem 0 1.25rem;
     pointer-events: auto;
     flex-direction: column;
     align-items: center;
@@ -1867,10 +1889,8 @@ body {
    MINIPLAYER (homepage only)
    ================================ */
 .miniplayer {
-  position: fixed;
-  top: 6rem;
-  right: 1.5rem;
-  z-index: 40;
+  /* Positioned by its .footer-stack parent, not on its own — that's what
+     keeps it glued directly above the footer at any footer height/breakpoint. */
   display: flex;
   align-items: center;
   gap: 0.625rem;
@@ -1882,6 +1902,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
+  pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -2003,11 +2024,4 @@ body {
   pointer-events: none;
 }
 
-@media (max-width: 50.5625rem) {
-  .miniplayer {
-    top: auto;
-    bottom: 1.25rem;
-    right: 1rem;
-  }
-}
 

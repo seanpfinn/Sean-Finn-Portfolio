@@ -512,7 +512,7 @@
   //                                            ^^^^^^^^^^^^^^^^^^ this part
   // YouTube Music playlists share the same catalog/IDs as youtube.com, so
   // the IFrame Player API (no API key needed) can play it directly.
-  const YT_PLAYLIST_ID = '';
+  const YT_PLAYLIST_ID = 'PL_KxoM8I-cz7nPee_o0DMZTuaVbrwKQOl';
 
   const miniplayer = document.getElementById('miniplayer');
   if (miniplayer) {
@@ -526,6 +526,14 @@
     let ready = false;
 
     function setMeta(title, artist, videoId) {
+      // Many uploads report no channel/author via the player API but follow
+      // the "Artist - Title" convention in the video title itself — fall
+      // back to splitting that when YouTube doesn't give us an artist.
+      if (!artist && title && title.includes(' - ')) {
+        const i = title.indexOf(' - ');
+        artist = title.slice(0, i);
+        title = title.slice(i + 3);
+      }
       titleEl.textContent = title || 'Music';
       artistEl.textContent = artist || '';
       if (videoId) {
