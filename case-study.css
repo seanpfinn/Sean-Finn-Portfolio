@@ -514,6 +514,30 @@
   object-fit: cover;
 }
 
+/* TG Constraints panel — right-view phone, overflowing top */
+.proj-tg-p7-wrap {
+  position: absolute;
+  left: 24.30%;
+  top: -38.75%;
+  width: 51.28%;
+  aspect-ratio: 400 / 1024;
+}
+.proj-tg-p7-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.proj-tg-p7-screen {
+  position: absolute;
+  left: 11.38%;
+  top: 1.68%;
+  width: 86.50%;
+  height: 96.75%;
+  object-fit: cover;
+}
+
 /* Neutral pan/zoom layer — no transform of its own, so it never conflicts
    with whatever responsive positioning lives on the content nested inside it. */
 .proj-zoom-target {
@@ -1042,7 +1066,8 @@
   .proj-tg-p3-wrap,
   .proj-tg-p4-wrap,
   .proj-tg-p5-wrap,
-  .proj-tg-p6-wrap {
+  .proj-tg-p6-wrap,
+  .proj-tg-p7-wrap {
     top: 1.25rem;
     bottom: auto;
     left: 50%;
