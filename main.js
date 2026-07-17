@@ -565,18 +565,12 @@
       const clip = titleEl.parentElement;
       clip.classList.remove('is-ticking');
       clip.style.removeProperty('--ticker-shift');
-      clip.style.removeProperty('--ticker-duration');
       // Wait a frame so the removed animation/measurement isn't racing the
       // text that was just written in.
       requestAnimationFrame(() => {
         const overflow = titleEl.scrollWidth - clip.clientWidth;
         if (overflow > 4) {
           clip.style.setProperty('--ticker-shift', `-${overflow}px`);
-          // Longer titles travel further, so scale duration with distance
-          // instead of racing a long title through in the same time as a
-          // short one.
-          const duration = Math.max(6, overflow / 30 + 4);
-          clip.style.setProperty('--ticker-duration', `${duration}s`);
           clip.classList.add('is-ticking');
         }
       });
@@ -626,6 +620,21 @@
 
     let randomized = false;
 
+    // Every mobile browser (and most desktop ones) block autoplay-with-sound
+    // outright — the only autoplay they universally allow is muted. So we
+    // start muted and unmute on the visitor's first tap/click/keypress
+    // anywhere on the page, which is the standard workaround and gets us as
+    // close to "just plays" as browser policy allows.
+    function unmuteOnFirstInteraction() {
+      if (!player) return;
+      player.unMute();
+      if (player.getPlayerState() !== YT.PlayerState.PLAYING) player.playVideo();
+      document.removeEventListener('pointerdown', unmuteOnFirstInteraction);
+      document.removeEventListener('keydown', unmuteOnFirstInteraction);
+    }
+    document.addEventListener('pointerdown', unmuteOnFirstInteraction, { passive: true });
+    document.addEventListener('keydown', unmuteOnFirstInteraction);
+
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player(host, {
         host: 'https://www.youtube.com',
@@ -633,6 +642,7 @@
           listType: 'playlist',
           list: YT_PLAYLIST_ID,
           autoplay: 1,
+          mute: 1,
           controls: 0,
           disablekb: 1,
           modestbranding: 1,
@@ -640,9 +650,10 @@
         },
         events: {
           onReady: function () {
-            // loadPlaylist (unlike cuePlaylist) autoplays — browsers that
-            // block autoplay-with-sound will simply leave it paused until
-            // the visitor hits a control, same as any other autoplay video.
+            // loadPlaylist (unlike cuePlaylist) autoplays. Starting muted
+            // means this succeeds on every platform; unmuteOnFirstInteraction
+            // takes over from there.
+            player.mute();
             player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
           },
           onStateChange: function (e) {

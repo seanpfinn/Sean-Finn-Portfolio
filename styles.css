@@ -1958,16 +1958,17 @@ body {
   line-height: 1;
 }
 
-/* Only kicks in once JS measures real overflow and sets --ticker-shift/
-   --ticker-duration — short titles just sit still. */
+/* Only kicks in once JS measures real overflow and sets --ticker-shift —
+   short titles just sit still. Fixed 25s cycle: scrolls out and back in the
+   first ~12s, then rests for the remaining ~13s before repeating. */
 .miniplayer-title-clip.is-ticking .miniplayer-title {
-  animation: miniplayer-ticker var(--ticker-duration, 6s) ease-in-out infinite;
+  animation: miniplayer-ticker 25s ease-in-out infinite;
 }
 
 @keyframes miniplayer-ticker {
-  0%, 15%  { transform: translateX(0); }
-  45%, 60% { transform: translateX(var(--ticker-shift, 0px)); }
-  90%, 100% { transform: translateX(0); }
+  0%, 4%    { transform: translateX(0); }
+  24%, 28%  { transform: translateX(var(--ticker-shift, 0px)); }
+  48%, 100% { transform: translateX(0); }
 }
 
 .miniplayer-artist {
@@ -2041,6 +2042,12 @@ body {
     transform: none;
     padding: 0.5rem;
     gap: 0.625rem;
+  }
+  /* Touch devices have no real hover — without this, a tap can leave the
+     white circle "stuck" on until the visitor taps elsewhere. */
+  .miniplayer-btn:hover {
+    background: rgba(255, 255, 255, 0);
+    color: rgba(255, 255, 255, 0.85);
   }
 }
 
