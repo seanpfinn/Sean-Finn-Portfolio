@@ -524,7 +524,9 @@
           <img id="miniplayer-artwork" class="miniplayer-artwork" src="" alt="" />
         </span>
         <span class="miniplayer-meta">
-          <span class="miniplayer-title" id="miniplayer-title">Music</span>
+          <span class="miniplayer-title-clip">
+            <span class="miniplayer-title" id="miniplayer-title">Music</span>
+          </span>
           <span class="miniplayer-artist" id="miniplayer-artist">Connecting…</span>
         </span>
       </div>
