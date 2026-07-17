@@ -561,6 +561,27 @@
 
     let player = null;
 
+    function updateTicker() {
+      const clip = titleEl.parentElement;
+      clip.classList.remove('is-ticking');
+      clip.style.removeProperty('--ticker-shift');
+      clip.style.removeProperty('--ticker-duration');
+      // Wait a frame so the removed animation/measurement isn't racing the
+      // text that was just written in.
+      requestAnimationFrame(() => {
+        const overflow = titleEl.scrollWidth - clip.clientWidth;
+        if (overflow > 4) {
+          clip.style.setProperty('--ticker-shift', `-${overflow}px`);
+          // Longer titles travel further, so scale duration with distance
+          // instead of racing a long title through in the same time as a
+          // short one.
+          const duration = Math.max(6, overflow / 30 + 4);
+          clip.style.setProperty('--ticker-duration', `${duration}s`);
+          clip.classList.add('is-ticking');
+        }
+      });
+    }
+
     function setMeta(title, artist, videoId) {
       // Many uploads report no channel/author via the player API but follow
       // the "Artist - Title" convention in the video title itself — fall
@@ -576,6 +597,7 @@
         imgEl.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
         artEl.classList.add('has-art');
       }
+      updateTicker();
     }
 
     function refreshFromPlayer() {
