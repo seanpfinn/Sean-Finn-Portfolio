@@ -97,27 +97,31 @@
   </nav>
 
   <main class="proj-col blur-in" style="animation-delay:0.05s">
-    <div class="proj-title-block">
-      <h1 class="proj-title-new">CLEAR Vault</h1>
-      <p class="proj-subtitle-new">A secure in-app wallet where CLEAR members store, manage, and share verified identity documents — across travel, healthcare, and beyond.</p>
+    <div class="proj-header-group">
+      <div class="proj-title-block">
+        <h1 class="proj-title-new">CLEAR Vault</h1>
+        <p class="proj-subtitle-new">A secure in-app wallet where CLEAR members store, manage, and share verified identity documents — across travel, healthcare, and beyond.</p>
+      </div>
+      <div class="proj-meta-row-new">
+        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q1 2026</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS, Android</span></div>
+      </div>
+      <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
+      <script>
+        (function () {
+          var ua = navigator.userAgent;
+          var btn = document.getElementById('dl-btn');
+          if (/android/i.test(ua)) {
+            btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
+          } else if (/iphone|ipad|ipod/i.test(ua)) {
+            btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
+          }
+        })();
+      </script>
+    
     </div>
-    <div class="proj-meta-row-new">
-      <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
-      <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">Q1 2026</span></div>
-      <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS, Android</span></div>
-    </div>
-    <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
-    <script>
-      (function () {
-        var ua = navigator.userAgent;
-        var btn = document.getElementById('dl-btn');
-        if (/android/i.test(ua)) {
-          btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
-        } else if (/iphone|ipad|ipod/i.test(ua)) {
-          btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
-        }
-      })();
-    </script>
+
     <div class="proj-caption">
       <span class="proj-caption-label">Context</span>
       <p class="proj-caption-body">CLEAR verification doesn't stop at the airport lane — it also applies to healthcare check-in, building access, and other moments where a member needs to prove who they are. Vault gives members a secure, persistent place to store their verified credentials and share them in seconds, wherever CLEAR shows up.</p>
