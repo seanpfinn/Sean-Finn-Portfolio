@@ -973,6 +973,21 @@ body {
     align-items: center;
     gap: 1.25rem;
   }
+  /* On mobile the miniplayer breaks out of .footer-stack and becomes an
+     independent floating dock near the bottom of the viewport — the footer
+     stays static in the page flow below it, they no longer move together. */
+  .miniplayer {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 2.25rem;
+    z-index: 100;
+    max-width: none;
+    padding: 0.625rem;
+  }
+  .miniplayer-controls {
+    display: flex;
+  }
   .splash-footer {
     width: auto;
     margin: 0;
@@ -1889,10 +1904,12 @@ body {
    MINIPLAYER (homepage only)
    ================================ */
 .miniplayer {
-  /* Positioned by its .footer-stack parent, not on its own — that's what
-     keeps it glued directly above the footer at any footer height/breakpoint. */
+  /* On desktop, positioned by its .footer-stack parent — that's what keeps
+     it glued directly above the footer at any footer height. On mobile it
+     switches to an independent floating dock (see media query below). */
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.625rem;
   padding: 0.625rem;
   max-width: 15rem;
@@ -1901,9 +1918,16 @@ body {
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  cursor: pointer;
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
+}
+
+.miniplayer-main {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  cursor: pointer;
 }
 
 .miniplayer-art {
@@ -1958,7 +1982,7 @@ body {
   transition: opacity 0.15s ease, background 0.15s ease;
 }
 
-.miniplayer:hover .miniplayer-play-icon,
+.miniplayer-main:hover .miniplayer-play-icon,
 .miniplayer.is-playing .miniplayer-play-icon {
   opacity: 1;
   background: rgba(0, 0, 0, 0.35);
@@ -2011,6 +2035,46 @@ body {
   font-weight: 400;
   letter-spacing: -0.12px;
   color: rgba(255, 255, 255, 0.8);
+}
+
+/* Transport controls — hidden on the compact desktop pill, shown as a full
+   dock on mobile (see media query below). */
+.miniplayer-controls {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.miniplayer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.miniplayer-btn:hover {
+  color: #fff;
+}
+
+.miniplayer-btn--play .icon-pause {
+  display: none;
+}
+
+.miniplayer.is-playing .miniplayer-btn--play .icon-play {
+  display: none;
+}
+
+.miniplayer.is-playing .miniplayer-btn--play .icon-pause {
+  display: block;
 }
 
 .miniplayer-yt-host {

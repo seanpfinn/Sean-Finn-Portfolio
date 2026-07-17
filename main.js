@@ -516,11 +516,15 @@
 
   const miniplayer = document.getElementById('miniplayer');
   if (miniplayer) {
-    const artEl    = miniplayer.querySelector('.miniplayer-art');
-    const imgEl    = document.getElementById('miniplayer-artwork');
-    const titleEl  = document.getElementById('miniplayer-title');
-    const artistEl = document.getElementById('miniplayer-artist');
-    const host     = document.getElementById('miniplayer-yt-host');
+    const artEl      = miniplayer.querySelector('.miniplayer-art');
+    const imgEl      = document.getElementById('miniplayer-artwork');
+    const titleEl    = document.getElementById('miniplayer-title');
+    const artistEl   = document.getElementById('miniplayer-artist');
+    const toggleEl   = document.getElementById('miniplayer-toggle');
+    const playBtn    = document.getElementById('miniplayer-playpause');
+    const prevBtn    = document.getElementById('miniplayer-prev');
+    const nextBtn    = document.getElementById('miniplayer-next');
+    const host       = document.getElementById('miniplayer-yt-host');
 
     let player = null;
     let ready = false;
@@ -550,7 +554,19 @@
 
     function setPlaying(isPlaying) {
       miniplayer.classList.toggle('is-playing', isPlaying);
-      miniplayer.setAttribute('aria-pressed', String(isPlaying));
+      const pressed = String(isPlaying);
+      toggleEl.setAttribute('aria-pressed', pressed);
+      playBtn.setAttribute('aria-pressed', pressed);
+      playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+    }
+
+    function togglePlay() {
+      if (!ready || !player) return;
+      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
     }
 
     if (YT_PLAYLIST_ID) {
@@ -581,20 +597,16 @@
       tag.src = 'https://www.youtube.com/iframe_api';
       document.body.appendChild(tag);
 
-      miniplayer.addEventListener('click', () => {
-        if (!ready || !player) return;
-        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-          player.pauseVideo();
-        } else {
-          player.playVideo();
-        }
-      });
-      miniplayer.addEventListener('keydown', (e) => {
+      toggleEl.addEventListener('click', togglePlay);
+      toggleEl.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          miniplayer.click();
+          togglePlay();
         }
       });
+      playBtn.addEventListener('click', togglePlay);
+      prevBtn.addEventListener('click', () => { if (ready && player) player.previousVideo(); });
+      nextBtn.addEventListener('click', () => { if (ready && player) player.nextVideo(); });
     }
   }
 
