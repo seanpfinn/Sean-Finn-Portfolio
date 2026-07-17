@@ -608,6 +608,7 @@
         playerVars: {
           listType: 'playlist',
           list: YT_PLAYLIST_ID,
+          autoplay: 1,
           controls: 0,
           disablekb: 1,
           modestbranding: 1,
@@ -615,18 +616,21 @@
         },
         events: {
           onReady: function () {
-            player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
+            // loadPlaylist (unlike cuePlaylist) autoplays — browsers that
+            // block autoplay-with-sound will simply leave it paused until
+            // the visitor hits a control, same as any other autoplay video.
+            player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
           },
           onStateChange: function (e) {
-            // The playlist's video IDs aren't available until the first cue
-            // resolves, so pick the random starting track by re-cueing once
+            // The playlist's video IDs aren't available until the first load
+            // resolves, so pick the random starting track by reloading once
             // we can see how many videos are actually in it.
-            if (!randomized && e.data === YT.PlayerState.CUED) {
+            if (!randomized && (e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED)) {
               const list = player.getPlaylist();
               if (list && list.length > 1) {
                 randomized = true;
                 const randomIndex = Math.floor(Math.random() * list.length);
-                player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
+                player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
                 return;
               }
               randomized = true;
