@@ -193,15 +193,29 @@
   </div>
 
   <div class="footer-stack">
-    <div class="miniplayer" id="miniplayer" role="button" tabindex="0" aria-label="Play music" aria-pressed="false">
-      <span class="miniplayer-art">
-        <img id="miniplayer-artwork" class="miniplayer-artwork" src="" alt="" />
-        <span class="miniplayer-play-icon" aria-hidden="true"></span>
-      </span>
-      <span class="miniplayer-meta">
-        <span class="miniplayer-title" id="miniplayer-title">Music</span>
-        <span class="miniplayer-artist" id="miniplayer-artist">Tap to connect</span>
-      </span>
+    <div class="miniplayer" id="miniplayer">
+      <div class="miniplayer-main" id="miniplayer-toggle" role="button" tabindex="0" aria-label="Play music" aria-pressed="false">
+        <span class="miniplayer-art">
+          <img id="miniplayer-artwork" class="miniplayer-artwork" src="" alt="" />
+          <span class="miniplayer-play-icon" aria-hidden="true"></span>
+        </span>
+        <span class="miniplayer-meta">
+          <span class="miniplayer-title" id="miniplayer-title">Music</span>
+          <span class="miniplayer-artist" id="miniplayer-artist">Tap to connect</span>
+        </span>
+      </div>
+      <div class="miniplayer-controls">
+        <button class="miniplayer-btn" id="miniplayer-prev" aria-label="Previous track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="miniplayer-btn miniplayer-btn--play" id="miniplayer-playpause" aria-label="Play" aria-pressed="false" type="button">
+          <svg class="icon-play" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <button class="miniplayer-btn" id="miniplayer-next" aria-label="Next track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
     </div>
 
     <footer class="splash-footer blur-in">
