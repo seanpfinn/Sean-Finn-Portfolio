@@ -684,11 +684,13 @@
     prevBtn.addEventListener('click', () => { if (player) player.previousVideo(); });
     nextBtn.addEventListener('click', () => { if (player) player.nextVideo(); });
 
-    // ── Mobile: auto-park off-screen after 10s, swipe left (or tap the
-    // peeking edge) to bring it back ──────────────────────────────────────
+    // ── Mobile: auto-park off-screen after 10s idle. Swipe left (or tap the
+    // peeking edge) to bring it back, swipe right to park it again — at any
+    // time, not just once the auto-hide timer has fired ────────────────────
     const isMobile = () => window.matchMedia('(max-width: 50.5625rem)').matches;
+    let autoHideTimer = null;
     if (isMobile()) {
-      setTimeout(() => {
+      autoHideTimer = setTimeout(() => {
         if (isMobile()) miniplayer.classList.add('is-hidden');
       }, 10000);
     }
@@ -697,15 +699,23 @@
       touchStartX = e.touches[0].clientX;
     }, { passive: true });
     miniplayer.addEventListener('touchend', (e) => {
-      if (touchStartX === null || !miniplayer.classList.contains('is-hidden')) {
-        touchStartX = null;
-        return;
-      }
+      if (touchStartX === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
       touchStartX = null;
+      const hidden = miniplayer.classList.contains('is-hidden');
       // A leftward swipe, or a plain tap on the peeking edge, both reveal it.
-      if (dx < -20 || Math.abs(dx) < 8) {
+      if (hidden && (dx < -20 || Math.abs(dx) < 8)) {
         miniplayer.classList.remove('is-hidden');
+      } else if (!hidden && dx > 20) {
+        miniplayer.classList.add('is-hidden');
+      } else {
+        return;
+      }
+      // Once the visitor takes manual control, don't let the 10s auto-hide
+      // fire later and override whatever they just chose.
+      if (autoHideTimer) {
+        clearTimeout(autoHideTimer);
+        autoHideTimer = null;
       }
     }, { passive: true });
   }

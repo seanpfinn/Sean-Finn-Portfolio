@@ -2045,10 +2045,10 @@ body {
     gap: 0.625rem;
   }
   /* Auto-parked off to the right after 10s idle (see main.js), leaving just
-     the album-art corner peeking in as a handle — swipe left (or tap the
-     peek) to bring it back. */
+     a small edge peeking in as a handle — swipe left (or tap the peek) to
+     bring it back, swipe right at any time to park it again. */
   .miniplayer.is-hidden {
-    transform: translateX(calc(100% - 3.5rem));
+    transform: translateX(calc(100% - 2rem));
   }
   /* Touch devices have no real hover — without this, a tap can leave the
      white circle "stuck" on until the visitor taps elsewhere. */
