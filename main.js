@@ -707,14 +707,21 @@
       if (touchStartX === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
       const dy = e.changedTouches[0].clientY - touchStartY;
+      // Touch targeting stays pinned to the element touchstart began on, even
+      // if the finger later moves elsewhere — safe to read here.
+      const target = e.changedTouches[0].target;
       touchStartX = null;
       touchStartY = null;
       const hidden = miniplayer.classList.contains('is-hidden');
       const horizontal = Math.abs(dx) > Math.abs(dy);
+      const isTap = Math.abs(dx) < 8 && Math.abs(dy) < 8;
+      const onArtOrTitle = target && target.closest && target.closest('.miniplayer-main');
       // A leftward swipe, or a plain tap on the peeking edge, both reveal it.
-      if (hidden && (Math.abs(dx) < 8 || (horizontal && dx < -SWIPE_THRESHOLD))) {
+      // When visible, a swipe right OR a plain tap on the album art/title
+      // (not the transport buttons) both park it again.
+      if (hidden && (isTap || (horizontal && dx < -SWIPE_THRESHOLD))) {
         miniplayer.classList.remove('is-hidden');
-      } else if (!hidden && horizontal && dx > SWIPE_THRESHOLD) {
+      } else if (!hidden && ((horizontal && dx > SWIPE_THRESHOLD) || (isTap && onArtOrTitle))) {
         miniplayer.classList.add('is-hidden');
       } else {
         return;

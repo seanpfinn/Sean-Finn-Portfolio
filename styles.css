@@ -2040,10 +2040,44 @@ body {
   pointer-events: none;
 }
 
+/* Light mode variant — the dark glass pill already contrasts fine against
+   the site's default light background, but goes muddy on a dark page, so
+   dark mode gets a light pill instead. Colors here are hardcoded (not
+   var(--text) etc.) since those tokens are flipped for text ON the dark
+   page background, which is the opposite of what text needs sitting on
+   this light pill. */
+.dark .miniplayer {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .miniplayer-art {
+  background: #f4f4f5;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.15);
+}
+
+.dark .miniplayer-meta {
+  color: #09090b;
+}
+
+.dark .miniplayer-artist {
+  color: rgba(9, 9, 11, 0.65);
+}
+
+.dark .miniplayer-btn {
+  color: rgba(9, 9, 11, 0.75);
+}
+
+.dark .miniplayer-btn:hover {
+  background: rgba(9, 9, 11, 0.08);
+  color: #09090b;
+}
+
 @media (max-width: 50.5625rem) {
   .miniplayer {
     left: 1rem;
     right: 1rem;
+    bottom: 0.75rem;
     width: auto;
     transform: none;
     padding: 0.5rem;
