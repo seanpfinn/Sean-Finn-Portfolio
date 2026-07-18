@@ -663,6 +663,12 @@
             player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
           },
           onStateChange: function (e) {
+            // Always reflect whatever's actually loaded immediately — the
+            // first track shows up as soon as it's ready rather than sitting
+            // on the placeholder through a second network round-trip while
+            // we reload at the random index below.
+            refreshFromPlayer();
+            setPlaying(e.data === YT.PlayerState.PLAYING);
             // The playlist's video IDs aren't available until the first load
             // resolves, so pick the random starting track by reloading once
             // we can see how many videos are actually in it.
@@ -676,8 +682,6 @@
               }
               randomized = true;
             }
-            refreshFromPlayer();
-            setPlaying(e.data === YT.PlayerState.PLAYING);
           },
         },
       });
