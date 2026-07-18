@@ -336,6 +336,29 @@
   margin: 0;
 }
 
+/* Wraps a .proj-panel-new with its .proj-image-caption so the caption hugs
+   the image (small gap) instead of inheriting .proj-col's full 3rem gap,
+   which would land it equidistant from the image above and the next
+   section below rather than reading as "under" the image. */
+.proj-panel-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Small centered caption sitting under an image panel, distinct from
+   .proj-caption's section label + body pairing above each panel. */
+.proj-image-caption {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: -0.01rem;
+  text-align: center;
+  color: #737373;
+  margin: 0;
+}
+
 /* Panel color variants for new layout (higher specificity beats the default bg) */
 .proj-panel-new.proj-panel--dark     { background: #000a26; }
 .proj-panel-new.proj-panel--navy     { background: radial-gradient(ellipse 70% 60% at 52% 80%, rgba(99,149,255,0.22) 0%, transparent 70%), #041A55; }
