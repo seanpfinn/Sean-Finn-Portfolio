@@ -516,7 +516,7 @@
 
   if (YT_PLAYLIST_ID && !document.getElementById('miniplayer')) {
     const miniplayer = document.createElement('div');
-    miniplayer.className = 'miniplayer blur-in';
+    miniplayer.className = 'miniplayer miniplayer-blur-in';
     miniplayer.id = 'miniplayer';
     miniplayer.innerHTML = `
       <div class="miniplayer-main">

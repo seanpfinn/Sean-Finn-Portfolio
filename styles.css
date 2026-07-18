@@ -1870,6 +1870,22 @@ body {
    MINIPLAYER — pinned to the bottom of every page, floats above content.
    Injected by main.js so it's a single source of truth across all pages.
    ================================ */
+
+/* Entrance animation, matching every other element's .blur-in timing/easing
+   — but its own scoped keyframes, not the shared blurIn ones. blurIn also
+   animates `transform` (translateY), and CSS animations replace an
+   element's whole `transform` rather than combining with it, which would
+   fight the persistent `transform: translateX(-50%)` this element needs
+   for centering (and its swipe-gesture and mobile transforms) for the
+   entire animation duration. Fade + blur only, no slide, sidesteps that. */
+@keyframes miniplayerBlurIn {
+  from { opacity: 0; filter: blur(1.25rem); }
+  to   { opacity: 1; filter: blur(0); }
+}
+.miniplayer-blur-in {
+  animation: miniplayerBlurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .miniplayer {
   /* Fixed width, centered — on mobile (media query below) it switches to
      filling the container between margins instead. Bottom offset matches
