@@ -1888,7 +1888,14 @@ body {
   -webkit-backdrop-filter: blur(12px);
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.4s ease;
+  /* transform (0.4s) is for the swipe-away gesture; background-color/
+     box-shadow (0.3s) match the site-wide theme-toggle transition on
+     `*` in BASE above — without this explicit pairing, this rule's own
+     `transition` shorthand would replace (not merge with) that global one,
+     and this pill's own background/shadow would snap instantly on toggle
+     while its children faded, which is exactly the inconsistency this
+     fixes. */
+  transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   /* Let our own swipe-left/right handling own horizontal drags on this
      element (mobile) instead of the browser treating them as a page-level
      gesture (overscroll bounce / edge-swipe navigation) — vertical scroll
@@ -2008,7 +2015,10 @@ body {
   color: rgba(9, 9, 11, 0.75);
   line-height: 0;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  /* 0.3s to match the pill's own theme-toggle transition above — a snappier
+     hover-only duration here would mean this button's color swaps on a
+     different timeline than the rest of the pill when dark mode toggles. */
+  transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
