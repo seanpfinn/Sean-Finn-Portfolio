@@ -512,7 +512,7 @@
   //                                            ^^^^^^^^^^^^^^^^^^ this part
   // YouTube Music playlists share the same catalog/IDs as youtube.com, so
   // the IFrame Player API (no API key needed) can play it directly.
-  const YT_PLAYLIST_ID = 'PL_KxoM8I-cz7nPee_o0DMZTuaVbrwKQOl';
+  const YT_PLAYLIST_ID = 'PLEDQcLdU2FpQ';
 
   if (YT_PLAYLIST_ID && !document.getElementById('miniplayer')) {
     const miniplayer = document.createElement('div');
