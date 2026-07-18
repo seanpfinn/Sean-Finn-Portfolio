@@ -1889,13 +1889,12 @@ body {
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
   /* transform (0.4s) is for the swipe-away gesture; background-color/
-     box-shadow (0.3s) match the site-wide theme-toggle transition on
-     `*` in BASE above — without this explicit pairing, this rule's own
-     `transition` shorthand would replace (not merge with) that global one,
-     and this pill's own background/shadow would snap instantly on toggle
-     while its children faded, which is exactly the inconsistency this
-     fixes. */
-  transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+     box-shadow (0.3s, ease-in-out) is the theme-toggle transition — every
+     other themed element below (art/meta/artist/buttons) declares this
+     same 0.3s ease-in-out explicitly too, rather than quietly relying on
+     the site-wide `*` transition in BASE above, so nothing can drift out
+     of sync with it if that global rule ever changes. */
+  transition: transform 0.4s ease, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   /* Let our own swipe-left/right handling own horizontal drags on this
      element (mobile) instead of the browser treating them as a page-level
      gesture (overscroll bounce / edge-swipe navigation) — vertical scroll
@@ -1923,6 +1922,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .miniplayer-art::before {
@@ -1953,6 +1953,7 @@ body {
   min-width: 0;
   flex: 1 1 auto;
   color: #09090b;
+  transition: color 0.3s ease-in-out;
 }
 
 .miniplayer-title-clip {
@@ -1969,6 +1970,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.14px;
   line-height: 1;
+  transition: color 0.3s ease-in-out;
 }
 
 /* Only kicks in once JS measures real overflow and sets --ticker-shift —
@@ -1994,6 +1996,7 @@ body {
   font-weight: 400;
   letter-spacing: -0.12px;
   color: rgba(9, 9, 11, 0.65);
+  transition: color 0.3s ease-in-out;
 }
 
 .miniplayer-controls {
@@ -2015,10 +2018,11 @@ body {
   color: rgba(9, 9, 11, 0.75);
   line-height: 0;
   cursor: pointer;
-  /* 0.3s to match the pill's own theme-toggle transition above — a snappier
-     hover-only duration here would mean this button's color swaps on a
-     different timeline than the rest of the pill when dark mode toggles. */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* 0.3s ease-in-out to match every other themed element in the pill — a
+     snappier hover-only duration/curve here would mean this button's color
+     swaps on a different timeline than the rest of the pill when dark mode
+     toggles. */
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   -webkit-tap-highlight-color: transparent;
 }
 
