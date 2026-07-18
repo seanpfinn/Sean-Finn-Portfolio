@@ -1044,14 +1044,6 @@
   z-index: 100;
 }
 
-/* .proj-footer's own bottom edge sits flush with the viewport (its 10px
-   clearance is internal padding), unlike .splash-footer which is inset
-   1.25rem — match the miniplayer's baseline to that here so it still lines
-   up with the footer text on case-study pages. */
-.miniplayer {
-  bottom: 0.625rem;
-}
-
 .proj-footer .social-links,
 .proj-footer .sidebar-meta,
 .proj-footer a,
