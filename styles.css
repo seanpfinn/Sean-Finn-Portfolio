@@ -2124,9 +2124,9 @@ body {
 .miniplayer-handle {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.125rem;
-  align-self: flex-start;
+  align-self: center;
   opacity: 0.25;
   background: none;
   border: none;
