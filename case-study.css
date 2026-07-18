@@ -1099,7 +1099,10 @@
   }
   .proj-footer {
     position: static;
-    padding: 0 1.25rem 2rem;
+    /* Bottom padding clears the fixed miniplayer (98px tall + 0.75rem gap
+       from the viewport edge = ~110px) so it doesn't sit on top of the
+       footer text once scrolled all the way down. */
+    padding: 0 1.25rem 7rem;
     pointer-events: auto;
   }
 }
