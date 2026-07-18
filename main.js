@@ -694,19 +694,27 @@
         if (isMobile()) miniplayer.classList.add('is-hidden');
       }, 10000);
     }
+    // A real swipe, not ordinary tap jitter — 60px is well past what a tap
+    // on the art/title/buttons ever moves, so those pass through untouched.
+    const SWIPE_THRESHOLD = 60;
     let touchStartX = null;
+    let touchStartY = null;
     miniplayer.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
     }, { passive: true });
     miniplayer.addEventListener('touchend', (e) => {
       if (touchStartX === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
       touchStartX = null;
+      touchStartY = null;
       const hidden = miniplayer.classList.contains('is-hidden');
+      const horizontal = Math.abs(dx) > Math.abs(dy);
       // A leftward swipe, or a plain tap on the peeking edge, both reveal it.
-      if (hidden && (dx < -20 || Math.abs(dx) < 8)) {
+      if (hidden && (Math.abs(dx) < 8 || (horizontal && dx < -SWIPE_THRESHOLD))) {
         miniplayer.classList.remove('is-hidden');
-      } else if (!hidden && dx > 20) {
+      } else if (!hidden && horizontal && dx > SWIPE_THRESHOLD) {
         miniplayer.classList.add('is-hidden');
       } else {
         return;

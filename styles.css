@@ -1889,6 +1889,11 @@ body {
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.4s ease;
+  /* Let our own swipe-left/right handling own horizontal drags on this
+     element (mobile) instead of the browser treating them as a page-level
+     gesture (overscroll bounce / edge-swipe navigation) — vertical scroll
+     still passes through untouched. */
+  touch-action: pan-y;
 }
 
 .miniplayer-main {
@@ -2044,11 +2049,13 @@ body {
     padding: 0.5rem;
     gap: 0.625rem;
   }
-  /* Auto-parked off to the right after 10s idle (see main.js), leaving just
-     a small edge peeking in as a handle — swipe left (or tap the peek) to
-     bring it back, swipe right at any time to park it again. */
+  /* Auto-parked off to the right after 10s idle (see main.js), leaving the
+     album art peeking in as a handle — swipe left (or tap the peek) to bring
+     it back, swipe right at any time to park it again. The art itself is
+     2.5rem wide starting at 0.5rem padding, so this needs to clear at least
+     3rem or the art gets clipped by the viewport edge. */
   .miniplayer.is-hidden {
-    transform: translateX(calc(100% - 2rem));
+    transform: translateX(calc(100% - 3rem));
   }
   /* Touch devices have no real hover — without this, a tap can leave the
      white circle "stuck" on until the visitor taps elsewhere. */
