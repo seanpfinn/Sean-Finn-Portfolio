@@ -359,6 +359,238 @@
   margin: 0;
 }
 
+/* Interactive Before/After demo (music-bar.html) — a self-contained, static
+   replica of the miniplayer with its own local light/dark toggle, scoped
+   entirely to .mb-demo-panel/.mb-demo-* so it can't collide with the real,
+   live #miniplayer that main.js injects on this same page. Lets a visitor
+   flip the switch themselves instead of just reading about the color swap. */
+.mb-demo-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.mb-demo-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.375rem;
+  width: 22.5rem;
+  max-width: 90%;
+  padding: 0.625rem;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 1.25rem;
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-pill {
+  background: rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
+}
+
+.mb-demo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.mb-demo-main {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.mb-demo-art {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.4375rem;
+  overflow: hidden;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.25);
+}
+
+.mb-demo-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mb-demo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  min-width: 0;
+  color: #000;
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-meta {
+  color: #fff;
+}
+
+.mb-demo-title {
+  display: block;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.14px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mb-demo-artist {
+  display: block;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: -0.12px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-artist {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mb-demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  color: rgba(0, 0, 0, 0.75);
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-controls {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mb-demo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem;
+}
+
+.mb-demo-progress {
+  position: relative;
+  width: 100%;
+  height: 0.75rem;
+}
+
+.mb-demo-progress-track,
+.mb-demo-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0.125rem;
+  border-radius: 0.25rem;
+}
+
+.mb-demo-progress-track {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-progress-track {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.mb-demo-progress-fill {
+  width: 24%;
+  background: #ff401a;
+}
+
+.mb-demo-time {
+  position: absolute;
+  top: 0.1875rem;
+  left: calc(24% - 0.125rem);
+  font-family: var(--font);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  color: #000;
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-time {
+  color: #fff;
+}
+
+.mb-demo-handle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  align-self: center;
+  opacity: 0.25;
+  padding: 0.1875rem 0;
+}
+
+.mb-demo-handle span {
+  width: 1rem;
+  height: 0.125rem;
+  border-radius: 0.25rem;
+  background: #000;
+  display: block;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mb-demo-panel.is-dark .mb-demo-handle span {
+  background: #fff;
+}
+
+.mb-demo-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0.1875rem;
+  background: #e3e3e3;
+  border-radius: 1.25rem;
+  box-shadow: inset 0 0 0.0625rem 0 rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.mb-demo-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.1875rem;
+  padding: 0.375rem 0.75rem;
+  background: none;
+  border: none;
+  border-radius: 1rem;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.0625rem;
+  text-transform: uppercase;
+  color: #000;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.mb-demo-toggle-btn svg {
+  flex-shrink: 0;
+}
+
+.mb-demo-toggle-btn.is-active {
+  opacity: 1;
+  background: #1a1a1a;
+  color: #fff;
+  box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.25);
+}
+
 /* Panel color variants for new layout (higher specificity beats the default bg) */
 .proj-panel-new.proj-panel--dark     { background: #000a26; }
 .proj-panel-new.proj-panel--navy     { background: radial-gradient(ellipse 70% 60% at 52% 80%, rgba(99,149,255,0.22) 0%, transparent 70%), #041A55; }
