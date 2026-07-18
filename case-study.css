@@ -359,17 +359,33 @@
   margin: 0;
 }
 
-/* Interactive Before/After demo (music-bar.html) — a self-contained, static
-   replica of the miniplayer with its own local light/dark toggle, scoped
-   entirely to .mb-demo-panel/.mb-demo-* so it can't collide with the real,
-   live #miniplayer that main.js injects on this same page. Lets a visitor
-   flip the switch themselves instead of just reading about the color swap. */
+/* Music-bar mockups (music-bar.html) — self-contained, native HTML replicas
+   of the miniplayer, scoped entirely to .mb-demo-* so they can't collide with
+   the real, live #miniplayer that main.js injects on this same page. Rendered
+   in-DOM (rather than as flat Figma exports) so the mockup content sits
+   directly on the panel's single background with no nested/doubled frame, and
+   so text stays crisp and theme-accurate. Each .mb-demo-pill carries its own
+   theme via the --dark modifier, so a light and a dark bar can share one
+   panel; the Before/After panel additionally toggles that modifier live. */
 .mb-demo-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+}
+
+/* Two collapsed bars stacked (User Journey). */
+.mb-demo-panel--stack {
+  gap: 1.25rem;
+}
+
+/* Two expanded bars fanned/skewed side by side (Process). Absolute layout so
+   the scaled+skewed pills can overlap cleanly without their unscaled layout
+   boxes shoving each other around. */
+.mb-demo-panel--fan {
+  display: block;
+  position: relative;
 }
 
 .mb-demo-pill {
@@ -386,9 +402,30 @@
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-pill {
+.mb-demo-pill--dark {
   background: rgba(0, 0, 0, 0.75);
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
+}
+
+.mb-demo-panel--fan .mb-demo-pill {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20rem;
+  max-width: none;
+  transform-origin: center center;
+}
+
+.mb-demo-panel--fan .mb-demo-pill--skew-l {
+  margin-left: -5.75rem;
+  transform: translate(-50%, -50%) scale(0.72) skewX(8deg);
+  z-index: 1;
+}
+
+.mb-demo-panel--fan .mb-demo-pill--skew-r {
+  margin-left: 5.75rem;
+  transform: translate(-50%, -50%) scale(0.72) skewX(-8deg);
+  z-index: 2;
 }
 
 .mb-demo-row {
@@ -412,7 +449,13 @@
   height: 2.5rem;
   border-radius: 0.4375rem;
   overflow: hidden;
+  background: #000;
   box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-art {
+  background: #fff;
 }
 
 .mb-demo-art img {
@@ -431,7 +474,7 @@
   transition: color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-meta {
+.mb-demo-pill--dark .mb-demo-meta {
   color: #fff;
 }
 
@@ -457,7 +500,7 @@
   transition: color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-artist {
+.mb-demo-pill--dark .mb-demo-artist {
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -470,7 +513,7 @@
   transition: color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-controls {
+.mb-demo-pill--dark .mb-demo-controls {
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -502,7 +545,7 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-progress-track {
+.mb-demo-pill--dark .mb-demo-progress-track {
   background: rgba(255, 255, 255, 0.25);
 }
 
@@ -524,7 +567,7 @@
   transition: color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-time {
+.mb-demo-pill--dark .mb-demo-time {
   color: #fff;
 }
 
@@ -547,8 +590,108 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.mb-demo-panel.is-dark .mb-demo-handle span {
+.mb-demo-pill--dark .mb-demo-handle span {
   background: #fff;
+}
+
+/* Expanded Up Next list (Process). */
+.mb-demo-upnext-label {
+  margin: 0.25rem 0 0.125rem;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.14px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.5);
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-upnext-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mb-demo-upnext {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.mb-demo-upnext-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.4375rem 0;
+}
+
+.mb-demo-upnext-art {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.4375rem;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-upnext-art {
+  background: #fff;
+}
+
+.mb-demo-upnext-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mb-demo-upnext-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  min-width: 0;
+}
+
+.mb-demo-upnext-title {
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.14px;
+  line-height: 1;
+  white-space: nowrap;
+  color: #000;
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-upnext-title {
+  color: #fff;
+}
+
+.mb-demo-upnext-artist {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: -0.12px;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.5);
+  transition: color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-upnext-artist {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mb-demo-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mb-demo-pill--dark .mb-demo-divider {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .mb-demo-toggle {
