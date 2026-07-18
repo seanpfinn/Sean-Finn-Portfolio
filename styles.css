@@ -758,11 +758,14 @@ body {
 
 .splash-footer {
   /* Fixed to the window. Edges mirror the nav: left 20px (menu), right 10px
-     (toggle), 20px below. pointer-events pass through the empty middle so it
-     never blocks the cards scrolling beneath it. .splash-page reserves bottom
-     clearance so the last cards keep a ~40px gap above it. */
+     (toggle). Bottom offset matches .proj-footer's on case-study pages
+     (that one sits flush with the viewport via bottom:0 + 10px padding
+     instead, but the visual baseline is the same). pointer-events pass
+     through the empty middle so it never blocks the cards scrolling
+     beneath it. .splash-page reserves bottom clearance so the last cards
+     keep a gap above it. */
   position: fixed;
-  bottom: 1.25rem;
+  bottom: 0.625rem;
   left: 1.25rem;
   right: 0.625rem;
   display: flex;
@@ -1869,12 +1872,14 @@ body {
    ================================ */
 .miniplayer {
   /* Fixed width, centered — on mobile (media query below) it switches to
-     filling the container between margins instead. */
+     filling the container between margins instead. Bottom offset matches
+     the footer's baseline (0.625rem) on every page, including the
+     homepage — case-study.css no longer needs its own override for this. */
   position: fixed;
   left: 50%;
   width: 22.5rem; /* 360px */
   transform: translateX(-50%);
-  bottom: 1.25rem;
+  bottom: 0.625rem;
   z-index: 200;
   display: flex;
   align-items: center;
