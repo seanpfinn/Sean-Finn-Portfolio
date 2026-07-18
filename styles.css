@@ -1881,9 +1881,9 @@ body {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.625rem;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 1.25rem;
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   pointer-events: auto;
@@ -1910,8 +1910,8 @@ body {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.4375rem;
-  background: #fff;
-  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.25);
+  background: #f4f4f5;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.15);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1945,7 +1945,7 @@ body {
   gap: 0.1875rem;
   min-width: 0;
   flex: 1 1 auto;
-  color: #fff;
+  color: #09090b;
 }
 
 .miniplayer-title-clip {
@@ -1986,7 +1986,7 @@ body {
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: -0.12px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(9, 9, 11, 0.65);
 }
 
 .miniplayer-controls {
@@ -2000,12 +2000,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0);
+  background: rgba(9, 9, 11, 0);
   border: none;
   border-radius: 50%;
   margin: 0;
   padding: 0.375rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(9, 9, 11, 0.75);
   line-height: 0;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -2013,8 +2013,8 @@ body {
 }
 
 .miniplayer-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(9, 9, 11, 0.08);
+  color: #09090b;
 }
 
 .miniplayer-btn--play .icon-pause {
@@ -2040,37 +2040,34 @@ body {
   pointer-events: none;
 }
 
-/* Light mode variant — the dark glass pill already contrasts fine against
-   the site's default light background, but goes muddy on a dark page, so
-   dark mode gets a light pill instead. Colors here are hardcoded (not
-   var(--text) etc.) since those tokens are flipped for text ON the dark
-   page background, which is the opposite of what text needs sitting on
-   this light pill. */
+/* Dark mode variant — the light pill blends into the site's default light
+   background (intentional), but would go washed-out on a dark page, so dark
+   mode gets a dark glass pill instead. */
 .dark .miniplayer {
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
 }
 
 .dark .miniplayer-art {
-  background: #f4f4f5;
-  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.15);
+  background: #fff;
+  box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.25);
 }
 
 .dark .miniplayer-meta {
-  color: #09090b;
+  color: #fff;
 }
 
 .dark .miniplayer-artist {
-  color: rgba(9, 9, 11, 0.65);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .dark .miniplayer-btn {
-  color: rgba(9, 9, 11, 0.75);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .dark .miniplayer-btn:hover {
-  background: rgba(9, 9, 11, 0.08);
-  color: #09090b;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 @media (max-width: 50.5625rem) {
@@ -2092,8 +2089,12 @@ body {
     transform: translateX(calc(100% - 3rem));
   }
   /* Touch devices have no real hover — without this, a tap can leave the
-     white circle "stuck" on until the visitor taps elsewhere. */
+     circle "stuck" on until the visitor taps elsewhere. */
   .miniplayer-btn:hover {
+    background: rgba(9, 9, 11, 0);
+    color: rgba(9, 9, 11, 0.75);
+  }
+  .dark .miniplayer-btn:hover {
     background: rgba(255, 255, 255, 0);
     color: rgba(255, 255, 255, 0.85);
   }
