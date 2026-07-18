@@ -516,7 +516,7 @@
 
   if (YT_PLAYLIST_ID && !document.getElementById('miniplayer')) {
     const miniplayer = document.createElement('div');
-    miniplayer.className = 'miniplayer';
+    miniplayer.className = 'miniplayer blur-in';
     miniplayer.id = 'miniplayer';
     miniplayer.innerHTML = `
       <div class="miniplayer-main">
@@ -626,29 +626,12 @@
 
     let randomized = false;
 
-    // Every mobile browser (and most desktop ones) block autoplay-with-sound
-    // outright — the only autoplay they universally allow is muted. So we
-    // start muted and unmute on the visitor's first tap/click/keypress
-    // anywhere on the page, which is the standard workaround and gets us as
-    // close to "just plays" as browser policy allows.
-    function unmuteOnFirstInteraction() {
-      if (!player) return;
-      player.unMute();
-      if (player.getPlayerState() !== YT.PlayerState.PLAYING) player.playVideo();
-      document.removeEventListener('pointerdown', unmuteOnFirstInteraction);
-      document.removeEventListener('keydown', unmuteOnFirstInteraction);
-    }
-    document.addEventListener('pointerdown', unmuteOnFirstInteraction, { passive: true });
-    document.addEventListener('keydown', unmuteOnFirstInteraction);
-
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player(host, {
         host: 'https://www.youtube.com',
         playerVars: {
           listType: 'playlist',
           list: YT_PLAYLIST_ID,
-          autoplay: 1,
-          mute: 1,
           controls: 0,
           disablekb: 1,
           modestbranding: 1,
@@ -656,28 +639,24 @@
         },
         events: {
           onReady: function () {
-            // loadPlaylist (unlike cuePlaylist) autoplays. Starting muted
-            // means this succeeds on every platform; unmuteOnFirstInteraction
-            // takes over from there.
-            player.mute();
-            player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
+            // cuePlaylist (unlike loadPlaylist) loads without autoplaying —
+            // the bar sits ready to go until the visitor presses play.
+            player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
           },
           onStateChange: function (e) {
-            // Always reflect whatever's actually loaded immediately — the
-            // first track shows up as soon as it's ready rather than sitting
-            // on the placeholder through a second network round-trip while
-            // we reload at the random index below.
+            // Always reflect whatever's actually loaded immediately.
             refreshFromPlayer();
             setPlaying(e.data === YT.PlayerState.PLAYING);
-            // The playlist's video IDs aren't available until the first load
-            // resolves, so pick the random starting track by reloading once
-            // we can see how many videos are actually in it.
+            // The playlist's video IDs aren't available until the first cue
+            // resolves, so pick the random starting track by re-cueing once
+            // we can see how many videos are actually in it. cuePlaylist
+            // (not loadPlaylist) again here so this never starts playback.
             if (!randomized && (e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED)) {
               const list = player.getPlaylist();
               if (list && list.length > 1) {
                 randomized = true;
                 const randomIndex = Math.floor(Math.random() * list.length);
-                player.loadPlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
+                player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
                 return;
               }
               randomized = true;
