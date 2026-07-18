@@ -585,6 +585,12 @@
         artist = title.slice(0, i);
         title = title.slice(i + 3);
       }
+      // YouTube's auto-generated music channels are literally named
+      // "<Artist> - Topic" — strip that suffix so it doesn't show up as
+      // part of the artist name.
+      if (artist) {
+        artist = artist.replace(/\s*[-–]\s*Topic\s*$/i, '');
+      }
       titleEl.textContent = title || 'Music';
       artistEl.textContent = artist || '';
       if (videoId) {
