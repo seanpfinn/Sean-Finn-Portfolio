@@ -404,7 +404,8 @@
 
 .mb-demo-pill--dark {
   background: rgba(0, 0, 0, 0.75);
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
+  /* Soft white glow on dark backgrounds (matches the real bar's dark mode). */
+  box-shadow: 0 0 1.25rem 0 rgba(255, 255, 255, 0.25);
 }
 
 .mb-demo-panel--fan .mb-demo-pill {
@@ -732,6 +733,19 @@
   background: #1a1a1a;
   color: #fff;
   box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.25);
+}
+
+/* On mobile the panel is both shorter and narrower, so the fanned pair of
+   expanded pills needs to shrink and pull closer together to stay inside it. */
+@media (max-width: 50.5625rem) {
+  .mb-demo-panel--fan .mb-demo-pill--skew-l {
+    margin-left: -3.5rem;
+    transform: translate(-50%, -50%) scale(0.5) skewX(8deg);
+  }
+  .mb-demo-panel--fan .mb-demo-pill--skew-r {
+    margin-left: 3.5rem;
+    transform: translate(-50%, -50%) scale(0.5) skewX(-8deg);
+  }
 }
 
 /* Panel color variants for new layout (higher specificity beats the default bg) */

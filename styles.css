@@ -2273,7 +2273,9 @@ body {
    mode gets a dark glass pill instead. */
 .dark .miniplayer {
   background: rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.35);
+  /* Soft white glow instead of a dark shadow — on a dark page a black shadow
+     is invisible, so the bar gets a subtle halo that lifts it off the page. */
+  box-shadow: 0 0 1.25rem 0 rgba(255, 255, 255, 0.25);
 }
 
 .dark .miniplayer-art,
