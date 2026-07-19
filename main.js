@@ -704,7 +704,19 @@
       return `${m}:${String(s).padStart(2, '0')}`;
     }
 
+    let isScrubbing = false;
+
+    function renderProgress(pct, seconds) {
+      progressFillEl.style.width = pct + '%';
+      progressThumbEl.style.left = pct + '%';
+      timeEl.style.left = `calc(${pct}% - 0.125rem)`;
+      timeEl.textContent = formatTime(seconds);
+    }
+
     function updateProgress() {
+      // While the visitor is dragging the scrubber, don't let the poll yank
+      // the thumb back to the real playhead mid-drag — the drag owns it.
+      if (isScrubbing) return;
       if (!player || typeof player.getCurrentTime !== 'function') return;
       let current = 0, duration = 0;
       try {
@@ -712,20 +724,49 @@
         duration = player.getDuration() || 0;
       } catch (e) { return; }
       const pct = duration > 0 ? Math.min(100, (current / duration) * 100) : 0;
-      progressFillEl.style.width = pct + '%';
-      progressThumbEl.style.left = pct + '%';
-      timeEl.style.left = `calc(${pct}% - 0.125rem)`;
-      timeEl.textContent = formatTime(current);
+      renderProgress(pct, current);
     }
 
-    progressEl.addEventListener('click', (e) => {
-      if (!player || typeof player.getDuration !== 'function') return;
+    // Click or drag anywhere on the bar to scrub. Pointer events unify mouse
+    // and touch, and pointer capture keeps the drag alive even when the
+    // finger/cursor slides off the thin bar. During the drag we seek with
+    // allowSeekAhead=false (cheap — stays within already-buffered audio); the
+    // release commits with true so the player can fetch ahead if needed.
+    let scrubDuration = 0;
+    function progressFracFromX(clientX) {
       const rect = progressEl.getBoundingClientRect();
-      const frac = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-      let duration = 0;
-      try { duration = player.getDuration() || 0; } catch (err) {}
-      if (duration > 0) player.seekTo(duration * frac, true);
+      if (rect.width <= 0) return 0;
+      return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    }
+    function scrubTo(clientX, commit) {
+      const frac = progressFracFromX(clientX);
+      renderProgress(frac * 100, scrubDuration * frac);
+      try { player.seekTo(scrubDuration * frac, commit); } catch (err) {}
+    }
+    progressEl.addEventListener('pointerdown', (e) => {
+      if (!player || typeof player.getDuration !== 'function') return;
+      try { scrubDuration = player.getDuration() || 0; } catch (err) { scrubDuration = 0; }
+      if (scrubDuration <= 0) return;
+      isScrubbing = true;
+      progressEl.classList.add('is-scrubbing');
+      try { progressEl.setPointerCapture(e.pointerId); } catch (err) {}
+      scrubTo(e.clientX, false);
+      e.preventDefault();
     });
+    progressEl.addEventListener('pointermove', (e) => {
+      if (!isScrubbing) return;
+      scrubTo(e.clientX, false);
+      e.preventDefault();
+    });
+    function endScrub(e) {
+      if (!isScrubbing) return;
+      scrubTo(e.clientX, true);
+      try { progressEl.releasePointerCapture(e.pointerId); } catch (err) {}
+      progressEl.classList.remove('is-scrubbing');
+      isScrubbing = false;
+    }
+    progressEl.addEventListener('pointerup', endScrub);
+    progressEl.addEventListener('pointercancel', endScrub);
 
     function setExpanded(expanded) {
       miniplayer.classList.toggle('is-expanded', expanded);
@@ -889,6 +930,9 @@
       const target = e.changedTouches[0].target;
       touchStartX = null;
       touchStartY = null;
+      // A drag that began on the scrubber is a seek, not a park-swipe — its
+      // own pointer handler already handled it, so bail before parking.
+      if (target && target.closest && target.closest('.miniplayer-progress')) return;
       const hidden = miniplayer.classList.contains('is-hidden');
       const horizontal = Math.abs(dx) > Math.abs(dy);
       const isTap = Math.abs(dx) < 8 && Math.abs(dy) < 8;

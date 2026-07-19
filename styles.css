@@ -2084,7 +2084,19 @@ body {
   position: relative;
   width: 100%;
   height: 1.125rem;
-  cursor: pointer;
+  cursor: grab;
+  /* Own horizontal drags here for scrubbing instead of letting the browser
+     scroll/pan (the pill's own touch-action is pan-y). */
+  touch-action: none;
+}
+
+.miniplayer-progress.is-scrubbing {
+  cursor: grabbing;
+}
+
+/* Grows the dot slightly while dragging for a clearer grab affordance. */
+.miniplayer-progress.is-scrubbing .miniplayer-progress-thumb {
+  transform: translate(-50%, -50%) scale(1.25);
 }
 
 .miniplayer-progress-track,
