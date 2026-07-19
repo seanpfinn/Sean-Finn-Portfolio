@@ -762,6 +762,44 @@
   }
 }
 
+/* Embedded, live Music Box (music-bar.html last panel). music-box-embed.js
+   builds a real player using the same .miniplayer-* styles as the global bar;
+   these rules neutralize that bar's fixed positioning so it sits centered in
+   the panel, and give the panel a dark surface in dark mode so the themed pill
+   (and its white glow) reads like the real thing on a dark page. */
+.mb-embed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.mb-embed .miniplayer {
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: auto;
+  transform: none;
+  margin: 0;
+  z-index: auto;
+  width: 22.5rem;
+  max-width: 100%;
+  animation: none;
+}
+
+.dark .proj-panel--embed {
+  background: #0f0f10;
+}
+
+@media (max-width: 50.5625rem) {
+  .mb-embed {
+    padding: 1rem;
+  }
+}
+
 /* Panel color variants for new layout (higher specificity beats the default bg) */
 .proj-panel-new.proj-panel--dark     { background: #000a26; }
 .proj-panel-new.proj-panel--navy     { background: radial-gradient(ellipse 70% 60% at 52% 80%, rgba(99,149,255,0.22) 0%, transparent 70%), #041A55; }

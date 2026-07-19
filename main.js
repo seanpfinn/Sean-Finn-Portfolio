@@ -681,11 +681,22 @@
       }
     }
 
+    // The case-study page embeds a second, fully-functional Music Box; this id
+    // lets the two coordinate so they never play over each other.
+    const MB_ID = 'global';
     function setPlaying(isPlaying) {
       miniplayer.classList.toggle('is-playing', isPlaying);
       playBtn.setAttribute('aria-pressed', String(isPlaying));
       playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+      // Tell any other Music Box on the page to pause, so they never overlap.
+      if (isPlaying) window.dispatchEvent(new CustomEvent('musicbox:play', { detail: MB_ID }));
     }
+    // Pause ourselves when another Music Box (the embedded one) starts playing.
+    window.addEventListener('musicbox:play', (e) => {
+      if (e.detail !== MB_ID && player && typeof player.pauseVideo === 'function') {
+        try { player.pauseVideo(); } catch (err) {}
+      }
+    });
 
     // The IFrame API queues playVideo/pauseVideo/next/previousVideo calls
     // internally until the player is actually ready, so these are safe to

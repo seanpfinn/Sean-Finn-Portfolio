@@ -1,0 +1,399 @@
+// Music Box — embedded, fully-functional instance for the case-study page.
+// Unlike the global bar in main.js (which is fixed to the bottom of every
+// page), this one mounts INSIDE a container (#mb-embed) so the last panel of
+// the Music Box case study is a real, playable player: play/pause, shuffle
+// next/prev, a draggable scrubber, and an expandable Up Next — all live.
+//
+// It reuses the same .miniplayer-* styles as the real bar (case-study.css
+// neutralizes the fixed positioning for .mb-embed), shares the one YouTube
+// IFrame API load with main.js, and coordinates with the global bar so the two
+// never play over each other.
+
+(function () {
+  const YT_PLAYLIST_ID = 'PLEDQcLdU2FpQ';
+  const MB_ID = 'embed';
+
+  const mount = document.getElementById('mb-embed');
+  if (!YT_PLAYLIST_ID || !mount || mount.dataset.built) return;
+  mount.dataset.built = '1';
+
+  const SKIP_BACK_PATH = 'M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z';
+  const PLAY_PATH = 'M22.5 12C22.5006 12.2546 22.4353 12.5051 22.3105 12.7271C22.1856 12.949 22.0055 13.1349 21.7875 13.2666L8.28 21.5297C8.05227 21.6691 7.79144 21.7453 7.52445 21.7502C7.25746 21.7552 6.99399 21.6887 6.76125 21.5578C6.53073 21.4289 6.3387 21.241 6.2049 21.0132C6.07111 20.7855 6.00039 20.5263 6 20.2622V3.73781C6.00039 3.4737 6.07111 3.21447 6.2049 2.98675C6.3387 2.75904 6.53073 2.57108 6.76125 2.44219C6.99399 2.31126 7.25746 2.24484 7.52445 2.24979C7.79144 2.25473 8.05227 2.33086 8.28 2.47031L21.7875 10.7334C22.0055 10.8651 22.1856 11.051 22.3105 11.2729C22.4353 11.4949 22.5006 11.7453 22.5 12Z';
+  const PAUSE_PATH = 'M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z';
+  const SKIP_FORWARD_PATH = 'M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z';
+
+  const miniplayer = document.createElement('div');
+  miniplayer.className = 'miniplayer mb-embed-player';
+  miniplayer.innerHTML = `
+    <div class="miniplayer-row">
+      <div class="miniplayer-main">
+        <span class="miniplayer-art">
+          <img class="miniplayer-artwork" src="" alt="" />
+        </span>
+        <span class="miniplayer-meta">
+          <span class="miniplayer-title-clip">
+            <span class="miniplayer-title">Music</span>
+          </span>
+          <span class="miniplayer-artist">Connecting…</span>
+        </span>
+      </div>
+      <div class="miniplayer-controls">
+        <button class="miniplayer-btn miniplayer-prev" aria-label="Previous track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="${SKIP_BACK_PATH}"/></svg>
+        </button>
+        <button class="miniplayer-btn miniplayer-btn--play miniplayer-playpause" aria-label="Play" aria-pressed="false" type="button">
+          <svg class="icon-play" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="${PLAY_PATH}"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="${PAUSE_PATH}"/></svg>
+        </button>
+        <button class="miniplayer-btn miniplayer-next" aria-label="Next track" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="${SKIP_FORWARD_PATH}"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="miniplayer-progress">
+      <span class="miniplayer-progress-track"></span>
+      <span class="miniplayer-progress-fill"></span>
+      <span class="miniplayer-progress-thumb"></span>
+      <span class="miniplayer-time">0:00</span>
+    </div>
+    <button class="miniplayer-handle" type="button" aria-label="Show upcoming tracks" aria-expanded="false">
+      <span class="miniplayer-handle-line"></span>
+      <span class="miniplayer-handle-line"></span>
+    </button>
+    <div class="miniplayer-expand">
+      <p class="miniplayer-upnext-label">Up Next</p>
+      <div class="miniplayer-upnext-list"></div>
+    </div>
+  `;
+  mount.appendChild(miniplayer);
+
+  const host = document.createElement('div');
+  host.id = 'mb-embed-yt-host';
+  host.className = 'miniplayer-yt-host';
+  host.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(host);
+
+  const artEl        = miniplayer.querySelector('.miniplayer-art');
+  const imgEl         = miniplayer.querySelector('.miniplayer-artwork');
+  const titleEl       = miniplayer.querySelector('.miniplayer-title');
+  const artistEl      = miniplayer.querySelector('.miniplayer-artist');
+  const playBtn        = miniplayer.querySelector('.miniplayer-playpause');
+  const prevBtn        = miniplayer.querySelector('.miniplayer-prev');
+  const nextBtn        = miniplayer.querySelector('.miniplayer-next');
+  const progressEl      = miniplayer.querySelector('.miniplayer-progress');
+  const progressFillEl  = miniplayer.querySelector('.miniplayer-progress-fill');
+  const progressThumbEl = miniplayer.querySelector('.miniplayer-progress-thumb');
+  const timeEl          = miniplayer.querySelector('.miniplayer-time');
+  const handleEl       = miniplayer.querySelector('.miniplayer-handle');
+  const upNextListEl   = miniplayer.querySelector('.miniplayer-upnext-list');
+
+  let player = null;
+  let tracks = [];     // every playlist video ID, in canonical order
+  let order = [];      // shuffled indices into `tracks`
+  let orderPos = 0;    // our current position within `order`
+  let shuffledOnce = false;
+
+  function updateTicker() {
+    const clip = titleEl.parentElement;
+    clip.classList.remove('is-ticking');
+    clip.style.removeProperty('--ticker-shift');
+    requestAnimationFrame(() => {
+      const overflow = titleEl.scrollWidth - clip.clientWidth;
+      if (overflow > 4) {
+        clip.style.setProperty('--ticker-shift', `-${overflow}px`);
+        clip.classList.add('is-ticking');
+      }
+    });
+  }
+
+  function splitTitleArtist(title, artist) {
+    if (!artist && title && title.includes(' - ')) {
+      const i = title.indexOf(' - ');
+      artist = title.slice(0, i);
+      title = title.slice(i + 3);
+    }
+    if (artist) artist = artist.replace(/\s*[-–]\s*Topic\s*$/i, '');
+    return [title, artist];
+  }
+
+  function setMeta(rawTitle, rawArtist, videoId) {
+    const [title, artist] = splitTitleArtist(rawTitle, rawArtist);
+    titleEl.textContent = title || 'Music';
+    artistEl.textContent = artist || '';
+    if (videoId) {
+      imgEl.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+      artEl.classList.add('has-art');
+    }
+    updateTicker();
+  }
+
+  function currentVideoId() {
+    if (order.length && tracks.length) return tracks[order[orderPos]] || null;
+    return null;
+  }
+
+  let shownVideoId = null;
+  let fetchingVideoId = null;
+  function fetchMetaByVideoId(videoId) {
+    if (!videoId || fetchingVideoId === videoId) return;
+    fetchingVideoId = videoId;
+    fetch(`https://noembed.com/embed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + videoId)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (currentVideoId() !== videoId) return;
+        setMeta(data.title, data.author_name, videoId);
+        shownVideoId = videoId;
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (fetchingVideoId === videoId) fetchingVideoId = null;
+      });
+  }
+
+  function refreshFromPlayer() {
+    const videoId = currentVideoId();
+    if (!videoId || videoId === shownVideoId) return;
+    let data = null;
+    try { data = player.getVideoData(); } catch (e) {}
+    if (data && data.video_id === videoId && data.title && data.author) {
+      setMeta(data.title, data.author, videoId);
+      shownVideoId = videoId;
+    } else {
+      fetchMetaByVideoId(videoId);
+    }
+  }
+
+  function setPlaying(isPlaying) {
+    miniplayer.classList.toggle('is-playing', isPlaying);
+    playBtn.setAttribute('aria-pressed', String(isPlaying));
+    playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+    // Tell any other Music Box on the page to pause, so they never overlap.
+    if (isPlaying) window.dispatchEvent(new CustomEvent('musicbox:play', { detail: MB_ID }));
+  }
+  // Pause ourselves when another Music Box (the global bar) starts playing.
+  window.addEventListener('musicbox:play', (e) => {
+    if (e.detail !== MB_ID && player && typeof player.pauseVideo === 'function') {
+      try { player.pauseVideo(); } catch (err) {}
+    }
+  });
+
+  function togglePlay() {
+    if (!player) return;
+    if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
+  }
+
+  function formatTime(sec) {
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  let isScrubbing = false;
+  function renderProgress(pct, seconds) {
+    progressFillEl.style.width = pct + '%';
+    progressThumbEl.style.left = pct + '%';
+    timeEl.style.left = `calc(${pct}% - 0.125rem)`;
+    timeEl.textContent = formatTime(seconds);
+  }
+  function updateProgress() {
+    if (isScrubbing) return;
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    let current = 0, duration = 0;
+    try {
+      current = player.getCurrentTime() || 0;
+      duration = player.getDuration() || 0;
+    } catch (e) { return; }
+    const pct = duration > 0 ? Math.min(100, (current / duration) * 100) : 0;
+    renderProgress(pct, current);
+  }
+
+  let scrubDuration = 0;
+  function progressFracFromX(clientX) {
+    const rect = progressEl.getBoundingClientRect();
+    if (rect.width <= 0) return 0;
+    return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+  }
+  function scrubTo(clientX, commit) {
+    const frac = progressFracFromX(clientX);
+    renderProgress(frac * 100, scrubDuration * frac);
+    try { player.seekTo(scrubDuration * frac, commit); } catch (err) {}
+  }
+  progressEl.addEventListener('pointerdown', (e) => {
+    if (!player || typeof player.getDuration !== 'function') return;
+    try { scrubDuration = player.getDuration() || 0; } catch (err) { scrubDuration = 0; }
+    if (scrubDuration <= 0) return;
+    isScrubbing = true;
+    progressEl.classList.add('is-scrubbing');
+    try { progressEl.setPointerCapture(e.pointerId); } catch (err) {}
+    scrubTo(e.clientX, false);
+    e.preventDefault();
+  });
+  progressEl.addEventListener('pointermove', (e) => {
+    if (!isScrubbing) return;
+    scrubTo(e.clientX, false);
+    e.preventDefault();
+  });
+  function endScrub(e) {
+    if (!isScrubbing) return;
+    scrubTo(e.clientX, true);
+    try { progressEl.releasePointerCapture(e.pointerId); } catch (err) {}
+    progressEl.classList.remove('is-scrubbing');
+    isScrubbing = false;
+  }
+  progressEl.addEventListener('pointerup', endScrub);
+  progressEl.addEventListener('pointercancel', endScrub);
+
+  function setExpanded(expanded) {
+    miniplayer.classList.toggle('is-expanded', expanded);
+    handleEl.setAttribute('aria-expanded', String(expanded));
+    handleEl.setAttribute('aria-label', expanded ? 'Hide upcoming tracks' : 'Show upcoming tracks');
+    if (expanded) populateUpNext();
+  }
+
+  function populateUpNext() {
+    if (!player || !tracks.length || !order.length) {
+      upNextListEl.innerHTML = '';
+      return;
+    }
+    const count = Math.min(4, order.length - 1);
+    const upcoming = [];
+    for (let i = 1; i <= count; i++) upcoming.push((orderPos + i) % order.length);
+
+    upNextListEl.innerHTML = upcoming.map((_, i) => `
+      ${i > 0 ? '<div class="miniplayer-divider"></div>' : ''}
+      <button class="miniplayer-upnext-item" type="button">
+        <span class="miniplayer-upnext-art"><img alt="" /></span>
+        <span class="miniplayer-upnext-meta">
+          <span class="miniplayer-upnext-title">Loading…</span>
+          <span class="miniplayer-upnext-artist"></span>
+        </span>
+      </button>
+    `).join('');
+
+    const items = upNextListEl.querySelectorAll('.miniplayer-upnext-item');
+    upcoming.forEach((orderIdx, i) => {
+      const videoId = tracks[order[orderIdx]];
+      const item = items[i];
+      const img = item.querySelector('img');
+      const titleSpan = item.querySelector('.miniplayer-upnext-title');
+      const artistSpan = item.querySelector('.miniplayer-upnext-artist');
+
+      item.addEventListener('click', () => {
+        loadTrack(orderIdx, true);
+        setExpanded(false);
+      });
+
+      fetch(`https://noembed.com/embed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + videoId)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          const [title, artist] = splitTitleArtist(data.title, data.author_name);
+          titleSpan.textContent = title || 'Music';
+          artistSpan.textContent = artist || '';
+          img.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+        })
+        .catch(() => {
+          titleSpan.textContent = 'Unknown track';
+        });
+    });
+  }
+
+  function buildShuffleOrder(len) {
+    const a = [];
+    for (let i = 0; i < len; i++) a.push(i);
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function loadTrack(pos, autoplay) {
+    if (!player || !order.length) return;
+    orderPos = ((pos % order.length) + order.length) % order.length;
+    const vid = tracks[order[orderPos]];
+    if (autoplay) player.loadVideoById(vid);
+    else player.cueVideoById(vid);
+  }
+
+  function createPlayer() {
+    player = new YT.Player(host, {
+      host: 'https://www.youtube.com',
+      playerVars: {
+        listType: 'playlist',
+        list: YT_PLAYLIST_ID,
+        controls: 0,
+        disablekb: 1,
+        modestbranding: 1,
+        playsinline: 1,
+      },
+      events: {
+        onReady: function () {
+          player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
+          setInterval(updateProgress, 250);
+        },
+        onStateChange: function (e) {
+          const loadState = e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED;
+          if (loadState && !shuffledOnce) {
+            const list = player.getPlaylist();
+            if (list && list.length > 1) {
+              shuffledOnce = true;
+              tracks = list.slice();
+              order = buildShuffleOrder(tracks.length);
+              orderPos = 0;
+              player.cueVideoById(tracks[order[0]]);
+              return;
+            }
+          }
+          if (e.data === YT.PlayerState.ENDED && order.length) {
+            loadTrack(orderPos + 1, true);
+            return;
+          }
+          refreshFromPlayer();
+          setPlaying(e.data === YT.PlayerState.PLAYING);
+        },
+      },
+    });
+  }
+
+  // Share the single IFrame API load with main.js: if it's ready, build now;
+  // otherwise chain onto the existing onYouTubeIframeAPIReady so both the
+  // global bar and this embed get created when the API finishes loading.
+  function whenYTReady(cb) {
+    if (window.YT && window.YT.Player) { cb(); return; }
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (typeof prev === 'function') prev();
+      cb();
+    };
+    if (!document.querySelector('script[src*="iframe_api"]')) {
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(s);
+    }
+  }
+  whenYTReady(createPlayer);
+
+  playBtn.addEventListener('click', togglePlay);
+  prevBtn.addEventListener('click', () => { loadTrack(orderPos - 1, true); });
+  nextBtn.addEventListener('click', () => { loadTrack(orderPos + 1, true); });
+
+  // Tap the drag handle (or swipe it up/down) to open/close Up Next.
+  handleEl.addEventListener('click', () => {
+    setExpanded(!miniplayer.classList.contains('is-expanded'));
+  });
+  let handleTouchStartY = null;
+  handleEl.addEventListener('touchstart', (e) => {
+    handleTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  handleEl.addEventListener('touchend', (e) => {
+    if (handleTouchStartY === null) return;
+    const dy = e.changedTouches[0].clientY - handleTouchStartY;
+    handleTouchStartY = null;
+    e.stopPropagation();
+    e.preventDefault();
+    if (dy < -20) setExpanded(true);
+    else if (dy > 20) setExpanded(false);
+    else setExpanded(!miniplayer.classList.contains('is-expanded'));
+  }, { passive: false });
+})();
