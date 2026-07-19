@@ -630,12 +630,9 @@
     }
 
     function currentVideoId() {
-      if (!player) return null;
-      try {
-        const list = player.getPlaylist();
-        const idx = player.getPlaylistIndex();
-        if (list && idx != null && idx >= 0) return list[idx] || null;
-      } catch (e) { /* player not ready yet */ }
+      // We play single videos we pick from our own shuffled order, so the
+      // current track is always known locally — no getPlaylist()/index needed.
+      if (order.length && tracks.length) return tracks[order[orderPos]] || null;
       return null;
     }
 
@@ -781,23 +778,18 @@
     }
 
     function populateUpNext() {
-      if (!player) return;
-      let list, idx;
-      try {
-        list = player.getPlaylist();
-        idx = player.getPlaylistIndex();
-      } catch (e) { return; }
-      if (!list || !list.length || idx == null || idx < 0) {
+      if (!player || !tracks.length || !order.length) {
         upNextListEl.innerHTML = '';
         return;
       }
-      // The playlist is cued in an explicitly shuffled order (see
-      // onStateChange), so the next few tracks in sequence ARE the real
-      // upcoming order — a stable list that changes only as the song advances,
-      // not each time the panel is opened.
-      const count = Math.min(4, list.length - 1);
+      // We drive playback through our own shuffled `order` (see onStateChange),
+      // so the real upcoming tracks are the next entries in `order` — a stable
+      // list that changes only as the song advances, not each time the panel is
+      // opened. `upcoming` holds positions in `order`; each maps to a video ID
+      // via tracks[order[pos]].
+      const count = Math.min(4, order.length - 1);
       const upcoming = [];
-      for (let i = 1; i <= count; i++) upcoming.push((idx + i) % list.length);
+      for (let i = 1; i <= count; i++) upcoming.push((orderPos + i) % order.length);
 
       // Dividers only BETWEEN consecutive Up Next items — none above the
       // first item or above the "Up Next" label (per the expanded design).
@@ -813,16 +805,15 @@
       `).join('');
 
       const items = upNextListEl.querySelectorAll('.miniplayer-upnext-item');
-      upcoming.forEach((trackIndex, i) => {
-        const videoId = list[trackIndex];
+      upcoming.forEach((orderIdx, i) => {
+        const videoId = tracks[order[orderIdx]];
         const item = items[i];
         const img = item.querySelector('img');
         const titleSpan = item.querySelector('.miniplayer-upnext-title');
         const artistSpan = item.querySelector('.miniplayer-upnext-artist');
 
         item.addEventListener('click', () => {
-          if (!player) return;
-          player.playVideoAt(trackIndex);
+          loadTrack(orderIdx, true);
           setExpanded(false);
         });
 
@@ -840,7 +831,31 @@
       });
     }
 
+    let tracks = [];     // every playlist video ID, in canonical order
+    let order = [];      // shuffled indices into `tracks`
+    let orderPos = 0;    // our current position within `order`
     let shuffledOnce = false;
+
+    function buildShuffleOrder(len) {
+      const a = [];
+      for (let i = 0; i < len; i++) a.push(i);
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    // Load (autoplay) or cue (no autoplay) the track at position `pos` in our
+    // shuffled order. Single-video playback — not a playlist — so YouTube never
+    // auto-advances to the sequential next track: every change goes through
+    // here, keeping playback shuffled.
+    function loadTrack(pos, autoplay) {
+      if (!player || !order.length) return;
+      orderPos = ((pos % order.length) + order.length) % order.length;
+      const vid = tracks[order[orderPos]];
+      if (autoplay) player.loadVideoById(vid);
+      else player.cueVideoById(vid);
+    }
 
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player(host, {
@@ -865,42 +880,45 @@
             if (loadState && !shuffledOnce) {
               const list = player.getPlaylist();
               if (list && list.length > 1) {
-                // Shuffle, decided once per page load. The first cue (by
-                // playlist ID) loads the tracks in their canonical order; the
-                // moment we can read that order we re-cue an explicitly
-                // shuffled copy of the video IDs, so ordinary sequential
-                // advance/next then walks a random order — and starting at
-                // index 0 of the shuffled copy is itself a random first track.
-                // Doing the shuffle here (once) rather than in populateUpNext
-                // is what keeps opening/closing the Up Next panel from
-                // reshuffling anything. cuePlaylist (not loadPlaylist) never
-                // autoplays, and the early return skips the metadata refresh so
-                // the visitor never sees a flash of the canonical first track
-                // before the shuffled one appears.
+                // Shuffle, decided once per page load. Cueing a shuffled array
+                // of IDs or calling setShuffle(true) are both silently ignored
+                // for a playlist loaded by ID — and a playlist doesn't even fire
+                // ENDED between tracks, so there's no way to intercept its
+                // sequential auto-advance. Instead we read the playlist's IDs
+                // once, keep our OWN shuffled order of them, and switch to
+                // single-video playback that we fully control (next/prev and the
+                // ENDED handler below both step through `order`). cueVideoById
+                // (not loadVideoById) doesn't autoplay; the early return skips
+                // the metadata refresh so there's no flash of the canonical
+                // first track. Doing this once here — not in populateUpNext — is
+                // what keeps opening/closing Up Next from reshuffling.
                 shuffledOnce = true;
-                const ids = list.slice();
-                for (let i = ids.length - 1; i > 0; i--) {
-                  const j = Math.floor(Math.random() * (i + 1));
-                  const tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
-                }
-                player.cuePlaylist(ids, 0);
+                tracks = list.slice();
+                order = buildShuffleOrder(tracks.length);
+                orderPos = 0;
+                player.cueVideoById(tracks[order[0]]);
                 return;
               }
+            }
+            // Each single video fires ENDED when it finishes — advance to the
+            // next track in our shuffled order (autoplay to keep it continuous).
+            if (e.data === YT.PlayerState.ENDED && order.length) {
+              loadTrack(orderPos + 1, true);
+              return;
             }
             refreshFromPlayer();
             setPlaying(e.data === YT.PlayerState.PLAYING);
           },
         },
       });
-      window.__mpPlayer = player; /* TEMP TEST HOOK — remove */
     };
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
 
     playBtn.addEventListener('click', togglePlay);
-    prevBtn.addEventListener('click', () => { if (player) player.previousVideo(); });
-    nextBtn.addEventListener('click', () => { if (player) player.nextVideo(); });
+    prevBtn.addEventListener('click', () => { loadTrack(orderPos - 1, true); });
+    nextBtn.addEventListener('click', () => { loadTrack(orderPos + 1, true); });
 
     // ── Expand/collapse the Up Next panel: swipe up (or tap) the drag
     // handle to open it, swipe down (or tap again) to close ────────────────
