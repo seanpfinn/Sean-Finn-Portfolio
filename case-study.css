@@ -359,7 +359,7 @@
   margin: 0;
 }
 
-/* Music-bar mockups (music-bar.html) — self-contained, native HTML replicas
+/* Music-bar mockups (music-box.html) — self-contained, native HTML replicas
    of the miniplayer, scoped entirely to .mb-demo-* so they can't collide with
    the real, live #miniplayer that main.js injects on this same page. Rendered
    in-DOM (rather than as flat Figma exports) so the mockup content sits
@@ -496,7 +496,7 @@
   font-weight: 400;
   letter-spacing: -0.12px;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.5);
+  color: #6e6e6e;
   white-space: nowrap;
   transition: color 0.3s ease-in-out;
 }
@@ -614,10 +614,10 @@
   margin: 0.25rem 0 0.125rem;
   font-family: var(--font);
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.14px;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.5);
+  color: #6e6e6e;
   transition: color 0.3s ease-in-out;
 }
 
@@ -690,7 +690,7 @@
   letter-spacing: -0.12px;
   line-height: 1;
   white-space: nowrap;
-  color: rgba(0, 0, 0, 0.5);
+  color: #6e6e6e;
   transition: color 0.3s ease-in-out;
 }
 
@@ -762,7 +762,7 @@
   }
 }
 
-/* Embedded, live Music Box (music-bar.html last panel). music-box-embed.js
+/* Embedded, live Music Box (music-box.html last panel). music-box-embed.js
    builds a real player using the same .miniplayer-* styles as the global bar;
    these rules neutralize that bar's fixed positioning so it sits centered in
    the panel, and give the panel a dark surface in dark mode so the themed pill
