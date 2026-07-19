@@ -559,7 +559,6 @@
         <span class="miniplayer-handle-line"></span>
       </button>
       <div class="miniplayer-expand" id="miniplayer-expand">
-        <div class="miniplayer-divider"></div>
         <p class="miniplayer-upnext-label">Up Next</p>
         <div class="miniplayer-upnext-list" id="miniplayer-upnext-list"></div>
       </div>
@@ -747,8 +746,10 @@
       const upcoming = [];
       for (let i = 1; i <= count; i++) upcoming.push(list[(idx + i) % list.length]);
 
-      upNextListEl.innerHTML = upcoming.map(() => `
-        <div class="miniplayer-divider"></div>
+      // Dividers only BETWEEN consecutive Up Next items — none above the
+      // first item or above the "Up Next" label (per the expanded design).
+      upNextListEl.innerHTML = upcoming.map((_, i) => `
+        ${i > 0 ? '<div class="miniplayer-divider"></div>' : ''}
         <button class="miniplayer-upnext-item" type="button">
           <span class="miniplayer-upnext-art"><img alt="" /></span>
           <span class="miniplayer-upnext-meta">
