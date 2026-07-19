@@ -891,6 +891,7 @@
           },
         },
       });
+      window.__mpPlayer = player; /* TEMP TEST HOOK — remove */
     };
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
