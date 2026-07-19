@@ -839,8 +839,7 @@
       });
     }
 
-    let randomized = false;
-    let shuffleApplied = false;
+    let shuffledOnce = false;
 
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player(host, {
