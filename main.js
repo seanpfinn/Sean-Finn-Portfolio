@@ -669,9 +669,14 @@
       // otherwise meant the title/artist didn't show until Play was
       // pressed. Falling back to the same noembed lookup used for the Up
       // Next list fixes that: it's independent of playback state.
+      //
+      // Require BOTH title and author before trusting getVideoData: for a
+      // freshly cued (unplayed) track it often returns the title with an
+      // empty author, which showed the first song with no artist until it
+      // started playing. When the author is missing, noembed still has it.
       let data = null;
       try { data = player.getVideoData(); } catch (e) {}
-      if (data && data.video_id === videoId && data.title) {
+      if (data && data.video_id === videoId && data.title && data.author) {
         setMeta(data.title, data.author, videoId);
         shownVideoId = videoId;
       } else {
@@ -786,17 +791,13 @@
         upNextListEl.innerHTML = '';
         return;
       }
-      // Playback is shuffled and the IFrame API doesn't expose the shuffled
-      // queue order, so a sequential "next N" list would lie about what plays
-      // next. Show a fresh random sample of other tracks instead — each one is
-      // still jump-to-able via playVideoAt, which is accurate.
-      const pool = [];
-      for (let i = 0; i < list.length; i++) if (i !== idx) pool.push(i);
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      const upcoming = pool.slice(0, Math.min(4, pool.length));
+      // The playlist is cued in an explicitly shuffled order (see
+      // onStateChange), so the next few tracks in sequence ARE the real
+      // upcoming order — a stable list that changes only as the song advances,
+      // not each time the panel is opened.
+      const count = Math.min(4, list.length - 1);
+      const upcoming = [];
+      for (let i = 1; i <= count; i++) upcoming.push((idx + i) % list.length);
 
       // Dividers only BETWEEN consecutive Up Next items — none above the
       // first item or above the "Up Next" label (per the expanded design).
@@ -861,28 +862,29 @@
           },
           onStateChange: function (e) {
             const loadState = e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED;
-            if (loadState && !shuffleApplied) {
+            if (loadState && !shuffledOnce) {
               const list = player.getPlaylist();
               if (list && list.length > 1) {
-                // The playlist's video IDs aren't available until the first
-                // cue resolves, so pick the random starting track by re-cueing
-                // once we can see how many videos are in it. cuePlaylist (not
-                // loadPlaylist) again here so this never starts playback, and
-                // the early return skips refreshFromPlayer/setPlaying so the
-                // visitor never sees a flash of track 1 before the real
-                // (random) starting track appears.
-                if (!randomized) {
-                  randomized = true;
-                  const randomIndex = Math.floor(Math.random() * list.length);
-                  player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
-                  return;
+                // Shuffle, decided once per page load. The first cue (by
+                // playlist ID) loads the tracks in their canonical order; the
+                // moment we can read that order we re-cue an explicitly
+                // shuffled copy of the video IDs, so ordinary sequential
+                // advance/next then walks a random order — and starting at
+                // index 0 of the shuffled copy is itself a random first track.
+                // Doing the shuffle here (once) rather than in populateUpNext
+                // is what keeps opening/closing the Up Next panel from
+                // reshuffling anything. cuePlaylist (not loadPlaylist) never
+                // autoplays, and the early return skips the metadata refresh so
+                // the visitor never sees a flash of the canonical first track
+                // before the shuffled one appears.
+                shuffledOnce = true;
+                const ids = list.slice();
+                for (let i = ids.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  const tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
                 }
-                // Now that the (re-cued) playlist is loaded, turn on shuffle so
-                // every auto-advance and next/previous picks a random track,
-                // not the sequential one. setShuffle is a no-op before the
-                // playlist has loaded, which is why it waits until here.
-                shuffleApplied = true;
-                player.setShuffle(true);
+                player.cuePlaylist(ids, 0);
+                return;
               }
             }
             refreshFromPlayer();
