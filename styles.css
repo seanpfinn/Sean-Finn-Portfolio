@@ -2009,17 +2009,12 @@ body {
   transition: color 0.3s ease-in-out;
 }
 
-/* Only kicks in once JS measures real overflow and sets --ticker-shift —
-   short titles just sit still. Fixed 25s cycle: scrolls out and back in the
-   first ~12s, then rests for the remaining ~13s before repeating. */
-.miniplayer-title-clip.is-ticking .miniplayer-title {
-  animation: miniplayer-ticker 25s ease-in-out infinite;
-}
-
-@keyframes miniplayer-ticker {
-  0%, 4%    { transform: translateX(0); }
-  24%, 28%  { transform: translateX(var(--ticker-shift, 0px)); }
-  48%, 100% { transform: translateX(0); }
+/* When JS measures real overflow it adds .is-ticking; a title that's too long
+   to fit fades out at the right edge instead of hard-clipping. Short titles
+   don't get the class, so they're never touched. */
+.miniplayer-title-clip.is-ticking {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
 }
 
 .miniplayer-artist {
@@ -2143,6 +2138,9 @@ body {
   position: absolute;
   top: 0.5rem;
   left: 0;
+  /* Centered under the scrubber: JS sets left to the fill %, this centers the
+     label on that point. */
+  transform: translateX(-50%);
   font-family: var(--font);
   font-size: 0.5rem;
   font-weight: 600;
@@ -2386,6 +2384,18 @@ body {
   }
   .miniplayer-handle:hover {
     opacity: 0.25;
+  }
+  /* Bigger touch target for scrubbing on mobile — an invisible overlay that
+     extends the hit area above and below the thin bar without shifting the
+     layout. Pointer events on it target .miniplayer-progress (its own scrub
+     handler), so dragging anywhere in this taller band scrubs. */
+  .miniplayer-progress::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.5rem;
+    bottom: -0.5rem;
   }
 }
 
