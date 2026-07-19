@@ -2108,6 +2108,21 @@ body {
   background: #ff401a;
 }
 
+/* Scrubber thumb — a small accent dot centered on the fill's leading edge.
+   JS keeps its left position in sync with the fill width; the translate
+   centers the 6px dot both on that point and vertically on the 2px bar. */
+.miniplayer-progress-thumb {
+  position: absolute;
+  top: 0.0625rem;
+  left: 0%;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: #ff401a;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .miniplayer-time {
   position: absolute;
   top: 0.1875rem;

@@ -552,6 +552,7 @@
       <div class="miniplayer-progress" id="miniplayer-progress">
         <span class="miniplayer-progress-track"></span>
         <span class="miniplayer-progress-fill" id="miniplayer-progress-fill"></span>
+        <span class="miniplayer-progress-thumb" id="miniplayer-progress-thumb"></span>
         <span class="miniplayer-time" id="miniplayer-time">0:00</span>
       </div>
       <button class="miniplayer-handle" id="miniplayer-handle" type="button" aria-label="Show upcoming tracks" aria-expanded="false">
@@ -578,9 +579,10 @@
     const playBtn        = document.getElementById('miniplayer-playpause');
     const prevBtn        = document.getElementById('miniplayer-prev');
     const nextBtn        = document.getElementById('miniplayer-next');
-    const progressEl     = document.getElementById('miniplayer-progress');
-    const progressFillEl = document.getElementById('miniplayer-progress-fill');
-    const timeEl         = document.getElementById('miniplayer-time');
+    const progressEl      = document.getElementById('miniplayer-progress');
+    const progressFillEl  = document.getElementById('miniplayer-progress-fill');
+    const progressThumbEl = document.getElementById('miniplayer-progress-thumb');
+    const timeEl          = document.getElementById('miniplayer-time');
     const handleEl       = document.getElementById('miniplayer-handle');
     const upNextListEl   = document.getElementById('miniplayer-upnext-list');
 
@@ -711,6 +713,7 @@
       } catch (e) { return; }
       const pct = duration > 0 ? Math.min(100, (current / duration) * 100) : 0;
       progressFillEl.style.width = pct + '%';
+      progressThumbEl.style.left = pct + '%';
       timeEl.style.left = `calc(${pct}% - 0.125rem)`;
       timeEl.textContent = formatTime(current);
     }
