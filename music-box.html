@@ -127,8 +127,11 @@
       <span class="proj-caption-label">Context</span>
       <p class="proj-caption-body">Every other case study on this site documents somebody else's product. Music Box documents this one — a persistent mini player built directly into the portfolio, pinned to the screen on every page and connected to a real playlist.</p>
     </div>
-    <div class="proj-panel-new">
-      <video src="assets/music-bar.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new">
+        <img src="assets/mb-cs-context.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
+      </div>
+      <p class="proj-image-caption">Pinned to the bottom of the screen and always in reach — it stays put and keeps playing as visitors move from page to page.</p>
     </div>
 
     <div class="proj-caption">
@@ -137,9 +140,9 @@
     </div>
     <div class="proj-panel-group">
       <div class="proj-panel-new">
-        <img src="assets/mb-p2-pill-light.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
+        <img src="assets/mb-cs-problem.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
       </div>
-      <p class="proj-image-caption">The first working version — album art, title, artist, and a transport row, all in one compact bar.</p>
+      <p class="proj-image-caption">Exploring the form — a circular album-art player, a square, a vertical stack — before settling on the compact bar.</p>
     </div>
 
     <div class="proj-caption">
@@ -148,9 +151,9 @@
     </div>
     <div class="proj-panel-group">
       <div class="proj-panel-new">
-        <img src="assets/mb-p3-pill-dark.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
+        <img src="assets/mb-cs-role.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
       </div>
-      <p class="proj-image-caption">Dark mode isn't an inverted color, it's a second pass — the bar reads its theme and blends in rather than fighting it.</p>
+      <p class="proj-image-caption">Every state built and tested on real devices — here the expanded Up Next queue running on iPhone.</p>
     </div>
 
     <div class="proj-caption">
@@ -158,99 +161,10 @@
       <p class="proj-caption-body">The first version was a compact pill — album art, title, artist — that toggled play on tap. I added dedicated skip-back, play/pause, and skip-forward controls to match a proper transport bar, then reworked its width and position through several passes: paired with the footer, centered on the page, and finally locked to a fixed 360px width on desktop so it reads as its own element instead of stretching arbitrarily wide.</p>
     </div>
     <div class="proj-panel-group">
-      <div class="proj-panel-new mb-demo-panel mb-demo-panel--fan">
-        <div class="mb-demo-pill mb-demo-pill--dark mb-demo-pill--skew-l">
-          <div class="mb-demo-row">
-            <div class="mb-demo-main">
-              <span class="mb-demo-art"><img src="assets/mb-demo-art.png" alt="" /></span>
-              <span class="mb-demo-meta">
-                <span class="mb-demo-title">Fragments of Time</span>
-                <span class="mb-demo-artist">Daft Punk</span>
-              </span>
-            </div>
-            <div class="mb-demo-controls">
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z"/></svg></span>
-            </div>
-          </div>
-          <div class="mb-demo-progress">
-            <span class="mb-demo-progress-track"></span>
-            <span class="mb-demo-progress-fill"></span>
-            <span class="mb-demo-progress-thumb"></span>
-            <span class="mb-demo-time">2:31</span>
-          </div>
-          <span class="mb-demo-handle"><span></span><span></span></span>
-          <p class="mb-demo-upnext-label">Up Next</p>
-          <div class="mb-demo-upnext">
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-u2.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Do You Feel Loved</span><span class="mb-demo-upnext-artist">U2</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-futureislands.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">The Chase</span><span class="mb-demo-upnext-artist">Future Islands</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-tenaciousd.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Wonderboy</span><span class="mb-demo-upnext-artist">Tenacious D</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-christophercross.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Sailing</span><span class="mb-demo-upnext-artist">Christopher Cross</span></span>
-            </div>
-          </div>
-        </div>
-        <div class="mb-demo-pill mb-demo-pill--skew-r">
-          <div class="mb-demo-row">
-            <div class="mb-demo-main">
-              <span class="mb-demo-art"><img src="assets/mb-demo-art.png" alt="" /></span>
-              <span class="mb-demo-meta">
-                <span class="mb-demo-title">Fragments of Time</span>
-                <span class="mb-demo-artist">Daft Punk</span>
-              </span>
-            </div>
-            <div class="mb-demo-controls">
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z"/></svg></span>
-            </div>
-          </div>
-          <div class="mb-demo-progress">
-            <span class="mb-demo-progress-track"></span>
-            <span class="mb-demo-progress-fill"></span>
-            <span class="mb-demo-progress-thumb"></span>
-            <span class="mb-demo-time">2:31</span>
-          </div>
-          <span class="mb-demo-handle"><span></span><span></span></span>
-          <p class="mb-demo-upnext-label">Up Next</p>
-          <div class="mb-demo-upnext">
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-u2.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Do You Feel Loved</span><span class="mb-demo-upnext-artist">U2</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-futureislands.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">The Chase</span><span class="mb-demo-upnext-artist">Future Islands</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-tenaciousd.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Wonderboy</span><span class="mb-demo-upnext-artist">Tenacious D</span></span>
-            </div>
-            <div class="mb-demo-divider"></div>
-            <div class="mb-demo-upnext-item">
-              <span class="mb-demo-upnext-art"><img src="assets/mb-art-christophercross.png" alt="" /></span>
-              <span class="mb-demo-upnext-meta"><span class="mb-demo-upnext-title">Sailing</span><span class="mb-demo-upnext-artist">Christopher Cross</span></span>
-            </div>
-          </div>
-        </div>
+      <div class="proj-panel-new">
+        <img src="assets/mb-cs-process.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
       </div>
-      <p class="proj-image-caption">Swipe up on the handle (or tap it) to open Up Next — the next few tracks, each one tappable, in both light and dark.</p>
+      <p class="proj-image-caption">Pull up on the handle and the bar grows into a full Up Next queue, each track one tap away.</p>
     </div>
 
     <div class="proj-caption">
@@ -258,55 +172,10 @@
       <p class="proj-caption-body">A visitor lands on any page and the bar is already there, pinned at the bottom, cued and ready — title, artist, and art show up immediately, with no autoplay involved; playback only starts once the visitor presses play. A drag handle beneath the progress bar opens Up Next with a swipe or a tap, and any track in it is one tap away. On mobile it goes further: after 10 seconds idle it slides most of the way off-screen, leaving the album art peeking in as a handle, and a swipe in either direction brings it back or parks it again — always the visitor's call, not a timer's.</p>
     </div>
     <div class="proj-panel-group">
-      <div class="proj-panel-new mb-demo-panel mb-demo-panel--stack">
-        <div class="mb-demo-pill mb-demo-pill--dark">
-          <div class="mb-demo-row">
-            <div class="mb-demo-main">
-              <span class="mb-demo-art"><img src="assets/mb-demo-art.png" alt="" /></span>
-              <span class="mb-demo-meta">
-                <span class="mb-demo-title">Fragments of Time</span>
-                <span class="mb-demo-artist">Daft Punk</span>
-              </span>
-            </div>
-            <div class="mb-demo-controls">
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z"/></svg></span>
-            </div>
-          </div>
-          <div class="mb-demo-progress">
-            <span class="mb-demo-progress-track"></span>
-            <span class="mb-demo-progress-fill"></span>
-            <span class="mb-demo-progress-thumb"></span>
-            <span class="mb-demo-time">2:31</span>
-          </div>
-          <span class="mb-demo-handle"><span></span><span></span></span>
-        </div>
-        <div class="mb-demo-pill">
-          <div class="mb-demo-row">
-            <div class="mb-demo-main">
-              <span class="mb-demo-art"><img src="assets/mb-demo-art.png" alt="" /></span>
-              <span class="mb-demo-meta">
-                <span class="mb-demo-title">Fragments of Time</span>
-                <span class="mb-demo-artist">Daft Punk</span>
-              </span>
-            </div>
-            <div class="mb-demo-controls">
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z"/></svg></span>
-              <span class="mb-demo-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z"/></svg></span>
-            </div>
-          </div>
-          <div class="mb-demo-progress">
-            <span class="mb-demo-progress-track"></span>
-            <span class="mb-demo-progress-fill"></span>
-            <span class="mb-demo-progress-thumb"></span>
-            <span class="mb-demo-time">2:31</span>
-          </div>
-          <span class="mb-demo-handle"><span></span><span></span></span>
-        </div>
+      <div class="proj-panel-new">
+        <img src="assets/mb-cs-journey.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
       </div>
-      <p class="proj-image-caption">The bar as visitors actually see it — art, transport controls, a scrubbable progress bar, and the handle that opens Up Next, in both themes.</p>
+      <p class="proj-image-caption">What visitors actually touch — a draggable scrubber and transport controls, rendered for both light and dark.</p>
     </div>
 
     <div class="proj-caption">
@@ -315,9 +184,9 @@
     </div>
     <div class="proj-panel-group">
       <div class="proj-panel-new">
-        <img src="assets/mb-p6-hover.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
+        <img src="assets/mb-cs-constraints.png" alt="" style="width:100%; height:100%; object-fit:contain; display:block;" />
       </div>
-      <p class="proj-image-caption">Small details matter at this scale — a hover state on the transport controls, tuned to disappear cleanly on touch devices.</p>
+      <p class="proj-image-caption">Built on YouTube's IFrame API with no key — tucked above the home indicator and re-themed to match a dark page.</p>
     </div>
 
     <div class="proj-caption">
