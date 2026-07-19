@@ -786,9 +786,17 @@
         upNextListEl.innerHTML = '';
         return;
       }
-      const count = Math.min(4, list.length - 1);
-      const upcoming = [];
-      for (let i = 1; i <= count; i++) upcoming.push(list[(idx + i) % list.length]);
+      // Playback is shuffled and the IFrame API doesn't expose the shuffled
+      // queue order, so a sequential "next N" list would lie about what plays
+      // next. Show a fresh random sample of other tracks instead — each one is
+      // still jump-to-able via playVideoAt, which is accurate.
+      const pool = [];
+      for (let i = 0; i < list.length; i++) if (i !== idx) pool.push(i);
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      const upcoming = pool.slice(0, Math.min(4, pool.length));
 
       // Dividers only BETWEEN consecutive Up Next items — none above the
       // first item or above the "Up Next" label (per the expanded design).
@@ -804,7 +812,8 @@
       `).join('');
 
       const items = upNextListEl.querySelectorAll('.miniplayer-upnext-item');
-      upcoming.forEach((videoId, i) => {
+      upcoming.forEach((trackIndex, i) => {
+        const videoId = list[trackIndex];
         const item = items[i];
         const img = item.querySelector('img');
         const titleSpan = item.querySelector('.miniplayer-upnext-title');
@@ -812,7 +821,7 @@
 
         item.addEventListener('click', () => {
           if (!player) return;
-          player.playVideoAt((idx + i + 1) % list.length);
+          player.playVideoAt(trackIndex);
           setExpanded(false);
         });
 
@@ -831,6 +840,7 @@
     }
 
     let randomized = false;
+    let shuffleApplied = false;
 
     window.onYouTubeIframeAPIReady = function () {
       player = new YT.Player(host, {
@@ -851,22 +861,30 @@
             setInterval(updateProgress, 250);
           },
           onStateChange: function (e) {
-            // The playlist's video IDs aren't available until the first cue
-            // resolves, so pick the random starting track by re-cueing once
-            // we can see how many videos are actually in it. cuePlaylist
-            // (not loadPlaylist) again here so this never starts playback,
-            // and skipping refreshFromPlayer/setPlaying below means the
-            // visitor never sees a flash of track 1 before the real
-            // (random) starting track appears.
-            if (!randomized && (e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED)) {
+            const loadState = e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING || e.data === YT.PlayerState.CUED;
+            if (loadState && !shuffleApplied) {
               const list = player.getPlaylist();
               if (list && list.length > 1) {
-                randomized = true;
-                const randomIndex = Math.floor(Math.random() * list.length);
-                player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
-                return;
+                // The playlist's video IDs aren't available until the first
+                // cue resolves, so pick the random starting track by re-cueing
+                // once we can see how many videos are in it. cuePlaylist (not
+                // loadPlaylist) again here so this never starts playback, and
+                // the early return skips refreshFromPlayer/setPlaying so the
+                // visitor never sees a flash of track 1 before the real
+                // (random) starting track appears.
+                if (!randomized) {
+                  randomized = true;
+                  const randomIndex = Math.floor(Math.random() * list.length);
+                  player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID, index: randomIndex });
+                  return;
+                }
+                // Now that the (re-cued) playlist is loaded, turn on shuffle so
+                // every auto-advance and next/previous picks a random track,
+                // not the sequential one. setShuffle is a no-op before the
+                // playlist has loaded, which is why it waits until here.
+                shuffleApplied = true;
+                player.setShuffle(true);
               }
-              randomized = true;
             }
             refreshFromPlayer();
             setPlaying(e.data === YT.PlayerState.PLAYING);
