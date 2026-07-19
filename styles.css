@@ -1906,7 +1906,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.375rem;
+  gap: 0.5rem;
   padding: 0.625rem;
   background: rgba(255, 255, 255, 0.75);
   border-radius: 1.25rem;
@@ -2083,7 +2083,10 @@ body {
 .miniplayer-progress {
   position: relative;
   width: 100%;
-  height: 1.125rem;
+  height: 1rem;
+  /* Extra space above the bar so the transport row sits 14px clear of it
+     (this 6px + the pill's 8px gap), per the spacing spec. */
+  margin-top: 0.375rem;
   cursor: grab;
   /* Own horizontal drags here for scrubbing instead of letting the browser
      scroll/pan (the pill's own touch-action is pan-y). */
@@ -2355,7 +2358,7 @@ body {
     width: auto;
     transform: none;
     padding: 0.5rem;
-    gap: 0.375rem;
+    gap: 0.5rem;
   }
   /* Auto-parked off to the right after 10s idle (see main.js), leaving the
      album art peeking in as a handle — swipe left (or tap the peek) to bring
