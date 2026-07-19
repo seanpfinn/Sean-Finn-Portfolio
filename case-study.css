@@ -555,6 +555,20 @@
   background: #ff401a;
 }
 
+/* Scrubber thumb — accent dot sitting on the fill's leading edge (static in
+   these mockups; the translate centers the 6px dot on that point and on the
+   2px bar). */
+.mb-demo-progress-thumb {
+  position: absolute;
+  top: 0.0625rem;
+  left: 24%;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: #ff401a;
+  transform: translate(-50%, -50%);
+}
+
 .mb-demo-time {
   position: absolute;
   top: 0.1875rem;
