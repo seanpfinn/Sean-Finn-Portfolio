@@ -2010,12 +2010,25 @@ body {
   transition: color 0.3s ease-in-out;
 }
 
-/* When JS measures real overflow it adds .is-ticking; a title that's too long
-   to fit fades out at the right edge instead of hard-clipping. Short titles
-   don't get the class, so they're never touched. */
+/* When JS measures real overflow it adds .is-ticking and sets --ticker-shift.
+   A title too long to fit both scrolls (ticker, below) and fades out at the
+   right edge so it never hard-clips. Short titles don't get the class, so
+   they're never touched. */
 .miniplayer-title-clip.is-ticking {
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
+}
+
+/* Fixed 25s cycle: scrolls out and back in the first ~12s, then rests for the
+   remaining ~13s before repeating. */
+.miniplayer-title-clip.is-ticking .miniplayer-title {
+  animation: miniplayer-ticker 25s ease-in-out infinite;
+}
+
+@keyframes miniplayer-ticker {
+  0%, 4%    { transform: translateX(0); }
+  24%, 28%  { transform: translateX(var(--ticker-shift, 0px)); }
+  48%, 100% { transform: translateX(0); }
 }
 
 .miniplayer-artist {

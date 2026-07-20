@@ -96,9 +96,14 @@
   function updateTicker() {
     const clip = titleEl.parentElement;
     clip.classList.remove('is-ticking');
+    clip.style.removeProperty('--ticker-shift');
     requestAnimationFrame(() => {
-      // Too long to fit? Add the class so the title fades out at the right edge.
-      if (titleEl.scrollWidth - clip.clientWidth > 4) clip.classList.add('is-ticking');
+      // Too long to fit? Scroll it on the ticker and fade it at the right edge.
+      const overflow = titleEl.scrollWidth - clip.clientWidth;
+      if (overflow > 4) {
+        clip.style.setProperty('--ticker-shift', `-${overflow}px`);
+        clip.classList.add('is-ticking');
+      }
     });
   }
 
