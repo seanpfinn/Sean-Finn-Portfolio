@@ -2138,9 +2138,6 @@ body {
   position: absolute;
   top: 0.5rem;
   left: 0;
-  /* Centered under the scrubber: JS sets left to the fill %, this centers the
-     label on that point. */
-  transform: translateX(-50%);
   font-family: var(--font);
   font-size: 0.5rem;
   font-weight: 600;
