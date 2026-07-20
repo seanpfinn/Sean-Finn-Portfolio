@@ -244,19 +244,25 @@
         svg.appendChild(t);
       });
 
-      // Month labels — pinned to the column where each month first appears
+      // Month labels — pinned to the column where each month first appears.
+      // Depending on where the 13-week window lands, its column start dates
+      // span either three or four calendar months. When it's four, the leading
+      // one is only a sliver of a month at the left edge, so drop it and name
+      // just three; when it's already three, keep them all.
+      const monthMarks = [];
       let lastMonth = -1;
       for (let col = 0; col < COLS; col++) {
         const d = new Date(startSunday);
         d.setDate(startSunday.getDate() + col * 7);
         const m = d.getMonth();
-        if (m !== lastMonth) {
-          lastMonth = m;
-          const t = mkText(MONTHS[m], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label');
-          t.setAttribute('text-anchor', 'start');
-          svg.appendChild(t);
-        }
+        if (m !== lastMonth) { lastMonth = m; monthMarks.push({ col, m }); }
       }
+      if (monthMarks.length > 3) monthMarks.shift();
+      monthMarks.forEach(({ col, m }) => {
+        const t = mkText(MONTHS[m], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label');
+        t.setAttribute('text-anchor', 'start');
+        svg.appendChild(t);
+      });
 
       // Cells — render every day in the grid; level-0 for days with no contributions
       for (let col = 0; col < COLS; col++) {
