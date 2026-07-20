@@ -805,6 +805,12 @@
 }
 
 /* Panel color variants for new layout (higher specificity beats the default bg) */
+/* Music Box case-study images carry their own flat gray canvas baked in. The
+   panel matches that exact gray so the letterboxed edges disappear into it and
+   the panel's rounded corner is the only frame the viewer sees. */
+.proj-panel-new.proj-panel--mbcs         { background: #ebebeb; }
+.proj-panel-new.proj-panel--mbcs-context { background: #efefef; }
+
 .proj-panel-new.proj-panel--dark     { background: #000a26; }
 .proj-panel-new.proj-panel--navy     { background: radial-gradient(ellipse 70% 60% at 52% 80%, rgba(99,149,255,0.22) 0%, transparent 70%), #041A55; }
 .proj-panel-new.proj-panel--blue     { background: #c0d1ff; }
