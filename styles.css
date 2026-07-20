@@ -497,8 +497,9 @@ body {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  /* bottom clearance keeps a ~40px gap between the last cards and the fixed footer */
-  padding: 1.25rem 7.5rem 6.25rem;
+  /* Bottom clearance so the last cards clear the pinned Music Box (~116px
+     tall incl. its offset) with a comfortable gap above it. */
+  padding: 1.25rem 7.5rem 10rem;
   gap: 3.75rem;
   box-sizing: border-box;
 }
@@ -957,10 +958,10 @@ body {
     position: static;
     inset: auto;
     margin: 0;
-    /* Bottom padding clears the fixed miniplayer (98px tall + 0.75rem gap
-       from the viewport edge = ~110px) so it doesn't sit on top of the
+    /* Bottom padding clears the pinned Music Box (~104px tall + 0.75rem gap
+       from the viewport edge = ~116px) so it doesn't sit on top of the
        footer text once scrolled all the way down. */
-    padding: 2.5rem 1.25rem 7rem;
+    padding: 2.5rem 1.25rem 10rem;
     pointer-events: auto;
     flex-direction: column;
     align-items: center;

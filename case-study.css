@@ -238,7 +238,9 @@
   width: auto;
   max-width: 48.75rem;
   margin: 0 auto;
-  padding: 1.25rem 1.25rem 6.25rem;
+  /* Extra bottom clearance so the last section clears the pinned Music Box
+     (~116px tall incl. its offset) with a comfortable gap above it. */
+  padding: 1.25rem 1.25rem 10rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -1542,10 +1544,10 @@
   }
   .proj-footer {
     position: static;
-    /* Bottom padding clears the fixed miniplayer (98px tall + 0.75rem gap
-       from the viewport edge = ~110px) so it doesn't sit on top of the
+    /* Bottom padding clears the pinned Music Box (~104px tall + 0.75rem gap
+       from the viewport edge = ~116px) so it doesn't sit on top of the
        footer text once scrolled all the way down. */
-    padding: 0 1.25rem 7rem;
+    padding: 0 1.25rem 10rem;
     pointer-events: auto;
   }
 }

@@ -190,7 +190,7 @@
   function renderProgress(pct, seconds) {
     progressFillEl.style.width = pct + '%';
     progressThumbEl.style.left = pct + '%';
-    timeEl.style.left = `calc(${pct}% - 0.125rem)`;
+    timeEl.style.left = pct + '%';
     timeEl.textContent = formatTime(seconds);
   }
   function updateProgress() {
