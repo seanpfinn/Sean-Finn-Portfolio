@@ -1910,7 +1910,7 @@ body {
   gap: 0.5rem;
   /* Less padding below the handle/list than above (10px top/sides, 6px bottom). */
   padding: 0.625rem 0.625rem 0.375rem;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 1.25rem;
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(12px);
