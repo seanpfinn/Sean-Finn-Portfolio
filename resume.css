@@ -236,10 +236,11 @@
    FLOATING DOWNLOAD BUTTON
    ================================ */
 .resume-download-btn {
+  /* Anchored bottom-right so it clears the centered, bottom-pinned Music Box
+     (which is z-index 200); z-index sits above it as a safety margin. */
   position: fixed;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,12 +255,18 @@
   letter-spacing: -0.64px;
   color: #faf9f7;
   cursor: pointer;
-  z-index: 100;
+  z-index: 300;
   transition: opacity 0.2s;
 }
 
 .resume-download-btn:hover {
   opacity: 0.85;
+}
+
+/* Invert on dark pages so the pill doesn't disappear into the near-black bg. */
+.dark .resume-download-btn {
+  background: #faf9f7;
+  color: #171717;
 }
 
 /* active state on resume nav link */
@@ -307,7 +314,11 @@
     border-top: 1px solid var(--border);
   }
 
+  /* On mobile the Music Box spans the full width at the bottom, so the pill
+     can't live there. Drop it into the header flow as an inline CTA under the
+     bio, where it's visible up top and never collides with the player. */
   .resume-download-btn {
-    bottom: 16px;
+    position: static;
+    margin-top: 1.25rem;
   }
 }
