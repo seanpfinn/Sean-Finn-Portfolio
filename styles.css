@@ -1706,6 +1706,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transform: translateY(0.375rem);
+  /* re-enabled when visible so the grid can be hovered/played with */
   transition: opacity 0.2s ease, transform 0.2s ease;
   box-shadow: 0 0.5rem 2rem rgba(0,0,0,0.1);
 }
@@ -1713,6 +1714,7 @@ body {
 .gh-tooltip.is-visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .gh-tip-header {
@@ -1769,6 +1771,43 @@ body {
 .dark .gh-cell--2 { fill: #1e6b32; }
 .dark .gh-cell--3 { fill: #2ea84a; }
 .dark .gh-cell--4 { fill: #4dd668; }
+
+/* Cursor-following glow: a white (dark mode) / green (light mode) overlay per
+   cell whose opacity is driven by proximity to the pointer, so cells brighten
+   in a soft radial spotlight as the cursor sweeps the grid. JS sets opacity;
+   the transition gives the highlight a gentle trailing "fidget" feel. */
+.gh-cell-glow {
+  fill: #2ea84a;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.dark .gh-cell-glow { fill: #ffffff; }
+
+/* Stat rows (Commits / Lines changed / PRs merged / PRs reviewed). */
+.gh-tip-stats {
+  display: flex;
+  flex-direction: column;
+}
+.gh-tip-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-top: 0.0625rem solid var(--border);
+  font-family: var(--font);
+  font-size: 0.8125rem;
+}
+.gh-tip-stat-label { color: var(--text-dim); }
+.gh-tip-stat-value {
+  color: var(--text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.gh-tip-stat-add { color: #2ea84a; }
+.gh-tip-stat-del { color: #e5534b; }
+.dark .gh-tip-stat-add { color: #4dd668; }
+.dark .gh-tip-stat-del { color: #f0665e; }
 
 @media (max-width: 50.5625rem) {
   .gh-tooltip { display: none; }

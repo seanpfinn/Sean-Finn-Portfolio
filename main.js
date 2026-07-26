@@ -194,10 +194,16 @@
         <img class="gh-tip-avatar" src="https://avatars.githubusercontent.com/u/193159120?v=4" alt="" />
         <div class="gh-tip-meta">
           <span class="gh-tip-user">seanpfinn</span>
-          <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions this year</span>
+          <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions in the last 90 days</span>
         </div>
       </div>
       <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="gh-tip-stats">
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Commits</span><span class="gh-tip-stat-value" data-stat="commits">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Lines changed</span><span class="gh-tip-stat-value" data-stat="lines">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">PRs merged</span><span class="gh-tip-stat-value" data-stat="prsMerged">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">PRs reviewed</span><span class="gh-tip-stat-value" data-stat="prsReviewed">–</span></div>
+      </div>
     `;
     // Lives above the content as a fixed overlay — never added to the page
     // flow beneath the footer (which would extend the scroll height).
@@ -206,6 +212,22 @@
     const svg = tip.querySelector('.gh-tip-graph');
     const NS = 'http://www.w3.org/2000/svg';
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // Stat values. Commits / PRs merged / PRs reviewed are filled live from
+    // GitHub's public API (last 90 days). Lines changed has no unauthenticated
+    // GitHub source — set linesAdded / linesRemoved here to display real figures.
+    // Any non-null value below overrides the live number.
+    const GH_STATS = {
+      commits: null,       // null → live 90-day count
+      linesAdded: null,    // e.g. 132000  (no live source; set to show)
+      linesRemoved: null,  // e.g. 38000
+      prsMerged: null,     // null → live
+      prsReviewed: null,   // null → live
+    };
+
+    // Filled by renderGraph; read by the pointer-driven glow below. Each entry
+    // is { cx, cy, glow } in viewBox units.
+    let glowCells = [];
 
     function renderGraph(contributions) {
       svg.innerHTML = '';
@@ -265,6 +287,8 @@
       });
 
       // Cells — render every day in the grid; level-0 for days with no contributions
+      glowCells = [];
+      const glowRects = [];
       for (let col = 0; col < COLS; col++) {
         for (let row = 0; row < ROWS; row++) {
           const d = new Date(startSunday);
@@ -272,13 +296,101 @@
           if (d > today) continue;
           const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
           const level = byDate[dateStr] ?? 0;
+          const x = LABEL_L + col * STEP, y = LABEL_T + row * STEP;
           const rect = document.createElementNS(NS, 'rect');
-          rect.setAttribute('x', LABEL_L + col * STEP);
-          rect.setAttribute('y', LABEL_T + row * STEP);
+          rect.setAttribute('x', x);
+          rect.setAttribute('y', y);
           rect.setAttribute('width', CELL); rect.setAttribute('height', CELL);
           rect.setAttribute('rx', 2);
           rect.setAttribute('class', `gh-cell--${level}`);
           svg.appendChild(rect);
+
+          // Matching glow overlay, drawn on top of every base cell below.
+          const glow = document.createElementNS(NS, 'rect');
+          glow.setAttribute('x', x);
+          glow.setAttribute('y', y);
+          glow.setAttribute('width', CELL); glow.setAttribute('height', CELL);
+          glow.setAttribute('rx', 2);
+          glow.setAttribute('class', 'gh-cell-glow');
+          glowRects.push(glow);
+          glowCells.push({ cx: x + CELL / 2, cy: y + CELL / 2, glow });
+        }
+      }
+      // Append the glow layer last so it sits above all base cells.
+      glowRects.forEach(g => svg.appendChild(g));
+    }
+
+    // ── Cursor-following glow ────────────────────────────────────────────────
+    // Brighten cells by proximity to the pointer, brightest under the cursor and
+    // fading out within ~3.5 cells, so the grid lights up like a fidget toy.
+    const GLOW_RADIUS = 42;   // viewBox units
+    const GLOW_MAX = 0.85;    // peak overlay opacity
+    let glowRaf = 0, glowX = 0, glowY = 0;
+    function paintGlow() {
+      glowRaf = 0;
+      for (const c of glowCells) {
+        const dx = c.cx - glowX, dy = c.cy - glowY;
+        let inf = 1 - Math.hypot(dx, dy) / GLOW_RADIUS;
+        inf = inf > 0 ? inf * inf : 0;   // ease-in falloff
+        c.glow.style.opacity = inf ? (inf * GLOW_MAX).toFixed(3) : '';
+      }
+    }
+    svg.addEventListener('pointermove', (e) => {
+      const r = svg.getBoundingClientRect();
+      const vb = svg.viewBox.baseVal;
+      if (!vb || !r.width) return;
+      glowX = (e.clientX - r.left) / r.width * vb.width;
+      glowY = (e.clientY - r.top) / r.height * vb.height;
+      if (!glowRaf) glowRaf = requestAnimationFrame(paintGlow);
+    });
+    svg.addEventListener('pointerleave', () => {
+      if (glowRaf) { cancelAnimationFrame(glowRaf); glowRaf = 0; }
+      for (const c of glowCells) c.glow.style.opacity = '';
+    });
+
+    // Compact number: 452 → "452", 1500 → "1.5k", 132000 → "132k".
+    function fmtCompact(n) {
+      if (n == null) return null;
+      const a = Math.abs(n);
+      if (a < 1000) return String(n);
+      const k = n / 1000;
+      return (a < 10000 ? k.toFixed(1).replace(/\.0$/, '') : Math.round(k)) + 'k';
+    }
+    function setStat(name, value) {
+      const el = tip.querySelector(`[data-stat="${name}"]`);
+      if (el) el.textContent = value == null ? '—' : Number(value).toLocaleString();
+    }
+
+    async function ghCount(url) {
+      try {
+        const r = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } });
+        if (!r.ok) return null;
+        const j = await r.json();
+        return typeof j.total_count === 'number' ? j.total_count : null;
+      } catch (e) { return null; }
+    }
+
+    async function loadStats() {
+      const since = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
+      const U = 'seanpfinn';
+      const [commits, prsMerged, prsReviewed] = await Promise.all([
+        ghCount(`https://api.github.com/search/commits?q=author:${U}+author-date:>=${since}&per_page=1`),
+        ghCount(`https://api.github.com/search/issues?q=type:pr+author:${U}+is:merged+merged:>=${since}&per_page=1`),
+        ghCount(`https://api.github.com/search/issues?q=type:pr+reviewed-by:${U}+updated:>=${since}&per_page=1`),
+      ]);
+      setStat('commits', GH_STATS.commits ?? commits);
+      setStat('prsMerged', GH_STATS.prsMerged ?? prsMerged);
+      setStat('prsReviewed', GH_STATS.prsReviewed ?? prsReviewed);
+
+      const la = GH_STATS.linesAdded, lr = GH_STATS.linesRemoved;
+      const linesEl = tip.querySelector('[data-stat="lines"]');
+      if (linesEl) {
+        if (la != null || lr != null) {
+          linesEl.innerHTML =
+            `<span class="gh-tip-stat-add">+${fmtCompact(la || 0)}</span> ` +
+            `<span class="gh-tip-stat-del">−${fmtCompact(lr || 0)}</span>`;
+        } else {
+          linesEl.textContent = '—';
         }
       }
     }
@@ -289,9 +401,14 @@
       try {
         const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=2026');
         const data = await res.json();
-        tip.querySelector('.gh-tip-count').textContent = (data.total[2026] || 0).toLocaleString();
-        renderGraph(data.contributions || []);
+        const contributions = data.contributions || [];
+        // Header count = contributions over the trailing 90 days (matches the grid/stats window).
+        const cutoff = new Date(Date.now() - 90 * 864e5);
+        const sum90 = contributions.reduce((a, c) => (new Date(c.date) >= cutoff ? a + (c.count || 0) : a), 0);
+        tip.querySelector('.gh-tip-count').textContent = sum90.toLocaleString();
+        renderGraph(contributions);
       } catch (e) {}
+      loadStats();
     }
 
     function positionTip(link) {
@@ -306,10 +423,19 @@
 
     loadGH();
 
+    // Keep the tooltip open while the cursor is over it (not just the link), so
+    // the grid can be hovered. A small close delay bridges the gap between the
+    // link and the tooltip floating above it.
+    let hideTimer = 0;
+    function showTip(link) { clearTimeout(hideTimer); tip.classList.add('is-visible'); positionTip(link); }
+    function scheduleHide() { hideTimer = setTimeout(() => tip.classList.remove('is-visible'), 160); }
+
     ghLinks.forEach(link => {
-      link.addEventListener('mouseenter', () => { tip.classList.add('is-visible'); positionTip(link); });
-      link.addEventListener('mouseleave', () => tip.classList.remove('is-visible'));
+      link.addEventListener('mouseenter', () => showTip(link));
+      link.addEventListener('mouseleave', scheduleHide);
     });
+    tip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    tip.addEventListener('mouseleave', scheduleHide);
   }
 
   // ── Work menu toggle ─────────────────────────────────────────────────────
