@@ -213,16 +213,21 @@
     const NS = 'http://www.w3.org/2000/svg';
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-    // Stat values. Commits / PRs merged / PRs reviewed are filled live from
-    // GitHub's public API (last 90 days). Lines changed has no unauthenticated
-    // GitHub source — set linesAdded / linesRemoved here to display real figures.
-    // Any non-null value below overrides the live number.
+    // ── Widget stats (last 90 days) ───────────────────────────────────────────
+    // Set any value here to display it. Where left null, PRs merged / reviewed
+    // auto-fill from GitHub's public API (real numbers, public repos only).
+    // Two categories can't come from an unauthenticated browser:
+    //   • Commits — GitHub's /search/commits endpoint is CORS-blocked, so it's
+    //     seeded below with a verified snapshot; update it as your count grows.
+    //   • Lines changed — no public source at all; set linesAdded/linesRemoved
+    //     to show it (it stays "—" until you do).
+    // Anything you set here always wins over the live value.
     const GH_STATS = {
-      commits: null,       // null → live 90-day count
-      linesAdded: null,    // e.g. 132000  (no live source; set to show)
+      commits: 452,        // verified 90-day snapshot (2026-07-26); update as needed
+      linesAdded: null,    // e.g. 132000
       linesRemoved: null,  // e.g. 38000
-      prsMerged: null,     // null → live
-      prsReviewed: null,   // null → live
+      prsMerged: null,     // null → live public count
+      prsReviewed: null,   // null → live public count
     };
 
     // Filled by renderGraph; read by the pointer-driven glow below. Each entry
@@ -373,12 +378,12 @@
     async function loadStats() {
       const since = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
       const U = 'seanpfinn';
-      const [commits, prsMerged, prsReviewed] = await Promise.all([
-        ghCount(`https://api.github.com/search/commits?q=author:${U}+author-date:>=${since}&per_page=1`),
+      // Only /search/issues is CORS-enabled for browsers; /search/commits is not.
+      const [prsMerged, prsReviewed] = await Promise.all([
         ghCount(`https://api.github.com/search/issues?q=type:pr+author:${U}+is:merged+merged:>=${since}&per_page=1`),
         ghCount(`https://api.github.com/search/issues?q=type:pr+reviewed-by:${U}+updated:>=${since}&per_page=1`),
       ]);
-      setStat('commits', GH_STATS.commits ?? commits);
+      setStat('commits', GH_STATS.commits);
       setStat('prsMerged', GH_STATS.prsMerged ?? prsMerged);
       setStat('prsReviewed', GH_STATS.prsReviewed ?? prsReviewed);
 
