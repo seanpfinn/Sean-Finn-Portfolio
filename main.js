@@ -336,14 +336,14 @@
     // ── Cursor-following glow ────────────────────────────────────────────────
     // Brighten cells by proximity to the pointer, brightest under the cursor and
     // fading out within ~3.5 cells, so the grid lights up like a fidget toy.
-    const GLOW_RADIUS = 42;   // viewBox units
     const GLOW_MAX = 0.85;    // peak overlay opacity
     let glowRaf = 0, glowX = 0, glowY = 0;
     function paintGlow() {
       glowRaf = 0;
+      const radius = glowStep * 3.5;   // ~3.5 cells, tracks the current cell size
       for (const c of glowCells) {
         const dx = c.cx - glowX, dy = c.cy - glowY;
-        let inf = 1 - Math.hypot(dx, dy) / GLOW_RADIUS;
+        let inf = 1 - Math.hypot(dx, dy) / radius;
         inf = inf > 0 ? inf * inf : 0;   // ease-in falloff
         c.glow.style.opacity = inf ? (inf * GLOW_MAX).toFixed(3) : '';
       }
@@ -361,67 +361,24 @@
       for (const c of glowCells) c.glow.style.opacity = '';
     });
 
-    // Compact number: 452 → "452", 1500 → "1.5k", 132000 → "132k".
-    function fmtCompact(n) {
-      if (n == null) return null;
-      const a = Math.abs(n);
-      if (a < 1000) return String(n);
-      const k = n / 1000;
-      return (a < 10000 ? k.toFixed(1).replace(/\.0$/, '') : Math.round(k)) + 'k';
-    }
-    function setStat(name, value) {
-      const el = tip.querySelector(`[data-stat="${name}"]`);
-      if (el) el.textContent = value == null ? '—' : Number(value).toLocaleString();
-    }
-
-    async function ghCount(url) {
-      try {
-        const r = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } });
-        if (!r.ok) return null;
-        const j = await r.json();
-        return typeof j.total_count === 'number' ? j.total_count : null;
-      } catch (e) { return null; }
-    }
-
-    async function loadStats() {
-      const since = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
-      const U = 'seanpfinn';
-      // Only /search/issues is CORS-enabled for browsers; /search/commits is not.
-      const [prsMerged, prsReviewed] = await Promise.all([
-        ghCount(`https://api.github.com/search/issues?q=type:pr+author:${U}+is:merged+merged:>=${since}&per_page=1`),
-        ghCount(`https://api.github.com/search/issues?q=type:pr+reviewed-by:${U}+updated:>=${since}&per_page=1`),
-      ]);
-      setStat('commits', GH_STATS.commits);
-      setStat('prsMerged', GH_STATS.prsMerged ?? prsMerged);
-      setStat('prsReviewed', GH_STATS.prsReviewed ?? prsReviewed);
-
-      const la = GH_STATS.linesAdded, lr = GH_STATS.linesRemoved;
-      const linesEl = tip.querySelector('[data-stat="lines"]');
-      if (linesEl) {
-        if (la != null || lr != null) {
-          linesEl.innerHTML =
-            `<span class="gh-tip-stat-add">+${fmtCompact(la || 0)}</span> ` +
-            `<span class="gh-tip-stat-del">−${fmtCompact(lr || 0)}</span>`;
-        } else {
-          linesEl.textContent = '—';
-        }
-      }
-    }
+    // Filter buttons switch the timeframe (re-renders graph + stats).
+    tip.querySelectorAll('.gh-tip-tf').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tf = Number(btn.dataset.tf);
+        if (allDays.length && tf !== currentTf) render(tf);
+      });
+    });
 
     let fetched = false;
     async function loadGH() {
       if (fetched) return; fetched = true;
       try {
-        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=2026');
+        // y=last returns the trailing 365 days — one fetch feeds every timeframe.
+        const res = await fetch('https://github-contributions-api.jogruber.de/v4/seanpfinn?y=last');
         const data = await res.json();
-        const contributions = data.contributions || [];
-        // Header count = contributions over the trailing 90 days (matches the grid/stats window).
-        const cutoff = new Date(Date.now() - 90 * 864e5);
-        const sum90 = contributions.reduce((a, c) => (new Date(c.date) >= cutoff ? a + (c.count || 0) : a), 0);
-        tip.querySelector('.gh-tip-count').textContent = sum90.toLocaleString();
-        renderGraph(contributions);
+        allDays = (data.contributions || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+        render(currentTf);
       } catch (e) {}
-      loadStats();
     }
 
     function positionTip(link) {

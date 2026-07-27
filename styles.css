@@ -1748,6 +1748,40 @@ body {
   color: var(--text-dim);
 }
 
+/* Timeframe filter — segmented pill, pushed to the right of the header. */
+.gh-tip-filter {
+  display: inline-flex;
+  gap: 0.125rem;
+  margin-left: auto;
+  align-self: flex-start;
+  padding: 0.1875rem;
+  border-radius: 999px;
+  background: var(--bg-card-out);
+}
+.gh-tip-tf {
+  border: none;
+  background: none;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-dim);
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.gh-tip-tf:hover { color: var(--text); }
+.gh-tip-tf.is-active {
+  color: var(--text);
+  background: var(--bg);
+  box-shadow: 0 0.0625rem 0.125rem rgba(0,0,0,0.12);
+}
+.dark .gh-tip-tf.is-active {
+  background: rgba(255,255,255,0.12);
+  box-shadow: none;
+}
+
 .gh-tip-graph {
   display: block;
   width: 100%;
