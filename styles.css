@@ -1788,12 +1788,6 @@ body {
   height: auto;
 }
 
-.gh-axis-label {
-  font-family: var(--mono);
-  font-size: 0.46875rem;
-  fill: var(--text-dim);
-}
-
 .gh-cell--0 { fill: rgba(0,0,0,0.07); }
 .gh-cell--1 { fill: #b6e8c0; }
 .gh-cell--2 { fill: #6cc97a; }
@@ -1818,7 +1812,7 @@ body {
 }
 .dark .gh-cell-glow { fill: #ffffff; }
 
-/* Stat rows (Commits / Lines changed / PRs merged / PRs reviewed). */
+/* Stat rows (Contributions / Active days / Longest streak / Busiest day). */
 .gh-tip-stats {
   display: flex;
   flex-direction: column;
@@ -1838,10 +1832,6 @@ body {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
-.gh-tip-stat-add { color: #2ea84a; }
-.gh-tip-stat-del { color: #e5534b; }
-.dark .gh-tip-stat-add { color: #4dd668; }
-.dark .gh-tip-stat-del { color: #f0665e; }
 
 @media (max-width: 50.5625rem) {
   .gh-tooltip { display: none; }
