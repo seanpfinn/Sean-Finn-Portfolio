@@ -194,15 +194,20 @@
         <img class="gh-tip-avatar" src="https://avatars.githubusercontent.com/u/193159120?v=4" alt="" />
         <div class="gh-tip-meta">
           <span class="gh-tip-user">seanpfinn</span>
-          <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions in the last 90 days</span>
+          <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions <span class="gh-tip-range">in the last 90 days</span></span>
+        </div>
+        <div class="gh-tip-filter" role="group" aria-label="Timeframe">
+          <button type="button" class="gh-tip-tf" data-tf="30">30D</button>
+          <button type="button" class="gh-tip-tf is-active" data-tf="90">90D</button>
+          <button type="button" class="gh-tip-tf" data-tf="365">1Y</button>
         </div>
       </div>
       <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="gh-tip-stats">
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Commits</span><span class="gh-tip-stat-value" data-stat="commits">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Lines changed</span><span class="gh-tip-stat-value" data-stat="lines">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">PRs merged</span><span class="gh-tip-stat-value" data-stat="prsMerged">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">PRs reviewed</span><span class="gh-tip-stat-value" data-stat="prsReviewed">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Contributions</span><span class="gh-tip-stat-value" data-stat="contrib">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Active days</span><span class="gh-tip-stat-value" data-stat="active">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Longest streak</span><span class="gh-tip-stat-value" data-stat="streak">–</span></div>
+        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Busiest day</span><span class="gh-tip-stat-value" data-stat="busiest">–</span></div>
       </div>
     `;
     // Lives above the content as a fixed overlay — never added to the page
@@ -213,86 +218,48 @@
     const NS = 'http://www.w3.org/2000/svg';
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-    // ── Widget stats (last 90 days) ───────────────────────────────────────────
-    // Set any value here to display it. Where left null, PRs merged / reviewed
-    // auto-fill from GitHub's public API (real numbers, public repos only).
-    // Two categories can't come from an unauthenticated browser:
-    //   • Commits — GitHub's /search/commits endpoint is CORS-blocked, so it's
-    //     seeded below with a verified snapshot; update it as your count grows.
-    //   • Lines changed — no public source at all; set linesAdded/linesRemoved
-    //     to show it (it stays "—" until you do).
-    // Anything you set here always wins over the live value.
-    const GH_STATS = {
-      commits: 452,        // verified 90-day snapshot (2026-07-26); update as needed
-      linesAdded: null,    // e.g. 132000
-      linesRemoved: null,  // e.g. 38000
-      prsMerged: null,     // null → live public count
-      prsReviewed: null,   // null → live public count
-    };
+    // Trailing 365 days of contributions ({date,count,level}); the 30/90/365-day
+    // views all slice from this one dataset. Filled by loadGH().
+    let allDays = [];
+    let currentTf = 90;   // selected timeframe in days
+    const TF_LABEL = { 30: 'in the last 30 days', 90: 'in the last 90 days', 365: 'in the last year' };
 
     // Filled by renderGraph; read by the pointer-driven glow below. Each entry
     // is { cx, cy, glow } in viewBox units.
     let glowCells = [];
 
-    function renderGraph(contributions) {
+    // Bare contribution heatmap (no axis labels, matching the reference), sized
+    // to fill a constant viewBox so every timeframe reads at the same footprint:
+    // cells stay a comfortable size for 30/90 days and shrink to pack a full year.
+    const VB_W = 340, VB_H = 84, CELL_CAP = 22, ROWS = 7;
+    let glowStep = 12;   // cell pitch of the current render, for the glow radius
+    function renderGraph(tf) {
       svg.innerHTML = '';
-      if (!contributions.length) return;
-      const CELL = 10, GAP = 2, STEP = 12;
-      const COLS = 13, ROWS = 7;
-      const LABEL_L = 26, LABEL_T = 14;
+      glowCells = [];
+      if (!allDays.length) return;
 
-      // Build date→level lookup
       const byDate = {};
-      contributions.forEach(c => { byDate[c.date] = c.level; });
+      allDays.forEach(c => { byDate[c.date] = c.level; });
 
-      // Always anchor to today — grid ends at the current week
-      const today = new Date(); today.setHours(0,0,0,0);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
       const endSunday = new Date(today);
       endSunday.setDate(today.getDate() - today.getDay());
-      const startSunday = new Date(endSunday);
-      startSunday.setDate(endSunday.getDate() - (COLS - 1) * 7);
+      const winStart = new Date(today);
+      winStart.setDate(today.getDate() - (tf - 1));
+      const startSunday = new Date(winStart);
+      startSunday.setDate(winStart.getDate() - winStart.getDay());
+      const COLS = Math.round((endSunday - startSunday) / (7 * 864e5)) + 1;
 
-      const W = LABEL_L + COLS * STEP - GAP + 4;
-      const H = LABEL_T + ROWS * STEP - GAP;
-      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('viewBox', `0 0 ${VB_W} ${VB_H}`);
 
-      function mkText(content, x, y, cls) {
-        const t = document.createElementNS(NS, 'text');
-        t.setAttribute('x', x); t.setAttribute('y', y);
-        t.setAttribute('class', cls);
-        t.textContent = content;
-        return t;
-      }
+      // Square cells that fill the width, capped so short ranges aren't huge;
+      // centered in the fixed viewBox.
+      const step = Math.min(VB_W / COLS, VB_H / ROWS, CELL_CAP);
+      glowStep = step;
+      const gap = step * 0.15, cell = step - gap, rx = Math.max(1, cell * 0.28);
+      const xOff = (VB_W - COLS * step) / 2;
+      const yOff = (VB_H - ROWS * step) / 2;
 
-      // Day-of-week labels
-      [[1,'Mon'],[3,'Wed'],[5,'Fri']].forEach(([row, label]) => {
-        const t = mkText(label, 0, LABEL_T + row * STEP + CELL / 2, 'gh-axis-label');
-        t.setAttribute('dominant-baseline', 'middle');
-        svg.appendChild(t);
-      });
-
-      // Month labels — pinned to the column where each month first appears.
-      // Depending on where the 13-week window lands, its column start dates
-      // span either three or four calendar months. When it's four, the leading
-      // one is only a sliver of a month at the left edge, so drop it and name
-      // just three; when it's already three, keep them all.
-      const monthMarks = [];
-      let lastMonth = -1;
-      for (let col = 0; col < COLS; col++) {
-        const d = new Date(startSunday);
-        d.setDate(startSunday.getDate() + col * 7);
-        const m = d.getMonth();
-        if (m !== lastMonth) { lastMonth = m; monthMarks.push({ col, m }); }
-      }
-      if (monthMarks.length > 3) monthMarks.shift();
-      monthMarks.forEach(({ col, m }) => {
-        const t = mkText(MONTHS[m], LABEL_L + col * STEP, LABEL_T - 3, 'gh-axis-label');
-        t.setAttribute('text-anchor', 'start');
-        svg.appendChild(t);
-      });
-
-      // Cells — render every day in the grid; level-0 for days with no contributions
-      glowCells = [];
       const glowRects = [];
       for (let col = 0; col < COLS; col++) {
         for (let row = 0; row < ROWS; row++) {
@@ -301,28 +268,69 @@
           if (d > today) continue;
           const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
           const level = byDate[dateStr] ?? 0;
-          const x = LABEL_L + col * STEP, y = LABEL_T + row * STEP;
+          const x = xOff + col * step, y = yOff + row * step;
           const rect = document.createElementNS(NS, 'rect');
-          rect.setAttribute('x', x);
-          rect.setAttribute('y', y);
-          rect.setAttribute('width', CELL); rect.setAttribute('height', CELL);
-          rect.setAttribute('rx', 2);
+          rect.setAttribute('x', x); rect.setAttribute('y', y);
+          rect.setAttribute('width', cell); rect.setAttribute('height', cell);
+          rect.setAttribute('rx', rx);
           rect.setAttribute('class', `gh-cell--${level}`);
           svg.appendChild(rect);
 
           // Matching glow overlay, drawn on top of every base cell below.
           const glow = document.createElementNS(NS, 'rect');
-          glow.setAttribute('x', x);
-          glow.setAttribute('y', y);
-          glow.setAttribute('width', CELL); glow.setAttribute('height', CELL);
-          glow.setAttribute('rx', 2);
+          glow.setAttribute('x', x); glow.setAttribute('y', y);
+          glow.setAttribute('width', cell); glow.setAttribute('height', cell);
+          glow.setAttribute('rx', rx);
           glow.setAttribute('class', 'gh-cell-glow');
           glowRects.push(glow);
-          glowCells.push({ cx: x + CELL / 2, cy: y + CELL / 2, glow });
+          glowCells.push({ cx: x + cell / 2, cy: y + cell / 2, glow });
         }
       }
-      // Append the glow layer last so it sits above all base cells.
       glowRects.forEach(g => svg.appendChild(g));
+    }
+
+    // Real, timeframe-aware stats from the daily contribution counts.
+    function renderStats(tf) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const start = new Date(today);
+      start.setDate(today.getDate() - (tf - 1));
+      const startStr = start.toISOString().slice(0, 10);
+      const win = allDays.filter(c => c.date >= startStr && c.count != null);
+
+      let total = 0, active = 0, streak = 0, best = 0, busiest = null;
+      for (const c of win) {
+        total += c.count;
+        if (c.count > 0) { active++; streak++; if (streak > best) best = streak; }
+        else streak = 0;
+        if (!busiest || c.count > busiest.count) busiest = c;
+      }
+
+      const set = (name, val) => {
+        const el = tip.querySelector(`[data-stat="${name}"]`);
+        if (el) el.textContent = val;
+      };
+      set('contrib', total.toLocaleString());
+      set('active', `${active} ${active === 1 ? 'day' : 'days'}`);
+      set('streak', `${best} ${best === 1 ? 'day' : 'days'}`);
+      if (busiest && busiest.count > 0) {
+        const dm = new Date(busiest.date + 'T00:00:00');
+        set('busiest', `${busiest.count} · ${MONTHS[dm.getMonth()]} ${dm.getDate()}`);
+      } else {
+        set('busiest', '—');
+      }
+
+      // Header count + range reflect the selected window too.
+      tip.querySelector('.gh-tip-count').textContent = total.toLocaleString();
+      tip.querySelector('.gh-tip-range').textContent = TF_LABEL[tf];
+    }
+
+    function render(tf) {
+      currentTf = tf;
+      renderGraph(tf);
+      renderStats(tf);
+      tip.querySelectorAll('.gh-tip-tf').forEach(b => {
+        b.classList.toggle('is-active', Number(b.dataset.tf) === tf);
+      });
     }
 
     // ── Cursor-following glow ────────────────────────────────────────────────
