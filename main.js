@@ -204,10 +204,10 @@
       </div>
       <svg class="gh-tip-graph" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="gh-tip-stats">
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Contributions</span><span class="gh-tip-stat-value" data-stat="contrib">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Active days</span><span class="gh-tip-stat-value" data-stat="active">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Longest streak</span><span class="gh-tip-stat-value" data-stat="streak">–</span></div>
-        <div class="gh-tip-stat-row"><span class="gh-tip-stat-label">Busiest day</span><span class="gh-tip-stat-value" data-stat="busiest">–</span></div>
+        <div class="gh-tip-stat-item"><span class="gh-tip-stat-value" data-stat="contrib">–</span><span class="gh-tip-stat-label">Contributions</span></div>
+        <div class="gh-tip-stat-item"><span class="gh-tip-stat-value" data-stat="active">–</span><span class="gh-tip-stat-label">Active days</span></div>
+        <div class="gh-tip-stat-item"><span class="gh-tip-stat-value" data-stat="streak">–</span><span class="gh-tip-stat-label">Longest streak</span></div>
+        <div class="gh-tip-stat-item"><span class="gh-tip-stat-value" data-stat="busiest">–</span><span class="gh-tip-stat-label">Busiest day</span></div>
       </div>
     `;
     // Lives above the content as a fixed overlay — never added to the page
