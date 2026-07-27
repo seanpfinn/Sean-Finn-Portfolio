@@ -230,7 +230,7 @@
 
     // Contribution heatmap with a month axis (x, top) and weekday axis (y, left),
     // sized to a constant viewBox so labels stay the same size across timeframes.
-    const VB_W = 340, VB_H = 100, CELL_CAP = 16, ROWS = 7;
+    const VB_W = 340, VB_H = 125, ROWS = 7;
     const AX_L = 24, AX_T = 13;      // gutters for the y-axis (weekdays) / x-axis (months)
     const AX_FONT = 7;               // axis label size, in viewBox units
     let glowStep = 12;               // cell pitch of the current render, for the glow radius
@@ -253,13 +253,17 @@
 
       svg.setAttribute('viewBox', `0 0 ${VB_W} ${VB_H}`);
 
-      // Square cells filling the plot area (right of the y-axis, below the x-axis),
-      // capped so short ranges aren't huge. Grid is left-anchored at the y-axis.
-      const areaW = VB_W - AX_L, areaH = VB_H - AX_T;
-      const step = Math.min(areaW / COLS, areaH / ROWS, CELL_CAP);
-      glowStep = step;
-      const gap = step * 0.15, cell = step - gap, rx = Math.max(1, cell * 0.28);
+      // The plot area is a fixed box (right of the y-axis, below the x-axis); the
+      // grid always fills it, so the chart's footprint never changes. Cells scale
+      // to the timeframe — wide for 30 days, narrow for a full year. Row height is
+      // constant (7 rows), column width shrinks as more weeks are shown.
       const xOff = AX_L, yOff = AX_T;
+      const cellW = (VB_W - AX_L) / COLS;
+      const cellH = (VB_H - AX_T) / ROWS;
+      glowStep = cellH;   // constant → the spotlight stays the same size across timeframes
+      const gap = Math.min(cellW, cellH) * 0.16;
+      const rectW = cellW - gap, rectH = cellH - gap;
+      const rx = Math.min(rectW, rectH) * 0.3;
 
       function mkText(txt, x, y, anchor) {
         const t = document.createElementNS(NS, 'text');
@@ -273,7 +277,7 @@
 
       // Y-axis: weekday labels (Mon / Wed / Fri), aligned to their rows.
       [[1, 'Mon'], [3, 'Wed'], [5, 'Fri']].forEach(([row, label]) => {
-        const t = mkText(label, AX_L - 4, yOff + row * step + cell / 2, 'end');
+        const t = mkText(label, AX_L - 4, yOff + row * cellH + cellH / 2, 'end');
         t.setAttribute('dominant-baseline', 'middle');
         svg.appendChild(t);
       });
@@ -281,7 +285,7 @@
       // X-axis: month labels at the column where each new month begins. Skip the
       // leading partial month (a thin sliver at the left whose label would land
       // over the next month) and keep a min column gap so labels never collide.
-      const minGap = Math.max(2, Math.ceil((AX_FONT * 2.2) / step));
+      const minGap = Math.max(2, Math.ceil((AX_FONT * 2.2) / cellW));
       let lastMonth = -1, lastLabelCol = -99;
       for (let col = 0; col < COLS; col++) {
         const d = new Date(startSunday);
@@ -291,7 +295,7 @@
           lastMonth = m;
           const isLeadingSliver = col === 0 && d.getDate() > 7;
           if (!isLeadingSliver && col - lastLabelCol >= minGap) {
-            svg.appendChild(mkText(MONTHS[m], xOff + col * step, AX_T - 4, 'start'));
+            svg.appendChild(mkText(MONTHS[m], xOff + col * cellW, yOff - 4, 'start'));
             lastLabelCol = col;
           }
         }
@@ -305,10 +309,10 @@
           if (d > today) continue;
           const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
           const level = byDate[dateStr] ?? 0;
-          const x = xOff + col * step, y = yOff + row * step;
+          const x = xOff + col * cellW, y = yOff + row * cellH;
           const rect = document.createElementNS(NS, 'rect');
           rect.setAttribute('x', x); rect.setAttribute('y', y);
-          rect.setAttribute('width', cell); rect.setAttribute('height', cell);
+          rect.setAttribute('width', rectW); rect.setAttribute('height', rectH);
           rect.setAttribute('rx', rx);
           rect.setAttribute('class', `gh-cell--${level}`);
           svg.appendChild(rect);
@@ -316,11 +320,11 @@
           // Matching glow overlay, drawn on top of every base cell below.
           const glow = document.createElementNS(NS, 'rect');
           glow.setAttribute('x', x); glow.setAttribute('y', y);
-          glow.setAttribute('width', cell); glow.setAttribute('height', cell);
+          glow.setAttribute('width', rectW); glow.setAttribute('height', rectH);
           glow.setAttribute('rx', rx);
           glow.setAttribute('class', 'gh-cell-glow');
           glowRects.push(glow);
-          glowCells.push({ cx: x + cell / 2, cy: y + cell / 2, glow });
+          glowCells.push({ cx: x + rectW / 2, cy: y + rectH / 2, glow });
         }
       }
       glowRects.forEach(g => svg.appendChild(g));
