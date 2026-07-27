@@ -228,11 +228,12 @@
     // is { cx, cy, glow } in viewBox units.
     let glowCells = [];
 
-    // Bare contribution heatmap (no axis labels, matching the reference), sized
-    // to fill a constant viewBox so every timeframe reads at the same footprint:
-    // cells stay a comfortable size for 30/90 days and shrink to pack a full year.
-    const VB_W = 340, VB_H = 84, CELL_CAP = 22, ROWS = 7;
-    let glowStep = 12;   // cell pitch of the current render, for the glow radius
+    // Contribution heatmap with a month axis (x, top) and weekday axis (y, left),
+    // sized to a constant viewBox so labels stay the same size across timeframes.
+    const VB_W = 340, VB_H = 100, CELL_CAP = 16, ROWS = 7;
+    const AX_L = 24, AX_T = 13;      // gutters for the y-axis (weekdays) / x-axis (months)
+    const AX_FONT = 7;               // axis label size, in viewBox units
+    let glowStep = 12;               // cell pitch of the current render, for the glow radius
     function renderGraph(tf) {
       svg.innerHTML = '';
       glowCells = [];
@@ -252,13 +253,47 @@
 
       svg.setAttribute('viewBox', `0 0 ${VB_W} ${VB_H}`);
 
-      // Square cells that fill the width, capped so short ranges aren't huge;
-      // centered in the fixed viewBox.
-      const step = Math.min(VB_W / COLS, VB_H / ROWS, CELL_CAP);
+      // Square cells filling the plot area (right of the y-axis, below the x-axis),
+      // capped so short ranges aren't huge. Grid is left-anchored at the y-axis.
+      const areaW = VB_W - AX_L, areaH = VB_H - AX_T;
+      const step = Math.min(areaW / COLS, areaH / ROWS, CELL_CAP);
       glowStep = step;
       const gap = step * 0.15, cell = step - gap, rx = Math.max(1, cell * 0.28);
-      const xOff = (VB_W - COLS * step) / 2;
-      const yOff = (VB_H - ROWS * step) / 2;
+      const xOff = AX_L, yOff = AX_T;
+
+      function mkText(txt, x, y, anchor) {
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', x); t.setAttribute('y', y);
+        t.setAttribute('class', 'gh-axis-label');
+        t.setAttribute('font-size', AX_FONT);
+        t.setAttribute('text-anchor', anchor);
+        t.textContent = txt;
+        return t;
+      }
+
+      // Y-axis: weekday labels (Mon / Wed / Fri), aligned to their rows.
+      [[1, 'Mon'], [3, 'Wed'], [5, 'Fri']].forEach(([row, label]) => {
+        const t = mkText(label, AX_L - 4, yOff + row * step + cell / 2, 'end');
+        t.setAttribute('dominant-baseline', 'middle');
+        svg.appendChild(t);
+      });
+
+      // X-axis: month labels at the column where each new month begins, with a
+      // minimum column gap so they never collide (matters most on the 1Y view).
+      const minGap = Math.max(2, Math.ceil((AX_FONT * 2.2) / step));
+      let lastMonth = -1, lastLabelCol = -99;
+      for (let col = 0; col < COLS; col++) {
+        const d = new Date(startSunday);
+        d.setDate(startSunday.getDate() + col * 7);
+        const m = d.getMonth();
+        if (m !== lastMonth) {
+          lastMonth = m;
+          if (col - lastLabelCol >= minGap && col <= COLS - 1) {
+            svg.appendChild(mkText(MONTHS[m], xOff + col * step, AX_T - 4, 'start'));
+            lastLabelCol = col;
+          }
+        }
+      }
 
       const glowRects = [];
       for (let col = 0; col < COLS; col++) {
@@ -310,14 +345,9 @@
         if (el) el.textContent = val;
       };
       set('contrib', total.toLocaleString());
-      set('active', `${active} ${active === 1 ? 'day' : 'days'}`);
-      set('streak', `${best} ${best === 1 ? 'day' : 'days'}`);
-      if (busiest && busiest.count > 0) {
-        const dm = new Date(busiest.date + 'T00:00:00');
-        set('busiest', `${busiest.count} · ${MONTHS[dm.getMonth()]} ${dm.getDate()}`);
-      } else {
-        set('busiest', '—');
-      }
+      set('active', String(active));
+      set('streak', String(best));
+      set('busiest', busiest && busiest.count > 0 ? String(busiest.count) : '—');
 
       // Header count + range reflect the selected window too.
       tip.querySelector('.gh-tip-count').textContent = total.toLocaleString();

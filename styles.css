@@ -1695,7 +1695,7 @@ body {
 .gh-tooltip {
   position: fixed;
   z-index: 1000;
-  width: 26.25rem;
+  width: 30rem;
   background: var(--bg);
   border: 0.0625rem solid var(--border);
   border-radius: 1rem;
@@ -1788,6 +1788,13 @@ body {
   height: auto;
 }
 
+/* Axis labels (months across the top, weekdays down the left). font-size is set
+   as an SVG attribute in viewBox units so it renders consistently at any timeframe. */
+.gh-axis-label {
+  font-family: var(--mono);
+  fill: var(--text-dim);
+}
+
 .gh-cell--0 { fill: rgba(0,0,0,0.07); }
 .gh-cell--1 { fill: #b6e8c0; }
 .gh-cell--2 { fill: #6cc97a; }
@@ -1812,24 +1819,39 @@ body {
 }
 .dark .gh-cell-glow { fill: #ffffff; }
 
-/* Stat rows (Contributions / Active days / Longest streak / Busiest day). */
+/* Stats as a horizontal KPI strip: Contributions / Active days / Longest streak
+   / Busiest day, each a big value over a small label, split by hairline dividers. */
 .gh-tip-stats {
   display: flex;
-  flex-direction: column;
-}
-.gh-tip-stat-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 0;
+  flex-direction: row;
+  padding-top: 0.875rem;
   border-top: 0.0625rem solid var(--border);
-  font-family: var(--font);
-  font-size: 0.8125rem;
 }
-.gh-tip-stat-label { color: var(--text-dim); }
+.gh-tip-stat-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  padding: 0 0.875rem;
+}
+.gh-tip-stat-item + .gh-tip-stat-item {
+  border-left: 0.0625rem solid var(--border);
+}
+.gh-tip-stat-item:first-child { padding-left: 0; }
+.gh-tip-stat-item:last-child { padding-right: 0; }
+.gh-tip-stat-label {
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.75rem;
+}
 .gh-tip-stat-value {
   color: var(--text);
-  font-weight: 500;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 
