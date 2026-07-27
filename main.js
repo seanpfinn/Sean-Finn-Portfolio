@@ -278,8 +278,9 @@
         svg.appendChild(t);
       });
 
-      // X-axis: month labels at the column where each new month begins, with a
-      // minimum column gap so they never collide (matters most on the 1Y view).
+      // X-axis: month labels at the column where each new month begins. Skip the
+      // leading partial month (a thin sliver at the left whose label would land
+      // over the next month) and keep a min column gap so labels never collide.
       const minGap = Math.max(2, Math.ceil((AX_FONT * 2.2) / step));
       let lastMonth = -1, lastLabelCol = -99;
       for (let col = 0; col < COLS; col++) {
@@ -288,7 +289,8 @@
         const m = d.getMonth();
         if (m !== lastMonth) {
           lastMonth = m;
-          if (col - lastLabelCol >= minGap && col <= COLS - 1) {
+          const isLeadingSliver = col === 0 && d.getDate() > 7;
+          if (!isLeadingSliver && col - lastLabelCol >= minGap) {
             svg.appendChild(mkText(MONTHS[m], xOff + col * step, AX_T - 4, 'start'));
             lastLabelCol = col;
           }
