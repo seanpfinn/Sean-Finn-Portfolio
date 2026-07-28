@@ -314,7 +314,8 @@
           rect.setAttribute('x', x); rect.setAttribute('y', y);
           rect.setAttribute('width', rectW); rect.setAttribute('height', rectH);
           rect.setAttribute('rx', rx);
-          rect.setAttribute('class', `gh-cell--${level}`);
+          rect.setAttribute('class', `gh-cell gh-cell--${level}`);
+          rect.style.animationDelay = (col * 0.012) + 's';   // left→right cascade
           svg.appendChild(rect);
 
           // Matching glow overlay, drawn on top of every base cell below.
@@ -346,18 +347,35 @@
         if (!busiest || c.count > busiest.count) busiest = c;
       }
 
-      const set = (name, val) => {
-        const el = tip.querySelector(`[data-stat="${name}"]`);
-        if (el) el.textContent = val;
-      };
-      set('contrib', total.toLocaleString());
-      set('active', String(active));
-      set('streak', String(best));
-      set('busiest', busiest && busiest.count > 0 ? String(busiest.count) : '—');
+      const busiestVal = busiest && busiest.count > 0 ? busiest.count : null;
+      countTo(tip.querySelector('[data-stat="contrib"]'), total);
+      countTo(tip.querySelector('[data-stat="active"]'), active);
+      countTo(tip.querySelector('[data-stat="streak"]'), best);
+      countTo(tip.querySelector('[data-stat="busiest"]'), busiestVal);
 
       // Header count + range reflect the selected window too.
-      tip.querySelector('.gh-tip-count').textContent = total.toLocaleString();
+      countTo(tip.querySelector('.gh-tip-count'), total);
       tip.querySelector('.gh-tip-range').textContent = TF_LABEL[tf];
+    }
+
+    // Tween a numeric stat from its current value to `to` (easeOutCubic). A null
+    // target renders "—"; a per-element token cancels any superseded tween so
+    // rapid timeframe switches don't leave two loops fighting over one element.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function countTo(el, to) {
+      if (!el) return;
+      if (to == null) { el._tok = (el._tok || 0) + 1; el.textContent = '—'; return; }
+      const from = parseInt((el.textContent || '').replace(/[^0-9-]/g, ''), 10) || 0;
+      const tok = el._tok = (el._tok || 0) + 1;
+      if (reduceMotion || from === to) { el.textContent = to.toLocaleString(); return; }
+      const dur = 480, t0 = performance.now();
+      (function tick(now) {
+        if (el._tok !== tok) return;   // superseded by a newer tween
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(from + (to - from) * eased).toLocaleString();
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
     }
 
     function render(tf) {
