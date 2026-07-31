@@ -326,11 +326,11 @@ body {
 }
 
 .hero-link {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.125rem;
+  color: #0066cc;
+  text-decoration: none;
   transition: opacity 0.15s;
 }
+.dark .hero-link { color: #5b9dff; }
 
 .hero-link:hover { opacity: 0.55; }
 
