@@ -529,6 +529,56 @@
     }
   }
 
+  // ── "More case studies" CTAs — two random other projects at the end of each
+  //    case study, reshuffled on every page load. Injected here (before the
+  //    in-view video observer below) so any video cards get observed too.
+  (function () {
+    const col = document.querySelector('body.proj-page .proj-col');
+    if (!col) return;
+    const PROJECTS = [
+      { href: 'clear-watchos-app.html',      title: 'watchOS App',    clear: true, img: 'assets/tile-watchos-app.png', bg: '#efefef' },
+      { href: 'clear-widgets.html',          title: 'Widgets',        clear: true, img: 'assets/tile-widgets.png',     bg: '#efefef' },
+      { href: 'plate.html',                  title: 'Plate',          clear: false, img: 'assets/tile-plate.png',      bg: '#efefef' },
+      { href: 'clear-messages.html',         title: 'Messages',       clear: true, img: 'assets/tile-messages.png',    bg: '#efefef' },
+      { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
+      { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
+      { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
+      { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
+      { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
+      { href: 'clear-vault.html',            title: 'Vault',          clear: true, video: 'assets/gallery-vault-video.mp4',   bg: '#e1e1e1' },
+    ];
+    const current = location.pathname.split('/').pop();
+    const pool = PROJECTS.filter(p => p.href !== current);
+    for (let i = pool.length - 1; i > 0; i--) {   // Fisher–Yates
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const pick = pool.slice(0, 2);
+    if (pick.length < 2) return;
+
+    const media = (p) => p.video
+      ? `<video class="gv-video" src="${p.video}" muted loop playsinline preload="metadata" data-play-in-view></video>`
+      : `<img class="gv-video" src="${p.img}" alt="" />`;
+    const tag = (p) => p.clear
+      ? `<img class="gallery-card-logo gcl-clear" src="assets/logo-clear.svg" alt="CLEAR" />`
+      : `<span class="gallery-card-company">Personal</span>`;
+    const card = (p) => `
+        <a href="${p.href}" class="gallery-card">
+          <div class="gallery-card-visual" style="background: ${p.bg};">${media(p)}</div>
+          <div class="gallery-card-info">
+            <span class="gallery-card-title">${p.title}</span>
+            ${tag(p)}
+          </div>
+        </a>`;
+
+    const section = document.createElement('section');
+    section.className = 'proj-more blur-in';
+    section.innerHTML = `
+      <span class="proj-more-label">More case studies</span>
+      <div class="proj-more-grid">${pick.map(card).join('')}</div>`;
+    col.appendChild(section);
+  })();
+
   // ── Play videos when scrolled into view (no loop) ─────────────────────────
   const inViewVideos = document.querySelectorAll('video[data-play-in-view]');
   if (inViewVideos.length) {
