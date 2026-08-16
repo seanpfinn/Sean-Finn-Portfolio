@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Widgets – Sean Finn</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="case-study.css" />
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
+</head>
+<body class="proj-page">
+
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+          <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+        <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0C3.10457 0 4 0.89543 4 2Z" fill="currentColor"/>
+          <path d="M11 2C11 3.10457 10.1046 4 9 4C7.89543 4 7 3.10457 7 2C7 0.89543 7.89543 0 9 0C10.1046 0 11 0.89543 11 2Z" fill="currentColor"/>
+          <path d="M18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2C14 0.89543 14.8954 0 16 0C17.1046 0 18 0.89543 18 2Z" fill="currentColor"/>
+          <path d="M4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6C3.10457 6 4 6.89543 4 8Z" fill="currentColor"/>
+          <path d="M11 8C11 9.10457 10.1046 10 9 10C7.89543 10 7 9.10457 7 8C7 6.89543 7.89543 6 9 6C10.1046 6 11 6.89543 11 8Z" fill="currentColor"/>
+          <path d="M18 8C18 9.10457 17.1046 10 16 10C14.8954 10 14 9.10457 14 8C14 6.89543 14.8954 6 16 6C17.1046 6 18 6.89543 18 8Z" fill="currentColor"/>
+          <path d="M4 14C4 15.1046 3.10457 16 2 16C0.89543 16 0 15.1046 0 14C0 12.8954 0.89543 12 2 12C3.10457 12 4 12.8954 4 14Z" fill="currentColor"/>
+          <path d="M11 14C11 15.1046 10.1046 16 9 16C7.89543 16 7 15.1046 7 14C7 12.8954 7.89543 12 9 12C10.1046 12 11 12.8954 11 14Z" fill="currentColor"/>
+          <path d="M18 14C18 15.1046 17.1046 16 16 16C14.8954 16 14 15.1046 14 14C14 12.8954 14.8954 12 16 12C17.1046 12 18 12.8954 18 14Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="splash-nav-links" id="splash-nav-links">
+            <button class="nav-close-btn" id="nav-close-btn" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-overlay-scroll">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Projects</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">CLEAR</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="clear-watchos-app.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  watchOS App
+                </a>
+                <a href="clear-widgets.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Widgets
+                </a>
+                <a href="clear-messages.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Messages
+                </a>
+                <a href="clear-passkeys.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Passkeys
+                </a>
+                <a href="clear-live-activity.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Live Activities
+                </a>
+                <a href="clear-terminal-guide.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Terminal Guide
+                </a>
+                <a href="clear-location-details.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Locations
+                </a>
+                <a href="clear-vault.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Vault
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">META</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="meta-codec-avatars.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Codec Avatars Workspace
+                </a>
+                <a href="meta-localization.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  User Guided Localization
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">PERSONAL</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="plate.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Plate
+                </a>
+                <a href="music-box.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Music Box
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="assets/sean-finn-resume.pdf" class="splash-nav-link" target="_blank" rel="noopener">Resume</a>
+      </div>
+        </div>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
+
+    <main class="proj-col blur-in" style="animation-delay:0.05s">
+    <div class="proj-header-group">
+      <div class="proj-title-block">
+        <h1 class="proj-title-new">Widgets</h1>
+        <p class="proj-subtitle-new">Home-screen widgets that surface the travel day — gate, boarding time, and checkpoint status — without opening the app.</p>
+      </div>
+      <div class="proj-meta-row-new">
+        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">2026</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
+      </div>
+      <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
+      <script>
+        (function () {
+          var ua = navigator.userAgent;
+          var btn = document.getElementById('dl-btn');
+          if (/android/i.test(ua)) {
+            btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
+          } else if (/iphone|ipad|ipod/i.test(ua)) {
+            btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
+          }
+        })();
+      </script>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Context</span>
+      <p class="proj-caption-body">The most valuable moments in the CLEAR app are also the briefest: a member checking whether it's time to head to the gate. Home-screen widgets bring that answer to the surface, turning a full app session into a single glance.</p>
+    </div>
+    <div class="proj-panel-new" style="background:#ededed;">
+      <img src="assets/tile-widgets.png" alt="" style="width:100%; height:100%; object-fit:cover; display:block;" />
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Problem</span>
+      <p class="proj-caption-body">Time-sensitive travel information — gate, boarding time, terminal — lived one or two taps deep in the app, so members repeatedly opened and closed CLEAR just to re-check a detail that changes throughout the day.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Role &amp; Approach</span>
+      <p class="proj-caption-body">I designed the widget family across sizes, deciding what each one should show and how it adapts as the travel day progresses. The priority was a widget that's useful before a member ever taps it.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Process</span>
+      <p class="proj-caption-body">I audited what members check most on travel day, then mapped those data points to widget sizes — small for a single next-up detail, larger for the fuller picture. I designed each to update through the day so the widget always reflects the current moment, not the last time the app was opened.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">User Journey</span>
+      <p class="proj-caption-body">A member glances at their home screen and sees their flight — ATL to SJC, Gate A25, boarding at 10:59 — alongside the day's essentials, deciding their next move without a single tap.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Constraints</span>
+      <p class="proj-caption-body">Widgets refresh on the system's schedule, not on demand, so the design had to stay useful even when data was a few minutes stale — communicating timing honestly and degrading gracefully between updates.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Summary</span>
+      <p class="proj-caption-body">CLEAR's home-screen widgets put the travel day one glance away — gate, boarding time, and status — so members spend less time in the app and more time moving.</p>
+    </div>
+
+    <div class="proj-caption">
+      <span class="proj-caption-label">Next Steps</span>
+      <p class="proj-caption-body">Live and iterating. Next up: Lock Screen widgets and interactive controls that let members act on the day without opening the app.</p>
+    </div>
+  </main>
+
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.spottedinprod.com/sean" class="social-link" target="_blank" rel="noopener">SIP</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: May 9th, 2026</p>
+      <p class="weather"><span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span><span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span></p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script type="module" src="sound.js"></script>
+</body>
+</html>
