@@ -2518,3 +2518,31 @@ body {
 }
 
 
+
+/* ================================
+   HOMEPAGE ENTRANCE — stagger the hero and each project tile so elements
+   blur in individually on load instead of the whole page as one block.
+   (Uses the shared blurIn keyframes; nav + footer keep their own blur-in.)
+   ================================ */
+.splash-hero {
+  animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.05s;
+}
+.project-grid > .gallery-card {
+  animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.project-grid > .gallery-card:nth-child(1)  { animation-delay: 0.12s; }
+.project-grid > .gallery-card:nth-child(2)  { animation-delay: 0.17s; }
+.project-grid > .gallery-card:nth-child(3)  { animation-delay: 0.22s; }
+.project-grid > .gallery-card:nth-child(4)  { animation-delay: 0.27s; }
+.project-grid > .gallery-card:nth-child(5)  { animation-delay: 0.32s; }
+.project-grid > .gallery-card:nth-child(6)  { animation-delay: 0.37s; }
+.project-grid > .gallery-card:nth-child(7)  { animation-delay: 0.42s; }
+.project-grid > .gallery-card:nth-child(8)  { animation-delay: 0.47s; }
+.project-grid > .gallery-card:nth-child(9)  { animation-delay: 0.52s; }
+.project-grid > .gallery-card:nth-child(10) { animation-delay: 0.57s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-hero,
+  .project-grid > .gallery-card { animation: none; }
+}
