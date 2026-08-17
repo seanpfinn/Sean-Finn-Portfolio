@@ -1589,3 +1589,39 @@
     gap: 1.25rem;
   }
 }
+
+/* ================================
+   CASE-STUDY ENTRANCE — stagger each content section so elements blur in
+   individually on load (nav + footer keep their own block-level blur-in).
+   ================================ */
+.proj-col > * {
+  animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.proj-col > *:nth-child(1) { animation-delay: 0.05s; }
+.proj-col > *:nth-child(2) { animation-delay: 0.10s; }
+.proj-col > *:nth-child(3) { animation-delay: 0.15s; }
+.proj-col > *:nth-child(4) { animation-delay: 0.20s; }
+.proj-col > *:nth-child(5) { animation-delay: 0.25s; }
+.proj-col > *:nth-child(6) { animation-delay: 0.30s; }
+.proj-col > *:nth-child(7) { animation-delay: 0.35s; }
+.proj-col > *:nth-child(8) { animation-delay: 0.40s; }
+.proj-col > *:nth-child(9) { animation-delay: 0.45s; }
+.proj-col > *:nth-child(10) { animation-delay: 0.50s; }
+.proj-col > *:nth-child(11) { animation-delay: 0.55s; }
+.proj-col > *:nth-child(12) { animation-delay: 0.60s; }
+.proj-col > *:nth-child(13) { animation-delay: 0.65s; }
+.proj-col > *:nth-child(14) { animation-delay: 0.70s; }
+.proj-col > *:nth-child(15) { animation-delay: 0.75s; }
+.proj-col > *:nth-child(16) { animation-delay: 0.80s; }
+.proj-col > *:nth-child(17) { animation-delay: 0.85s; }
+.proj-col > *:nth-child(18) { animation-delay: 0.90s; }
+.proj-col > *:nth-child(19) { animation-delay: 0.95s; }
+.proj-col > *:nth-child(20) { animation-delay: 1.00s; }
+.proj-col > *:nth-child(21) { animation-delay: 1.05s; }
+.proj-col > *:nth-child(22) { animation-delay: 1.10s; }
+.proj-col > *:nth-child(23) { animation-delay: 1.15s; }
+.proj-col > *:nth-child(24) { animation-delay: 1.20s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .proj-col > * { animation: none; }
+}

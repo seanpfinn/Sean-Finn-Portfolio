@@ -572,7 +572,7 @@
         </a>`;
 
     const section = document.createElement('section');
-    section.className = 'proj-more blur-in';
+    section.className = 'proj-more';
     section.innerHTML = `
       <span class="proj-more-label">More case studies</span>
       <div class="proj-more-grid">${pick.map(card).join('')}</div>`;
