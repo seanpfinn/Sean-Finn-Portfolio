@@ -536,8 +536,8 @@
     const col = document.querySelector('body.proj-page .proj-col');
     if (!col) return;
     const PROJECTS = [
-      { href: 'clear-watchos-app.html',      title: 'watchOS App',    clear: true, img: 'assets/tile-watchos-app.png', bg: '#efefef' },
-      { href: 'clear-widgets.html',          title: 'Widgets',        clear: true, img: 'assets/tile-widgets.png',     bg: '#efefef' },
+      { href: 'clear-watchos-app.html',      title: 'watchOS App',    clear: true, video: 'assets/gallery-watchos-app.mp4', bg: '#efefef' },
+      { href: 'clear-widgets.html',          title: 'Widgets',        clear: true, video: 'assets/gallery-widgets.mp4',     bg: '#efefef' },
       { href: 'plate.html',                  title: 'Plate',          clear: false, img: 'assets/tile-plate.png',      bg: '#efefef' },
       { href: 'clear-messages.html',         title: 'Messages',       clear: true, img: 'assets/tile-messages.png',    bg: '#efefef' },
       { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
