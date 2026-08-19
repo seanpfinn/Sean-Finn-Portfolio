@@ -1,4 +1,4 @@
-import { defineSound, ensureReady, setMasterVolume } from './node_modules/@web-kits/audio/dist/index.js';
+import { defineSound, ensureReady, setMasterVolume } from './lib/webkits-audio.js';
 
 const VOLUME = 0.65;
 
@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ) return;
 
     el.addEventListener('click', e => {
+      // Don't hijack modifier/middle clicks — let the browser open a new tab etc.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       e.preventDefault();
       play(transitionSound);
       setTimeout(() => { window.location.href = href; }, 80);
