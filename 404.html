@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found – Sean Finn</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script>if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');</script>
+  <style>
+    html { overflow: auto; height: auto; }
+    body {
+      min-height: 100vh; margin: 0; cursor: auto;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+    }
+    .e404 { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+    .e404-code {
+      font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text); opacity: 0.5;
+    }
+    .e404-title {
+      font-family: var(--font); font-size: 2rem; font-weight: 500;
+      letter-spacing: -0.04em; color: var(--text); margin: 0;
+    }
+    .e404-link { font-family: var(--font); font-size: 1rem; color: #0066cc; }
+    :root:not([data-theme="light"]) .e404-link { }
+    .dark .e404-link { color: #5b9dff; }
+  </style>
+</head>
+<body>
+  <div class="e404">
+    <span class="e404-code">404</span>
+    <h1 class="e404-title">This page took a wrong turn.</h1>
+    <a class="e404-link" href="/">Back to home &rarr;</a>
+  </div>
+</body>
+</html>
