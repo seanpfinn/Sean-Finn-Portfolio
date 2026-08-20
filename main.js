@@ -538,8 +538,8 @@
     const PROJECTS = [
       // { href: 'clear-watchos-app.html',      title: 'watchOS App',    clear: true, video: 'assets/gallery-watchos-app.mp4', bg: '#efefef' },
       // { href: 'clear-widgets.html',          title: 'Widgets',        clear: true, video: 'assets/gallery-widgets.mp4',     bg: '#efefef' },
-      // { href: 'plate.html',                  title: 'Plate',          clear: false, img: 'assets/tile-plate.png',      bg: '#efefef' },
-      // { href: 'clear-messages.html',         title: 'Messages',       clear: true, img: 'assets/tile-messages.png',    bg: '#efefef' },
+      // { href: 'plate.html',                  title: 'Plate',          clear: false, img: 'assets/tile-plate.webp',      bg: '#efefef' },
+      // { href: 'clear-messages.html',         title: 'Messages',       clear: true, img: 'assets/tile-messages.webp',    bg: '#efefef' },
       // { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
       // { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
