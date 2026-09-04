@@ -1,4 +1,7 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/clear-passkeys", "destination": "/clear-passkey-management", "permanent": true }
+  ]
 }
