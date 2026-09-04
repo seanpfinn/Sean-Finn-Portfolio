@@ -978,10 +978,12 @@ body {
     width: 2.5rem;
     height: 2.5rem;
   }
-  .splash-page .project-grid {
+  .splash-page .project-grid,
+  .splash-page .project-grid.is-cols-3 {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
+  .globe-canvas { height: min(26rem, 60vh); }
   .gallery-card-visual { aspect-ratio: 1 / 1; }
   .splash-footer {
     position: static;
@@ -1933,6 +1935,56 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   width: 100%;
+}
+
+/* Three-across density, chosen from the layout toggle. */
+.project-grid.is-cols-3 { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.project-grid.is-cols-3 .gallery-card-title { font-size: 0.84375rem; }
+
+/* ── Layout toggle ────────────────────────────────────────────────────────
+   Dot-matrix density glyphs (2-across / 3-across) plus the globe. */
+.layout-bar {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.layout-toggle { display: flex; align-items: center; gap: 1rem; }
+.layout-btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0.125rem;
+  line-height: 0;
+  cursor: pointer;
+  color: var(--border);
+  transition: color 0.15s ease;
+}
+.layout-btn svg { display: block; fill: currentColor; }
+.layout-btn--globe svg { fill: none; }
+.layout-btn:hover { color: var(--text-muted); }
+.layout-btn[aria-pressed="true"] { color: var(--text); }
+.dark .layout-btn { color: #3f3f46; }
+.dark .layout-btn:hover { color: var(--text-dim); }
+.dark .layout-btn[aria-pressed="true"] { color: var(--text); }
+
+/* ── Globe view ───────────────────────────────────────────────────────────
+   Project media mapped onto a sphere — no titles or logos, just the tiles. */
+.globe-stage { width: 100%; }
+.globe-canvas {
+  width: 100%;
+  height: min(38rem, 70vh);
+  touch-action: none;
+  cursor: grab;
+}
+.globe-canvas:active { cursor: grabbing; }
+.globe-canvas canvas { display: block; width: 100%; height: 100%; }
+.globe-hint {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
 }
 
 /* Card shell */
