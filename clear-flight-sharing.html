@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Messages – Sean Finn</title>
-  <meta name="description" content="An in-app inbox that gives CLEAR a voice — membership news, partner perks, and milestones, without cluttering email." />
-  <link rel="canonical" href="https://www.seanpfinn.com/clear-messages" />
+  <title>Flight Sharing – Sean Finn</title>
+  <meta name="description" content="Sharing a flight out of the CLEAR app as a rich card that answers “when do I pick you up?” before it’s asked." />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://www.seanpfinn.com/clear-flight-sharing" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
-  <meta property="og:title" content="Messages – Sean Finn" />
-  <meta property="og:description" content="An in-app inbox that gives CLEAR a voice — membership news, partner perks, and milestones, without cluttering email." />
-  <meta property="og:url" content="https://www.seanpfinn.com/clear-messages" />
+  <meta property="og:title" content="Flight Sharing – Sean Finn" />
+  <meta property="og:description" content="Sharing a flight out of the CLEAR app as a rich card that answers “when do I pick you up?” before it’s asked." />
+  <meta property="og:url" content="https://www.seanpfinn.com/clear-flight-sharing" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Messages – Sean Finn" />
-  <meta name="twitter:description" content="An in-app inbox that gives CLEAR a voice — membership news, partner perks, and milestones, without cluttering email." />
+  <meta name="twitter:title" content="Flight Sharing – Sean Finn" />
+  <meta name="twitter:description" content="Sharing a flight out of the CLEAR app as a rich card that answers “when do I pick you up?” before it’s asked." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og-image.png" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
@@ -148,69 +149,66 @@
     <main class="proj-col" style="animation-delay:0.05s">
     <div class="proj-header-group">
       <div class="proj-title-block">
-        <h1 class="proj-title-new">Messages</h1>
-        <p class="proj-subtitle-new">An in-app inbox that gives CLEAR a voice — membership news, partner perks, and milestones, without cluttering email.</p>
+        <h1 class="proj-title-new">Flight Sharing</h1>
+        <p class="proj-subtitle-new">Sharing a flight out of the CLEAR app as a rich card that answers &ldquo;when do I pick you up?&rdquo; before it&rsquo;s asked.</p>
       </div>
       <div class="proj-meta-row-new">
         <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">CLEAR</span></div>
         <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">2026</span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS, Android</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">iOS</span></div>
       </div>
-      <a id="dl-btn" href="https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504" class="proj-dl-btn" target="_blank" rel="noopener">Download app</a>
-      <script>
-        (function () {
-          var ua = navigator.userAgent;
-          var btn = document.getElementById('dl-btn');
-          if (/android/i.test(ua)) {
-            btn.href = 'https://play.google.com/store/apps/details?id=com.clearme.clearapp';
-          } else if (/iphone|ipad|ipod/i.test(ua)) {
-            btn.href = 'https://apps.apple.com/us/app/clear-fast-touchless-access/id1436333504';
-          }
-        })();
-      </script>
     </div>
+
+    <!-- ===================================================================
+         DRAFT COPY — written from the Figma design only.
+         Everything below describes what the screens show. It does NOT
+         contain the real project narrative: your actual role, the team,
+         timeline, research, tradeoffs, or outcomes/metrics.
+         Replace before removing the noindex tag in <head>.
+         =================================================================== -->
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Context</h2>
-      <p class="proj-caption-body">CLEAR has plenty worth telling members — new benefits, partner perks, and the occasional celebration — but email is easy to miss and push is easy to tune out. The in-app Messages inbox gives those moments a home members can return to on their own terms.</p>
+      <p class="proj-caption-body">Someone texts &ldquo;What time should I meet you at the airport?&rdquo; The answer lives in the CLEAR app &mdash; flight number, arrival time, terminal, gate &mdash; but getting it into the conversation meant a screenshot or retyping it by hand. Flight Sharing sends it as a card instead.</p>
     </div>
-    <div class="proj-panel-new" style="background:#ededed;">
-      <img src="assets/tile-messages.webp" alt="Messages — Context" style="width:100%; height:100%; object-fit:cover; display:block;" decoding="async" width="575" height="314" />
+
+    <div class="proj-panel-new" style="background:#efefef;">
+      <img src="assets/tile-flight-sharing.webp" alt="Flight Sharing &mdash; a shared flight card in a Messages thread" style="width:100%; height:100%; object-fit:cover; display:block;" decoding="async" width="575" height="314" />
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Problem</h2>
-      <p class="proj-caption-body">Membership news and partner offers were scattered across email and notifications, so members either missed them or felt spammed. There was no single, calm place inside the app to catch up on what CLEAR wanted to share.</p>
+      <p class="proj-caption-body">Travel details are the most-asked-for and least-shareable thing in the app. A screenshot loses the live status the moment the flight moves, and typing it out drops exactly the details &mdash; terminal, gate &mdash; that the person picking you up actually needs.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Role &amp; Approach</h2>
-      <p class="proj-caption-body">I designed the Messages surface end to end — the inbox, the message states, and how a single message reads — balancing CLEAR's voice with a member's need to skim, act, or dismiss.</p>
+      <p class="proj-caption-body">TODO &mdash; your role, the team you worked with, and how the work was scoped.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Process</h2>
-      <p class="proj-caption-body">I defined the message types the inbox needed to hold — perks, membership updates, milestones — then designed a read/unread system, clear sender identity, and a layout that keeps promotional content from feeling like noise. Each message got a consistent structure so members always know what they're looking at.</p>
+      <p class="proj-caption-body">The shared card carries the flight&rsquo;s identity and its logistics together: carrier and flight number (DL 707), the route as the headline (JFK &rarr; DEN), and the arrival time, terminal, and gate as supporting detail. The CLEAR mark sits on the card so the recipient knows where the information came from and that it is live.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">User Journey</h2>
-      <p class="proj-caption-body">A member opens Messages and finds a free coffee from a partner, a welcome to CLEAR+, and a birthday note — each clearly dated and sourced, easy to read now or come back to later.</p>
+      <p class="proj-caption-body">A traveler opens their flight in CLEAR, shares it into a thread, and the recipient sees a formatted card rather than a wall of text &mdash; enough to plan a pickup without a follow-up question.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Constraints</h2>
-      <p class="proj-caption-body">The inbox had to carry marketing content without eroding trust, so hierarchy, restraint, and honest labeling mattered as much as the visuals. It also had to scale from a single message to a busy inbox without losing clarity.</p>
+      <p class="proj-caption-body">TODO &mdash; how the card degrades outside iMessage, what happens when a flight changes after it&rsquo;s been shared, and what could be shown to a recipient without a CLEAR account.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">CLEAR Messages gives the brand a considered, member-controlled channel — surfacing perks, news, and milestones in one calm inbox instead of scattered across email and push.</p>
+      <p class="proj-caption-body">Flight Sharing turns a screenshot into a first-class share &mdash; the flight leaves the app with its context intact.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Next Steps</h2>
-      <p class="proj-caption-body">Live and iterating. Next up: richer message types, deep links into relevant flows, and per-category preferences so members shape what they hear about.</p>
+      <p class="proj-caption-body">TODO &mdash; what shipped, what the results were, and what is still open.</p>
     </div>
   </main>
 

@@ -2,9 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.seanpfinn.com/</loc></url>
   <url><loc>https://www.seanpfinn.com/about</loc></url>
+  <url><loc>https://www.seanpfinn.com/clear-watchos-app</loc></url>
+  <url><loc>https://www.seanpfinn.com/clear-widgets</loc></url>
+  <url><loc>https://www.seanpfinn.com/clear-messages</loc></url>
+  <url><loc>https://www.seanpfinn.com/clear-passkeys</loc></url>
+  <url><loc>https://www.seanpfinn.com/clear-live-activity</loc></url>
   <url><loc>https://www.seanpfinn.com/clear-terminal-guide</loc></url>
   <url><loc>https://www.seanpfinn.com/clear-location-details</loc></url>
   <url><loc>https://www.seanpfinn.com/clear-vault</loc></url>
+  <url><loc>https://www.seanpfinn.com/plate</loc></url>
   <url><loc>https://www.seanpfinn.com/music-box</loc></url>
   <url><loc>https://www.seanpfinn.com/resume</loc></url>
 </urlset>
