@@ -1,0 +1,25 @@
+{
+  "_comment": "The Arcade library. Drop matching .gba files into assets/roms/ — no ROMs ship with this repo. `label` is optional; without one a typographic label is generated at runtime.",
+  "games": [
+    {
+      "id": "pokemon-ruby",
+      "title": "Pokémon Ruby",
+      "meta": "Game Boy Advance · 2003",
+      "rom": "assets/roms/pokemon-ruby.gba",
+      "label": "assets/cartridges/pokemon-ruby.webp",
+      "screen": "assets/arcade-pokemon-ruby.webp",
+      "shell": "#9b1c1c",
+      "accent": "#f4d03f"
+    },
+    {
+      "id": "boktai",
+      "title": "Boktai: The Sun Is in Your Hand",
+      "meta": "Game Boy Advance · 2003",
+      "rom": "assets/roms/boktai.gba",
+      "label": "assets/cartridges/boktai.webp",
+      "screen": "assets/arcade-boktai.webp",
+      "shell": "#1f6fb2",
+      "accent": "#ffd23f"
+    }
+  ]
+}

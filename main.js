@@ -793,17 +793,6 @@
     const upNextListEl   = document.getElementById('miniplayer-upnext-list');
 
     let player = null;
-    // The YouTube IFrame API is heavy third-party JS (and noisy in the console),
-    // so it isn't loaded on page load — only on the visitor's first interaction
-    // with the mini-player. wantPlay remembers a play press made before it's ready.
-    let ytRequested = false, wantPlay = false;
-    function loadYouTube() {
-      if (ytRequested) return;
-      ytRequested = true;
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-    }
 
     function updateTicker() {
       const clip = titleEl.parentElement;
@@ -916,10 +905,11 @@
     });
 
     // The IFrame API queues playVideo/pauseVideo/next/previousVideo calls
-    // internally until the player is actually ready, so these are safe to
-    // call as soon as `player` exists — no separate "ready" gate needed.
+    // internally until the player is actually ready. Getters are NOT queued
+    // though — getPlayerState isn't attached to the instance until onReady —
+    // so gate on it before reading, the same way updateProgress does.
     function togglePlay() {
-      if (!player) { wantPlay = true; loadYouTube(); return; }
+      if (!player || typeof player.getPlayerState !== 'function') return;
       if (player.getPlayerState() === YT.PlayerState.PLAYING) {
         player.pauseVideo();
       } else {
@@ -1102,8 +1092,7 @@
             // the bar sits ready to go until the visitor presses play.
             player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
             setInterval(updateProgress, 250);
-            // Honor a play press / open panel made before the API finished loading.
-            if (wantPlay) player.playVideo();
+            // The panel can be opened before the API finishes loading.
             if (miniplayer.classList.contains('is-expanded')) populateUpNext();
           },
           onStateChange: function (e) {
@@ -1143,13 +1132,16 @@
         },
       });
     };
-    // Load the YouTube API on the visitor's first interaction anywhere on the
-    // mini-player (play/prev/next/scrub/expand all fire pointerdown here).
-    miniplayer.addEventListener('pointerdown', loadYouTube, { once: true });
+    // Load the IFrame API on page load. The bar shows "Connecting…" until the
+    // player is ready and the first track's metadata resolves, so deferring
+    // this to the first interaction left it reading "Connecting…" forever.
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(tag);
 
     playBtn.addEventListener('click', togglePlay);
-    prevBtn.addEventListener('click', () => { if (!player) { wantPlay = true; loadYouTube(); return; } loadTrack(orderPos - 1, true); });
-    nextBtn.addEventListener('click', () => { if (!player) { wantPlay = true; loadYouTube(); return; } loadTrack(orderPos + 1, true); });
+    prevBtn.addEventListener('click', () => { loadTrack(orderPos - 1, true); });
+    nextBtn.addEventListener('click', () => { loadTrack(orderPos + 1, true); });
 
     // ── Expand/collapse the Up Next panel: swipe up (or tap) the drag
     // handle to open it, swipe down (or tap again) to close ────────────────
