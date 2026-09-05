@@ -980,10 +980,10 @@ body {
     width: 2.5rem;
     height: 2.5rem;
   }
+  .splash-page .projects-block { --tile-gap: 1.25rem; }
   .splash-page .project-grid,
   .splash-page .project-grid.is-cols-3 {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
   }
   .globe-canvas { height: min(26rem, 60vh); }
   .gallery-card-visual { aspect-ratio: 1 / 1; }
@@ -1938,7 +1938,7 @@ body {
      would otherwise refuse to shrink below their content, overflowing the
      fixed content width. */
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: var(--tile-gap, 1.5rem);
   width: 100%;
 }
 
@@ -1947,7 +1947,7 @@ body {
 .globe-stage[hidden] { display: none; }
 
 /* Three-across density, chosen from the layout toggle. */
-.project-grid.is-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.project-grid.is-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .project-grid.is-cols-3 .gallery-card-title { font-size: 0.84375rem; }
 
 /* ── Layout toggle ────────────────────────────────────────────────────────
@@ -1955,11 +1955,14 @@ body {
 /* Bar + grid + globe travel together, so .splash-page's 3.75rem gap lands
    above the block rather than between the bar and the first row of tiles. */
 .projects-block {
+  --tile-gap: 1.5rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--tile-gap);
 }
+/* Three-across runs a little tighter; the row above follows it. */
+.projects-block:has(.project-grid.is-cols-3) { --tile-gap: 1.25rem; }
 
 .layout-bar {
   display: flex;
@@ -2061,6 +2064,23 @@ body {
   pointer-events: none;
 }
 .globe-canvas { position: relative; }
+
+/* Project name on hover over a globe panel. */
+.globe-tip {
+  position: absolute;
+  z-index: 2;
+  transform: translate(0.75rem, -50%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.globe-tip[hidden] { display: none; }
 
 .globe-hint {
   margin: 0.5rem 0 0;

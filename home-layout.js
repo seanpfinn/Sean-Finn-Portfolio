@@ -60,25 +60,39 @@ function transition(commit) {
 
 // ── Category filter ───────────────────────────────────────────────────────
 
+// Restart the per-card blurIn on whatever is now visible, stepping the delay
+// by visible position rather than DOM position — the stylesheet's nth-child
+// delays count hidden cards too, which leaves gaps in the stagger once a
+// filter is on.
+function staggerCards() {
+  if (reduceMotion) return;
+  const visible = Array.from(grid.querySelectorAll('.gallery-card')).filter((c) => !c.hidden);
+  visible.forEach((c) => { c.style.animation = 'none'; });
+  void grid.offsetWidth;   // one reflow, so the animation restarts
+  visible.forEach((c, i) => {
+    c.style.animation = '';
+    c.style.animationDelay = (0.04 * i).toFixed(3) + 's';
+  });
+}
+
 function commitFilter(next) {
   filter = next;
   tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.cat === filter)));
   grid.querySelectorAll('.gallery-card').forEach((card) => {
     card.hidden = filter !== 'all' && card.dataset.cat !== filter;
   });
+  staggerCards();
   // The globe is built from the visible set, so it has to be rebuilt.
   if (globe && mode === 'globe') rebuildGlobe();
 }
 
+// Filtering deliberately skips the block crossfade: the tiles fade in
+// individually instead, the way they do on first load.
 function applyFilter(next, userInitiated) {
   const target = CATS.includes(next) ? next : 'all';
   if (userInitiated && target === filter) return;
-  if (userInitiated) {
-    transition(() => commitFilter(target));
-    writeKey(FILTER_KEY, target);
-  } else {
-    commitFilter(target);
-  }
+  commitFilter(target);
+  if (userInitiated) writeKey(FILTER_KEY, target);
 }
 
 // ── Layout ────────────────────────────────────────────────────────────────
@@ -170,22 +184,34 @@ function createGlobe(THREE, mount, tiles) {
 
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0, 9.2);
+  // Pulled back to keep the larger panels inside the frame.
+  camera.position.set(0, 0, 10.6);
 
   const world = new THREE.Group();
   scene.add(world);
 
   // A short list shouldn't sprawl across a big sphere — pull the radius in.
   const R  = Math.max(2.1, Math.min(3.35, 1.15 + tiles.length * 0.17));
-  const TW = 1.62;
+  const TW = 2.4;
   const TH = TW * (314 / 575);
+
+  // One rounded-corner mask shared by every panel. Geometry stays a plane;
+  // the corners are cut by alpha instead.
+  const cornerMask = roundedMask(THREE);
 
   const panels = tiles.map((tile, i) => {
     const { texture, video } = makeTexture(THREE, tile);
     if (video) pool.appendChild(video);
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(TW, TH),
-      new THREE.MeshBasicMaterial({ map: texture, toneMapped: false, side: THREE.DoubleSide })
+      new THREE.MeshBasicMaterial({
+        map: texture,
+        alphaMap: cornerMask,
+        transparent: true,
+        alphaTest: 0.1,
+        toneMapped: false,
+        side: THREE.DoubleSide,
+      })
     );
     // Fibonacci sphere: even coverage without clumping at the poles.
     const k = i + 0.5;
@@ -224,12 +250,13 @@ function createGlobe(THREE, mount, tiles) {
     el.setPointerCapture(e.pointerId);
   });
   el.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
+    if (!dragging) { hover(e); return; }
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
     velY = dx * 0.0045;
     velX = dy * 0.0032;
+    hideTip();
   });
   el.addEventListener('pointerup', (e) => {
     if (!dragging) return;
@@ -237,16 +264,46 @@ function createGlobe(THREE, mount, tiles) {
     if (moved < 6) openAt(e);
   });
   el.addEventListener('pointercancel', () => { dragging = false; });
+  el.addEventListener('pointerleave', hideTip);
 
   const ray = new THREE.Raycaster();
   const ptr = new THREE.Vector2();
-  function openAt(e) {
+
+  function pick(e) {
     const r = el.getBoundingClientRect();
     ptr.x = ((e.clientX - r.left) / r.width) * 2 - 1;
     ptr.y = -((e.clientY - r.top) / r.height) * 2 + 1;
     ray.setFromCamera(ptr, camera);
-    const hit = ray.intersectObjects(panels, false)[0];
+    return ray.intersectObjects(panels, false)[0] || null;
+  }
+
+  function openAt(e) {
+    const hit = pick(e);
     if (hit?.object?.userData?.tile?.href) location.href = hit.object.userData.tile.href;
+  }
+
+  // ── hover tooltip ───────────────────────────────────────────────────────
+  const tip = document.createElement('div');
+  tip.className = 'globe-tip';
+  tip.setAttribute('role', 'status');
+  tip.hidden = true;
+  mount.appendChild(tip);
+
+  function hideTip() {
+    tip.hidden = true;
+    el.style.cursor = '';
+  }
+
+  function hover(e) {
+    const hit = pick(e);
+    const name = hit?.object?.userData?.tile?.title;
+    if (!name) { hideTip(); return; }
+    const r = mount.getBoundingClientRect();
+    tip.textContent = name;
+    tip.style.left = (e.clientX - r.left) + 'px';
+    tip.style.top  = (e.clientY - r.top) + 'px';
+    tip.hidden = false;
+    el.style.cursor = 'pointer';
   }
 
   // ── loop ────────────────────────────────────────────────────────────────
@@ -307,11 +364,40 @@ function createGlobe(THREE, mount, tiles) {
         m.material.map?.dispose();
         m.material.dispose();
       });
+      cornerMask.dispose();
       renderer.dispose();
       el.remove();
       pool.remove();
+      tip.remove();
     },
   };
+}
+
+// A white rounded rectangle on black, used as an alphaMap so the panels get
+// soft corners without changing their geometry. The radius is proportional to
+// the panel, tuned to read as ~8px at the globe's default framing (a panel
+// renders roughly 260px wide there); it scales with the panel, not the screen.
+function roundedMask(THREE) {
+  const W = 512;
+  const H = Math.round(W * (314 / 575));
+  const r = Math.round(W * 0.031);
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  g.fillStyle = '#000';
+  g.fillRect(0, 0, W, H);
+  g.fillStyle = '#fff';
+  g.beginPath();
+  g.moveTo(r, 0);
+  g.arcTo(W, 0, W, H, r);
+  g.arcTo(W, H, 0, H, r);
+  g.arcTo(0, H, 0, 0, r);
+  g.arcTo(0, 0, W, 0, r);
+  g.closePath();
+  g.fill();
+  const t = new THREE.CanvasTexture(c);
+  t.anisotropy = 4;
+  return t;
 }
 
 function makeTexture(THREE, tile) {
