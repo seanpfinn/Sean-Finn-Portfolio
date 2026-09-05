@@ -680,7 +680,9 @@ body {
 }
 
 .nav-work-submenu-wrap.is-open {
-  max-height: 20rem;
+  /* Fallback only — main.js measures the real content height. Sized to fit
+     the current project list with headroom. */
+  max-height: 34rem;
 }
 
 .nav-work-submenu {
@@ -1945,10 +1947,50 @@ body {
    Dot-matrix density glyphs (2-across / 3-across) plus the globe. */
 .layout-bar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 1rem;
 }
+
+/* ── Category tabs ────────────────────────────────────────────────────────
+   Lowercase labels with a 4px accent underline on the active one. */
+.filter-tabs { display: flex; align-items: flex-end; gap: 1rem; }
+.filter-tab {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0 0 0.25rem;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  letter-spacing: -0.01rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.filter-tab::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: #FF401A;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.filter-tab:hover { color: var(--text-muted); }
+.filter-tab[aria-selected="true"] { color: var(--text); }
+.filter-tab[aria-selected="true"]::after { opacity: 1; }
+.dark .filter-tab { color: #52525b; }
+.dark .filter-tab:hover { color: var(--text-dim); }
+.dark .filter-tab[aria-selected="true"] { color: var(--text); }
+
+/* Cards filtered out of the current category. */
+.gallery-card[hidden] { display: none; }
 .layout-toggle { display: flex; align-items: center; gap: 1rem; }
 .layout-btn {
   appearance: none;

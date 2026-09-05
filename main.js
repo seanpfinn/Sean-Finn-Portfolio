@@ -469,22 +469,35 @@
   const workCaret  = document.getElementById('nav-work-caret');
 
   if (workBtn) {
-    workBtn.addEventListener('click', () => {
-      const isOpen = workBtn.getAttribute('aria-expanded') === 'true';
-      const next = !isOpen;
+    // The submenu animates on max-height, so it needs a number to ease to.
+    // Measure the content instead of trusting a fixed cap — the menu grows
+    // as projects are added, and a hardcoded ceiling silently clips the
+    // groups at the bottom once it's outgrown.
+    function setWorkOpen(next) {
       workBtn.setAttribute('aria-expanded', next);
-      if (workWrap)  workWrap.classList.toggle('is-open', next);
+      if (workWrap) {
+        workWrap.classList.toggle('is-open', next);
+        workWrap.style.maxHeight = next ? workWrap.scrollHeight + 'px' : '';
+      }
       if (navLinks)  navLinks.classList.toggle('is-open', next);
       if (workCaret) workCaret.classList.toggle('is-open', next);
+    }
+
+    workBtn.addEventListener('click', () => {
+      setWorkOpen(workBtn.getAttribute('aria-expanded') !== 'true');
     });
 
     document.addEventListener('click', e => {
       if (!navLinks || !navLinks.classList.contains('is-open')) return;
       if (navLinks.contains(e.target)) return;
-      workBtn.setAttribute('aria-expanded', 'false');
-      if (workWrap)  workWrap.classList.remove('is-open');
-      navLinks.classList.remove('is-open');
-      if (workCaret) workCaret.classList.remove('is-open');
+      setWorkOpen(false);
+    });
+
+    // Re-measure if the layout reflows while the menu is open.
+    window.addEventListener('resize', () => {
+      if (workWrap && workWrap.classList.contains('is-open')) {
+        workWrap.style.maxHeight = workWrap.scrollHeight + 'px';
+      }
     });
   }
 

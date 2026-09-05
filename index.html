@@ -165,6 +165,11 @@
     </div>
 
     <div class="layout-bar">
+      <div class="filter-tabs" role="tablist" aria-label="Filter projects">
+        <button type="button" class="filter-tab" data-cat="all"  role="tab" aria-selected="true">all</button>
+        <button type="button" class="filter-tab" data-cat="apps" role="tab" aria-selected="false">apps</button>
+        <button type="button" class="filter-tab" data-cat="web"  role="tab" aria-selected="false">web</button>
+      </div>
       <div class="layout-toggle" role="group" aria-label="Layout">
         <button type="button" class="layout-btn" data-layout="cols2" aria-label="Two columns" aria-pressed="true"><svg viewBox="0 0 11 16" width="11" height="16" aria-hidden="true"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="9.5" cy="1.5" r="1.5"/><circle cx="1.5" cy="8" r="1.5"/><circle cx="9.5" cy="8" r="1.5"/><circle cx="1.5" cy="14.5" r="1.5"/><circle cx="9.5" cy="14.5" r="1.5"/></svg></button>
         <button type="button" class="layout-btn" data-layout="cols3" aria-label="Grid, three across" aria-pressed="false"><svg viewBox="0 0 18 16" width="18" height="16" aria-hidden="true"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="9" cy="1.5" r="1.5"/><circle cx="16.5" cy="1.5" r="1.5"/><circle cx="1.5" cy="8" r="1.5"/><circle cx="9" cy="8" r="1.5"/><circle cx="16.5" cy="8" r="1.5"/><circle cx="1.5" cy="14.5" r="1.5"/><circle cx="9" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg></button>
@@ -174,7 +179,7 @@
 
     <div class="project-grid" id="project-grid">
 
-      <a href="clear-watchos-app.html" class="gallery-card">
+      <a href="clear-watchos-app.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <video class="gv-video" src="assets/gallery-watchos-app.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -184,7 +189,7 @@
         </div>
       </a>
 
-      <a href="clear-referrals.html" class="gallery-card">
+      <a href="clear-referrals.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;"></div>
         <div class="gallery-card-info">
           <span class="gallery-card-title">CLEAR+ Referrals</span>
@@ -192,7 +197,7 @@
         </div>
       </a>
 
-      <a href="clear-flight-sharing.html" class="gallery-card">
+      <a href="clear-flight-sharing.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <img class="gv-video" src="assets/tile-flight-sharing.webp" alt="" decoding="async" loading="lazy" width="575" height="314" />
         </div>
@@ -202,7 +207,7 @@
         </div>
       </a>
 
-      <a href="clear-onboarding.html" class="gallery-card">
+      <a href="clear-onboarding.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <img class="gv-video" src="assets/tile-app-onboarding.webp" alt="" decoding="async" loading="lazy" width="575" height="314" />
         </div>
@@ -212,7 +217,7 @@
         </div>
       </a>
 
-      <a href="ucrfc-club-hub.html" class="gallery-card">
+      <a href="ucrfc-club-hub.html" class="gallery-card" data-cat="web">
         <div class="gallery-card-visual" style="background: #efefef;">
           <img class="gv-video" src="assets/tile-ucrfc-club-hub.webp" alt="" decoding="async" loading="lazy" width="575" height="314" />
         </div>
@@ -222,7 +227,7 @@
         </div>
       </a>
 
-      <a href="clear-widgets.html" class="gallery-card">
+      <a href="clear-widgets.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <video class="gv-video" src="assets/gallery-widgets.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -242,7 +247,7 @@
         </div>
       </a> -->
 
-      <a href="clear-messages.html" class="gallery-card">
+      <a href="clear-messages.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <img class="gv-video" src="assets/tile-messages.webp" alt="" decoding="async" loading="lazy" width="575" height="314" />
         </div>
@@ -252,7 +257,7 @@
         </div>
       </a>
 
-      <a href="clear-passkey-management.html" class="gallery-card">
+      <a href="clear-passkey-management.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #efefef;">
           <video class="gv-video" src="assets/gallery-passkeys.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -262,7 +267,7 @@
         </div>
       </a>
 
-      <a href="clear-live-activity.html" class="gallery-card">
+      <a href="clear-live-activity.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #e1e1e1;">
           <video class="gv-video" src="assets/gallery-live-activity.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -272,7 +277,7 @@
         </div>
       </a>
 
-      <a href="music-box.html" class="gallery-card">
+      <a href="music-box.html" class="gallery-card" data-cat="web">
         <div class="gallery-card-visual" style="background: #e5e5e5;">
           <video class="gv-video" src="assets/music-box.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -282,7 +287,7 @@
         </div>
       </a>
 
-      <a href="clear-terminal-guide.html" class="gallery-card">
+      <a href="clear-terminal-guide.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #E5E5E5;">
           <video class="gv-video" src="assets/terminal-guide.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -292,7 +297,7 @@
         </div>
       </a>
 
-      <a href="clear-location-details.html" class="gallery-card">
+      <a href="clear-location-details.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #e1e1e1;">
           <video class="gv-video" src="assets/gallery-location-search.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
@@ -302,7 +307,7 @@
         </div>
       </a>
 
-      <a href="clear-vault.html" class="gallery-card">
+      <a href="clear-vault.html" class="gallery-card" data-cat="apps">
         <div class="gallery-card-visual" style="background: #e1e1e1;">
           <video class="gv-video" src="assets/gallery-vault-video.mp4" muted loop playsinline preload="metadata" data-play-in-view></video>
         </div>
