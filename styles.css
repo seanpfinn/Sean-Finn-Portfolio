@@ -1952,12 +1952,34 @@ body {
 
 /* ── Layout toggle ────────────────────────────────────────────────────────
    Dot-matrix density glyphs (2-across / 3-across) plus the globe. */
+/* Bar + grid + globe travel together, so .splash-page's 3.75rem gap lands
+   above the block rather than between the bar and the first row of tiles. */
+.projects-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .layout-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 0.5rem;
+}
+
+/* Crossfade when switching between the three layouts. */
+.project-grid,
+.globe-stage {
+  transition: opacity 0.24s ease;
+}
+.projects-block.is-switching .project-grid,
+.projects-block.is-switching .globe-stage {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-grid,
+  .globe-stage { transition: none; }
 }
 
 /* ── Category tabs ────────────────────────────────────────────────────────

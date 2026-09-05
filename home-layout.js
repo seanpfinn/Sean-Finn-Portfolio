@@ -3,31 +3,34 @@
 // case study's Platform metadata); the toggles on the right choose how it's
 // laid out — two columns, three across, or a globe showing only the project
 // media. three.js is pulled in on demand so the default view never pays for it.
+//
+// NOTE ON ORDER: every `let` below is declared before any function runs, and
+// the bootstrap sits at the very bottom of the file. Calling into these
+// functions from above their declarations puts `globe`/`THREE` in the
+// temporal dead zone and throws on module load.
 
 const LAYOUT_KEY = 'home-layout';
 const FILTER_KEY = 'home-filter';
 const MODES = ['cols2', 'cols3', 'globe'];
 const CATS  = ['all', 'apps', 'web'];
+const FADE_MS = 240;
 
 const grid     = document.getElementById('project-grid');
 const stage    = document.getElementById('globe-stage');
 const canvasEl = document.getElementById('globe-canvas');
+const block    = document.querySelector('.projects-block');
 const buttons  = Array.from(document.querySelectorAll('.layout-btn'));
 const tabs     = Array.from(document.querySelectorAll('.filter-tab'));
 
-let mode   = 'cols2';
-let filter = 'all';
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (grid && buttons.length) {
-  mode   = readKey(LAYOUT_KEY, MODES)  || 'cols2';
-  filter = readKey(FILTER_KEY, CATS)   || 'all';
+let mode    = 'cols2';
+let filter  = 'all';
+let globe   = null;
+let THREE   = null;
+let loading = false;
 
-  buttons.forEach((b) => b.addEventListener('click', () => applyLayout(b.dataset.layout, true)));
-  tabs.forEach((t) => t.addEventListener('click', () => applyFilter(t.dataset.cat, true)));
-
-  applyFilter(filter, false);
-  applyLayout(mode, false);
-}
+// ── Storage ───────────────────────────────────────────────────────────────
 
 function readKey(key, allowed) {
   try {
@@ -40,23 +43,48 @@ function writeKey(key, v) {
   try { localStorage.setItem(key, v); } catch (e) {}
 }
 
+// ── Crossfade ─────────────────────────────────────────────────────────────
+// Fade the block out, swap the state while it's invisible, then fade back in
+// once the new layout has painted.
+
+function transition(commit) {
+  if (!block || reduceMotion) { commit(); return; }
+  block.classList.add('is-switching');
+  setTimeout(() => {
+    commit();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => block.classList.remove('is-switching'));
+    });
+  }, FADE_MS);
+}
+
 // ── Category filter ───────────────────────────────────────────────────────
 
-function applyFilter(next, persist) {
-  filter = CATS.includes(next) ? next : 'all';
+function commitFilter(next) {
+  filter = next;
   tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.cat === filter)));
   grid.querySelectorAll('.gallery-card').forEach((card) => {
     card.hidden = filter !== 'all' && card.dataset.cat !== filter;
   });
-  if (persist) writeKey(FILTER_KEY, filter);
   // The globe is built from the visible set, so it has to be rebuilt.
   if (globe && mode === 'globe') rebuildGlobe();
 }
 
+function applyFilter(next, userInitiated) {
+  const target = CATS.includes(next) ? next : 'all';
+  if (userInitiated && target === filter) return;
+  if (userInitiated) {
+    transition(() => commitFilter(target));
+    writeKey(FILTER_KEY, target);
+  } else {
+    commitFilter(target);
+  }
+}
+
 // ── Layout ────────────────────────────────────────────────────────────────
 
-function applyLayout(next, persist) {
-  mode = MODES.includes(next) ? next : 'cols2';
+function commitLayout(next) {
+  mode = next;
   buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layout === mode)));
   grid.classList.toggle('is-cols-3', mode === 'cols3');
 
@@ -64,15 +92,20 @@ function applyLayout(next, persist) {
   grid.hidden = globeOn;
   if (stage) stage.hidden = !globeOn;
   if (globeOn) startGlobe(); else stopGlobe();
+}
 
-  if (persist) writeKey(LAYOUT_KEY, mode);
+function applyLayout(next, userInitiated) {
+  const target = MODES.includes(next) ? next : 'cols2';
+  if (userInitiated && target === mode) return;
+  if (userInitiated) {
+    transition(() => commitLayout(target));
+    writeKey(LAYOUT_KEY, target);
+  } else {
+    commitLayout(target);
+  }
 }
 
 // ── Globe ─────────────────────────────────────────────────────────────────
-
-let globe = null;
-let THREE = null;
-let loading = false;
 
 async function startGlobe() {
   if (globe) { globe.resume(); return; }
@@ -121,7 +154,6 @@ function createGlobe(THREE, mount, tiles) {
     mount.innerHTML = '<p class="globe-hint">Nothing to show in this category.</p>';
     return { pause() {}, resume() {}, destroy() { mount.innerHTML = ''; } };
   }
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Video elements have to be in the document to reliably decode — a detached
   // one is enough for some browsers but not others. Park them in an
@@ -183,30 +215,27 @@ function createGlobe(THREE, mount, tiles) {
   resize();
 
   // ── drag to spin ────────────────────────────────────────────────────────
-  let velY = reduced ? 0 : 0.0026, velX = 0;
+  let velY = reduceMotion ? 0 : 0.0026, velX = 0;
   let dragging = false, moved = 0, lastX = 0, lastY = 0;
   const el = renderer.domElement;
 
-  const onDown = (e) => {
+  el.addEventListener('pointerdown', (e) => {
     dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
     el.setPointerCapture(e.pointerId);
-  };
-  const onMove = (e) => {
+  });
+  el.addEventListener('pointermove', (e) => {
     if (!dragging) return;
     const dx = e.clientX - lastX, dy = e.clientY - lastY;
     lastX = e.clientX; lastY = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
     velY = dx * 0.0045;
     velX = dy * 0.0032;
-  };
-  const onUp = (e) => {
+  });
+  el.addEventListener('pointerup', (e) => {
     if (!dragging) return;
     dragging = false;
     if (moved < 6) openAt(e);
-  };
-  el.addEventListener('pointerdown', onDown);
-  el.addEventListener('pointermove', onMove);
-  el.addEventListener('pointerup', onUp);
+  });
   el.addEventListener('pointercancel', () => { dragging = false; });
 
   const ray = new THREE.Raycaster();
@@ -228,7 +257,7 @@ function createGlobe(THREE, mount, tiles) {
   function frame() {
     raf = requestAnimationFrame(frame);
     if (!dragging) {
-      velY += ((reduced ? 0 : 0.0026) - velY) * 0.04;
+      velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;
       velX *= 0.92;
     }
     world.rotation.y += velY;
@@ -304,3 +333,14 @@ function makeTexture(THREE, tile) {
 }
 
 function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+// ── Bootstrap ─────────────────────────────────────────────────────────────
+// Last, so every binding above is initialised before anything runs.
+
+if (grid && buttons.length) {
+  buttons.forEach((b) => b.addEventListener('click', () => applyLayout(b.dataset.layout, true)));
+  tabs.forEach((t) => t.addEventListener('click', () => applyFilter(t.dataset.cat, true)));
+
+  applyFilter(readKey(FILTER_KEY, CATS) || 'all', false);
+  applyLayout(readKey(LAYOUT_KEY, MODES) || 'cols2', false);
+}
