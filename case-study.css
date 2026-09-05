@@ -60,6 +60,9 @@
   width: auto;
   object-fit: contain;
 }
+/* CLEAR is the more compact of the marks; give it a little more height so it
+   holds its own next to the wider Finrez lockup. */
+.pml-clear { height: 0.9375rem; }
 .dark .proj-meta-logo { filter: brightness(0) invert(1); }
 
 /* Context block */
