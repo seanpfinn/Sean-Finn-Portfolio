@@ -86,14 +86,53 @@
     .arcade-shell {
       position: absolute;
       display: block;
-    }
-    .arcade-shell {
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 2;
       pointer-events: none;
     }
+
+    /* ── Clickable console buttons ─────────────────────────────────
+       Transparent hotspots sitting over the shell art. Percentages were
+       measured off assets/arcade-gba-sp.webp (750 × 1334), so they track
+       the console at any width. */
+    .arcade-pad { position: absolute; inset: 0; z-index: 3; }
+    .pad-btn {
+      position: absolute;
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 0.3rem;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pad-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: rgba(0,0,0,0);
+      transition: background 0.08s ease;
+    }
+    .pad-btn.is-down::after { background: rgba(0,0,0,0.24); }
+    .pad-btn:focus-visible { outline: 2px solid #1d9bf0; outline-offset: 2px; }
+    .pad-btn--round { border-radius: 50%; }
+    .arcade-pad.is-idle .pad-btn { cursor: default; }
+
+    .pad-l      { left: 1.0%;  top: 50.6%; width: 13.3%; height: 3.8%; }
+    .pad-r      { left: 86.0%; top: 50.6%; width: 13.3%; height: 3.8%; }
+    .pad-up     { left: 18.7%; top: 63.2%; width: 10.9%; height: 6.6%; }
+    .pad-down   { left: 18.7%; top: 75.8%; width: 10.9%; height: 6.5%; }
+    .pad-left   { left: 8.3%;  top: 69.8%; width: 11.1%; height: 6.0%; }
+    .pad-right  { left: 29.1%; top: 69.8%; width: 10.9%; height: 6.0%; }
+    .pad-b      { left: 61.6%; top: 71.1%; width: 12.8%; height: 7.2%; }
+    .pad-a      { left: 79.6%; top: 67.1%; width: 12.8%; height: 7.2%; }
+    .pad-select { left: 39.2%; top: 94.8%; width: 6.9%;  height: 3.9%; }
+    .pad-start  { left: 54.1%; top: 94.8%; width: 6.9%;  height: 3.9%; }
 
     /* ── Collection controls ──────────────────────────────────── */
     .arcade-controls {
@@ -270,10 +309,10 @@
                 <span class="nav-company-label">PERSONAL</span>
               </div>
               <div class="nav-company-projects">
-                <a href="plate.html" class="nav-project-item">
+                <!-- <a href="plate.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   Plate
-                </a>
+                </a> -->
                 <a href="music-box.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   Music Box
@@ -307,6 +346,18 @@
       </div>
       <img class="arcade-shell" src="assets/arcade-gba-sp.webp"
            alt="Game Boy Advance SP" decoding="async" width="750" height="1334" />
+      <div class="arcade-pad is-idle" id="arcade-pad">
+        <button type="button" class="pad-btn pad-up"     data-btn="UP"     aria-label="D-pad up"></button>
+        <button type="button" class="pad-btn pad-down"   data-btn="DOWN"   aria-label="D-pad down"></button>
+        <button type="button" class="pad-btn pad-left"   data-btn="LEFT"   aria-label="D-pad left"></button>
+        <button type="button" class="pad-btn pad-right"  data-btn="RIGHT"  aria-label="D-pad right"></button>
+        <button type="button" class="pad-btn pad-btn--round pad-a"      data-btn="A"      aria-label="A button"></button>
+        <button type="button" class="pad-btn pad-btn--round pad-b"      data-btn="B"      aria-label="B button"></button>
+        <button type="button" class="pad-btn pad-l"      data-btn="L"      aria-label="L shoulder"></button>
+        <button type="button" class="pad-btn pad-r"      data-btn="R"      aria-label="R shoulder"></button>
+        <button type="button" class="pad-btn pad-btn--round pad-select" data-btn="SELECT" aria-label="Select"></button>
+        <button type="button" class="pad-btn pad-btn--round pad-start"  data-btn="START"  aria-label="Start"></button>
+      </div>
     </div>
 
     <div class="arcade-controls">

@@ -24,6 +24,7 @@ const prevBtn    = document.getElementById('arcade-prev');
 const nextBtn    = document.getElementById('arcade-next');
 const startBtn   = document.getElementById('arcade-start');
 const shelfEl    = document.getElementById('arcade-shelf');
+const padEl      = document.getElementById('arcade-pad');
 
 if (stageEl && shelfEl) init();
 
@@ -63,6 +64,8 @@ async function init() {
     if (e.key === 'ArrowLeft')  select(index - 1);
     if (e.key === 'ArrowRight') select(index + 1);
   });
+
+  setupPad();
 
   // A ?game= param means we were reloaded to swap cartridges — boot straight in.
   const wanted = new URLSearchParams(location.search).get('game');
@@ -131,6 +134,7 @@ function start(game) {
   window.EJS_gameName      = game.title;
   window.EJS_startOnLoaded = true;
   window.EJS_volume        = 0.5;
+  window.EJS_onGameStart   = () => padEl?.classList.remove('is-idle');
 
   const s = document.createElement('script');
   s.src = EJS_DATA + 'loader.js';
@@ -141,6 +145,75 @@ function start(game) {
     setNotice('Emulator failed to load');
   };
   document.body.appendChild(s);
+}
+
+// ── Console buttons ───────────────────────────────────────────────────────
+// The shell art is just an image, so each control is a transparent hotspot
+// laid over it. Indices are libretro joypad ids, read off EmulatorJS's own
+// GBA control table (src/emulator.js).
+
+const GBA_BUTTON = { B: 0, SELECT: 2, START: 3, UP: 4, DOWN: 5, LEFT: 6, RIGHT: 7, A: 8, L: 10, R: 11 };
+
+function padInput(name, isDown) {
+  const index = GBA_BUTTON[name];
+  if (index === undefined) return;
+  const gm = window.EJS_emulator?.gameManager;
+  if (!gm || typeof gm.simulateInput !== 'function') return;
+  try { gm.simulateInput(0, index, isDown ? 1 : 0); } catch (e) {}
+}
+
+function releaseAll() {
+  padEl?.querySelectorAll('.pad-btn.is-down').forEach((b) => {
+    b.classList.remove('is-down');
+    padInput(b.dataset.btn, false);
+  });
+}
+
+function setupPad() {
+  if (!padEl) return;
+
+  padEl.querySelectorAll('.pad-btn').forEach((btn) => {
+    const name = btn.dataset.btn;
+
+    function press(e) {
+      e?.preventDefault();
+      // Nothing is running yet: Start doubles as "insert cartridge", which is
+      // what pressing Start on a real console with no game would suggest.
+      if (!running) {
+        if (name === 'START') startBtn?.click();
+        return;
+      }
+      if (btn.classList.contains('is-down')) return;
+      btn.classList.add('is-down');
+      padInput(name, true);
+    }
+    function release() {
+      if (!btn.classList.contains('is-down')) return;
+      btn.classList.remove('is-down');
+      padInput(name, false);
+    }
+
+    // Each hotspot tracks its own pointer, so holding a direction while
+    // pressing A (or two directions for a diagonal) works on touch too.
+    btn.addEventListener('pointerdown', press);
+    btn.addEventListener('pointerup', release);
+    btn.addEventListener('pointerleave', release);
+    btn.addEventListener('pointercancel', release);
+    btn.addEventListener('contextmenu', (e) => e.preventDefault());
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); press(); }
+    });
+    btn.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') release();
+    });
+    btn.addEventListener('blur', release);
+  });
+
+  // A pointer let go outside the console must still end the press, otherwise
+  // the button sticks down in the emulator.
+  window.addEventListener('pointerup', releaseAll);
+  window.addEventListener('pointercancel', releaseAll);
+  window.addEventListener('blur', releaseAll);
 }
 
 // ── 3D cartridge library ──────────────────────────────────────────────────
