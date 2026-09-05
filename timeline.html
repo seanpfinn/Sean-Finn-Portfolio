@@ -3,31 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Music Box – Sean Finn</title>
-  <meta name="description" content="A persistent, site-wide mini player that follows visitors from page to page." />
-  <link rel="canonical" href="https://www.seanpfinn.com/music-box" />
+  <title>Career Timeline – Sean Finn</title>
+  <meta name="description" content="Sean Finn's career timeline — roles, dates, and the path from Boston University to CLEAR." />
+  <link rel="canonical" href="https://www.seanpfinn.com/timeline" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
-  <meta property="og:title" content="Music Box – Sean Finn" />
-  <meta property="og:description" content="A persistent, site-wide mini player that follows visitors from page to page." />
-  <meta property="og:url" content="https://www.seanpfinn.com/music-box" />
+  <meta property="og:title" content="Career Timeline – Sean Finn" />
+  <meta property="og:description" content="Sean Finn's career timeline — roles, dates, and the path from Boston University to CLEAR." />
+  <meta property="og:url" content="https://www.seanpfinn.com/timeline" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Music Box – Sean Finn" />
-  <meta name="twitter:description" content="A persistent, site-wide mini player that follows visitors from page to page." />
+  <meta name="twitter:title" content="Career Timeline – Sean Finn" />
+  <meta name="twitter:description" content="Sean Finn's career timeline — roles, dates, and the path from Boston University to CLEAR." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og-image.png" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="case-study.css" />
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
+
+    .tl-main {
+      max-width: 62.5rem;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 8rem;
+    }
+
+    .tl-head { text-align: center; margin-bottom: 3.5rem; }
+    .tl-title {
+      font-family: var(--font);
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.035rem;
+      color: var(--text);
+      margin: 0;
+    }
+    .tl-sub {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      color: var(--text-dim);
+      margin: 0.375rem 0 0;
+    }
+
+    /* ── Chart ────────────────────────────────────────────────────────
+       One linear time scale. Year rules and cards are both positioned
+       from real dates by timeline.js, so nothing is hand-placed. */
+    .tl-chart { position: relative; padding-left: 5.5rem; }
+
+    .tl-axis { position: absolute; inset: 0 0 0 0; pointer-events: none; }
+    .tl-axis-line {
+      position: absolute;
+      top: 0; bottom: 0; left: 5.5rem;
+      border-left: 1px dashed var(--border);
+    }
+    .tl-tick { position: absolute; left: 0; width: 5rem; text-align: right; }
+    .tl-tick span {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      color: var(--text-dim);
+      line-height: 1;
+    }
+    .tl-tick--now span { color: var(--text-muted); }
+
+    .tl-list { position: relative; margin: 0; padding: 0; list-style: none; }
+    .tl-item { position: absolute; }
+
+    .tl-card {
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.625rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+    .tl-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .tl-role {
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      margin: 0;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tl-logo { display: block; height: 0.875rem; width: auto; flex-shrink: 0; }
+    .tll-meta { height: 0.75rem; }
+    .dark .tl-logo { filter: brightness(0) invert(1); }
+    .tl-company {
+      font-family: var(--mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tl-blurb {
+      font-family: var(--font);
+      font-size: 0.75rem;
+      line-height: 1.15rem;
+      color: var(--text-body);
+      margin: 0;
+    }
+    .tl-dates {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      color: var(--text-dim);
+      margin: auto 0 0;
+    }
+    .tl-item--point .tl-card { background: none; border-style: dashed; }
+
+    @media (max-width: 40rem) {
+      .tl-chart { padding-left: 3.5rem; }
+      .tl-axis-line { left: 3.5rem; }
+      .tl-tick { width: 3rem; }
+      .tl-blurb { display: none; }
+    }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
 </head>
-<body class="proj-page">
+<body class="timeline-page">
 
   <nav class="splash-nav blur-in" style="animation-delay:0s">
           <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
@@ -165,109 +273,114 @@
     <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
   </nav>
 
-  <main class="proj-col" style="animation-delay:0.05s">
-    <div class="proj-header-group">
-      <div class="proj-title-block">
-        <h1 class="proj-title-new">Music Box</h1>
-        <p class="proj-subtitle-new">A persistent, site-wide mini player that follows visitors from page to page.</p>
+  <main class="tl-main blur-in" style="animation-delay:0.05s">
+
+    <header class="tl-head">
+      <h1 class="tl-title">Career Timeline</h1>
+      <p class="tl-sub">Or how I got to where I am now.</p>
+    </header>
+
+    <div class="tl-chart" id="tl-chart">
+      <div class="tl-axis" id="tl-axis" aria-hidden="true">
+        <div class="tl-axis-line"></div>
       </div>
-      <div class="proj-meta-row-new">
-        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Timeframe</span><span class="proj-meta-value">July 2026</span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
-      </div>
-      <a href="https://github.com/seanpfinn/Music-Bar-Widget" class="proj-dl-btn" target="_blank" rel="noopener">Download on GitHub</a>
+      <ol class="tl-list" id="tl-list">
+        <li class="tl-item" data-start="2026-01" data-end="">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Senior Product Designer</h3>
+              <img class="tl-logo tll-clear" src="assets/logo-clear.svg" alt="CLEAR" decoding="async" />
+            </div>
+            <p class="tl-blurb">End-to-end features for daily travelers across the CLEAR+ mobile experience.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2023-10" data-end="">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Lead Designer</h3>
+              <img class="tl-logo tll-finrez" src="assets/logo-finrez.svg" alt="Finrez" decoding="async" />
+            </div>
+            <p class="tl-blurb">Founder and lead designer helping early-stage startups shape brand identities and product experiences.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2025-07" data-end="2025-11">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Head of UX</h3>
+              <span class="tl-company">Becoming You Labs</span>
+            </div>
+            <p class="tl-blurb">Design strategy, systems, and MVP roadmap for personal growth and behavior change products.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2022-06" data-end="2024-06">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Product Designer IV</h3>
+              <img class="tl-logo tll-meta" src="assets/logo-meta.svg" alt="Meta" decoding="async" />
+            </div>
+            <p class="tl-blurb">XR tools and AI-driven interfaces in Reality Labs — XR Simulator, MetaSim, Codec Avatars.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2021-07" data-end="2022-06">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Product Designer</h3>
+              <span class="tl-company">RECUR Forever</span>
+            </div>
+            <p class="tl-blurb">Second designer scaling the digital collectible platform; design system and gamified Challenges.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2021-02" data-end="2021-07">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Product Designer</h3>
+              <span class="tl-company">VICE Media Group</span>
+            </div>
+            <p class="tl-blurb">Ad product design and strategy across web and mobile.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2019-12" data-end="2021-02">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Design Manager, Ad Products</h3>
+              <span class="tl-company">VICE Media Group</span>
+            </div>
+            <p class="tl-blurb">Ad Studio strategy and creative direction, driving global KPI gains and $5MM annual revenue.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2018-07" data-end="2019-12">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Sr. Interactive Designer, Ad Products</h3>
+              <span class="tl-company">VICE Media Group</span>
+            </div>
+            <p class="tl-blurb">Built VICE's Ad Studio and custom ad tools, driving $7MM in revenue growth in year one.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item tl-item--point" data-start="2013-05" data-end="2013-05">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">BS, Advertising</h3>
+              <span class="tl-company">Boston University</span>
+            </div>
+            <p class="tl-blurb">College of Communications</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+      </ol>
     </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Context</h2>
-      <p class="proj-caption-body">Every other case study on this site documents somebody else's product. Music Box documents this one — a persistent mini player built directly into the portfolio, pinned to the screen on every page and connected to a real playlist.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs proj-panel--mbcs-context">
-        <video src="assets/music-box.mp4" muted loop playsinline autoplay preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
-      </div>
-      <p class="proj-image-caption">Pinned to the bottom of the screen and always in reach — it stays put and keeps playing as visitors move from page to page.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Problem</h2>
-      <p class="proj-caption-body">A portfolio site is static by nature — visitors land, scroll, and leave. There was no ambient signal that the site was actually alive, and nothing for a visitor to directly interact with beyond reading and clicking through case studies.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs">
-        <img src="assets/mb-cs-problem.webp" alt="Music Box — Problem" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" width="1400" height="853" />
-      </div>
-      <p class="proj-image-caption">Exploring the form — a circular album-art player, a square, a vertical stack — before settling on the compact bar.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Role &amp; Approach</h2>
-      <p class="proj-caption-body">I designed and built Music Box myself, end to end, iterating directly against the live site rather than a static mock — every version got tested in a real browser, on real devices, before moving to the next decision.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs">
-        <img src="assets/mb-cs-role.webp" alt="Music Box — Role &amp; Approach" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="853" />
-      </div>
-      <p class="proj-image-caption">Every state built and tested on real devices — here the expanded Up Next queue running on iPhone.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Process</h2>
-      <p class="proj-caption-body">The first version was a compact pill — album art, title, artist — that toggled play on tap. I added dedicated skip-back, play/pause, and skip-forward controls to match a proper transport bar, then reworked its width and position through several passes: paired with the footer, centered on the page, and finally locked to a fixed 360px width on desktop so it reads as its own element instead of stretching arbitrarily wide.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs">
-        <img src="assets/mb-cs-process.webp" alt="Music Box — Process" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="853" />
-      </div>
-      <p class="proj-image-caption">Pull up on the handle and the bar grows into a full Up Next queue, each track one tap away.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">USER Journey</h2>
-      <p class="proj-caption-body">A visitor lands on any page and the bar is already there, pinned at the bottom, cued and ready — title, artist, and art show up immediately, with no autoplay involved; playback only starts once the visitor presses play. A drag handle beneath the progress bar opens Up Next with a swipe or a tap, and any track in it is one tap away. On mobile it goes further: after 10 seconds idle it slides most of the way off-screen, leaving the album art peeking in as a handle, and a swipe in either direction brings it back or parks it again — always the visitor's call, not a timer's.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs">
-        <img src="assets/mb-cs-journey.webp" alt="Music Box — USER Journey" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="853" />
-      </div>
-      <p class="proj-image-caption">What visitors actually touch — a draggable scrubber and transport controls, rendered for both light and dark.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Constraints</h2>
-      <p class="proj-caption-body">The whole thing runs on YouTube's IFrame Player API with no API key, which meant designing around real limits: autoplay-with-sound is blocked everywhere without a prior gesture; there's no way to know a playlist's length before loading it once, which shapes how track randomization has to work; and swipe handling on mobile had to explicitly hand vertical scrolling back to the browser while claiming horizontal drags for itself, or dragging the bar would drag the whole page along with it.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--mbcs">
-        <img src="assets/mb-cs-constraints.webp" alt="Music Box — Constraints" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="853" />
-      </div>
-      <p class="proj-image-caption">Built on YouTube's IFrame API with no key — tucked above the home indicator and re-themed to match a dark page.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Before / After</h2>
-      <p class="proj-caption-body">Before: every page was the same static experience regardless of how long a visitor stayed. After: a small, real, working feature that plays music, responds to taps and swipes, and quietly matches its own color scheme to light or dark mode instead of fighting it.</p>
-    </div>
-    <div class="proj-panel-group">
-      <div class="proj-panel-new proj-panel--embed">
-        <div class="mb-embed" id="mb-embed"></div>
-      </div>
-      <p class="proj-image-caption">Not a mockup — a real, working Music Box. Press play, skip around the shuffle, drag the scrubber, and pull up the handle for Up Next. Flip the site's theme and it re-colors to match.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">Music Box turned the portfolio itself into a small case study — not a mockup of a decision, but the decision, tested and shipped on the live site. It's a persistent, theme-aware, gesture-driven mini player that follows visitors across every page they visit.</p>
-    </div>
-
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Next Steps</h2>
-      <p class="proj-caption-body">Live and iterating. The metadata-normalization and queue-view gaps that shaped the last redesign are closed — next up: persisting playback position across page navigations instead of restarting fresh on every load, and a volume control now that the transport row has room for one.</p>
-    </div>
   </main>
 
-  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
+  <footer class="splash-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">
       <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
       <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
@@ -276,18 +389,13 @@
       <a href="https://www.spottedinprod.com/sean" class="social-link" target="_blank" rel="noopener">SIP</a>
     </div>
     <div class="sidebar-meta">
-      <p class="last-updated">Last updated: July 18th, 2026</p>
-      <p class="weather">
-        <span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span>
-        <span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span>
-      </p>
+      <p class="last-updated">Last updated: May 9th, 2026</p>
+      <p class="weather"><span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span><span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span></p>
     </div>
   </footer>
 
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>
-  <!-- Fully-functional Music Box embedded in the last panel of this case study. -->
-  <script src="music-box-embed.js"></script>
-
+  <script src="timeline.js"></script>
 </body>
 </html>

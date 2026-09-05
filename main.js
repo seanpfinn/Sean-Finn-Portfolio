@@ -463,41 +463,58 @@
   }
 
   // ── Work menu toggle ─────────────────────────────────────────────────────
-  const workBtn    = document.getElementById('nav-work-btn');
-  const workWrap   = document.getElementById('nav-work-submenu-wrap');
-  const navLinks   = document.getElementById('splash-nav-links');
-  const workCaret  = document.getElementById('nav-work-caret');
+  const navLinks = document.getElementById('splash-nav-links');
+  // There is more than one of these now (projects, about), so wire them by
+  // class rather than by id.
+  const navGroups = Array.from(document.querySelectorAll('.splash-nav-work-group'))
+    .map((group) => ({
+      group,
+      btn:   group.querySelector('.splash-nav-work-btn'),
+      wrap:  group.querySelector('.nav-work-submenu-wrap'),
+      caret: group.querySelector('.splash-nav-caret'),
+    }))
+    .filter((g) => g.btn && g.wrap);
 
-  if (workBtn) {
-    // The submenu animates on max-height, so it needs a number to ease to.
-    // Measure the content instead of trusting a fixed cap — the menu grows
-    // as projects are added, and a hardcoded ceiling silently clips the
-    // groups at the bottom once it's outgrown.
-    function setWorkOpen(next) {
-      workBtn.setAttribute('aria-expanded', next);
-      if (workWrap) {
-        workWrap.classList.toggle('is-open', next);
-        workWrap.style.maxHeight = next ? workWrap.scrollHeight + 'px' : '';
-      }
-      if (navLinks)  navLinks.classList.toggle('is-open', next);
-      if (workCaret) workCaret.classList.toggle('is-open', next);
-    }
+  // The submenu animates on max-height, so it needs a number to ease to.
+  // Measure the content instead of trusting a fixed cap — the menu grows as
+  // projects are added, and a hardcoded ceiling silently clips the groups at
+  // the bottom once it's outgrown.
+  function setGroupOpen(g, next) {
+    g.btn.setAttribute('aria-expanded', next);
+    g.wrap.classList.toggle('is-open', next);
+    g.wrap.style.maxHeight = next ? g.wrap.scrollHeight + 'px' : '';
+    if (g.caret) g.caret.classList.toggle('is-open', next);
+  }
 
-    workBtn.addEventListener('click', () => {
-      setWorkOpen(workBtn.getAttribute('aria-expanded') !== 'true');
+  function syncNavOpen() {
+    const anyOpen = navGroups.some((g) => g.wrap.classList.contains('is-open'));
+    if (navLinks) navLinks.classList.toggle('is-open', anyOpen);
+  }
+
+  navGroups.forEach((g) => {
+    g.btn.addEventListener('click', () => {
+      const next = g.btn.getAttribute('aria-expanded') !== 'true';
+      // Only one open at a time, so they don't stack down the page.
+      navGroups.forEach((other) => setGroupOpen(other, other === g ? next : false));
+      syncNavOpen();
     });
+  });
 
-    document.addEventListener('click', e => {
+  if (navGroups.length) {
+    document.addEventListener('click', (e) => {
       if (!navLinks || !navLinks.classList.contains('is-open')) return;
       if (navLinks.contains(e.target)) return;
-      setWorkOpen(false);
+      navGroups.forEach((g) => setGroupOpen(g, false));
+      syncNavOpen();
     });
 
-    // Re-measure if the layout reflows while the menu is open.
+    // Re-measure if the layout reflows while a menu is open.
     window.addEventListener('resize', () => {
-      if (workWrap && workWrap.classList.contains('is-open')) {
-        workWrap.style.maxHeight = workWrap.scrollHeight + 'px';
-      }
+      navGroups.forEach((g) => {
+        if (g.wrap.classList.contains('is-open')) {
+          g.wrap.style.maxHeight = g.wrap.scrollHeight + 'px';
+        }
+      });
     });
   }
 
