@@ -117,7 +117,19 @@ function readTiles() {
 }
 
 function createGlobe(THREE, mount, tiles) {
+  if (!tiles.length) {
+    mount.innerHTML = '<p class="globe-hint">Nothing to show in this category.</p>';
+    return { pause() {}, resume() {}, destroy() { mount.innerHTML = ''; } };
+  }
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Video elements have to be in the document to reliably decode — a detached
+  // one is enough for some browsers but not others. Park them in an
+  // off-screen holder rather than display:none, which suspends decoding.
+  const pool = document.createElement('div');
+  pool.className = 'globe-video-pool';
+  pool.setAttribute('aria-hidden', 'true');
+  mount.appendChild(pool);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -138,6 +150,7 @@ function createGlobe(THREE, mount, tiles) {
 
   const panels = tiles.map((tile, i) => {
     const { texture, video } = makeTexture(THREE, tile);
+    if (video) pool.appendChild(video);
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(TW, TH),
       new THREE.MeshBasicMaterial({ map: texture, toneMapped: false, side: THREE.DoubleSide })
@@ -259,13 +272,15 @@ function createGlobe(THREE, mount, tiles) {
       ro.disconnect();
       document.removeEventListener('visibilitychange', onVis);
       panels.forEach((m) => {
-        m.userData.video?.pause();
+        const v = m.userData.video;
+        if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
         m.geometry.dispose();
         m.material.map?.dispose();
         m.material.dispose();
       });
       renderer.dispose();
       el.remove();
+      pool.remove();
     },
   };
 }
