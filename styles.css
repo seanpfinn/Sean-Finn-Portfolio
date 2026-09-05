@@ -308,7 +308,7 @@ body {
   transition: opacity 0.15s;
 }
 
-.nav-link:hover { opacity: 0.55; }
+.nav-link:hover { color: #FF401A; opacity: 1; }
 
 /* ================================
    SIDEBAR HERO
@@ -340,13 +340,25 @@ body {
   max-width: 23.75rem;
 }
 
+.hero-line {
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: -0.0125rem;
+  color: var(--text);
+  margin: 0;
+}
+.dark .hero-line { color: var(--text); }
+
 .hero-current {
   font-family: var(--font);
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.25rem;
-  letter-spacing: -0.0225rem;
+  letter-spacing: -0.0125rem;
   color: #434242;
+  margin: 0;
 }
 .dark .hero-current { color: #a1a1aa; }
 
@@ -361,7 +373,7 @@ body {
 }
 .dark .hero-link { color: #5b9dff; }
 
-.hero-link:hover { opacity: 0.55; }
+.hero-link:hover { color: #FF401A; opacity: 1; }
 
 .cta-btn {
   display: flex;
@@ -479,7 +491,7 @@ body {
   transition: opacity 0.15s;
 }
 
-.social-link:hover { opacity: 0.55; }
+.social-link:hover { color: #FF401A; opacity: 1; }
 
 .sidebar-meta {
   display: flex;
@@ -528,8 +540,11 @@ body {
   width: 100%;
   /* Bottom clearance so the last cards clear the pinned Music Box (~116px
      tall incl. its offset) with a comfortable gap above it. */
-  padding: 1.25rem 7.5rem 10rem;
-  gap: 3.75rem;
+  /* Design frame is 1440 wide with the content column spanning 220..1220. */
+  max-width: 62.5rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 10rem;
+  gap: 2.5rem;
   box-sizing: border-box;
 }
 
@@ -785,7 +800,7 @@ body {
 }
 
 .splash-hero .hero-current {
-  margin-top: 0.5rem;
+  margin-top: 0;
 }
 
 .splash-footer {
@@ -980,7 +995,6 @@ body {
     width: 2.5rem;
     height: 2.5rem;
   }
-  .splash-page .projects-block { --tile-gap: 1.25rem; }
   .splash-page .project-grid,
   .splash-page .project-grid.is-cols-3 {
     grid-template-columns: 1fr;
@@ -1955,14 +1969,12 @@ body {
 /* Bar + grid + globe travel together, so .splash-page's 3.75rem gap lands
    above the block rather than between the bar and the first row of tiles. */
 .projects-block {
-  --tile-gap: 1.5rem;
+  --tile-gap: 1rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--tile-gap);
 }
-/* Three-across runs a little tighter; the row above follows it. */
-.projects-block:has(.project-grid.is-cols-3) { --tile-gap: 1.25rem; }
 
 .layout-bar {
   display: flex;
@@ -1971,18 +1983,13 @@ body {
   width: 100%;
 }
 
-/* Crossfade when switching between the three layouts. */
-.project-grid,
+/* The grid's entrance is the per-tile stagger (see home-layout.js); the
+   globe has no tiles to stagger, so it fades in as a whole. */
 .globe-stage {
-  transition: opacity 0.24s ease;
-}
-.projects-block.is-switching .project-grid,
-.projects-block.is-switching .globe-stage {
-  opacity: 0;
+  animation: blurIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
-  .project-grid,
-  .globe-stage { transition: none; }
+  .globe-stage { animation: none; }
 }
 
 /* ── Category tabs ────────────────────────────────────────────────────────
@@ -2035,7 +2042,6 @@ body {
   transition: color 0.15s ease;
 }
 .layout-btn svg { display: block; fill: currentColor; }
-.layout-btn--globe svg { fill: none; }
 .layout-btn:hover { color: var(--text-muted); }
 .layout-btn[aria-pressed="true"] { color: var(--text); }
 .dark .layout-btn { color: #3f3f46; }

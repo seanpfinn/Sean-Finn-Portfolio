@@ -13,12 +13,10 @@ const LAYOUT_KEY = 'home-layout';
 const FILTER_KEY = 'home-filter';
 const MODES = ['cols2', 'cols3', 'globe'];
 const CATS  = ['all', 'apps', 'web'];
-const FADE_MS = 240;
 
 const grid     = document.getElementById('project-grid');
 const stage    = document.getElementById('globe-stage');
 const canvasEl = document.getElementById('globe-canvas');
-const block    = document.querySelector('.projects-block');
 const buttons  = Array.from(document.querySelectorAll('.layout-btn'));
 const tabs     = Array.from(document.querySelectorAll('.filter-tab'));
 
@@ -41,21 +39,6 @@ function readKey(key, allowed) {
 
 function writeKey(key, v) {
   try { localStorage.setItem(key, v); } catch (e) {}
-}
-
-// ── Crossfade ─────────────────────────────────────────────────────────────
-// Fade the block out, swap the state while it's invisible, then fade back in
-// once the new layout has painted.
-
-function transition(commit) {
-  if (!block || reduceMotion) { commit(); return; }
-  block.classList.add('is-switching');
-  setTimeout(() => {
-    commit();
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => block.classList.remove('is-switching'));
-    });
-  }, FADE_MS);
 }
 
 // ── Category filter ───────────────────────────────────────────────────────
@@ -86,8 +69,6 @@ function commitFilter(next) {
   if (globe && mode === 'globe') rebuildGlobe();
 }
 
-// Filtering deliberately skips the block crossfade: the tiles fade in
-// individually instead, the way they do on first load.
 function applyFilter(next, userInitiated) {
   const target = CATS.includes(next) ? next : 'all';
   if (userInitiated && target === filter) return;
@@ -108,15 +89,14 @@ function commitLayout(next) {
   if (globeOn) startGlobe(); else stopGlobe();
 }
 
+// Every state change uses the same entrance: the tiles restagger, the way
+// they do coming back from the globe. The globe itself fades in via CSS.
 function applyLayout(next, userInitiated) {
   const target = MODES.includes(next) ? next : 'cols2';
   if (userInitiated && target === mode) return;
-  if (userInitiated) {
-    transition(() => commitLayout(target));
-    writeKey(LAYOUT_KEY, target);
-  } else {
-    commitLayout(target);
-  }
+  commitLayout(target);
+  if (target !== 'globe') staggerCards();
+  if (userInitiated) writeKey(LAYOUT_KEY, target);
 }
 
 // ── Globe ─────────────────────────────────────────────────────────────────
