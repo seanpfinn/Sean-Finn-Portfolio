@@ -11,7 +11,8 @@
 
   const PX_PER_YEAR = 80;    // matches the design's year spacing
   const MIN_H       = 76;    // a short role still needs room for its text
-  const LANE_GAP    = 10;    // px between side-by-side lanes
+  const LANE_GAP    = 12;    // px between side-by-side lanes
+  const CARD_GAP    = 12;    // px of air below each card
   const MS_YEAR     = 365.2425 * 24 * 60 * 60 * 1000;
 
   const now = new Date();
@@ -63,8 +64,12 @@
   // roles, so a role that overlaps nothing still gets the full width.
   items.forEach((i) => {
     i.top = y(i.end);
-    i.height = Math.max(MIN_H, y(i.start) - y(i.end));
-    i.bottom = i.top + i.height;
+    // Inset the card from the bottom of its span so consecutive roles don't
+    // butt together. The top edge still sits exactly on the end date.
+    i.height = Math.max(MIN_H, y(i.start) - y(i.end) - CARD_GAP);
+    // Lane packing works on the card plus its gap, so lane-mates keep the
+    // same air between them as stacked cards do.
+    i.bottom = i.top + i.height + CARD_GAP;
   });
   items.sort((a, b) => a.top - b.top);
 

@@ -48,15 +48,23 @@
     /* ── Chart ────────────────────────────────────────────────────────
        One linear time scale. Year rules and cards are both positioned
        from real dates by timeline.js, so nothing is hand-placed. */
-    .tl-chart { position: relative; padding-left: 5.5rem; }
+    /* Axis sits at 5.5rem; cards start further right so they clear it. */
+    .tl-chart { position: relative; padding-left: 7.5rem; }
 
     .tl-axis { position: absolute; inset: 0 0 0 0; pointer-events: none; }
+    /* A gradient rather than `border: dashed` so the dash length and colour
+       are ours to set — the browser default was faint and finely broken. */
     .tl-axis-line {
       position: absolute;
       top: 0; bottom: 0; left: 5.5rem;
-      border-left: 1px dashed var(--border);
+      width: 2px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--text-dim) 0 7px,
+        transparent 7px 14px
+      );
     }
-    .tl-tick { position: absolute; left: 0; width: 5rem; text-align: right; }
+    .tl-tick { position: absolute; left: 0; width: 4.75rem; text-align: right; }
     .tl-tick span {
       font-family: var(--mono);
       font-size: 0.6875rem;
@@ -123,10 +131,14 @@
       color: var(--text-dim);
       margin: auto 0 0;
     }
-    .tl-item--point .tl-card { background: none; border-style: dashed; }
+    .tl-item--point .tl-card {
+      background: none;
+      border-style: dashed;
+      border-color: var(--text-dim);
+    }
 
     @media (max-width: 40rem) {
-      .tl-chart { padding-left: 3.5rem; }
+      .tl-chart { padding-left: 5rem; }
       .tl-axis-line { left: 3.5rem; }
       .tl-tick { width: 3rem; }
       .tl-blurb { display: none; }
