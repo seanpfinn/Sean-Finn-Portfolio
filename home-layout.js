@@ -184,15 +184,14 @@ function createGlobe(THREE, mount, tiles) {
 
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  // Pulled back to keep the larger panels inside the frame.
-  camera.position.set(0, 0, 10.6);
 
   const world = new THREE.Group();
   scene.add(world);
 
-  // A short list shouldn't sprawl across a big sphere — pull the radius in.
-  const R  = Math.max(2.1, Math.min(3.35, 1.15 + tiles.length * 0.17));
-  const TW = 2.4;
+  // Radius tracks the tile count so a short list doesn't sprawl, and keeps
+  // surface coverage under ~45% so neighbouring panels don't intersect.
+  const R  = Math.max(2.4, Math.min(4.0, 1.35 + tiles.length * 0.196));
+  const TW = 3.4;
   const TH = TW * (314 / 575);
 
   // One rounded-corner mask shared by every panel. Geometry stays a plane;
@@ -201,7 +200,13 @@ function createGlobe(THREE, mount, tiles) {
 
   const panels = tiles.map((tile, i) => {
     const { texture, video } = makeTexture(THREE, tile);
-    if (video) pool.appendChild(video);
+    if (video) {
+      pool.appendChild(video);
+      // Start every video, not just the front-facing ones — the loop above
+      // won't pause a panel until it has a frame, so this is what guarantees
+      // the whole globe has loaded thumbnails rather than black rectangles.
+      video.play().catch(() => {});
+    }
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(TW, TH),
       new THREE.MeshBasicMaterial({
@@ -229,13 +234,28 @@ function createGlobe(THREE, mount, tiles) {
     return mesh;
   });
 
+  // Pull the camera back just far enough that the sphere fits, rather than
+  // fixing a distance for the worst case: a filtered view has a smaller
+  // sphere, so its panels can sit much closer and read much larger. With free
+  // rotation, panels clipping at the poles reads as broken, hence the margin.
+  const extent = Math.hypot(R, TW / 2);
+  function fitCamera() {
+    const vFov = (camera.fov * Math.PI / 180) * 0.95;
+    let d = extent / Math.tan(vFov / 2);
+    // A canvas taller than it is wide is limited horizontally instead.
+    if (camera.aspect < 1) d /= camera.aspect;
+    camera.position.set(0, 0, d);
+  }
+
   function resize() {
     const w = mount.clientWidth, h = mount.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
+    fitCamera();
     camera.updateProjectionMatrix();
   }
+  fitCamera();
   const ro = new ResizeObserver(resize);
   ro.observe(mount);
   resize();
@@ -310,25 +330,35 @@ function createGlobe(THREE, mount, tiles) {
   let raf = 0, active = true;
   const forward = new THREE.Vector3();
   const worldPos = new THREE.Vector3();
+  // Free tumbling needs quaternions — Euler angles gimbal-lock and forced the
+  // old vertical clamp. Increments are applied in world space (premultiply),
+  // so a drag means the same thing whatever the current orientation.
+  const spin = new THREE.Quaternion();
+  const AXIS_X = new THREE.Vector3(1, 0, 0);
+  const AXIS_Y = new THREE.Vector3(0, 1, 0);
 
   function frame() {
     raf = requestAnimationFrame(frame);
     if (!dragging) {
       velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;
-      velX *= 0.92;
+      velX *= 0.94;
     }
-    world.rotation.y += velY;
-    world.rotation.x = clamp(world.rotation.x + velX, -0.6, 0.6);
+    if (velY) { spin.setFromAxisAngle(AXIS_Y, velY); world.quaternion.premultiply(spin); }
+    if (velX) { spin.setFromAxisAngle(AXIS_X, velX); world.quaternion.premultiply(spin); }
 
-    // Only decode video for panels actually facing the viewer.
+    // Keep the front hemisphere playing. A back-facing video is only paused
+    // once it has decoded at least one frame (readyState >= HAVE_CURRENT_DATA),
+    // so every panel is showing an image rather than black.
     for (const m of panels) {
       const v = m.userData.video;
       if (!v) continue;
       m.getWorldPosition(worldPos);
       forward.copy(worldPos).normalize();
-      const facing = forward.z > 0.1;
-      if (facing && v.paused) v.play().catch(() => {});
-      else if (!facing && !v.paused) v.pause();
+      if (forward.z > 0.1) {
+        if (v.paused) v.play().catch(() => {});
+      } else if (!v.paused && v.readyState >= 2) {
+        v.pause();
+      }
     }
     renderer.render(scene, camera);
   }
@@ -417,8 +447,6 @@ function makeTexture(THREE, tile) {
   texture.anisotropy = 8;
   return { texture, video: null };
 }
-
-function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────
 // Last, so every binding above is initialised before anything runs.
