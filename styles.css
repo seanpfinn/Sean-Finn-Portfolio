@@ -2145,6 +2145,7 @@ body {
   flex-shrink: 0;
 }
 .gcl-meta { height: 0.875rem; }
+.gcl-finrez { height: 0.875rem; }
 /* Dark logos need to flip to white on the dark theme */
 .dark .gallery-card-logo { filter: brightness(0) invert(1); }
 

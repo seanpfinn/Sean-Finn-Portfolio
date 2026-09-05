@@ -50,6 +50,18 @@
   color: var(--text-body);
 }
 
+/* A client logo standing in for the company name. It sits inside the normal
+   .proj-meta-value line box so this item keeps the same height as Timeframe
+   and Platform beside it, and the alt text still carries the company name. */
+.proj-meta-logo {
+  display: inline-block;
+  vertical-align: middle;
+  height: 0.875rem;
+  width: auto;
+  object-fit: contain;
+}
+.dark .proj-meta-logo { filter: brightness(0) invert(1); }
+
 /* Context block */
 .proj-context {
   display: flex;
