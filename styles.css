@@ -1011,8 +1011,16 @@ body {
      which sits later in the file and would otherwise win on equal specificity. */
   .layout-toggle .layout-btn--list { display: block; }
   .layout-btn:not(.layout-btn--list):not(.layout-btn--globe) { display: none; }
-  .layout-toggle { gap: 1.25rem; }
-  .layout-btn { padding: 0.375rem 0.5rem; }
+  /* Pull the two glyphs close together, then hand each one an invisible tap
+     target that reaches past it — the icons read as a pair without the hit
+     areas shrinking. Same approach as .miniplayer-progress::before below. */
+  .layout-toggle { gap: 0.25rem; }
+  .layout-btn { position: relative; padding: 0.5rem; }
+  .layout-btn::before {
+    content: '';
+    position: absolute;
+    inset: -0.875rem -0.125rem;
+  }
 
   /* The globe wants to sit closer under the toggles than the tiles do. */
   .globe-stage { margin-top: -0.5rem; }
