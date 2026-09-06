@@ -31,6 +31,9 @@
   const MS_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
   const now = new Date();
 
+  // Below this the vertical chart can't hold parallel lanes legibly.
+  const narrow = () => window.matchMedia('(max-width: 50.5625rem)').matches;
+
   // "YYYY-MM" -> Date at the first of that month. Empty means "still going".
   function parse(v) {
     if (!v) return now;
@@ -110,6 +113,18 @@
 
   // ── Vertical: newest at the top, time running downward into the past ─────
   function renderVertical() {
+    // On a phone the chart degrades to a chronological list: no absolute
+    // positioning, no axis, full-width cards. Their printed date ranges carry
+    // the timing instead of the geometry.
+    if (narrow()) {
+      chart.classList.add('is-list');
+      items.slice()
+        .sort((a, b) => b.end - a.end || b.start - a.start)
+        .forEach((it) => list.appendChild(it.el));
+      return;
+    }
+    chart.classList.remove('is-list');
+
     const y = (d) => ((now - d) / MS_YEAR) * V_PX_YEAR;
     const total = spanYears * V_PX_YEAR;
 
@@ -178,6 +193,7 @@
 
   function render() {
     clearStyles();
+    chart.classList.remove('is-list');
     const horizontal = chart.classList.contains('is-horizontal');
     if (horizontal) renderHorizontal(); else renderVertical();
   }

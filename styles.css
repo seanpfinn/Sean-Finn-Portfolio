@@ -53,9 +53,22 @@ a { text-decoration: none; color: inherit; }
   --font:        'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --mono:        'Geist Mono', 'Menlo', monospace;
   --sidebar-w:   21.875rem;
+  /* Page gutter — every content container reads these so the body margins
+     stay identical across pages and breakpoints. */
+  --page-x:      1.25rem;
+  --page-top:    1.25rem;
+  --page-bottom: 10rem;
   --content-w:   57.0625rem;
   --gap:         1.25rem;
   --pad:         0.625rem;
+}
+
+/* On phones the nav becomes a bar across the top, so content starts lower. */
+@media (max-width: 50.5625rem) {
+  :root {
+    --page-top:    4.5rem;
+    --page-bottom: 8rem;
+  }
 }
 
 /* ================================
@@ -543,7 +556,7 @@ body {
   /* Design frame is 1440 wide with the content column spanning 220..1220. */
   max-width: 62.5rem;
   margin: 0 auto;
-  padding: 1.25rem 1.25rem 10rem;
+  padding: var(--page-top) var(--page-x) var(--page-bottom);
   gap: 2.5rem;
   box-sizing: border-box;
 }
@@ -842,7 +855,6 @@ body {
 
 @media (max-width: 50.5625rem) {
   .splash-page {
-    padding: 4.5rem 1.25rem 1.25rem;
     gap: 2.5rem;
   }
 

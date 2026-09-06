@@ -255,7 +255,7 @@
   margin: 0 auto;
   /* Extra bottom clearance so the last section clears the pinned Music Box
      (~116px tall incl. its offset) with a comfortable gap above it. */
-  padding: 1.25rem 1.25rem 10rem;
+  padding: var(--page-top) var(--page-x) var(--page-bottom);
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -1521,7 +1521,6 @@
   /* Mobile nav also uses the homepage styles (styles.css) */
 
   .proj-col {
-    padding: 3.75rem 0.625rem 3.75rem;
     max-width: none;
     margin: 0;
     width: auto;
