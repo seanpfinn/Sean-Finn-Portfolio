@@ -1003,7 +1003,7 @@ body {
   .splash-page .project-grid.is-cols-3 {
     grid-template-columns: 1fr;
   }
-  .globe-canvas { height: min(26rem, 60vh); }
+  .globe-canvas { height: min(19rem, 46vh); }
 
   /* The grid is always one column on a phone, so the 2-up/3-up density icons
      have nothing to switch between. A single list glyph stands in for them.
@@ -1023,7 +1023,7 @@ body {
   }
 
   /* The globe wants to sit closer under the toggles than the tiles do. */
-  .globe-stage { margin-top: -0.5rem; }
+  .globe-stage { margin-top: -0.75rem; }
   .gallery-card-visual { aspect-ratio: 1 / 1; }
   .splash-footer {
     position: static;

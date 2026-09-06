@@ -62,6 +62,16 @@
     .iso-obj:focus-visible { outline: 2px solid #FF401A; outline-offset: 6px; border-radius: 0.5rem; }
 
     .iso-svg { display: block; width: 6.75rem; height: auto; }
+    /* Photo objects match the cubes' footprint; without this an image would
+       render at its natural pixel size. */
+    .iso-photo {
+      display: block;
+      width: 7.5rem;
+      height: auto;
+      border-radius: 0.5rem;
+      pointer-events: none;
+      user-select: none;
+    }
     .iso-label {
       font-family: var(--mono);
       font-size: 0.625rem;
@@ -175,6 +185,7 @@
 
     @media (max-width: 50.5625rem) {
       .iso-svg { width: 5rem; }
+      .iso-photo { width: 5.75rem; }
       .ab-hint { bottom: 7.5rem; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -502,8 +513,11 @@
       if (Math.abs(velX) > 0.1 || Math.abs(velY) > 0.1) raf = requestAnimationFrame(inertia);
     }
 
+    let pressTarget = null;
+
     wrap.addEventListener('pointerdown', (e) => {
       dragging = true; moved = 0;
+      pressTarget = e.target.closest('.iso-obj');
       lastX = e.clientX; lastY = e.clientY;
       velX = velY = 0;
       cancelAnimationFrame(raf);
@@ -528,6 +542,9 @@
       dragging = false;
       wrap.classList.remove('is-dragging');
       raf = requestAnimationFrame(inertia);
+      // A press that barely travelled is a tap, not a drag.
+      if (pressTarget && moved <= 6) openZoom(pressTarget);
+      pressTarget = null;
     }
     wrap.addEventListener('pointerup', endDrag);
     wrap.addEventListener('pointercancel', endDrag);
@@ -596,9 +613,11 @@
       if (zClose) zClose.focus();
     }
 
-    field.addEventListener('click', (e) => {
+    field.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
       const btn = e.target.closest('.iso-obj');
-      if (!btn || moved > 6) return;    // a drag is not a tap
+      if (!btn) return;
+      e.preventDefault();
       openZoom(btn);
     });
     if (zClose) zClose.addEventListener('click', closeZoom);
