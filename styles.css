@@ -380,11 +380,11 @@ body {
 }
 
 .hero-link {
-  color: #0000EE;
+  color: inherit;
   text-decoration: none;
   transition: opacity 0.15s;
 }
-.dark .hero-link { color: #5b9dff; }
+.dark .hero-link { color: inherit; }
 
 .hero-link:hover { color: #FF401A; opacity: 1; }
 

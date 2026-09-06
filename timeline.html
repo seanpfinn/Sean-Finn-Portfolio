@@ -24,7 +24,7 @@
     body { overflow: visible !important; height: auto !important; }
 
     .tl-main {
-      max-width: 62.5rem;
+      max-width: 52rem;
       margin: 0 auto;
       padding: var(--page-top) var(--page-x) var(--page-bottom);
     }
@@ -48,15 +48,15 @@
     /* ── Chart ────────────────────────────────────────────────────────
        One linear time scale. Year rules and cards are both positioned
        from real dates by timeline.js, so nothing is hand-placed. */
-    /* Axis sits at 5.5rem; cards start further right so they clear it. */
-    .tl-chart { position: relative; padding-left: 7.5rem; }
+    /* Axis sits at 4.5rem; cards start further right so they clear it. */
+    .tl-chart { position: relative; padding-left: 6.5rem; }
 
     .tl-axis { position: absolute; inset: 0 0 0 0; pointer-events: none; }
     /* A gradient rather than `border: dashed` so the dash length and colour
        are ours to set — the browser default was faint and finely broken. */
     .tl-axis-line {
       position: absolute;
-      top: 0; bottom: 0; left: 5.5rem;
+      top: 0; bottom: 0; left: 4.5rem;
       width: 2px;
       background-image: repeating-linear-gradient(
         to bottom,
@@ -64,7 +64,7 @@
         transparent 7px 14px
       );
     }
-    .tl-tick { position: absolute; left: 0; width: 4.75rem; text-align: right; }
+    .tl-tick { position: absolute; left: 0; width: 3.75rem; text-align: right; }
     .tl-tick span {
       font-family: var(--mono);
       font-size: 0.6875rem;
@@ -261,10 +261,10 @@
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="nav-overlay-scroll">
-      <a href="/" class="splash-nav-link">home</a>
+      <a href="/" class="splash-nav-link">Home</a>
       <div class="splash-nav-work-group">
         <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
-          <span class="splash-nav-link">projects</span>
+          <span class="splash-nav-link">Projects</span>
           <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
@@ -354,7 +354,7 @@
       </div>
       <div class="splash-nav-work-group">
         <button class="splash-nav-work-btn" aria-expanded="false">
-          <span class="splash-nav-link">about</span>
+          <span class="splash-nav-link">About</span>
           <svg class="splash-nav-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="nav-work-submenu-wrap">
@@ -372,7 +372,6 @@
           </div>
         </div>
       </div>
-      <a href="arcade.html" class="splash-nav-link">arcade</a>
       </div>
         </div>
     <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
