@@ -73,32 +73,90 @@
     /* The symbol definitions themselves never render. */
     .iso-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-    .iso-popup {
-      position: fixed;
-      z-index: 600;
-      display: flex;
-      gap: 0.625rem;
-      max-width: 17.5rem;
-      padding: 0.75rem 0.875rem;
+    /* ── Zoom ──────────────────────────────────────────────────────────
+       Clicking an object flies it to the middle while the canvas whooshes
+       away behind it. The flying element is a clone positioned over the
+       original, moved with a transform so it stays on the compositor. */
+    .iso-zoom { position: fixed; inset: 0; z-index: 500; }
+    .iso-zoom[hidden] { display: none; }
+    .iso-zoom::before {
+      content: '';
+      position: absolute;
+      inset: 0;
       background: var(--bg);
-      border: 0.0625rem solid var(--border);
-      border-radius: 0.75rem;
-      box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.12);
       opacity: 0;
-      transform: translateY(0.25rem) scale(0.98);
-      transition: opacity 0.16s ease, transform 0.16s ease;
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .iso-zoom.is-open::before { opacity: 1; }
+
+    .iso-zoom-art {
+      position: fixed;
+      transform-origin: center center;
+      transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+      z-index: 1;
+    }
+    img.iso-zoom-art { border-radius: 0.75rem; object-fit: contain; }
+
+    .iso-zoom-detail {
+      position: absolute;
+      left: 50%;
+      bottom: 12vh;
+      transform: translate(-50%, 0.75rem);
+      width: min(28rem, calc(100vw - 2.5rem));
+      text-align: center;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.4s ease 0.28s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.28s;
+    }
+    .iso-zoom.is-open .iso-zoom-detail { opacity: 1; transform: translate(-50%, 0); }
+
+    .iso-zoom-eyebrow { font-size: 1.5rem; line-height: 1; margin: 0 0 0.5rem; }
+    .iso-zoom-name {
+      font-family: var(--font);
+      font-size: 1.375rem;
+      font-weight: 600;
+      letter-spacing: -0.0275rem;
+      color: var(--text);
+      margin: 0;
+    }
+    .iso-zoom-desc {
+      font-family: var(--font);
+      font-size: 0.875rem;
+      line-height: 1.375rem;
+      color: var(--text-body);
+      margin: 0.5rem 0 0;
+    }
+    .iso-zoom-close {
+      margin-top: 1.25rem;
+      padding: 0.4375rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .iso-zoom-close:hover { background: var(--badge-bg); }
+
+    /* The whoosh: the whole canvas pushes past the viewer and blurs out. */
+    .ab-wrap {
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter 0.45s ease;
+    }
+    .ab-wrap.is-zoomed {
+      opacity: 0;
+      transform: scale(1.14);
+      filter: blur(8px);
       pointer-events: none;
     }
-    .iso-popup.is-visible { opacity: 1; transform: translateY(0) scale(1); }
-    .iso-popup-emoji { font-size: 1.5rem; line-height: 1; flex-shrink: 0; }
-    .iso-popup-body { display: flex; flex-direction: column; gap: 0.25rem; }
-    .iso-popup-name {
-      font-family: var(--font); font-size: 0.8125rem; font-weight: 600;
-      color: var(--text); margin: 0;
-    }
-    .iso-popup-desc {
-      font-family: var(--font); font-size: 0.75rem; line-height: 1rem;
-      color: var(--text-body); margin: 0;
+
+    @media (prefers-reduced-motion: reduce) {
+      .iso-zoom-art, .iso-zoom-detail, .ab-wrap, .iso-zoom::before { transition: none; }
+      .ab-wrap.is-zoomed { transform: none; filter: none; }
     }
 
     .ab-hint {
@@ -270,11 +328,13 @@
 
   <p class="ab-hint" id="ab-hint">Drag to explore</p>
 
-  <div class="iso-popup" id="iso-popup" role="status">
-    <span class="iso-popup-emoji" id="iso-popup-emoji"></span>
-    <div class="iso-popup-body">
-      <p class="iso-popup-name" id="iso-popup-name"></p>
-      <p class="iso-popup-desc" id="iso-popup-desc"></p>
+  <div class="iso-zoom" id="iso-zoom" role="dialog" aria-modal="true" aria-labelledby="iso-zoom-name" hidden>
+    <div class="iso-zoom-stage" id="iso-zoom-stage" aria-hidden="true"></div>
+    <div class="iso-zoom-detail" id="iso-zoom-detail">
+      <p class="iso-zoom-eyebrow" id="iso-zoom-eyebrow"></p>
+      <h2 class="iso-zoom-name" id="iso-zoom-name"></h2>
+      <p class="iso-zoom-desc" id="iso-zoom-desc"></p>
+      <button class="iso-zoom-close" id="iso-zoom-close" type="button">Close</button>
     </div>
   </div>
 
@@ -308,7 +368,7 @@
       { emoji:'🏀', name:'Basketball',   desc:'Watching the Nets suffer. Hoping annually. Somehow still a fan.',                     top:'#FED7AA', left:'#F97316', right:'#7C2D12' },
       { emoji:'🏄', name:'Surfing',      desc:'Weekend trips to Rockaway. Never getting good. Always going back.',                   top:'#6EE7F7', left:'#0891B2', right:'#164E63' },
       { emoji:'🍺', name:'Craft Beer',   desc:'Sours, IPAs, and anything from Other Half. Brooklyn biased.',                         top:'#FDE68A', left:'#D97706', right:'#78350F' },
-      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
+      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.jpg', top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
     ];
 
     // ── Geometry ────────────────────────────────────────────────────────────
@@ -388,8 +448,14 @@
           ' data-i="' + i + '"' +
           (primary ? ' aria-label="' + it.name + '"' : ' tabindex="-1" aria-hidden="true"') +
           '>' +
-          '<svg class="iso-svg" viewBox="0 0 120 106" aria-hidden="true">' +
-          '<use href="#iso-cube-' + i + '"/></svg>' +
+          // An item with `img` renders as a photo. If that file is missing the
+          // onerror swaps in the cube, so the canvas never shows a broken image.
+          (it.img
+            ? '<img class="iso-photo" src="' + it.img + '" alt="" decoding="async"' +
+              ' onerror="this.outerHTML=\'<svg class=\\\'iso-svg\\\' viewBox=\\\'0 0 120 106\\\'>' +
+              '<use href=\\\'#iso-cube-' + i + '\\\'/></svg>\'" />'
+            : '<svg class="iso-svg" viewBox="0 0 120 106" aria-hidden="true">' +
+              '<use href="#iso-cube-' + i + '"/></svg>') +
           '<span class="iso-label">' + it.name + '</span>' +
           '</button>';
       }
@@ -443,7 +509,7 @@
       cancelAnimationFrame(raf);
       wrap.classList.add('is-dragging');
       wrap.setPointerCapture(e.pointerId);
-      hidePopup();
+      closeZoom();
       if (hint) hint.classList.add('is-gone');
     });
 
@@ -466,47 +532,78 @@
     wrap.addEventListener('pointerup', endDrag);
     wrap.addEventListener('pointercancel', endDrag);
 
-    // ── Popup ───────────────────────────────────────────────────────────────
-    const pop     = document.getElementById('iso-popup');
-    const popMoji = document.getElementById('iso-popup-emoji');
-    const popName = document.getElementById('iso-popup-name');
-    const popDesc = document.getElementById('iso-popup-desc');
-    let activeEl = null;
+    // ── Zoom ────────────────────────────────────────────────────────────────
+    // Clicking an object flies a clone of it to the centre while the canvas
+    // whooshes away behind it, then the detail panel fades in underneath.
+    // The clone is moved with a transform rather than left/top so the whole
+    // flight stays on the compositor.
+    const zoom     = document.getElementById('iso-zoom');
+    const stage    = document.getElementById('iso-zoom-stage');
+    const zEyebrow = document.getElementById('iso-zoom-eyebrow');
+    const zName    = document.getElementById('iso-zoom-name');
+    const zDesc    = document.getElementById('iso-zoom-desc');
+    const zClose   = document.getElementById('iso-zoom-close');
+    let zoomOpen = false, lastFocus = null;
 
-    function hidePopup() {
-      if (!pop) return;
-      pop.classList.remove('is-visible');
-      if (activeEl) activeEl.classList.remove('is-active');
-      activeEl = null;
+    function closeZoom() {
+      if (!zoomOpen) return;
+      zoomOpen = false;
+      const art = stage.firstElementChild;
+      if (art) art.style.transform = '';        // flies back to where it started
+      zoom.classList.remove('is-open');
+      wrap.classList.remove('is-zoomed');
+      setTimeout(() => {
+        if (!zoomOpen) { zoom.hidden = true; stage.innerHTML = ''; }
+      }, 640);
+      if (lastFocus) { lastFocus.focus(); lastFocus = null; }
     }
 
-    function showPopup(btn) {
+    function openZoom(btn) {
       const it = ITEMS[Number(btn.dataset.i)];
-      if (!it || !pop) return;
-      popMoji.textContent = it.emoji;
-      popName.textContent = it.name;
-      popDesc.textContent = it.desc;
-      pop.classList.add('is-visible');
-      activeEl = btn;
-      btn.classList.add('is-active');
-      const r = btn.getBoundingClientRect();
-      const pw = pop.offsetWidth, ph = pop.offsetHeight;
-      let x = r.left + r.width / 2 - pw / 2;
-      let y = r.top - ph - 10;
-      if (y < 12) y = r.bottom + 10;
-      x = Math.max(12, Math.min(x, window.innerWidth - pw - 12));
-      pop.style.left = x + 'px';
-      pop.style.top = y + 'px';
+      const src = btn.querySelector('.iso-photo, .iso-svg');
+      if (!it || !src || !zoom || zoomOpen) return;
+
+      // Start the clone exactly over the original, then transform from there.
+      const r = src.getBoundingClientRect();
+      const art = src.cloneNode(true);
+      art.removeAttribute('style');
+      art.classList.add('iso-zoom-art');
+      art.style.left = r.left + 'px';
+      art.style.top = r.top + 'px';
+      art.style.width = r.width + 'px';
+      art.style.height = r.height + 'px';
+      stage.innerHTML = '';
+      stage.appendChild(art);
+
+      zEyebrow.textContent = it.emoji;
+      zName.textContent = it.name;
+      zDesc.textContent = it.desc;
+
+      zoom.hidden = false;
+      zoomOpen = true;
+      lastFocus = btn;
+
+      const targetW = Math.min(window.innerWidth * 0.72, 544);
+      const scale = targetW / r.width;
+      const dx = window.innerWidth / 2 - (r.left + r.width / 2);
+      const dy = window.innerHeight * 0.36 - (r.top + r.height / 2);
+
+      requestAnimationFrame(() => {
+        wrap.classList.add('is-zoomed');
+        zoom.classList.add('is-open');
+        art.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
+      });
+      if (zClose) zClose.focus();
     }
 
     field.addEventListener('click', (e) => {
       const btn = e.target.closest('.iso-obj');
-      if (!btn || moved > 6) return;
-      if (activeEl === btn) { hidePopup(); return; }
-      hidePopup();
-      showPopup(btn);
+      if (!btn || moved > 6) return;    // a drag is not a tap
+      openZoom(btn);
     });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePopup(); });
+    if (zClose) zClose.addEventListener('click', closeZoom);
+    if (zoom) zoom.addEventListener('click', (e) => { if (e.target === zoom) closeZoom(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeZoom(); });
 
     // ── Boot ────────────────────────────────────────────────────────────────
     buildField();
