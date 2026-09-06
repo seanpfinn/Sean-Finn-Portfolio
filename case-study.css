@@ -1532,6 +1532,15 @@
   .proj-panel-new {
     height: 21.875rem;
   }
+
+  /* A full-bleed landscape image inside a fixed-height panel gets savaged by
+     object-fit: cover once the panel goes near-square on a phone — these were
+     losing 38-45% of their width. Size by aspect instead so almost nothing
+     is cropped. */
+  .proj-panel-new.proj-panel--media {
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
   /* Live Activity panel 4: re-anchor to top so the phone starts flush
      with the panel edge on mobile instead of leaving a blank gap above it. */
   .proj-la-p4-wrap {

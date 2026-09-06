@@ -518,6 +518,35 @@
     });
   }
 
+  // ── Haptics ──────────────────────────────────────────────────────────────
+  // A short tick on real touch input only. Delegated from the document so every
+  // control on every page is covered without each module wiring its own.
+  // Note: the Vibration API is Android-only — iOS Safari does not implement it,
+  // so this is silently inert on iPhone.
+  const canVibrate = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
+
+  function haptic(ms) {
+    if (!canVibrate) return;
+    try { navigator.vibrate(ms); } catch (e) {}
+  }
+  window.haptic = haptic;
+
+  if (canVibrate) {
+    // Light tick for ordinary controls, a touch more for opening the nav.
+    const TAP = '.layout-btn, .filter-tab, .tl-orient-btn, .pad-btn, .miniplayer-btn,'
+              + ' .arcade-nav-btn, .arcade-start, .gallery-card, .nav-project-item,'
+              + ' .splash-nav-link, .dark-toggle';
+    const STRONG = '.nav-hamburger, .nav-close-btn, .splash-nav-work-btn';
+
+    document.addEventListener('pointerdown', (e) => {
+      // Mouse and pen shouldn't buzz anything, and this keeps desktop untouched.
+      if (e.pointerType !== 'touch') return;
+      const el = e.target.closest(STRONG + ',' + TAP);
+      if (!el) return;
+      haptic(el.matches(STRONG) ? 14 : 8);
+    }, { passive: true });
+  }
+
   // ── Mobile nav scroll glass ──────────────────────────────────────────────
   const splashNav = document.querySelector('.splash-nav');
   if (splashNav) {
