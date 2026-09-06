@@ -547,6 +547,49 @@
     }, { passive: true });
   }
 
+  // ── iOS haptics ──────────────────────────────────────────────────────────
+  // Safari has never implemented the Vibration API, so the block above is inert
+  // on iPhone. WebKit's <input type="checkbox" switch> does fire a system tick
+  // when toggled — but iOS 26.5 closed off triggering that from script, so only
+  // a genuine tap on the control still works.
+  //
+  // The workaround: lay an invisible switch over the button and let the tap
+  // land on it, then forward the activation to the real button. Deliberately
+  // limited to the discrete icon toggles — anything needing press-and-hold
+  // (the arcade pad) would break, since the overlay swallows the touch.
+  //
+  // The switch keeps its native appearance (no `appearance: none`), because
+  // WebKit stops emitting the haptic once it isn't rendered as a real switch.
+  const HAPTIC_OVERLAY = '.layout-btn, .filter-tab, .tl-orient-btn';
+
+  function supportsSwitchHaptic() {
+    if (canVibrate) return false;                       // Android path already works
+    if (!window.matchMedia('(hover: none)').matches) return false;   // touch only
+    return 'switch' in document.createElement('input');
+  }
+
+  if (supportsSwitchHaptic()) {
+    document.querySelectorAll(HAPTIC_OVERLAY).forEach((btn) => {
+      if (btn.parentElement && btn.parentElement.classList.contains('haptic-wrap')) return;
+
+      const wrap = document.createElement('span');
+      wrap.className = 'haptic-wrap';
+      btn.parentNode.insertBefore(wrap, btn);
+      wrap.appendChild(btn);
+
+      const sw = document.createElement('input');
+      sw.type = 'checkbox';
+      sw.setAttribute('switch', '');
+      sw.className = 'haptic-switch';
+      // Kept out of the accessibility tree and the tab order: the real button
+      // beside it stays the labelled, focusable control.
+      sw.setAttribute('aria-hidden', 'true');
+      sw.tabIndex = -1;
+      sw.addEventListener('change', () => { btn.click(); });
+      wrap.appendChild(sw);
+    });
+  }
+
   // ── Mobile nav scroll glass ──────────────────────────────────────────────
   const splashNav = document.querySelector('.splash-nav');
   if (splashNav) {
