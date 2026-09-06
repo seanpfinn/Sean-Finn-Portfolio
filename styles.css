@@ -1006,8 +1006,10 @@ body {
   .globe-canvas { height: min(26rem, 60vh); }
 
   /* The grid is always one column on a phone, so the 2-up/3-up density icons
-     have nothing to switch between. A single list glyph stands in for them. */
-  .layout-btn--list { display: block; }
+     have nothing to switch between. A single list glyph stands in for them.
+     Scoped to .layout-toggle so it outranks the desktop `display: none`,
+     which sits later in the file and would otherwise win on equal specificity. */
+  .layout-toggle .layout-btn--list { display: block; }
   .layout-btn:not(.layout-btn--list):not(.layout-btn--globe) { display: none; }
   .layout-toggle { gap: 1.25rem; }
   .layout-btn { padding: 0.375rem 0.5rem; }
@@ -2761,6 +2763,10 @@ body {
   animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: 0.05s;
 }
+.layout-bar {
+  animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.08s;
+}
 .project-grid > .gallery-card {
   animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -2777,5 +2783,6 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .splash-hero,
+  .layout-bar,
   .project-grid > .gallery-card { animation: none; }
 }
