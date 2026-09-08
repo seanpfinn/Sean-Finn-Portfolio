@@ -1576,7 +1576,7 @@
     /* Bottom padding clears the pinned Music Box (~104px tall + 0.75rem gap
        from the viewport edge = ~116px) so it doesn't sit on top of the
        footer text once scrolled all the way down. */
-    padding: 0 1.25rem 10rem;
+    padding: 0 1.25rem 2.5rem;
     pointer-events: auto;
   }
 }

@@ -209,8 +209,21 @@
        view becomes a plain chronological list and the axis steps aside.
        The horizontal view still gives the true dated picture. */
     @media (max-width: 50.5625rem) {
-      .tl-chart.is-list { padding-left: 0; height: auto !important; }
-      .tl-chart.is-list .tl-axis { display: none; }
+      /* Keep a rail so it still reads as a timeline, not a plain list. The
+         year ticks are dropped — they can't align to a flow layout — but each
+         entry gets a marker and carries its own date range. */
+      .tl-chart.is-list { padding-left: 1.75rem; height: auto !important; }
+      .tl-chart.is-list .tl-axis { display: block; }
+      .tl-chart.is-list .tl-tick { display: none; }
+      .tl-chart.is-list .tl-axis-line {
+        left: 0.4375rem;
+        top: 0.5rem;
+        bottom: 0.5rem;
+        width: 2px;
+        height: auto;
+        background-image: repeating-linear-gradient(
+          to bottom, var(--text-dim) 0 7px, transparent 7px 14px);
+      }
       .tl-chart.is-list .tl-list {
         position: static;
         display: flex;
@@ -219,12 +232,25 @@
         height: auto !important;
       }
       .tl-chart.is-list .tl-item {
-        position: static;
+        position: relative;
         width: auto !important;
         height: auto !important;
         left: auto !important;
         top: auto !important;
       }
+      /* Marker sitting on the rail, level with the role title. */
+      .tl-chart.is-list .tl-item::before {
+        content: '';
+        position: absolute;
+        left: -1.53125rem;
+        top: 1rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--text-dim);
+        box-shadow: 0 0 0 0.25rem var(--bg);
+      }
+      .tl-chart.is-list .tl-item--point::before { background: var(--bg); box-shadow: 0 0 0 2px var(--text-dim), 0 0 0 0.3125rem var(--bg); }
       .tl-chart.is-list .tl-card { height: auto; }
 
       .tl-chart.is-horizontal {
