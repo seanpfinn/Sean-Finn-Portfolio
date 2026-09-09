@@ -253,6 +253,18 @@
       .tl-chart.is-list .tl-item--point::before { background: var(--bg); box-shadow: 0 0 0 2px var(--text-dim), 0 0 0 0.3125rem var(--bg); }
       .tl-chart.is-list .tl-card { height: auto; }
 
+      /* Titles and company labels wrap in list mode. Single-line ellipsis is
+         a horizontal-bar behaviour; in a stacked card it forces the whole
+         document wider than the phone and clips the right edge. */
+      .tl-chart.is-list .tl-role {
+        white-space: normal; overflow: visible; text-overflow: clip;
+        min-width: 0; line-height: 1.3;
+      }
+      .tl-chart.is-list .tl-company { white-space: normal; min-width: 0; text-align: right; }
+      .tl-chart.is-list .tl-card-head { align-items: flex-start; }
+      .tl-chart.is-list .tl-logo { margin-top: 0.125rem; }
+
+
       .tl-chart.is-horizontal {
         -webkit-mask-image: linear-gradient(to right,
           transparent 0, #000 2rem, #000 calc(100% - 2rem), transparent 100%);
@@ -262,6 +274,26 @@
       .tl-title { font-size: 1.5rem; }
       .tl-bar { margin-bottom: 0.75rem; }
     }
+  
+    /* ── phones ───────────────────────────────────────────────────── */
+    @media (max-width: 30rem) {
+      .tl-main { padding-left: 1rem; padding-right: 1rem; }
+      .tl-chart.is-list { padding-left: 1.5rem; }
+      .tl-chart.is-list .tl-axis-line { left: 0.3125rem; }
+      .tl-chart.is-list .tl-item::before { left: -1.28125rem; top: 0.9375rem; }
+      .tl-chart.is-list .tl-list { gap: 0.625rem; }
+      .tl-card { padding: 0.75rem 0.8125rem; gap: 0.3125rem; border-radius: 0.625rem; }
+      .tl-role { font-size: 0.9375rem; }
+      .tl-blurb { font-size: 0.8125rem; line-height: 1.25rem; }
+      .tl-dates { font-size: 0.6875rem; margin-top: 0.125rem; }
+      .tl-company { font-size: 0.5625rem; letter-spacing: 0.05em; }
+      .tl-title { font-size: 1.375rem; }
+      .tl-sub { font-size: 0.75rem; }
+      /* a thumb-sized target for the orientation toggle */
+      .tl-orient-btn { padding: 0.5rem; }
+      .tl-bar { gap: 0.25rem; }
+    }
+
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
@@ -353,6 +385,10 @@
                 <span class="nav-company-label">FINREZ</span>
               </div>
               <div class="nav-company-projects">
+                <a href="graffs.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Graffs
+                </a>
                 <a href="ucrfc-club-hub.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   UCRFC Club Hub
