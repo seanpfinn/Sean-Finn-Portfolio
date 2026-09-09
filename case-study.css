@@ -17,7 +17,7 @@
   margin-top: 0.375rem;
 }
 
-/* Meta row: Company / Timeframe / Platform */
+/* Meta row: Company / Year / Platform */
 .proj-meta-row {
   display: flex;
   align-items: flex-start;
@@ -51,7 +51,7 @@
 }
 
 /* A client logo standing in for the company name. It sits inside the normal
-   .proj-meta-value line box so this item keeps the same height as Timeframe
+   .proj-meta-value line box so this item keeps the same height as Year
    and Platform beside it, and the alt text still carries the company name. */
 .proj-meta-logo {
   display: inline-block;
