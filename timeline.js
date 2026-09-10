@@ -24,7 +24,8 @@
   const H_PX_YEAR = 260;
   const H_MIN     = 200;
   const H_GAP     = 14;
-  const H_ROW     = 104;   // row height
+  const H_ROW     = 104;   // row height on a wide screen
+  const H_ROW_SM  = 176;   // ...and on a phone, where the card head stacks
   const H_ROWGAP  = 12;
   const H_AXIS    = 44;    // headroom for the axis line and its year labels
 
@@ -139,18 +140,46 @@
       const size = Math.max(V_MIN, y(it.start) - a - V_GAP);
       return { it, a, size, b: a + size + V_GAP };
     });
-    assignLanes(measured);
 
-    for (const m of measured) {
-      const pct = 100 / m.lanes;
-      const s = m.it.el.style;
-      s.top = m.a + 'px';
-      s.height = m.size + 'px';
-      s.left = `calc(${m.lane * pct}% + ${m.lane ? V_LANE / 2 : 0}px)`;
-      s.width = m.lanes > 1 ? `calc(${pct}% - ${V_LANE / 2}px)` : '100%';
+    function place() {
+      assignLanes(measured);
+      for (const m of measured) {
+        const pct = 100 / m.lanes;
+        const s = m.it.el.style;
+        s.top = m.a + 'px';
+        s.height = m.size + 'px';
+        s.left = `calc(${m.lane * pct}% + ${m.lane ? V_LANE / 2 : 0}px)`;
+        s.width = m.lanes > 1 ? `calc(${pct}% - ${V_LANE / 2}px)` : '100%';
+      }
     }
-    list.style.height = total + 'px';
-    chart.style.height = total + 'px';
+    place();
+
+    // A card clips what it cannot fit, so no card may be shorter than its own
+    // contents. Measuring needs the real column width, which is why this runs
+    // after the first placement rather than instead of it. Growing a card can
+    // change the lane packing, which changes column widths, which can rewrap
+    // text onto another line — so this settles rather than correcting once.
+    // Four passes is far more than it has ever taken.
+    for (let pass = 0; pass < 4; pass++) {
+      let grew = false;
+      for (const m of measured) {
+        const card = m.it.el.firstElementChild;
+        if (!card) continue;
+        const need = card.scrollHeight;
+        if (need > m.size + 0.5) {
+          m.size = need;
+          m.b = m.a + need + V_GAP;
+          grew = true;
+        }
+      }
+      if (!grew) break;
+      place();
+    }
+
+    const bottom = measured.reduce((mx, m) => Math.max(mx, m.a + m.size), 0);
+    const h = Math.max(total, bottom);
+    list.style.height = h + 'px';
+    chart.style.height = h + 'px';
   }
 
   // ── Horizontal: oldest at the left, reading forward in time ──────────────
@@ -174,15 +203,33 @@
     let rows = 1;
     for (const m of measured) rows = Math.max(rows, m.lane + 1);
 
+    // Width first, with the height left to the content — then the row is the
+    // tallest card that resulted, rather than a number guessed in advance.
+    // A fixed row left 17-77px of dead space under almost every card.
     for (const m of measured) {
       const s = m.it.el.style;
       s.left = m.a + 'px';
       s.width = m.size + 'px';
-      s.top = (H_AXIS + m.lane * (H_ROW + H_ROWGAP)) + 'px';
-      s.height = H_ROW + 'px';
+      s.height = 'auto';
+      s.top = H_AXIS + 'px';
     }
 
-    const height = H_AXIS + rows * (H_ROW + H_ROWGAP);
+    let row = H_ROW;
+    if (narrow()) {
+      row = 0;
+      for (const m of measured) row = Math.max(row, m.it.el.offsetHeight);
+      row = Math.max(row, H_ROW);
+    }
+
+    for (const m of measured) {
+      const s = m.it.el.style;
+      s.top = (H_AXIS + m.lane * (row + H_ROWGAP)) + 'px';
+      // On a phone the card keeps its own height so it does not stretch into
+      // dead space; the row only has to be tall enough to keep lanes clear.
+      s.height = narrow() ? 'auto' : row + 'px';
+    }
+
+    const height = H_AXIS + rows * (row + H_ROWGAP);
     // The scroll surface has to be as wide as the whole span, plus a little
     // run-off so the last card clears the fade at the right edge.
     list.style.width = (total + H_MIN) + 'px';
@@ -258,7 +305,10 @@
   // when that value changes at the narrow breakpoint.
   function stuckCheck() {
     if (!sentinel) return;
-    const top = parseFloat(getComputedStyle(head).top) || 0;
+    const cs = getComputedStyle(head);
+    // Desktop leaves the header static, so there is nothing to stick to.
+    if (cs.position !== 'sticky') { head.classList.remove('is-stuck'); return; }
+    const top = parseFloat(cs.top) || 0;
     head.classList.toggle('is-stuck', sentinel.getBoundingClientRect().top <= top);
   }
 
