@@ -1021,12 +1021,17 @@ body {
   /* Pull the two glyphs close together, then hand each one an invisible tap
      target that reaches past it — the icons read as a pair without the hit
      areas shrinking. Same approach as .miniplayer-progress::before below. */
-  .layout-toggle { gap: 0.25rem; }
-  .layout-btn { position: relative; padding: 0.5rem; }
+  /* Closer together: the flex gap goes to zero and each button's own padding
+     does the separating, so the two hit areas sit edge to edge instead of
+     leaving a dead strip between them. The glyphs read ~12px apart while the
+     targets stay ~28x42px and, crucially, never overlap — an overlapping tap
+     target is how you end up in the globe when you meant the list. */
+  .layout-toggle { gap: 0; }
+  .layout-btn { position: relative; padding: 0.375rem; }
   .layout-btn::before {
     content: '';
     position: absolute;
-    inset: -0.875rem -0.125rem;
+    inset: -0.8125rem 0;
   }
 
   /* The globe wants to sit closer under the toggles than the tiles do. */

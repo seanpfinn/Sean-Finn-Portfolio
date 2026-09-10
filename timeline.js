@@ -221,3 +221,197 @@
     resizeTimer = setTimeout(render, 150);
   });
 })();
+
+
+// ── Locked header + rolling year ──────────────────────────────────────────
+// Self-contained: it reads the same data-start/data-end attributes the chart
+// is built from, so it stays right without being wired into the renderer.
+(function () {
+  const head  = document.getElementById('tl-head');
+  const yearEl = document.getElementById('tl-year');
+  const chart = document.getElementById('tl-chart');
+  const sentinel = document.querySelector('.tl-head-sentinel');
+  if (!head || !yearEl || !chart) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const now = new Date();
+
+  // Fractional years, so a role that ran to June reads as 2024.5 and the
+  // odometer lands on the right year rather than the one it started in.
+  function fy(v, fallback) {
+    if (!v) return fallback;
+    const [y, m] = v.split('-').map(Number);
+    return y + ((m || 1) - 1) / 12;
+  }
+  const nowFy = now.getFullYear() + now.getMonth() / 12;
+
+  const items = Array.from(chart.querySelectorAll('.tl-item')).map((el) => ({
+    el,
+    sy: fy(el.dataset.start, nowFy),
+    ey: fy(el.dataset.end, nowFy),
+  }));
+  if (!items.length) return;
+
+  // ── stuck state ─────────────────────────────────────────────────────────
+  // Measured against the header's own resolved `top`, so it flips at the exact
+  // moment the header actually pins — and keeps flipping at the right moment
+  // when that value changes at the narrow breakpoint.
+  function stuckCheck() {
+    if (!sentinel) return;
+    const top = parseFloat(getComputedStyle(head).top) || 0;
+    head.classList.toggle('is-stuck', sentinel.getBoundingClientRect().top <= top);
+  }
+
+  // ── odometer ────────────────────────────────────────────────────────────
+  const COLS = 4;
+  const cols = [];
+  for (let i = 0; i < COLS; i++) {
+    const col = document.createElement('span');
+    col.className = 'tl-dig';
+    const strip = document.createElement('span');
+    strip.className = 'tl-dig-strip';
+    for (let copy = 0; copy < 3; copy++) {
+      for (let d = 0; d < 10; d++) {
+        const s = document.createElement('span');
+        s.textContent = String(d);
+        strip.appendChild(s);
+      }
+    }
+    col.appendChild(strip);
+    yearEl.appendChild(col);
+    // pos indexes the 30-digit strip; rest state is always the middle copy.
+    cols.push({ strip, pos: 10 });
+    strip.style.transform = 'translateY(-10em)';
+  }
+
+  function roll(col, digit, dir) {
+    let target;
+    if (dir > 0)      target = digit + 10 > col.pos ? digit + 10 : digit + 20;
+    else if (dir < 0) target = digit + 10 < col.pos ? digit + 10 : digit;
+    else              target = digit + 10;
+    if (target === col.pos) return;
+    col.pos = target;
+    const rest = digit + 10;
+    if (reduce) {
+      col.strip.style.transition = 'none';
+      col.strip.style.transform = 'translateY(-' + rest + 'em)';
+      col.pos = rest;
+      return;
+    }
+    col.strip.style.transition = 'transform .42s cubic-bezier(.22,1,.36,1)';
+    col.strip.style.transform = 'translateY(-' + target + 'em)';
+    // Slide back to the middle copy with the transition off, so the next roll
+    // always has a full copy of the strip in either direction.
+    const settle = () => {
+      col.strip.removeEventListener('transitionend', settle);
+      if (col.pos !== target) return;      // a newer roll already took over
+      col.strip.style.transition = 'none';
+      col.strip.style.transform = 'translateY(-' + rest + 'em)';
+      col.pos = rest;
+      void col.strip.offsetHeight;         // commit before the next transition
+    };
+    col.strip.addEventListener('transitionend', settle);
+  }
+
+  let shown = null;
+  function show(year) {
+    if (year === shown) return;
+    const dir = shown === null ? 0 : Math.sign(year - shown);
+    const s = String(year).padStart(COLS, '0');
+    for (let i = 0; i < COLS; i++) roll(cols[i], Number(s[i]), dir);
+    shown = year;
+  }
+
+  // ── what am I looking at ────────────────────────────────────────────────
+  // The card nearest the reading line, then the date at the point the line
+  // crosses it. Vertical charts run newest-at-top, so the top edge is the
+  // later date; horizontal ones read left to right, so it is the earlier one.
+  // The chart's own year ticks are the source of truth wherever they exist:
+  // reading between them means the number always agrees with the axis sitting
+  // right beside it, including across the empty stretches where no card is
+  // near the line but time is still passing.
+  function scaleFromTicks(horizontal) {
+    const pts = [];
+    chart.querySelectorAll('.tl-tick').forEach((t) => {
+      const year = parseInt(t.textContent, 10);
+      if (!isFinite(year)) return;                 // the "Now" tick has no year
+      const b = t.getBoundingClientRect();
+      if (!b.width && !b.height) return;           // hidden in list mode
+      pts.push({ year, at: horizontal ? b.left + b.width / 2 : b.top });
+    });
+    pts.sort((a, b) => a.at - b.at);
+    return pts.length >= 2 ? pts : null;
+  }
+
+  function alongScale(pts, ref) {
+    let lo = pts[0], hi = pts[pts.length - 1];
+    for (let i = 0; i < pts.length - 1; i++) {
+      if (ref >= pts[i].at && ref <= pts[i + 1].at) { lo = pts[i]; hi = pts[i + 1]; break; }
+    }
+    // Past either end, the nearest pair's slope carries on rather than clamping,
+    // then the result is held inside the real span.
+    if (ref < pts[0].at)                    { lo = pts[0]; hi = pts[1]; }
+    else if (ref > pts[pts.length - 1].at)  { lo = pts[pts.length - 2]; hi = pts[pts.length - 1]; }
+    const d = hi.at - lo.at;
+    const t = d === 0 ? 0 : (ref - lo.at) / d;
+    const y = lo.year + (hi.year - lo.year) * t;
+    const first = pts[0].year, last = pts[pts.length - 1].year;
+    return Math.min(Math.max(y, Math.min(first, last)), Math.max(first, last));
+  }
+
+  // Without ticks — the undated mobile list — fall back to the card nearest the
+  // line, and read the point the line crosses it between its own two dates.
+  function fromNearestCard(horizontal, ref, span) {
+    let best = null, bestDist = Infinity;
+    for (const it of items) {
+      const [a, b] = span(it.el);
+      const dist = Math.abs((a + b) / 2 - ref);
+      if (dist < bestDist) { bestDist = dist; best = { it, a, b }; }
+    }
+    if (!best) return null;
+    const { it, a, b } = best;
+    const t = b === a ? 0 : Math.min(1, Math.max(0, (ref - a) / (b - a)));
+    const from = horizontal ? it.sy : it.ey;
+    const to   = horizontal ? it.ey : it.sy;
+    return from + (to - from) * t;
+  }
+
+  function readYear() {
+    const horizontal = chart.classList.contains('is-horizontal');
+    let ref, span;
+    if (horizontal) {
+      const r = chart.getBoundingClientRect();
+      ref = r.left + r.width / 2;
+      span = (el) => { const b = el.getBoundingClientRect(); return [b.left, b.right]; };
+    } else {
+      ref = window.innerHeight * 0.45;
+      span = (el) => { const b = el.getBoundingClientRect(); return [b.top, b.bottom]; };
+    }
+    const pts = scaleFromTicks(horizontal);
+    const y = pts ? alongScale(pts, ref) : fromNearestCard(horizontal, ref, span);
+    return y == null ? null : Math.round(y);
+  }
+
+  let queued = false;
+  function update() {
+    queued = false;
+    stuckCheck();
+    const y = readYear();
+    if (y != null && isFinite(y)) show(y);
+  }
+  function schedule() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  chart.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  // The orientation toggle relays out the whole chart, so re-read after it.
+  document.querySelectorAll('.tl-orient-btn').forEach((b) => {
+    b.addEventListener('click', () => setTimeout(update, 60));
+  });
+
+  update();
+})();

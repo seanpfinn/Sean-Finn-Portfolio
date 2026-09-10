@@ -289,12 +289,91 @@
       .tl-company { font-size: 0.5625rem; letter-spacing: 0.05em; }
       .tl-title { font-size: 1.375rem; }
       .tl-sub { font-size: 0.75rem; }
+      /* Clears the fixed nav bar, which becomes a full-width strip here. */
+      .tl-head { top: 2.875rem; }
+      .tl-head.is-stuck { padding-left: 0.75rem; padding-right: 0.75rem; }
+
       /* a thumb-sized target for the orientation toggle */
       .tl-orient-btn { padding: 0.5rem; }
       .tl-bar { gap: 0.25rem; }
     }
 
-  </style>
+  
+    /* ── Locked header ────────────────────────────────────────────────────
+       Sticks under the fixed nav and stays centred. The sentinel above it is
+       what tells us it has stuck — a scroll-position threshold would have to
+       be re-derived every time the header's height changes. */
+    .tl-head-sentinel { height: 1px; margin-bottom: -1px; }
+    .tl-head {
+      position: sticky;
+      top: 0.75rem;
+      z-index: 6;
+      text-align: center;
+      margin-bottom: 3.5rem;
+      padding: 0.5rem 0 0.625rem;
+      border-radius: 0.875rem;
+      transition: padding 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  background 0.28s ease, box-shadow 0.28s ease;
+    }
+    /* Pinned, it shrink-wraps to a pill. A full-column bar reads as a browser
+       chrome bar rather than part of the page, and it blurs far more of the
+       chart than the title actually needs. */
+    .tl-head.is-stuck {
+      width: max-content;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0.5rem 1.375rem 0.5625rem;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      backdrop-filter: blur(14px) saturate(140%);
+      box-shadow: 0 0.0625rem 0 rgba(0, 0, 0, 0.05),
+                  0 0.75rem 1.75rem -1rem rgba(0, 0, 0, 0.28);
+    }
+    .dark .tl-head.is-stuck {
+      box-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.06),
+                  0 0.75rem 1.75rem -1rem rgba(0, 0, 0, 0.7);
+    }
+    /* The strapline has done its job by the time the header pins. */
+    /* The title steps down a size when it pins, so the bar sits lighter over
+       the chart it is covering. */
+    .tl-title { transition: font-size 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+    .tl-head.is-stuck .tl-title { font-size: 1.25rem; }
+    .tl-sub {
+      transition: opacity 0.22s ease, max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  margin 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      max-height: 2rem;
+      overflow: hidden;
+    }
+    .tl-head.is-stuck .tl-sub { opacity: 0; max-height: 0; margin-top: 0; }
+
+    /* ── Odometer year ───────────────────────────────────────────────────
+       Four columns, each a strip of digits that slides. The strip carries
+       three copies of 0-9 so a roll can always run the way time is running —
+       forward past 9 into 0, or backward past 0 into 9 — without the column
+       snapping the other way. It is normalised back to the middle copy the
+       moment the transition ends. */
+    .tl-year {
+      display: flex;
+      justify-content: center;
+      gap: 0.0625rem;
+      margin-top: 0.25rem;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+      height: 1em;
+    }
+    .tl-dig { display: block; height: 1em; overflow: hidden; }
+    .tl-dig-strip { display: block; will-change: transform; }
+    .tl-dig-strip > span { display: block; height: 1em; line-height: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .tl-dig-strip { transition: none !important; }
+      .tl-head, .tl-sub { transition: none; }
+    }
+</style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
 </head>
@@ -441,9 +520,14 @@
 
   <main class="tl-main blur-in" style="animation-delay:0.05s">
 
-    <header class="tl-head">
+    <div class="tl-head-sentinel" aria-hidden="true"></div>
+    <header class="tl-head" id="tl-head">
       <h1 class="tl-title">Career Timeline</h1>
       <p class="tl-sub">Or how I got to where I am now.</p>
+      <!-- The digits are decorative duplication of dates each card already
+           states, so they are hidden from assistive tech rather than announced
+           on every scroll frame. -->
+      <div class="tl-year" id="tl-year" aria-hidden="true"></div>
     </header>
 
     <div class="tl-bar">

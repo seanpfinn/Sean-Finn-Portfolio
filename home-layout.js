@@ -12,7 +12,7 @@
 const LAYOUT_KEY = 'home-layout';
 const FILTER_KEY = 'home-filter';
 const MODES = ['cols2', 'cols3', 'globe'];
-const CATS  = ['all', 'apps', 'web'];
+const CATS  = ['all', 'apps', 'web', 'brand'];
 
 const grid     = document.getElementById('project-grid');
 const stage    = document.getElementById('globe-stage');
@@ -22,7 +22,7 @@ const tabs     = Array.from(document.querySelectorAll('.filter-tab'));
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-let mode    = 'cols2';
+let mode    = 'globe';
 let filter  = 'all';
 let globe   = null;
 let THREE   = null;
@@ -62,7 +62,8 @@ function commitFilter(next) {
   filter = next;
   tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.cat === filter)));
   grid.querySelectorAll('.gallery-card').forEach((card) => {
-    card.hidden = filter !== 'all' && card.dataset.cat !== filter;
+    const cats = (card.dataset.cat || '').split(/\s+/).filter(Boolean);
+    card.hidden = filter !== 'all' && !cats.includes(filter);
   });
   staggerCards();
   // The globe is built from the visible set, so it has to be rebuilt.
@@ -92,7 +93,7 @@ function commitLayout(next) {
 // Every state change uses the same entrance: the tiles restagger, the way
 // they do coming back from the globe. The globe itself fades in via CSS.
 function applyLayout(next, userInitiated) {
-  const target = MODES.includes(next) ? next : 'cols2';
+  const target = MODES.includes(next) ? next : 'globe';
   if (userInitiated && target === mode) return;
   commitLayout(target);
   if (target !== 'globe') staggerCards();
@@ -436,5 +437,5 @@ if (grid && buttons.length) {
   tabs.forEach((t) => t.addEventListener('click', () => applyFilter(t.dataset.cat, true)));
 
   applyFilter(readKey(FILTER_KEY, CATS) || 'all', false);
-  applyLayout(readKey(LAYOUT_KEY, MODES) || 'cols2', false);
+  applyLayout(readKey(LAYOUT_KEY, MODES) || 'globe', false);
 }
