@@ -361,7 +361,66 @@
   <path class="m0" d="M29.0 52.0 L3 52.0" stroke="#7FA8B5" stroke-width="6" stroke-linecap="round" fill="none"/><path class="m1" d="M29.0 60.0 L10 60.0" stroke="#7FA8B5" stroke-width="6" stroke-linecap="round" fill="none"/><path class="m2" d="M29.0 68.0 L6 68.0" stroke="#7FA8B5" stroke-width="6" stroke-linecap="round" fill="none"/><rect class="h" x="37" y="45" width="26" height="26" rx="13" fill="#E9ECEE"/><circle class="p" cx="54" cy="58" r="5" fill="#0D1114"/>
 </svg></div><p class="gp-lab" style="margin:.75rem 0 0;text-align:center">Dispatched</p></div>
         <div class="gp-cell"><div class="gp-aye"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -29 100 124" class="gpst5" role="img" aria-label="Graffs node eye — Cleared">
-  <style>.gpst5 .a{stroke-dasharray:0 200;stroke-width:26px;animation:cka 2.2s ease-in-out infinite,ckw 2.2s ease-in-out infinite,ckt 2.2s steps(1,end) infinite}@keyframes cka{0%,12%{stroke-dasharray:0 200}26%,82%{stroke-dasharray:19.799 200}92%,100%{stroke-dasharray:0 200}}.gpst5 .b{stroke-dasharray:0 200;stroke-width:26px;animation:ckb 2.2s ease-in-out infinite,ckw 2.2s ease-in-out infinite,ckt 2.2s steps(1,end) infinite}@keyframes ckb{0%,15%{stroke-dasharray:0 200}34%,82%{stroke-dasharray:43.267 200}92%,100%{stroke-dasharray:0 200}}@keyframes ckw{0%,12%{stroke-width:26px}24%,82%{stroke-width:10px}92%,100%{stroke-width:26px}}@keyframes ckt{0%,11%{stroke:#E9ECEE}12%,88%{stroke:#7FA8B5}89%,100%{stroke:#E9ECEE}}.gpst5 .p{animation:ckp 2.2s steps(1,end) infinite}@keyframes ckp{0%,11%{opacity:1}12%,88%{opacity:0}89%,100%{opacity:1}}@media(prefers-reduced-motion:reduce){.gpst5 .a,.gpst5 .b{animation:none;stroke:#7FA8B5;stroke-width:10px;stroke-dasharray:none}.gpst5 .p{animation:none;opacity:0}}</style>
+  <style>.gpst5 .a{stroke-dasharray:0 200;stroke-width:26px;animation:cka 2.2s ease-in-out infinite,ckw 2.2s ease-in-out infinite,ckt 2.2s steps(1,end) infinite}@keyframes cka{0%,12%{stroke-dasharray:0 200}26%,82%{stroke-dasharray:19.799 200}92%,100%{stroke-dasharray:0 200}}.gpst5 .b{stroke-dasharray:0 200;stroke-width:26px;animation:ckb 2.2s ease-in-out infinite,ckw 2.2s ease-in-out infinite,ckt 2.2s steps(1,end) infinite}@keyframes ckb{0%,15%{stroke-dasharray:0 200}34%,82%{stroke-dasharray:43.267 200}92%,100%{stroke-dasharray:0 200}}@keyframes ckw{0%,12%{stroke-width:26px}24%,82%{stroke-width:10px}92%,100%{stroke-width:26px}}@keyframes ckt{0%,11%{stroke:#E9ECEE}12%,88%{stroke:#7FA8B5}89%,100%{stroke:#E9ECEE}}.gpst5 .p{animation:ckp 2.2s steps(1,end) infinite}@keyframes ckp{0%,11%{opacity:1}12%,88%{opacity:0}89%,100%{opacity:1}}@media(prefers-reduced-motion:reduce){.gpst5 .a,.gpst5 .b{animation:none;stroke:#7FA8B5;stroke-width:10px;stroke-dasharray:none}.gpst5 .p{animation:none;opacity:0}}
+    /* ---- Applied carousel -------------------------------------------------
+       Lives inside a .proj-panel-new, so it inherits the panel's height and
+       radius. Five of the eight renders are portrait, so cropping to the
+       panel's landscape ratio would throw away the subject — they are
+       contained instead. The leftover width is not dead space: it carries the
+       identity's own lattice dot field on graphite, faded at the edges, so a
+       portrait render reads as mounted on the system rather than letterboxed
+       into a gap. A blurred copy of the render was tried there first and read
+       as murk — the field is the thing the brand already owns. */
+    .gmk{position:absolute;inset:0;overflow:hidden;touch-action:pan-y}
+    .gmk-track{display:flex;height:100%;
+      transition:transform .62s cubic-bezier(.22,1,.36,1)}
+    .gmk-track.is-drag{transition:none}
+    .gmk-slide{flex:0 0 100%;height:100%;position:relative;display:flex;
+      align-items:center;justify-content:center;overflow:hidden}
+    .gmk-slide::before{content:'';position:absolute;inset:0;z-index:0;
+      background-image:radial-gradient(rgba(233,236,238,.16) 1.8px,transparent 1.9px);
+      background-size:24px 24px;
+      -webkit-mask-image:radial-gradient(ellipse 78% 96% at 50% 50%,#000 0%,transparent 100%);
+      mask-image:radial-gradient(ellipse 78% 96% at 50% 50%,#000 0%,transparent 100%)}
+    .gmk-slide img{position:relative;z-index:2;
+      max-width:100%;max-height:100%;width:auto;height:auto;
+      display:block;object-fit:contain;-webkit-user-drag:none;user-select:none;
+      box-shadow:0 1.5rem 3rem rgba(0,0,0,.42)}
+    .gmk-cap{position:absolute;left:1rem;bottom:1rem;z-index:3;
+      font-family:'Azeret Mono',ui-monospace,monospace;font-size:.5625rem;
+      letter-spacing:.14em;text-transform:uppercase;color:rgba(233,236,238,.78);
+      background:rgba(13,17,20,.62);backdrop-filter:blur(6px);
+      padding:.4rem .6rem;border-radius:.25rem;pointer-events:none}
+    .gmk-cap b{color:#E9ECEE;font-weight:500}
+    .gmk-cap .gmk-sub::before{content:'\00a0\00a0'}
+    @media (max-width:640px){
+      .gmk-cap{left:.625rem;bottom:.625rem;font-size:.5rem;padding:.35rem .5rem}
+      .gmk-cap .gmk-sub{display:none}
+      .gmk-dots{right:.625rem;bottom:.625rem}
+      .gmk-arrow{display:none}
+    }
+    .gmk-dots{position:absolute;right:1rem;bottom:1rem;z-index:3;display:flex;
+      gap:.375rem;align-items:center}
+    .gmk-dots button{width:.4375rem;height:.4375rem;padding:0;border:0;
+      border-radius:50%;background:rgba(233,236,238,.3);cursor:pointer;
+      transition:background .2s,transform .2s}
+    .gmk-dots button[aria-current="true"]{background:#D9552F;transform:scale(1.25)}
+    .gmk-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+      width:2rem;height:2rem;border:0;border-radius:50%;cursor:pointer;
+      background:rgba(13,17,20,.5);backdrop-filter:blur(6px);
+      color:#E9ECEE;display:flex;align-items:center;justify-content:center;
+      opacity:0;transition:opacity .2s}
+    .gmk:hover .gmk-arrow,.gmk:focus-within .gmk-arrow{opacity:1}
+    .gmk-arrow svg{width:.75rem;height:.75rem}
+    .gmk-arrow.prev{left:.75rem}
+    .gmk-arrow.next{right:.75rem}
+    .gmk-arrow:focus-visible,.gmk-dots button:focus-visible{outline:2px solid #D9552F;
+      outline-offset:2px;opacity:1}
+    @media (prefers-reduced-motion:reduce){
+      .gmk-track{transition:none}
+      .gmk-arrow{opacity:1}
+    }
+</style>
   <path class="a" d="M50.0 58.0 L36 44" stroke="#E9ECEE" fill="none" stroke-linecap="round"/><path class="b" d="M50.0 58.0 L74 22" stroke="#E9ECEE" fill="none" stroke-linecap="round"/><circle class="p" cx="50" cy="58" r="5" fill="#0D1114"/>
 </svg></div><p class="gp-lab" style="margin:.75rem 0 0;text-align:center">Cleared</p></div>
       </div>
@@ -381,7 +440,26 @@
     <div class="proj-panel-new proj-panel--media" style="background:#0D1114;">
       <img src="assets/graffs-deck.webp" alt="Thirteen slide layouts alternating paper and graphite, with oxide reserved for section breaks" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" width="575" height="386" />
     </div>
+    
     <div class="proj-caption">
+      <h2 class="proj-caption-label">In the world</h2>
+      <p class="proj-caption-body">Eight surfaces, chosen for range rather than variety &mdash; a stage wall six metres across and an embroidered cap panel seventy millimetres wide, so the mark is tested at both ends of its life. The grounds alternate deliberately: graphite carries the statements, paper carries the objects you hold, and oxide is spent only where a surface reports something. Across all eight it appears four times.</p>
+    </div>
+    <div class="proj-panel-new proj-panel--media" style="background:#0D1114;">
+      <div class="gmk" id="gmk" aria-roledescription="carousel" aria-label="Graffs applied to eight surfaces">
+        <div class="gmk-track" id="gmk-track"><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="1 of 8 — Stage backdrop"><img src="assets/graffs-mock-01.jpg" alt="Stage backdrop — Conference stage · LED wall" loading="eager" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="2 of 8 — Signage pylon"><img src="assets/graffs-mock-02.jpg" alt="Signage pylon — Wayfinding · exterior pylon" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="3 of 8 — Tote"><img src="assets/graffs-mock-03.jpg" alt="Tote — Merchandise · one-colour print" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="4 of 8 — Phone console"><img src="assets/graffs-mock-04.jpg" alt="Phone console — Product · the console on a phone" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="5 of 8 — Six-sheet"><img src="assets/graffs-mock-05.jpg" alt="Six-sheet — Out of home · bus shelter" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="6 of 8 — Cap"><img src="assets/graffs-mock-06.jpg" alt="Cap — Site kit · embroidered front panel" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="7 of 8 — Badge"><img src="assets/graffs-mock-07.jpg" alt="Badge — Print · conference credential" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="8 of 8 — Section break"><img src="assets/graffs-mock-08.jpg" alt="Section break — Conference stage · section break" loading="lazy" decoding="async" draggable="false" /></div></div>
+        <div class="gmk-cap" id="gmk-cap"></div>
+        <button class="gmk-arrow prev" id="gmk-prev" type="button" aria-label="Previous surface">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1 L3 6 L8 11"/></svg>
+        </button>
+        <button class="gmk-arrow next" id="gmk-next" type="button" aria-label="Next surface">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 1 L9 6 L4 11"/></svg>
+        </button>
+        <div class="gmk-dots" id="gmk-dots"><button type="button" aria-label="Stage backdrop" aria-current="true"></button><button type="button" aria-label="Signage pylon"></button><button type="button" aria-label="Tote"></button><button type="button" aria-label="Phone console"></button><button type="button" aria-label="Six-sheet"></button><button type="button" aria-label="Cap"></button><button type="button" aria-label="Badge"></button><button type="button" aria-label="Section break"></button></div>
+      </div>
+    </div>
+
+<div class="proj-caption">
       <h2 class="proj-caption-label">Constraints</h2>
       <p class="proj-caption-body">One rule governs everything: orange means a point is off its lattice, right now. Nothing else in the product may borrow it &mdash; not a heading, not a call to action, not a chart series that did nothing unusual. Put it on a button and you teach an operator to ignore the one colour that matters. TODO &mdash; the client-side constraints: stakeholders, approvals, and what the identity had to replace.</p>
     </div>
@@ -411,5 +489,96 @@
 
   <script src="main.js"></script>
   <script type="module" src="sound.js"></script>
+
+<script>
+/* Applied carousel. Advances on its own, but yields to the reader: it pauses
+   on hover, on keyboard focus, while a finger is down, and whenever the panel
+   is off screen — and it never starts at all under prefers-reduced-motion. */
+(function () {
+  var root = document.getElementById('gmk');
+  if (!root) return;
+  var track = document.getElementById('gmk-track'),
+      cap   = document.getElementById('gmk-cap'),
+      dots  = [].slice.call(document.querySelectorAll('#gmk-dots button')),
+      slides= [].slice.call(track.children),
+      N = slides.length, i = 0, timer = null, held = false, seen = true;
+
+  var META = slides.map(function (s) {
+    var img = s.querySelector('img'), a = (img.getAttribute('alt') || '').split(' — ');
+    return { t: a[0] || '', s: a[1] || '' };
+  });
+
+  var reduce = window.matchMedia &&
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function paint() {
+    track.style.transform = 'translateX(' + (-i * 100) + '%)';
+    cap.innerHTML = '<b>' + META[i].t + '</b><span class="gmk-sub">' + META[i].s + '</span>';
+    for (var k = 0; k < N; k++) {
+      dots[k].setAttribute('aria-current', k === i ? 'true' : 'false');
+      slides[k].setAttribute('aria-hidden', k === i ? 'false' : 'true');
+    }
+  }
+  function go(n) { i = (n + N) % N; paint(); }
+
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function start() {
+    stop();
+    if (reduce || held || !seen) return;
+    timer = setInterval(function () { go(i + 1); }, 4600);
+  }
+
+  dots.forEach(function (d, n) {
+    d.addEventListener('click', function () { go(n); start(); });
+  });
+  document.getElementById('gmk-prev').addEventListener('click', function () { go(i - 1); start(); });
+  document.getElementById('gmk-next').addEventListener('click', function () { go(i + 1); start(); });
+
+  root.addEventListener('mouseenter', function () { held = true; stop(); });
+  root.addEventListener('mouseleave', function () { held = false; start(); });
+  root.addEventListener('focusin',  function () { held = true; stop(); });
+  root.addEventListener('focusout', function () { held = false; start(); });
+
+  root.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { go(i + 1); start(); }
+    else if (e.key === 'ArrowLeft') { go(i - 1); start(); }
+    else return;
+    e.preventDefault();
+  });
+
+  /* drag / swipe — pointer events cover touch and mouse in one path */
+  var x0 = null, dx = 0, w = 1;
+  root.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    x0 = e.clientX; dx = 0; w = root.clientWidth || 1;
+    held = true; stop();
+    track.classList.add('is-drag');
+  });
+  root.addEventListener('pointermove', function (e) {
+    if (x0 === null) return;
+    dx = e.clientX - x0;
+    track.style.transform = 'translateX(' + (-i * 100 + (dx / w) * 100) + '%)';
+  });
+  function release() {
+    if (x0 === null) return;
+    track.classList.remove('is-drag');
+    if (Math.abs(dx) > w * 0.14) go(i + (dx < 0 ? 1 : -1)); else paint();
+    x0 = null; dx = 0; held = false; start();
+  }
+  root.addEventListener('pointerup', release);
+  root.addEventListener('pointercancel', release);
+  root.addEventListener('pointerleave', release);
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      seen = es[0].isIntersecting;
+      if (seen) start(); else stop();
+    }, { threshold: 0.25 }).observe(root);
+  }
+
+  paint();
+  start();
+})();
+</script>
 </body>
 </html>
