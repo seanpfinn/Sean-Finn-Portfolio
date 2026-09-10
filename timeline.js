@@ -214,19 +214,16 @@
       s.top = H_AXIS + 'px';
     }
 
-    let row = H_ROW;
-    if (narrow()) {
-      row = 0;
-      for (const m of measured) row = Math.max(row, m.it.el.offsetHeight);
-      row = Math.max(row, H_ROW);
-    }
+    let row = 0;
+    for (const m of measured) row = Math.max(row, m.it.el.offsetHeight);
+    row = Math.max(row, H_ROW);
 
     for (const m of measured) {
       const s = m.it.el.style;
       s.top = (H_AXIS + m.lane * (row + H_ROWGAP)) + 'px';
-      // On a phone the card keeps its own height so it does not stretch into
-      // dead space; the row only has to be tall enough to keep lanes clear.
-      s.height = narrow() ? 'auto' : row + 'px';
+      // The card keeps its own height so it never stretches into dead space;
+      // the row only has to be tall enough to keep the lanes clear of it.
+      s.height = 'auto';
     }
 
     const height = H_AXIS + rows * (row + H_ROWGAP);
