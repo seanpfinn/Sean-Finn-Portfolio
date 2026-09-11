@@ -464,6 +464,35 @@
     @media (max-width: 30rem) {
       .tl-head.is-stuck { padding-left: 0.75rem; padding-right: 0.75rem; }
     }
+
+    /* ── Mobile rhythm and copy scale ──────────────────────────────────────
+       Last in the file on purpose: media queries add no specificity, so these
+       have to sit after the base rules they override rather than rely on
+       matching a narrower selector.
+
+       The page was carrying desktop vertical rhythm on a phone — 92px above
+       the header and a 3.5rem gap below it. On a 1440px screen that reads as
+       generous; on a 390px one it costs a fifth of the viewport before the
+       first card, and it breaks the header and the chart into two unrelated
+       blocks rather than one. The header moves up toward the nav, the chart
+       closes up under the header, and enough travel is left below the nav
+       that the header still visibly pins rather than starting stuck. */
+    @media (max-width: 50.5625rem) {
+      .tl-main { padding-top: 4.5rem; }
+      .tl-head { margin-bottom: 1.5rem; }
+    }
+
+    @media (max-width: 30rem) {
+      .tl-main { padding-top: 4rem; }
+      .tl-head { margin-bottom: 1.25rem; }
+
+      /* Card copy. The phone block was stepping the blurb UP from the tablet
+         size (12px to 13px) at a 1.54 leading, so the description was the
+         heaviest thing in the card and sat too close to the 15px role above
+         it. Slightly smaller and tighter-leaded: the block loses about a
+         tenth of its height and the role gets its hierarchy back. */
+      .tl-blurb { font-size: 0.78125rem; line-height: 1.125rem; }
+    }
 </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
