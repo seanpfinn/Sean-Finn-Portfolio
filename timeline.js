@@ -235,11 +235,36 @@
     chart.style.height = height + 'px';
   }
 
+  // In list mode the rail is decoration, not an axis, so it should begin and
+  // end on the markers rather than running past them into empty space. The
+  // last card's height is whatever its copy needs, so this has to be measured.
+  function fitRail() {
+    const line = axis.querySelector('.tl-axis-line');
+    if (!line) return;
+    if (!chart.classList.contains('is-list')) {
+      line.style.top = line.style.bottom = '';
+      return;
+    }
+    const els = Array.from(list.children);
+    if (els.length < 2) { line.style.top = line.style.bottom = ''; return; }
+    const first = els[0], last = els[els.length - 1];
+    // Where the marker's centre sits inside an item, read from the pseudo
+    // element itself so the two breakpoints don't need duplicating here.
+    const cs = getComputedStyle(first, '::before');
+    const centre = (parseFloat(cs.top) || 0) + (parseFloat(cs.height) || 0) / 2;
+    line.style.top = (first.offsetTop + centre) + 'px';
+    line.style.bottom = (chart.clientHeight - (last.offsetTop + centre)) + 'px';
+  }
+
   function render() {
     clearStyles();
     chart.classList.remove('is-list');
     const horizontal = chart.classList.contains('is-horizontal');
     if (horizontal) renderHorizontal(); else renderVertical();
+    fitRail();
+    // Web fonts and late images change card heights after first layout.
+    requestAnimationFrame(fitRail);
+    if (document.fonts?.ready) document.fonts.ready.then(fitRail);
   }
 
   function apply(next, persist) {

@@ -206,7 +206,16 @@ function createGlobe(THREE, mount, tiles) {
     );
     mesh.lookAt(0, 0, 0);
     mesh.rotateY(Math.PI);
-    mesh.userData = { tile, video: null, loading: false, failed: false };
+    mesh.userData = {
+      tile,
+      video: null,
+      videoTex: null,
+      stillTex: texture,   // kept for the life of the panel, never disposed
+      showing: 'still',
+      loading: false,
+      failed: false,
+      tries: 0,
+    };
     world.add(mesh);
     return mesh;
   });
@@ -216,14 +225,33 @@ function createGlobe(THREE, mount, tiles) {
   // in quickly, few enough that they are not all competing for the same pipe.
   // Each one is only swapped in once it has a frame, so a panel never blanks.
   const MAX_IN_FLIGHT = 3;
+  // A load that has not produced a frame by here is not going to: release the
+  // slot so the rest of the globe is not held hostage by one stalled request.
+  const LOAD_TIMEOUT = 9000;
+  const MAX_TRIES = 2;
   let inFlight = 0;
+  const timers = new Set();
+
+  // The panel's texture is whichever of its two is currently usable. The still
+  // is never thrown away, so a video that stalls or gets its decoder evicted
+  // falls back to the poster instead of rendering an empty frame.
+  function show(mesh, which) {
+    const d = mesh.userData;
+    if (d.showing === which) return;
+    const tex = which === 'video' ? d.videoTex : d.stillTex;
+    if (!tex) return;
+    d.showing = which;
+    mesh.material.map = tex;
+    mesh.material.needsUpdate = true;
+  }
 
   function attachVideo(mesh) {
-    const tile = mesh.userData.tile;
-    if (tile.type !== 'video') return;
-    if (mesh.userData.video || mesh.userData.loading || mesh.userData.failed) return;
+    const d = mesh.userData;
+    if (d.tile.type !== 'video') return;
+    if (d.video || d.loading || d.failed) return;
 
-    mesh.userData.loading = true;
+    d.loading = true;
+    d.tries++;
     inFlight++;
 
     const video = document.createElement('video');
@@ -233,27 +261,37 @@ function createGlobe(THREE, mount, tiles) {
     video.preload = 'auto';
     pool.appendChild(video);
 
+    let settled = false;
     const done = (ok) => {
-      mesh.userData.loading = false;
+      if (settled) return;              // loadeddata and error can both fire
+      settled = true;
+      clearTimeout(timer);
+      timers.delete(timer);
+      d.loading = false;
       inFlight--;
       if (ok) {
         const vt = new THREE.VideoTexture(video);
         vt.colorSpace = THREE.SRGBColorSpace;
-        const previous = mesh.material.map;
-        mesh.material.map = vt;
-        mesh.material.needsUpdate = true;
-        if (previous) previous.dispose();   // the poster has done its job
-        mesh.userData.video = video;
+        d.videoTex = vt;
+        d.video = video;
+        show(mesh, 'video');
       } else {
-        mesh.userData.failed = true;        // keep the poster; do not retry
+        video.removeAttribute('src');
+        video.load();                   // let go of the socket, not just the node
         video.remove();
+        // One retry: a stall is usually contention, and by the time the slot
+        // comes round again the pipe is clear. Twice means it is not coming.
+        if (d.tries >= MAX_TRIES) d.failed = true;
       }
       pump();
     };
 
+    const timer = setTimeout(() => done(false), LOAD_TIMEOUT);
+    timers.add(timer);
+
     video.addEventListener('loadeddata', () => done(true), { once: true });
     video.addEventListener('error', () => done(false), { once: true });
-    video.src = tile.src;
+    video.src = d.tile.src;
     video.play().catch(() => {});
   }
 
@@ -394,11 +432,16 @@ function createGlobe(THREE, mount, tiles) {
     for (const m of panels) {
       const v = m.userData.video;
       if (!v) continue;
+      // A video with no current frame renders as an empty texture, so show the
+      // poster again until it has one back. This is what stops the blinking.
+      show(m, v.readyState >= 2 ? 'video' : 'still');
       m.getWorldPosition(worldPos);
       forward.copy(worldPos).normalize();
-      if (forward.z > 0.1) {
+      // A band rather than a line: panels sitting on the edge of the hemisphere
+      // were being played and paused on alternate frames as the globe drifted.
+      if (forward.z > 0.15) {
         if (v.paused) v.play().catch(() => {});
-      } else if (!v.paused && v.readyState >= 2) {
+      } else if (forward.z < -0.05 && !v.paused && v.readyState >= 2) {
         v.pause();
       }
     }
@@ -431,11 +474,15 @@ function createGlobe(THREE, mount, tiles) {
       ro.disconnect();
       document.removeEventListener('visibilitychange', onVis);
       inFlight = MAX_IN_FLIGHT;   // stop pump() handing out any more work
+      timers.forEach(clearTimeout);
+      timers.clear();
       panels.forEach((m) => {
         const v = m.userData.video;
         if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
         m.geometry.dispose();
-        m.material.map?.dispose();
+        // Both textures, not just the one on show.
+        m.userData.stillTex?.dispose();
+        m.userData.videoTex?.dispose();
         m.material.dispose();
       });
       cornerMask.dispose();

@@ -289,8 +289,19 @@
 
   .resume-content {
     flex-direction: column;
+    /* flex-start is the desktop two-column behaviour; stacked, it stops the
+       columns filling the width they now have to themselves. */
+    align-items: stretch;
     padding: 20px;
     gap: 32px;
+  }
+
+  /* The 65% is the desktop split against the sidebar. Stacked, there is no
+     sidebar beside it, and leaving the width in place threw away 122px of the
+     phone's 350 — which is what made the longer descriptions wall up. */
+  .resume-main {
+    flex: 1 1 auto;
+    width: 100%;
   }
 
   /* On mobile: skills/tools/collaboration/education in 2-column grid, contact at bottom */
@@ -306,6 +317,36 @@
     order: 10;
     grid-column: 1 / -1;
     text-align: center;
+  }
+
+  /* Type scale.
+     On a desktop column the entries have room to breathe, so a flat 16px
+     reads fine. On a phone the column is ~350px and every part of an entry —
+     role, company, dates, description — is the same size with the same tight
+     -0.64px tracking, so a long description (Meta's runs six lines) lands
+     with the same weight as the heading above it and the whole entry reads as
+     one grey slab. The role stays the anchor; everything under it steps down
+     and the display tracking comes off the running copy. */
+  .resume-entry-role,
+  .resume-entry-sep,
+  .resume-entry-company {
+    font-size: 15px;
+    line-height: 21px;
+    letter-spacing: -0.3px;
+  }
+
+  .resume-entry-desc {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;          /* -0.64px is display tracking, not body */
+    color: var(--text-body, var(--text));
+    margin-top: 5px;
+  }
+
+  .resume-entry-dates {
+    font-size: 12.5px;
+    line-height: 18px;
+    letter-spacing: 0;
   }
 
   .resume-footer {
