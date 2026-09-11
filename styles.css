@@ -1462,66 +1462,12 @@ body {
   position: absolute;
 }
 
-/* --------------------------------
-   Meta AI Hearable
-   -------------------------------- */
-.card-media--hearable {
-  background: #fff;
-}
-
-.card-media--hearable .media-bg {
-  object-fit: cover;
-  object-position: center;
-}
-
-/* --------------------------------
-   Codec Avatars
-   -------------------------------- */
-.card-media--codec {
-  background: #0a0a0a;
-}
-
 .media-bg--wide {
   object-fit: cover;
   object-position: center top;
   inset: -0.053125rem -0.00125rem 0.053125rem 0.00125rem;
   height: calc(100% + 0.10625rem);
   width: calc(100% + 0.0025rem);
-}
-
-/* --------------------------------
-   MetaSim Platform
-   -------------------------------- */
-.card-media--metasim {
-  background: #0d0d0d;
-}
-
-.media-ui--metasim {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -46%);
-  width: 84%;
-  height: auto;
-  box-shadow: 0 0 0.75rem rgba(0,0,0,0.1);
-  border-radius: 0.5rem;
-  object-fit: cover;
-}
-
-/* --------------------------------
-   XR Simulator
-   -------------------------------- */
-.card-media--xr {
-  background: #0a0a12;
-}
-
-.media-ui--xr {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -46%);
-  width: 84%;
-  height: auto;
-  box-shadow: 0 0 0.375rem rgba(0,0,0,0.2);
-  object-fit: cover;
 }
 
 /* ================================
@@ -1711,9 +1657,6 @@ body {
   .vb-desktop { width: 75%; left: 1.25rem; bottom: 1.875rem; }
   .vb-mobile  { width: 16%; right: 1rem; bottom: 1.75rem; }
 
-
-  .media-ui--metasim { left: 8%; width: 84%; top: 0.875rem; }
-  .media-ui--xr      { left: 8%; width: 84%; top: 0.875rem; }
 
   .card-deal {
     animation-name: cardDealMobile;
