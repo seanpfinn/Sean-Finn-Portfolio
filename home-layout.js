@@ -139,6 +139,8 @@ function readTiles() {
         title: card.querySelector('.gallery-card-title')?.textContent?.trim() || '',
         type:  video ? 'video' : 'image',
         src:   video ? video.getAttribute('src') : img?.getAttribute('src'),
+        // The poster is what the panel shows until the video has a frame.
+        still: video ? video.getAttribute('poster') : img?.getAttribute('src'),
       };
     })
     .filter((t) => t.src);
@@ -180,14 +182,8 @@ function createGlobe(THREE, mount, tiles) {
   const cornerMask = roundedMask(THREE);
 
   const panels = tiles.map((tile, i) => {
-    const { texture, video } = makeTexture(THREE, tile);
-    if (video) {
-      pool.appendChild(video);
-      // Start every video, not just the front-facing ones — the loop above
-      // won't pause a panel until it has a frame, so this is what guarantees
-      // the whole globe has loaded thumbnails rather than black rectangles.
-      video.play().catch(() => {});
-    }
+    // Every panel starts as a still. Video arrives later, per attachVideo.
+    const texture = stillTexture(THREE, tile);
     const mesh = new THREE.Mesh(
       new THREE.PlaneGeometry(TW, TH),
       new THREE.MeshBasicMaterial({
@@ -210,10 +206,74 @@ function createGlobe(THREE, mount, tiles) {
     );
     mesh.lookAt(0, 0, 0);
     mesh.rotateY(Math.PI);
-    mesh.userData = { tile, video };
+    mesh.userData = { tile, video: null, loading: false, failed: false };
     world.add(mesh);
     return mesh;
   });
+
+  // ── progressive video ───────────────────────────────────────────────────
+  // A small number in flight at once: enough that the front of the globe fills
+  // in quickly, few enough that they are not all competing for the same pipe.
+  // Each one is only swapped in once it has a frame, so a panel never blanks.
+  const MAX_IN_FLIGHT = 3;
+  let inFlight = 0;
+
+  function attachVideo(mesh) {
+    const tile = mesh.userData.tile;
+    if (tile.type !== 'video') return;
+    if (mesh.userData.video || mesh.userData.loading || mesh.userData.failed) return;
+
+    mesh.userData.loading = true;
+    inFlight++;
+
+    const video = document.createElement('video');
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    pool.appendChild(video);
+
+    const done = (ok) => {
+      mesh.userData.loading = false;
+      inFlight--;
+      if (ok) {
+        const vt = new THREE.VideoTexture(video);
+        vt.colorSpace = THREE.SRGBColorSpace;
+        const previous = mesh.material.map;
+        mesh.material.map = vt;
+        mesh.material.needsUpdate = true;
+        if (previous) previous.dispose();   // the poster has done its job
+        mesh.userData.video = video;
+      } else {
+        mesh.userData.failed = true;        // keep the poster; do not retry
+        video.remove();
+      }
+      pump();
+    };
+
+    video.addEventListener('loadeddata', () => done(true), { once: true });
+    video.addEventListener('error', () => done(false), { once: true });
+    video.src = tile.src;
+    video.play().catch(() => {});
+  }
+
+  // Next in line is whichever panel still needs a video and is closest to
+  // facing the camera — what you are looking at loads before what you are not.
+  const pumpPos = new THREE.Vector3();
+  function pump() {
+    while (inFlight < MAX_IN_FLIGHT) {
+      let best = null, bestFacing = -Infinity;
+      for (const m of panels) {
+        const d = m.userData;
+        if (d.tile.type !== 'video' || d.video || d.loading || d.failed) continue;
+        m.getWorldPosition(pumpPos);
+        const facing = pumpPos.normalize().z;
+        if (facing > bestFacing) { bestFacing = facing; best = m; }
+      }
+      if (!best) return;
+      attachVideo(best);
+    }
+  }
 
   // Pull the camera back just far enough that the sphere fits, rather than
   // fixing a distance for the worst case: a filtered view has a smaller
@@ -327,9 +387,10 @@ function createGlobe(THREE, mount, tiles) {
     if (velY) { spin.setFromAxisAngle(AXIS_Y, velY); world.quaternion.premultiply(spin); }
     if (velX) { spin.setFromAxisAngle(AXIS_X, velX); world.quaternion.premultiply(spin); }
 
-    // Keep the front hemisphere playing. A back-facing video is only paused
-    // once it has decoded at least one frame (readyState >= HAVE_CURRENT_DATA),
-    // so every panel is showing an image rather than black.
+    // Fill in any free slots, then keep the front hemisphere playing. Panels
+    // still waiting on a video are showing their poster, so nothing is blank.
+    if (inFlight < MAX_IN_FLIGHT) pump();
+
     for (const m of panels) {
       const v = m.userData.video;
       if (!v) continue;
@@ -344,6 +405,7 @@ function createGlobe(THREE, mount, tiles) {
     renderer.render(scene, camera);
   }
   frame();
+  pump();
 
   const onVis = () => {
     if (document.hidden) cancelAnimationFrame(raf);
@@ -368,6 +430,7 @@ function createGlobe(THREE, mount, tiles) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       document.removeEventListener('visibilitychange', onVis);
+      inFlight = MAX_IN_FLIGHT;   // stop pump() handing out any more work
       panels.forEach((m) => {
         const v = m.userData.video;
         if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
@@ -411,22 +474,13 @@ function roundedMask(THREE) {
   return t;
 }
 
-function makeTexture(THREE, tile) {
-  if (tile.type === 'video') {
-    const video = document.createElement('video');
-    video.src = tile.src;
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.preload = 'auto';
-    const texture = new THREE.VideoTexture(video);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    return { texture, video };
-  }
-  const texture = new THREE.TextureLoader().load(tile.src);
+// The still every panel opens on: a video tile's poster, or the image itself.
+// Roughly 60KB for the whole globe, against 18MB if it waited for the videos.
+function stillTexture(THREE, tile) {
+  const texture = new THREE.TextureLoader().load(tile.still || tile.src);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 8;
-  return { texture, video: null };
+  return texture;
 }
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────
