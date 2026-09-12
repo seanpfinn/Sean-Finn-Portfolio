@@ -1648,3 +1648,12 @@
 @media (prefers-reduced-motion: reduce) {
   .proj-col > * { animation: none; }
 }
+
+/* Same handoff as .splash-page in styles.css — see the note there. This column
+   is narrower (48.75rem against 62.5rem) so it would in fact stay clear down to
+   1120px, but every page uses the widest crossing point of the set so that the
+   top of the content sits at the same height on all of them at any given
+   width. Consistency across pages beats squeezing the last 240px out of one. */
+@media (min-width: 50.625rem) and (max-width: 85rem) {
+  .proj-col { padding-top: var(--nav-clear-top); }
+}

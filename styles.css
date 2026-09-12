@@ -56,19 +56,13 @@ a { text-decoration: none; color: inherit; }
   /* Page gutter — every content container reads these so the body margins
      stay identical across pages and breakpoints. */
   --page-x:      1.25rem;
-  /* Distance from the bottom edge of the fixed nav to the top of the page's
-     content. The nav is out of flow and changes height with the breakpoint —
-     81px as a floating bar, 36px as a strip — while --page-top used to be a
-     flat number, so the real gap stepped at every breakpoint and on wide
-     screens went negative: content began 53px above the nav's bottom edge and
-     sat level with it. Deriving the offset from where the nav actually ends
-     holds one gap at every width. Pages tune --nav-gap, never --page-top. */
-  --nav-gap:     2.5rem;
-  /* Overwritten in px by main.js from the nav's measured height. The value
-     here is that measurement at rest, so the first paint is already correct
-     and stays correct if the script never runs. */
-  --nav-bottom:  6.3125rem;
-  --page-top:    calc(var(--nav-bottom) + var(--nav-gap));
+  /* Content starts level with the nav by design: on a wide screen the nav is
+     a small block in the left margin and the centred column sits beside it,
+     so the page reads as one band rather than starting below a bar. */
+  --page-top:    2.5rem;
+  /* The width at which that stops being true — see the --nav-clear rules at
+     the foot of this file. */
+  --nav-clear-top: 8.75rem;
   /* Enough to clear the fixed footer. Pages that still carry the music bar
      add their own clearance below. */
   --page-bottom: 5rem;
@@ -80,12 +74,14 @@ a { text-decoration: none; color: inherit; }
 /* Only pages carrying the music bar need to clear it. */
 body[data-miniplayer] { --page-bottom: 10rem; }
 
-/* On phones the nav becomes a full-width strip pinned to the very top, so its
-   bottom edge sits much higher. Only the fallback changes — the gap below it
-   is the same one the wide layout uses. */
+/* On phones the nav becomes a bar across the top, so content starts lower.
+   4rem is the value tuned on the timeline — 28px of air under the 36px strip.
+   It lives here rather than on that one page so every page starts at the same
+   height; the timeline used to override this and sat 28px higher than the
+   homepage on the same phone. */
 @media (max-width: 50.5625rem) {
   :root {
-    --nav-bottom:  2.25rem;
+    --page-top:    4rem;
     --page-bottom: 4.5rem;
   }
   body[data-miniplayer] { --page-bottom: 8rem; }
@@ -967,20 +963,25 @@ body {
     box-sizing: border-box;
   }
 
-  /* Mobile menu typography — large links */
+  /* Mobile menu typography.
+     Both the top-level links and the nested project items sat at 1.5rem, so a
+     project read exactly as loud as the section containing it — a stack of
+     equally large lines with no hierarchy, which is also what made the panel
+     feel oversized. The links come down, and the projects come down further,
+     so the nesting the tree icons already imply is carried by the type too. */
   .splash-nav-links.mobile-open .splash-nav-link {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: normal;
   }
   .splash-nav-links.mobile-open .nav-company-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1125rem;
     line-height: 1rem;
   }
   .splash-nav-links.mobile-open .nav-project-item {
-    font-size: 1.5rem;
+    font-size: 1.0625rem;
     line-height: normal;
-    letter-spacing: -0.036rem;
+    letter-spacing: -0.02rem;
   }
   .splash-nav-links.mobile-open .nav-work-submenu {
     gap: 0.75rem;
@@ -2774,4 +2775,24 @@ body {
     position: absolute;
     inset: -0.8125rem -0.125rem;
   }
+}
+
+/* ── Nav clearance in the middle widths ──────────────────────────────────
+   The centred content column is meant to sit BESIDE the nav, level with it:
+   on a wide screen the nav is a ~195px block in the left margin and the
+   column is centred well clear of it. But the column is centred, so as the
+   viewport narrows its left edge walks leftward until it slides underneath
+   the nav — and because the nav is fixed, it then floats on top of the
+   content instead of beside it.
+
+   Each page's column is a different width, so each crosses under the nav at
+   a different viewport width (measured: homepage 1320px, case study 1120px).
+   Below that crossing point the content drops beneath the nav instead. The
+   lower bound hands off to the phone layout, where the nav is already a
+   full-width strip and --page-top clears it.
+
+   Last in the file so these beat the base --page-top padding, which media
+   queries alone would not. */
+@media (min-width: 50.625rem) and (max-width: 85rem) {
+  .splash-page { padding-top: var(--nav-clear-top); }
 }

@@ -1321,41 +1321,5 @@
     }, { passive: true });
   }
 
-  // ── Nav clearance ───────────────────────────────────────────────────────
-  // The nav is fixed, so nothing in flow knows how tall it is, and its height
-  // changes with the breakpoint and with how its links wrap. Publishing its
-  // measured bottom edge lets --page-top sit one constant gap below it at
-  // every width rather than a per-breakpoint guess. The stylesheet carries
-  // resting values for both layouts, so this only corrects for wrapping and
-  // for whatever the real rendered height turns out to be.
-  (function navClearance() {
-    const nav = document.querySelector('.splash-nav');
-    // Only a nav that is out of flow needs compensating; an in-flow one
-    // already occupies its own space and would be counted twice.
-    if (!nav || getComputedStyle(nav).position !== 'fixed') return;
-
-    let last = -1;
-    const measure = () => {
-      // offsetTop/offsetHeight, not getBoundingClientRect: the nav enters with
-      // a blurIn transform, and the rect reflects that transform. Measuring
-      // mid-animation read ~8px tall and then stuck, because ResizeObserver
-      // watches the layout box — which a transform never changes — so nothing
-      // ever corrected it. These two are layout values and ignore transforms.
-      // For a fixed element offsetTop is relative to the initial containing
-      // block, which is the viewport: exactly the number wanted here.
-      const bottom = Math.round(nav.offsetTop + nav.offsetHeight);
-      if (bottom === last || bottom <= 0) return;
-      last = bottom;
-      document.documentElement.style.setProperty('--nav-bottom', bottom + 'px');
-    };
-
-    measure();
-    // The nav's height can change without the window resizing — a web font
-    // landing, or the links rewrapping — so watch the element, not just resize.
-    if (window.ResizeObserver) new ResizeObserver(measure).observe(nav);
-    window.addEventListener('resize', measure, { passive: true });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-  })();
-
 })();
 

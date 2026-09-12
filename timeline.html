@@ -478,19 +478,21 @@
        closes up under the header, and enough travel is left below the nav
        that the header still visibly pins rather than starting stuck. */
     /* Same nav-clearance handoff as the other pages — see the note at the
-       foot of styles.css. This column is 52rem, so it stays clear of the nav
-       down to a measured 1160px; below that it drops beneath it. */
-    @media (min-width: 50.625rem) and (max-width: 75rem) {
+       foot of styles.css. This column (52rem) would clear the nav down to a
+       measured 1160px, but it uses the shared 85rem threshold so the content
+       starts at the same height here as on every other page. */
+    @media (min-width: 50.625rem) and (max-width: 85rem) {
       .tl-main { padding-top: var(--nav-clear-top); }
     }
 
+    /* No padding-top of its own any more: --page-top carries it, so this page
+       starts at the same height as the homepage and the case studies instead
+       of 28px higher. Only the gap below the header is the timeline's own. */
     @media (max-width: 50.5625rem) {
-      .tl-main { padding-top: 4.5rem; }
       .tl-head { margin-bottom: 1.5rem; }
     }
 
     @media (max-width: 30rem) {
-      .tl-main { padding-top: 4rem; }
       .tl-head { margin-bottom: 1.25rem; }
 
       /* Card copy.
