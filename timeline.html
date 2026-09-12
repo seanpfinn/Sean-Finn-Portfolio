@@ -519,6 +519,23 @@
        one before the dates, which are metadata rather than part of the copy.
        Set last in the file because media queries carry no extra specificity
        and these have to beat the base rules they replace. */
+    /* Cap the measure.
+       A card's width is its duration, so the longest roles get the widest
+       cards — and their copy was setting to fill them. Finrez ran 102
+       characters on a single 725px line and Meta 89, against 25-46 per line
+       on every other card: the two longest-serving roles were the two that
+       looked wrong. The bar's length is the data; the text is not, so the
+       copy wraps at a fixed measure and the card keeps its full width. In ch
+       units, so it holds at both the phone and desktop type sizes.
+
+       Two values, because the two layouts sprawl by different amounts. The
+       horizontal view is where it is severe, so it takes the tight cap. The
+       dated vertical chart varies only with lane packing, so it takes a
+       looser one — chosen to sit just wider than a phone's full-width list
+       card, which must not be narrowed by this at all. */
+    .tl-chart .tl-blurb { max-width: 52ch; }
+    .tl-chart.is-horizontal .tl-blurb { max-width: 44ch; }
+
     .tl-card { gap: 0; }
     .tl-card > * + * { margin-top: 0.4375rem; }
     /* Two classes deep so it also beats the horizontal layout's own 0.375rem,
@@ -768,6 +785,33 @@
               <span class="tl-company">VICE Media Group</span>
             </div>
             <p class="tl-blurb">Built VICE's Ad Studio and custom ad tools, driving $7MM in revenue growth in year one.</p>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2017-04" data-end="2018-07">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Designer</h3>
+              <span class="tl-company">Merkley + Partners</span>
+            </div>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2016-03" data-end="2017-04">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Digital Designer</h3>
+              <span class="tl-company">McCann Humancare</span>
+            </div>
+            <p class="tl-dates"></p>
+          </div>
+        </li>
+        <li class="tl-item" data-start="2014-10" data-end="2016-03">
+          <div class="tl-card">
+            <div class="tl-card-head">
+              <h3 class="tl-role">Art Director</h3>
+              <span class="tl-company">Havas Life</span>
+            </div>
             <p class="tl-dates"></p>
           </div>
         </li>
