@@ -28,6 +28,12 @@
   const H_ROW_SM  = 176;   // ...and on a phone, where the card head stacks
   const H_ROWGAP  = 12;
   const H_AXIS    = 44;    // headroom for the axis line and its year labels
+  // Lead-in before the earliest date. The scroll surface used to begin exactly
+  // on it, and the year ticks are centred on their date, so the first label sat
+  // half off the left edge and could not be scrolled to — 2013 was unreachable.
+  // The chart also fades its first 4rem, so the lead has to clear the fade plus
+  // half a label. The right edge already had H_MIN of run-off for this reason.
+  const H_LEAD    = 80;
 
   const MS_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
   const now = new Date();
@@ -200,14 +206,15 @@
 
   // ── Horizontal: oldest at the left, reading forward in time ──────────────
   function renderHorizontal() {
-    const x = (d) => ((d - rangeStart) / MS_YEAR) * H_PX_YEAR;
+    const x = (d) => H_LEAD + ((d - rangeStart) / MS_YEAR) * H_PX_YEAR;
     const total = spanYears * H_PX_YEAR;
+    const end = x(now);
 
     for (let yr = rangeStart.getFullYear(); yr <= now.getFullYear(); yr++) {
       const left = x(new Date(yr, 0, 1));
-      if (left >= 0 && left <= total - 28) addTick(left, String(yr), '', true);
+      if (left >= H_LEAD - 0.5 && left <= end - 28) addTick(left, String(yr), '', true);
     }
-    addTick(total, 'Now', 'tl-tick--now', true);
+    addTick(end, 'Now', 'tl-tick--now', true);
 
     const measured = items.map((it) => {
       const a = x(it.start);
@@ -243,11 +250,12 @@
     }
 
     const height = H_AXIS + rows * (row + H_ROWGAP);
-    // The scroll surface has to be as wide as the whole span, plus a little
-    // run-off so the last card clears the fade at the right edge.
-    list.style.width = (total + H_MIN) + 'px';
+    // The scroll surface has to be as wide as the whole span, plus the lead-in
+    // at the start and a little run-off so the last card clears the fade at the
+    // right edge.
+    list.style.width = (end + H_MIN) + 'px';
     list.style.height = height + 'px';
-    axis.style.width = (total + H_MIN) + 'px';
+    axis.style.width = (end + H_MIN) + 'px';
     chart.style.height = height + 'px';
   }
 
