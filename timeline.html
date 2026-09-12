@@ -493,6 +493,29 @@
          tenth of its height and the role gets its hierarchy back. */
       .tl-blurb { font-size: 0.78125rem; line-height: 1.125rem; }
     }
+
+    /* ── Card interior rhythm ──────────────────────────────────────────────
+       A single flex `gap` spaced every child equally, so the company sat as
+       far from its own role as the dates sat from the description — three
+       evenly spaced lines with no indication of which belong together. The
+       gap comes off and the steps become explicit: role and company stay
+       tight as one unit, a clear step down to the description, and a wider
+       one before the dates, which are metadata rather than part of the copy.
+       Set last in the file because media queries carry no extra specificity
+       and these have to beat the base rules they replace. */
+    .tl-card { gap: 0; }
+    .tl-card > * + * { margin-top: 0.4375rem; }
+    /* Two classes deep so it also beats the horizontal layout's own 0.375rem,
+       which would otherwise keep that one view on the old tighter step. */
+    .tl-chart .tl-card > .tl-dates { margin-top: 0.625rem; }
+    .tl-chart .tl-card-head { gap: 0.25rem; }
+
+    /* The phone's cards are physically larger and carry more copy, so the
+       same rhythm is set a notch wider there. */
+    @media (max-width: 30rem) {
+      .tl-card > * + * { margin-top: 0.5rem; }
+      .tl-chart .tl-card > .tl-dates { margin-top: 0.6875rem; }
+    }
 </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>

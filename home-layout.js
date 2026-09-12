@@ -58,14 +58,14 @@ function staggerCards() {
   });
 }
 
-function commitFilter(next) {
+function commitFilter(next, restagger = true) {
   filter = next;
   tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.cat === filter)));
   grid.querySelectorAll('.gallery-card').forEach((card) => {
     const cats = (card.dataset.cat || '').split(/\s+/).filter(Boolean);
     card.hidden = filter !== 'all' && !cats.includes(filter);
   });
-  staggerCards();
+  if (restagger) staggerCards();
   // The globe is built from the visible set, so it has to be rebuilt.
   if (globe && mode === 'globe') rebuildGlobe();
 }
@@ -73,7 +73,11 @@ function commitFilter(next) {
 function applyFilter(next, userInitiated) {
   const target = CATS.includes(next) ? next : 'all';
   if (userInitiated && target === filter) return;
-  commitFilter(target);
+  // On the first pass the cards are already partway through the entrance the
+  // stylesheet started. Restaggering there cancels it and replays it from
+  // zero, which reads as the grid flashing out and coming back. Only a change
+  // the visitor made needs the delays recomputed.
+  commitFilter(target, userInitiated);
   if (userInitiated) writeKey(FILTER_KEY, target);
 }
 
@@ -96,7 +100,9 @@ function applyLayout(next, userInitiated) {
   const target = MODES.includes(next) ? next : 'globe';
   if (userInitiated && target === mode) return;
   commitLayout(target);
-  if (target !== 'globe') staggerCards();
+  // Same reasoning as applyFilter: on first load the grid's entrance is
+  // already running, so replaying it is the blink rather than the polish.
+  if (target !== 'globe' && userInitiated) staggerCards();
   if (userInitiated) writeKey(LAYOUT_KEY, target);
 }
 
@@ -539,4 +545,9 @@ if (grid && buttons.length) {
 
   applyFilter(readKey(FILTER_KEY, CATS) || 'all', false);
   applyLayout(readKey(LAYOUT_KEY, MODES) || 'globe', false);
+
+  // The pre-paint guard in the document head has done its job: `hidden` on the
+  // grid now carries the state, so release the class rather than leaving two
+  // things claiming to control the same visibility.
+  document.documentElement.classList.remove('layout-globe-pending');
 }

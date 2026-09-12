@@ -160,12 +160,28 @@
     // change the lane packing, which changes column widths, which can rewrap
     // text onto another line — so this settles rather than correcting once.
     // Four passes is far more than it has ever taken.
+    // scrollHeight is an integer and does not account for the bottom padding
+    // of a flex column reliably, so it under-reported by a couple of pixels
+    // once the children carried margins — enough to clip the last line of the
+    // dates. Releasing the height and reading offsetHeight gives the real
+    // content box, padding included. Batched per pass: all cards are freed,
+    // all are read, all are restored, so this costs two reflows rather than
+    // two per card.
+    const natural = (cards) => {
+      for (const c of cards) c.style.height = 'auto';
+      const h = cards.map((c) => c.offsetHeight);
+      for (const c of cards) c.style.height = '';
+      return h;
+    };
+
     for (let pass = 0; pass < 4; pass++) {
       let grew = false;
+      const cards = measured.map((m) => m.it.el.firstElementChild).filter(Boolean);
+      const heights = natural(cards);
+      let i = 0;
       for (const m of measured) {
-        const card = m.it.el.firstElementChild;
-        if (!card) continue;
-        const need = card.scrollHeight;
+        if (!m.it.el.firstElementChild) continue;
+        const need = heights[i++];
         if (need > m.size + 0.5) {
           m.size = need;
           m.b = m.a + need + V_GAP;
