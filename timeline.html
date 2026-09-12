@@ -477,25 +477,35 @@
        blocks rather than one. The header moves up toward the nav, the chart
        closes up under the header, and enough travel is left below the nav
        that the header still visibly pins rather than starting stuck. */
-    /* The timeline sits a little tighter under the nav than the rest of the
-       site — the header is a compact block rather than a page of copy, and it
-       pins there on scroll. One value, not a per-breakpoint padding, so the
-       shared clearance system keeps the gap identical at every width. */
-    :root { --nav-gap: 1.75rem; }
+    /* Same nav-clearance handoff as the other pages — see the note at the
+       foot of styles.css. This column is 52rem, so it stays clear of the nav
+       down to a measured 1160px; below that it drops beneath it. */
+    @media (min-width: 50.625rem) and (max-width: 75rem) {
+      .tl-main { padding-top: var(--nav-clear-top); }
+    }
 
     @media (max-width: 50.5625rem) {
+      .tl-main { padding-top: 4.5rem; }
       .tl-head { margin-bottom: 1.5rem; }
     }
 
     @media (max-width: 30rem) {
+      .tl-main { padding-top: 4rem; }
       .tl-head { margin-bottom: 1.25rem; }
 
-      /* Card copy. The phone block was stepping the blurb UP from the tablet
-         size (12px to 13px) at a 1.54 leading, so the description was the
-         heaviest thing in the card and sat too close to the 15px role above
-         it. Slightly smaller and tighter-leaded: the block loses about a
-         tenth of its height and the role gets its hierarchy back. */
-      .tl-blurb { font-size: 0.78125rem; line-height: 1.125rem; }
+      /* Card copy.
+         The phone block originally stepped the blurb UP from the tablet size
+         (12px to 13px) at 1.54 leading, which made the description the
+         heaviest thing in the card. Bringing the blurb alone down helped but
+         left the rest of the card at its old scale — and in the horizontal
+         view, where a card's width is its duration, a long role gets a wide
+         card and the whole set still read oversized against a 400px phone.
+         So the card's whole type scale steps down together rather than one
+         line of it, which keeps the hierarchy intact at the smaller size. */
+      .tl-role   { font-size: 0.84375rem; line-height: 1.15rem; }
+      .tl-blurb  { font-size: 0.71875rem; line-height: 1rem; }
+      .tl-dates  { font-size: 0.625rem; }
+      .tl-company { font-size: 0.5rem; }
     }
 
     /* ── Card interior rhythm ──────────────────────────────────────────────
