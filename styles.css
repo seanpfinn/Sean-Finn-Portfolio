@@ -56,7 +56,19 @@ a { text-decoration: none; color: inherit; }
   /* Page gutter — every content container reads these so the body margins
      stay identical across pages and breakpoints. */
   --page-x:      1.25rem;
-  --page-top:    2.5rem;
+  /* Distance from the bottom edge of the fixed nav to the top of the page's
+     content. The nav is out of flow and changes height with the breakpoint —
+     81px as a floating bar, 36px as a strip — while --page-top used to be a
+     flat number, so the real gap stepped at every breakpoint and on wide
+     screens went negative: content began 53px above the nav's bottom edge and
+     sat level with it. Deriving the offset from where the nav actually ends
+     holds one gap at every width. Pages tune --nav-gap, never --page-top. */
+  --nav-gap:     2.5rem;
+  /* Overwritten in px by main.js from the nav's measured height. The value
+     here is that measurement at rest, so the first paint is already correct
+     and stays correct if the script never runs. */
+  --nav-bottom:  6.3125rem;
+  --page-top:    calc(var(--nav-bottom) + var(--nav-gap));
   /* Enough to clear the fixed footer. Pages that still carry the music bar
      add their own clearance below. */
   --page-bottom: 5rem;
@@ -68,10 +80,12 @@ a { text-decoration: none; color: inherit; }
 /* Only pages carrying the music bar need to clear it. */
 body[data-miniplayer] { --page-bottom: 10rem; }
 
-/* On phones the nav becomes a bar across the top, so content starts lower. */
+/* On phones the nav becomes a full-width strip pinned to the very top, so its
+   bottom edge sits much higher. Only the fallback changes — the gap below it
+   is the same one the wide layout uses. */
 @media (max-width: 50.5625rem) {
   :root {
-    --page-top:    5.75rem;
+    --nav-bottom:  2.25rem;
     --page-bottom: 4.5rem;
   }
   body[data-miniplayer] { --page-bottom: 8rem; }

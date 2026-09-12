@@ -477,13 +477,17 @@
        blocks rather than one. The header moves up toward the nav, the chart
        closes up under the header, and enough travel is left below the nav
        that the header still visibly pins rather than starting stuck. */
+    /* The timeline sits a little tighter under the nav than the rest of the
+       site — the header is a compact block rather than a page of copy, and it
+       pins there on scroll. One value, not a per-breakpoint padding, so the
+       shared clearance system keeps the gap identical at every width. */
+    :root { --nav-gap: 1.75rem; }
+
     @media (max-width: 50.5625rem) {
-      .tl-main { padding-top: 4.5rem; }
       .tl-head { margin-bottom: 1.5rem; }
     }
 
     @media (max-width: 30rem) {
-      .tl-main { padding-top: 4rem; }
       .tl-head { margin-bottom: 1.25rem; }
 
       /* Card copy. The phone block was stepping the blurb UP from the tablet
