@@ -1,3 +1,18 @@
+/* Stop iOS Safari resizing text on its own.
+   Safari inflates text inside a block in proportion to how wide that block is
+   against the viewport. Every layout here that gives an element its own width
+   therefore renders at a size nobody specified — on the horizontal timeline a
+   card's width is its duration, so the two longest roles sat in cards 2-4x
+   wider than their neighbours and their copy came out visibly bigger on a
+   phone and only on a phone. The inflation is a multiplier applied after the
+   CSS size, so no amount of shrinking the font reaches it, and no desktop
+   browser reproduces it. 100% means "render the size I asked for"; it does not
+   affect pinch-zoom or the user's own text-size setting. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 /* ================================
    FONTS — self-hosted Geist (Latin subset), replacing the dead jsdelivr links.
    ================================ */

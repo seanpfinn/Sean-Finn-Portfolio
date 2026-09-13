@@ -12,7 +12,7 @@
 const LAYOUT_KEY = 'home-layout';
 const FILTER_KEY = 'home-filter';
 const MODES = ['cols2', 'cols3', 'globe'];
-const CATS  = ['all', 'apps', 'web', 'brand'];
+const CATS  = ['all', 'apps', 'brand', 'web'];   // same order as the tab row
 
 const grid     = document.getElementById('project-grid');
 const stage    = document.getElementById('globe-stage');
@@ -195,8 +195,23 @@ function createGlobe(THREE, mount, tiles) {
       new THREE.MeshBasicMaterial({
         map: texture,
         alphaMap: cornerMask,
-        transparent: true,
-        alphaTest: 0.1,
+        // NOT transparent. These panels are opaque rectangles with their
+        // corners cut away — the only partial alpha in the mask is the
+        // antialiased edge of the rounded corner. Flagging them transparent
+        // put all nine into three's transparent pass, which re-sorts by
+        // distance every frame and draws back-to-front with depth writing on.
+        // On a turning sphere the order of near-equidistant panels flips
+        // between frames, and each flip lets one panel depth-reject another:
+        // panels wink out and come back as the globe rotates. Cutout geometry
+        // belongs in the opaque pass, where the depth buffer resolves it and
+        // no sorting happens at all.
+        transparent: false,
+        // 0.1 kept nearly-invisible pixels; 0.5 is the midpoint of the mask's
+        // edge ramp, so the corner lands where it was drawn. alphaToCoverage
+        // hands the cut edge to MSAA, which keeps the corners smooth without
+        // the transparent pass.
+        alphaTest: 0.5,
+        alphaToCoverage: true,
         toneMapped: false,
         side: THREE.DoubleSide,
       })
@@ -422,8 +437,14 @@ function createGlobe(THREE, mount, tiles) {
   const AXIS_X = new THREE.Vector3(1, 0, 0);
   const AXIS_Y = new THREE.Vector3(0, 1, 0);
 
+  // How long a video may report no current frame before the panel falls back
+  // to its poster. Long enough to ride out a loop restart, short enough that a
+  // genuine stall does not leave an empty texture on screen.
+  const STALL_GRACE = 700;
+
   function frame() {
     raf = requestAnimationFrame(frame);
+    const now = performance.now();
     if (!dragging) {
       velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;
       velX *= 0.94;
@@ -438,9 +459,19 @@ function createGlobe(THREE, mount, tiles) {
     for (const m of panels) {
       const v = m.userData.video;
       if (!v) continue;
-      // A video with no current frame renders as an empty texture, so show the
-      // poster again until it has one back. This is what stops the blinking.
-      show(m, v.readyState >= 2 ? 'video' : 'still');
+      // A video with no current frame renders as an empty texture, so fall
+      // back to the poster — but not on the first frame it happens. readyState
+      // dips below HAVE_CURRENT_DATA routinely: every loop restart, and any
+      // time the decoder is briefly reclaimed. Reacting instantly turned those
+      // dips into a visible swap to the still and back, once per loop. Only a
+      // stall that outlasts the grace period is real; recovery is immediate.
+      if (v.readyState >= 2) {
+        m.userData.unreadyAt = 0;
+        show(m, 'video');
+      } else {
+        if (!m.userData.unreadyAt) m.userData.unreadyAt = now;
+        if (now - m.userData.unreadyAt > STALL_GRACE) show(m, 'still');
+      }
       m.getWorldPosition(worldPos);
       forward.copy(worldPos).normalize();
       // A band rather than a line: panels sitting on the edge of the hemisphere
