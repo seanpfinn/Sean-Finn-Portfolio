@@ -489,6 +489,9 @@
        starts at the same height here as on every other page. */
     @media (min-width: 50.625rem) and (max-width: 85rem) {
       .tl-main {
+        /* as on the homepage: without width:auto this keeps its max-width and
+           overflows the margins */
+        width: auto;
         margin-left: var(--nav-clear-left);
         margin-right: var(--page-x);
       }

@@ -2838,6 +2838,9 @@ body {
    would not. */
 @media (min-width: 50.625rem) and (max-width: 85rem) {
   .splash-page {
+    /* width:100% would ignore the margins below and overflow the right
+       edge; auto lets max-width and the margins settle it. */
+    width: auto;
     margin-left: var(--nav-clear-left);
     margin-right: var(--page-x);
   }
