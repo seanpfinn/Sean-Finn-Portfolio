@@ -338,12 +338,26 @@ function createGlobe(THREE, mount, tiles) {
   // fixing a distance for the worst case: a filtered view has a smaller
   // sphere, so its panels can sit much closer and read much larger. With free
   // rotation, panels clipping at the poles reads as broken, hence the margin.
-  const extent = Math.hypot(R, TW / 2);
+  //
+  // Every panel is tangent to the sphere of radius R, so its furthest corner
+  // is half a panel diagonal out from the surface. The old extent used only
+  // TW / 2 and lost the height entirely.
+  const extent = Math.hypot(R, Math.hypot(TW / 2, TH / 2));
+
+  // Panels clip because the near side of the sphere sits closer to the camera,
+  // where the frustum is narrower — so a distance that fits the silhouette at
+  // z = 0 still cuts the panels swinging toward you. Margin for the corners
+  // that round() and the rotation put a hair outside the bounding sphere.
+  const FIT_MARGIN = 1.04;
+
   function fitCamera() {
-    const vFov = (camera.fov * Math.PI / 180) * 0.95;
-    let d = extent / Math.tan(vFov / 2);
-    // A canvas taller than it is wide is limited horizontally instead.
-    if (camera.aspect < 1) d /= camera.aspect;
+    // extent / tan(half) fits a flat disc at z = 0. A sphere needs
+    // extent / sin(half), which is the tangent-line solve and the reason the
+    // poles were being cut. The tighter of the two axes wins, which also
+    // covers a canvas taller than it is wide without a special case.
+    const vHalf = (camera.fov * Math.PI / 180) / 2;
+    const hHalf = Math.atan(Math.tan(vHalf) * camera.aspect);
+    const d = FIT_MARGIN * extent / Math.sin(Math.min(vHalf, hHalf));
     camera.position.set(0, 0, d);
   }
 
