@@ -29,8 +29,7 @@
     body { overflow-x: clip !important; overflow-y: visible !important; height: auto !important; }
 
     .tl-main {
-      max-width: 52rem;
-      margin: 0 auto;
+      /* width and margins come from the shared column rule in styles.css */
       padding: var(--page-top) var(--page-x) var(--page-bottom);
     }
     /* .tl-title runs at line-height:normal, which parks its cap 10.75px into
@@ -364,10 +363,12 @@
     /* body is display:flex, so .tl-main is a flex item and its automatic
        min-width is its min-content size. In the horizontal view that is the
        whole 3,759px scroll surface, which pinned main at its 52rem max-width
-       on a 390px phone and pushed the entire page off screen. An explicit
-       width plus min-width:0 is what makes the swiped chart fit the viewport
-       it is in; max-width still caps it at 52rem on a wide screen. */
-    .tl-main { min-width: 0; width: 100%; }
+       on a 390px phone and pushed the entire page off screen. min-width:0 is
+       what lets the swiped chart fit the viewport it is in.
+       The width itself is NOT set here: the shared column rule in styles.css
+       owns it, and a `width: 100%` at this point in the cascade would win and
+       stretch the column to the full viewport. */
+    .tl-main { min-width: 0; }
 
     .tl-head-sentinel { height: 1px; margin-bottom: -1px; }
     /* Static on desktop. A pinned bar earns its place on a phone, where the
@@ -487,15 +488,6 @@
        foot of styles.css. This column (52rem) would clear the nav down to a
        measured 1160px, but it uses the shared 85rem threshold so the content
        starts at the same height here as on every other page. */
-    @media (min-width: 50.625rem) and (max-width: 85rem) {
-      .tl-main {
-        /* as on the homepage: without width:auto this keeps its max-width and
-           overflows the margins */
-        width: auto;
-        margin-left: var(--nav-clear-left);
-        margin-right: var(--page-x);
-      }
-    }
 
     /* No padding-top of its own any more: --page-top carries it, so this page
        starts at the same height as the homepage and the case studies instead

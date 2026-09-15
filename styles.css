@@ -112,6 +112,9 @@ body[data-miniplayer] { --page-bottom: 10rem; }
   :root {
     --page-top:    4rem;
     --page-bottom: 4.5rem;
+    /* the nav is a full-width strip down here, so there is nothing to clear
+       sideways — the clearance becomes the ordinary gutter */
+    --nav-clear-left: var(--page-x);
   }
   body[data-miniplayer] { --page-bottom: 8rem; }
   body[data-miniplayer] .splash-footer { padding-bottom: 10rem; }
@@ -2836,12 +2839,27 @@ body {
 
    Last in the file so these beat the base rules, which media queries alone
    would not. */
-@media (min-width: 50.625rem) and (max-width: 85rem) {
-  .splash-page {
-    /* width:100% would ignore the margins below and overflow the right
-       edge; auto lets max-width and the margins settle it. */
-    width: auto;
-    margin-left: var(--nav-clear-left);
-    margin-right: var(--page-x);
-  }
+/* ── Column placement ────────────────────────────────────────────────────
+   One declaration does both jobs. The column is fluid up to its own cap, and
+   its left margin is whichever is larger: the centring margin, or the width
+   the nav needs. max() means it slides continuously between "centred" and
+   "beside the nav" instead of snapping at a breakpoint — and there is no
+   media query to keep in sync with the nav's actual width.
+
+   The phone layout zeroes --nav-clear-left rather than overriding the rule,
+   because down there the nav is a full-width strip and --page-top clears it. */
+.splash-page,
+.proj-col,
+.tl-main {
+  /* The available width has to allow for the left margin, or the column runs
+     off the right edge exactly where the nav is pushing it in. Subtracting the
+     clearance unconditionally is safe: when the centring margin wins it is
+     already larger than the clearance, so min() takes --col-w either way. */
+  width: min(var(--col-w), 100% - var(--nav-clear-left) - var(--page-x));
+  margin-left: max(var(--nav-clear-left),
+                   (100% - min(var(--col-w), 100% - var(--nav-clear-left) - var(--page-x))) / 2);
+  margin-right: auto;
 }
+.splash-page { --col-w: 62.5rem; }   /* 1000px */
+.proj-col    { --col-w: 48.75rem; }  /* 780px — a reading measure, not the page */
+.tl-main     { --col-w: 52rem; }     /* 832px */
