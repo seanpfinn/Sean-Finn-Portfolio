@@ -1654,6 +1654,11 @@
    1120px, but every page uses the widest crossing point of the set so that the
    top of the content sits at the same height on all of them at any given
    width. Consistency across pages beats squeezing the last 240px out of one. */
+/* See the nav-clearance note at the foot of styles.css: the column anchors
+   beside the nav rather than dropping below it, so the top alignment holds. */
 @media (min-width: 50.625rem) and (max-width: 85rem) {
-  .proj-col { padding-top: var(--nav-clear-top); }
+  .proj-col {
+    margin-left: var(--nav-clear-left);
+    margin-right: var(--page-x);
+  }
 }

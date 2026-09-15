@@ -88,9 +88,10 @@ a { text-decoration: none; color: inherit; }
   --nav-cap:     0.3125rem;                              /* 5.00px  — Home, Geist 400 14/20.16 */
   --cap-line:    calc(var(--nav-top) + var(--nav-cap));  /* 25px: where every first cap lands */
   --page-top:    calc(var(--cap-line) - 0.3125rem);      /* 5.00px  — .proj-title-new, 600 24/28 */
-  /* The width at which that stops being true — see the --nav-clear rules at
-     the foot of this file. */
-  --nav-clear-top: 8.75rem;
+  /* Where the column has to start once it would otherwise slide under the
+     nav — see the --nav-clear rules at the foot of this file. The nav's own
+     block measures 200px wide; this is that plus a gutter. */
+  --nav-clear-left: 14rem;
   /* Enough to clear the fixed footer. Pages that still carry the music bar
      add their own clearance below. */
   --page-bottom: 5rem;
@@ -2805,22 +2806,6 @@ body {
   }
 }
 
-/* ── Nav clearance in the middle widths ──────────────────────────────────
-   The centred content column is meant to sit BESIDE the nav, level with it:
-   on a wide screen the nav is a ~195px block in the left margin and the
-   column is centred well clear of it. But the column is centred, so as the
-   viewport narrows its left edge walks leftward until it slides underneath
-   the nav — and because the nav is fixed, it then floats on top of the
-   content instead of beside it.
-
-   Each page's column is a different width, so each crosses under the nav at
-   a different viewport width (measured: homepage 1320px, case study 1120px).
-   Below that crossing point the content drops beneath the nav instead. The
-   lower bound hands off to the phone layout, where the nav is already a
-   full-width strip and --page-top clears it.
-
-   Last in the file so these beat the base --page-top padding, which media
-   queries alone would not. */
 /* ── Per-column half-leading ─────────────────────────────────────────────
    --page-top above carries the case-study heading's 5px. The two pages whose
    first line is something else correct for their own. Scoped above the phone
@@ -2830,6 +2815,30 @@ body {
   .splash-page { --page-top: calc(var(--cap-line) - 0.234375rem); }  /* 3.75px — .hero-line, 400 14/18 */
 }
 
+/* ── Nav clearance in the middle widths ──────────────────────────────────
+   The centred content column is meant to sit BESIDE the nav, level with it:
+   on a wide screen the nav is a ~200px block in the left margin and the
+   column is centred well clear of it. But the column is centred, so as the
+   viewport narrows its left edge walks leftward until it slides underneath
+   the fixed nav.
+
+   This used to be answered by dropping the whole column below the nav. That
+   cost more than it bought: the nav is only 101px tall, the drop was 140px,
+   and it threw away the top alignment on every page between 810px and 1360px
+   — a band that covers most laptops. The hero sat in the middle of the screen
+   with an empty strip above it and nothing to line up against.
+
+   So the column stops centring instead. It anchors just right of the nav,
+   keeps a gutter on the right, and holds its top alignment with Home all the
+   way down to the phone breakpoint, where the nav becomes a full-width strip
+   and --page-top clears it. The side margins narrow as the window does, which
+   is the point: the space goes to the content rather than above it.
+
+   Last in the file so these beat the base rules, which media queries alone
+   would not. */
 @media (min-width: 50.625rem) and (max-width: 85rem) {
-  .splash-page { padding-top: var(--nav-clear-top); }
+  .splash-page {
+    margin-left: var(--nav-clear-left);
+    margin-right: var(--page-x);
+  }
 }
