@@ -89,9 +89,12 @@ a { text-decoration: none; color: inherit; }
   --cap-line:    calc(var(--nav-top) + var(--nav-cap));  /* 25px: where every first cap lands */
   --page-top:    calc(var(--cap-line) - 0.3125rem);      /* 5.00px  — .proj-title-new, 600 24/28 */
   /* Where the column has to start once it would otherwise slide under the
-     nav — see the --nav-clear rules at the foot of this file. The nav's own
-     block measures 200px wide; this is that plus a gutter. */
-  --nav-clear-left: 14rem;
+     nav — see the --nav-clear rules at the foot of this file. This clears the
+     nav at rest, whose widest visible label ends at 69px; the 200px block it
+     reports is the Projects panel, which is fixed and floats over the page
+     while it is open, so reserving room for it permanently cost the column
+     80px of measure at every width below 1450. */
+  --nav-clear-left: 10rem;
   /* Enough to clear the fixed footer. Pages that still carry the music bar
      add their own clearance below. */
   --page-bottom: 5rem;
@@ -2831,11 +2834,15 @@ body {
    — a band that covers most laptops. The hero sat in the middle of the screen
    with an empty strip above it and nothing to line up against.
 
-   So the column stops centring instead. It anchors just right of the nav,
-   keeps a gutter on the right, and holds its top alignment with Home all the
-   way down to the phone breakpoint, where the nav becomes a full-width strip
-   and --page-top clears it. The side margins narrow as the window does, which
-   is the point: the space goes to the content rather than above it.
+   So the column keeps centring and gives up width instead. Both margins stay
+   equal at every width; once the centring margin would drop below the nav's
+   clearance, the clearance holds and the column narrows. It holds its top
+   alignment with Home all the way down to the phone breakpoint, where the nav
+   becomes a full-width strip and --page-top clears it.
+
+   The earlier version pinned only the left margin, so below about 1450px the
+   column stopped centring and slid right until its right gutter hit the 20px
+   page padding — 224px of air on the left against 20px on the right.
 
    Last in the file so these beat the base rules, which media queries alone
    would not. */
@@ -2851,13 +2858,13 @@ body {
 .splash-page,
 .proj-col,
 .tl-main {
-  /* The available width has to allow for the left margin, or the column runs
-     off the right edge exactly where the nav is pushing it in. Subtracting the
-     clearance unconditionally is safe: when the centring margin wins it is
-     already larger than the clearance, so min() takes --col-w either way. */
-  width: min(var(--col-w), 100% - var(--nav-clear-left) - var(--page-x));
+  /* The width subtracts the clearance twice — once for each margin — so the
+     column can always sit centred between two equal gutters. Subtracting it
+     unconditionally is safe: when the centring margin wins it is already
+     larger than the clearance, so min() takes --col-w either way. */
+  width: min(var(--col-w), 100% - 2 * var(--nav-clear-left));
   margin-left: max(var(--nav-clear-left),
-                   (100% - min(var(--col-w), 100% - var(--nav-clear-left) - var(--page-x))) / 2);
+                   (100% - min(var(--col-w), 100% - 2 * var(--nav-clear-left))) / 2);
   margin-right: auto;
 }
 .splash-page { --col-w: 62.5rem; }   /* 1000px */
