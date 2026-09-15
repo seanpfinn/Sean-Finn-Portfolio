@@ -73,8 +73,21 @@ a { text-decoration: none; color: inherit; }
   --page-x:      1.25rem;
   /* Content starts level with the nav by design: on a wide screen the nav is
      a small block in the left margin and the centred column sits beside it,
-     so the page reads as one band rather than starting below a bar. */
-  --page-top:    2.5rem;
+     so the page reads as one band rather than starting below a bar.
+
+     "Level with" means level with the Home link's cap, not with its line box.
+     Geist drops the cap top 5px into Home's 20.16px box, so the first cap on
+     every page has to land at --cap-line, and each column subtracts its own
+     heading's half-leading to get there. Those offsets were measured by
+     rendering each heading and finding its first row of ink, not read off a
+     cap-height table: half-leading moves with size, weight and line-height, so
+     a single padding cannot serve three different headings. The old flat
+     2.5rem left the homepage 18.75px low, the case studies 20px and the
+     timeline 25.75px. */
+  --nav-top:     1.25rem;                                /* .splash-nav top */
+  --nav-cap:     0.3125rem;                              /* 5.00px  — Home, Geist 400 14/20.16 */
+  --cap-line:    calc(var(--nav-top) + var(--nav-cap));  /* 25px: where every first cap lands */
+  --page-top:    calc(var(--cap-line) - 0.3125rem);      /* 5.00px  — .proj-title-new, 600 24/28 */
   /* The width at which that stops being true — see the --nav-clear rules at
      the foot of this file. */
   --nav-clear-top: 8.75rem;
@@ -2808,6 +2821,15 @@ body {
 
    Last in the file so these beat the base --page-top padding, which media
    queries alone would not. */
+/* ── Per-column half-leading ─────────────────────────────────────────────
+   --page-top above carries the case-study heading's 5px. The two pages whose
+   first line is something else correct for their own. Scoped above the phone
+   breakpoint because down there the nav is a full-width strip and --page-top
+   is clearance, not alignment. */
+@media (min-width: 50.625rem) {
+  .splash-page { --page-top: calc(var(--cap-line) - 0.234375rem); }  /* 3.75px — .hero-line, 400 14/18 */
+}
+
 @media (min-width: 50.625rem) and (max-width: 85rem) {
   .splash-page { padding-top: var(--nav-clear-top); }
 }
