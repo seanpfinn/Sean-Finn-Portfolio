@@ -467,6 +467,21 @@
       </div>
     </div>
 
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">The site</h2>
+      <p class="proj-caption-body">The homepage set the language; the rest of the site had to prove it stretched. Each page carries one device drawn out of the identity rather than applied to it &mdash; the console page runs a rail down its left margin that is the traversal itself, advancing one node at a time; pricing draws its tiers as lattice density, because the thing being priced is points on a graph, and every tier still has exactly one oxide dot; the documentation sets its API reference as a traversal record, in the same monospace receipt the console writes. Nine screens, one of them at 393 points wide and one projected six metres across.</p>
+    </div>
+    <div class="proj-panel-new proj-panel--media" style="background:#0D1114;">
+      <div class="gmk" aria-roledescription="carousel" aria-label="The Spectra marketing site across nine screens">
+        <div class="gmk-track"><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="1 of 9 — Homepage"><img src="assets/spectra-site-home.webp" alt="Homepage — spectra.io · analytics that act" loading="eager" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="2 of 9 — Console"><img src="assets/spectra-site-product.webp" alt="Console — spectra.io/console · five surfaces, one route" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="3 of 9 — The rail"><img src="assets/spectra-site-route.webp" alt="The rail — the traversal drawn once, one node lit" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="4 of 9 — Pricing"><img src="assets/spectra-site-pricing.webp" alt="Pricing — spectra.io/pricing · priced by what it watches" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="5 of 9 — Tiers"><img src="assets/spectra-site-tiers.webp" alt="Tiers — the field grows; the oxide point does not" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="6 of 9 — Documentation"><img src="assets/spectra-site-docs.webp" alt="Documentation — spectra.io/docs · the API as a traversal record" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="7 of 9 — Changelog"><img src="assets/spectra-site-changelog.webp" alt="Changelog — versions along the lattice, current release lit" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="8 of 9 — In hand"><img src="assets/spectra-site-phone.jpg" alt="In hand — the marketing site at 393 points wide" loading="lazy" decoding="async" draggable="false" /></div><div class="gmk-slide" role="group" aria-roledescription="slide" aria-label="9 of 9 — On screen"><img src="assets/spectra-site-stage.jpg" alt="On screen — launch keynote · projected six metres" loading="lazy" decoding="async" draggable="false" /></div></div>
+        <div class="gmk-cap"></div>
+        <button class="gmk-arrow prev" type="button" aria-label="Previous screen"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1 L3 6 L8 11"/></svg></button>
+        <button class="gmk-arrow next" type="button" aria-label="Next screen"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 1 L9 6 L4 11"/></svg></button>
+        <div class="gmk-dots"><button type="button" aria-label="Homepage" aria-current="true"></button><button type="button" aria-label="Console"></button><button type="button" aria-label="The rail"></button><button type="button" aria-label="Pricing"></button><button type="button" aria-label="Tiers"></button><button type="button" aria-label="Documentation"></button><button type="button" aria-label="Changelog"></button><button type="button" aria-label="In hand"></button><button type="button" aria-label="On screen"></button></div>
+      </div>
+    </div>
+
+
 <div class="proj-caption">
       <h2 class="proj-caption-label">Constraints</h2>
       <p class="proj-caption-body">One rule governs everything: orange means a point is off its lattice, right now. Nothing else in the product may borrow it &mdash; not a heading, not a call to action, not a chart series that did nothing unusual. Put it on a button and you teach an operator to ignore the one colour that matters. TODO &mdash; the client-side constraints: stakeholders, approvals, and what the identity had to replace.</p>
@@ -502,12 +517,10 @@
 /* Applied carousel. Advances on its own, but yields to the reader: it pauses
    on hover, on keyboard focus, while a finger is down, and whenever the panel
    is off screen — and it never starts at all under prefers-reduced-motion. */
-(function () {
-  var root = document.getElementById('gmk');
-  if (!root) return;
-  var track = document.getElementById('gmk-track'),
-      cap   = document.getElementById('gmk-cap'),
-      dots  = [].slice.call(document.querySelectorAll('#gmk-dots button')),
+[].slice.call(document.querySelectorAll('.gmk')).forEach(function (root) {
+  var track = root.querySelector('.gmk-track'),
+      cap   = root.querySelector('.gmk-cap'),
+      dots  = [].slice.call(root.querySelectorAll('.gmk-dots button')),
       slides= [].slice.call(track.children),
       N = slides.length, i = 0, timer = null, held = false, seen = true;
 
@@ -539,8 +552,8 @@
   dots.forEach(function (d, n) {
     d.addEventListener('click', function () { go(n); start(); });
   });
-  document.getElementById('gmk-prev').addEventListener('click', function () { go(i - 1); start(); });
-  document.getElementById('gmk-next').addEventListener('click', function () { go(i + 1); start(); });
+  root.querySelector('.gmk-arrow.prev').addEventListener('click', function () { go(i - 1); start(); });
+  root.querySelector('.gmk-arrow.next').addEventListener('click', function () { go(i + 1); start(); });
 
   root.addEventListener('mouseenter', function () { held = true; stop(); });
   root.addEventListener('mouseleave', function () { held = false; start(); });
@@ -586,7 +599,7 @@
 
   paint();
   start();
-})();
+});
 </script>
 </body>
 </html>
