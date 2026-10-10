@@ -170,70 +170,124 @@
   </nav>
 
     <main class="proj-col" style="animation-delay:0.05s">
-    <div class="proj-header-group">
-      <div class="proj-title-block">
-        <h1 class="proj-title-new">UCRFC Club Hub</h1>
-        <p class="proj-subtitle-new">A season hub for an amateur rugby club &mdash; match week, availability, and paperwork in one dashboard.</p>
-      </div>
-      <div class="proj-meta-row-new">
-        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value"><img class="proj-meta-logo" src="assets/logo-finrez.svg" alt="Finrez" decoding="async" /></span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Year</span><span class="proj-meta-value">2026</span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
-      </div>
-    </div>
+ <div class="proj-header-group">
+ <div class="proj-title-block">
+ <h1 class="proj-title-new">UCRFC Club Hub</h1>
+ <p class="proj-subtitle-new">A season hub for an amateur rugby club &mdash; match week, availability, and paperwork in one dashboard.</p>
+ </div>
+ <div class="proj-meta-row-new">
+ <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value"><img class="proj-meta-logo" src="assets/logo-finrez.svg" alt="Finrez" decoding="async" /></span></div>
+ <div class="proj-meta-item"><span class="proj-meta-label">Year</span><span class="proj-meta-value">2026</span></div>
+ <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
+ </div>
+ </div>
 
-    <!-- ===================================================================
-         DRAFT COPY — written from the Figma design only.
-         Everything below describes what the screens show. It does NOT
-         contain the real project narrative: your actual role, the team,
-         timeline, research, tradeoffs, or outcomes/metrics.
-         Replace before removing the noindex tag in <head>.
-         =================================================================== -->
+ <!-- ===================================================================
+ DRAFT COPY. Product shots are rendered from the dashboard prototype.
+ Context through Summary keep the existing draft copy. Before / After and
+ Next Steps are new. Next Steps describes proposed work, not outcomes:
+ replace it with what actually shipped and how the club uses it, then
+ remove the noindex tag in <head>.
+ =================================================================== -->
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Context</h2>
-      <p class="proj-caption-body">An amateur rugby club runs on group chats, spreadsheets, and a coach chasing people for waivers. The Club Hub gives Union County Mudturtles RFC one screen for the thing that actually matters each week: who is playing on Saturday.</p>
-    </div>
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Context</h2>
+ <p class="proj-caption-body">An amateur rugby club runs on group chats, spreadsheets, and a coach chasing people for waivers. The Club Hub gives Union County Mudturtles RFC one screen for the thing that actually matters each week: who is playing on Saturday.</p>
+ </div>
 
-    <div class="proj-panel-new proj-panel--media" style="background:#000;">
-      <video src="assets/ucrfc-club-hub.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-ucrfc-club-hub.webp" aria-label="UCRFC Club Hub &mdash; season hub reel"></video>
-    </div>
+ <div class="proj-panel-new proj-panel--media" style="background:#000;">
+ <video src="assets/ucrfc-club-hub.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-ucrfc-club-hub.webp" aria-label="UCRFC Club Hub &mdash; season hub reel"></video>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Problem</h2>
-      <p class="proj-caption-body">Availability, paperwork, schedule, and results each lived somewhere different. Selection depended on a coach reconciling all of it by hand, and players had no single place to see where they stood.</p>
-    </div>
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Problem</h2>
+ <p class="proj-caption-body">Availability, paperwork, schedule, and results each lived somewhere different. Selection depended on a coach reconciling all of it by hand, and players had no single place to see where they stood.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Role &amp; Approach</h2>
-      <p class="proj-caption-body">A Finrez engagement, and the Club Hub is one piece of it. The same scope covered the club&rsquo;s brand guidelines, its public website, dues collection through Stripe, an SMS channel for match-week notices, and the integration with TeamSnap the club was already living in. Designing the hub after those decisions rather than before them is why it behaves like a front door instead of another destination: the fixture, the availability question and the paperwork are the only things it asks a player to deal with, and everything that already had a home &mdash; rosters, payments, messaging &mdash; stayed where it was and got surfaced.</p>
-    </div>
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-problem.webp" alt="Five separate cards from the Club Hub, scattered: paperwork checklist, upcoming fixtures, last result, season stats and registration." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">Paperwork, fixtures, results, stats and registration: five things a player used to look for in five places.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Process</h2>
-      <p class="proj-caption-body">The dashboard is organized around match week. The fixture leads &mdash; opponent, kickoff, ground, and arrival time &mdash; and the availability question sits directly under it as three buttons: In, Maybe, Out. Social proof (&ldquo;twenty-two others have answered&rdquo;) and a stated selection deadline do the chasing that a coach used to do manually. Around it sit the player&rsquo;s own season &mdash; tries, training percentage, caps &mdash; the last result, the next three fixtures with inline availability, and a paperwork checklist that shows what is on file against what is due.</p>
-    </div>
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Role &amp; Approach</h2>
+ <p class="proj-caption-body">A Finrez engagement, and the Club Hub is one piece of it. The same scope covered the club&rsquo;s brand guidelines, its public website, dues collection through Stripe, an SMS channel for match-week notices, and the integration with TeamSnap the club was already living in. Designing the hub after those decisions rather than before them is why it behaves like a front door instead of another destination: the fixture, the availability question and the paperwork are the only things it asks a player to deal with, and everything that already had a home &mdash; rosters, payments, messaging &mdash; stayed where it was and got surfaced.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">User Journey</h2>
-      <p class="proj-caption-body">A player signs in, sees the fixture, taps In, and clears whatever paperwork is outstanding &mdash; registration, medical waiver, concussion protocol, dues &mdash; without leaving the page. Role tabs for player, coach, and admin change what the same hub exposes.</p>
-    </div>
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-approach.webp" alt="Admin console showing the club alert composer for push and SMS, the dues outstanding list, and club health tiles." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">Admin console: SMS and push alerts, Stripe dues and club health, surfaced rather than rebuilt.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Constraints</h2>
-      <p class="proj-caption-body">The club is run by volunteers, which sets the ceiling on everything. Nothing here can require an administrator who is paid to maintain it, so the hub had to replace a coach&rsquo;s spreadsheet without becoming a second system he has to keep current. It also could not ask the club to abandon TeamSnap, which the squad already uses and which holds the roster of record &mdash; so the hub reads alongside it rather than competing with it. Dues run through Stripe for the same reason: money handled by a service the treasurer can audit without the club owning any of it. And a player&rsquo;s side of it has to work on a phone, one-handed, in the two minutes between a notification and putting the phone back in a pocket &mdash; which is the real constraint the availability question is designed against.</p>
-    </div>
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Process</h2>
+ <p class="proj-caption-body">The dashboard is organized around match week. The fixture leads &mdash; opponent, kickoff, ground, and arrival time &mdash; and the availability question sits directly under it as three buttons: In, Maybe, Out. Social proof (&ldquo;twenty-two others have answered&rdquo;) and a stated selection deadline do the chasing that a coach used to do manually. Around it sit the player&rsquo;s own season &mdash; tries, training percentage, caps &mdash; the last result, the next three fixtures with inline availability, and a paperwork checklist that shows what is on file against what is due.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">The Club Hub collapses a season&rsquo;s worth of admin into one dashboard, and makes the weekly availability question something a player answers in a single tap.</p>
-    </div>
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-process.webp" alt="Player home screen with the next fixture, In, Maybe and Out buttons, season stats, last result and upcoming fixtures." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">Player home: the fixture leads, and the availability question sits directly beneath it.</p>
+ </div>
 
-    <div class="proj-caption">
-      <h2 class="proj-caption-label">Next Steps</h2>
-      <p class="proj-caption-body">TODO &mdash; what shipped, whether the club is using it, and what is still open.</p>
-    </div>
-  </main>
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">User Journey</h2>
+ <p class="proj-caption-body">A player signs in, sees the fixture, taps In, and clears whatever paperwork is outstanding &mdash; registration, medical waiver, concussion protocol, dues &mdash; without leaving the page. Role tabs for player, coach, and admin change what the same hub exposes.</p>
+ </div>
+
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-journey.webp" alt="Three steps: the fixture with an In button, the paperwork checklist, and the coach view with confirmed, maybe, out and no-reply counts." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">From one tap on the fixture to the coach&rsquo;s count of who is in.</p>
+ </div>
+
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Constraints</h2>
+ <p class="proj-caption-body">The club is run by volunteers, which sets the ceiling on everything. Nothing here can require an administrator who is paid to maintain it, so the hub had to replace a coach&rsquo;s spreadsheet without becoming a second system he has to keep current. It also could not ask the club to abandon TeamSnap, which the squad already uses and which holds the roster of record &mdash; so the hub reads alongside it rather than competing with it. Dues run through Stripe for the same reason: money handled by a service the treasurer can audit without the club owning any of it. And a player&rsquo;s side of it has to work on a phone, one-handed, in the two minutes between a notification and putting the phone back in a pocket &mdash; which is the real constraint the availability question is designed against.</p>
+ </div>
+
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-constraints.webp" alt="Two phones showing the player home screen: the fixture with RSVP buttons, and the paperwork checklist further down." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">The player view on a phone: fixture and RSVP first, paperwork a scroll away.</p>
+ </div>
+
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Before / After</h2>
+ <p class="proj-caption-body">Before the hub, a match week was scattered across a group chat, a spreadsheet, a TeamSnap roster and whatever the treasurer knew about dues, and the coach opened all of them to work out who was actually playing. Now the coach desk opens on the answer: confirmed, maybe, out and no-reply counts across the top, availability by position underneath, and one Nudge button for everyone who has not responded. The same data feeds the matchday lineup, which suggests a starting fifteen from the confirmed players and publishes it to the squad.</p>
+ </div>
+
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-beforeafter.webp" alt="Coach desk availability table next to the matchday lineup with a starting fifteen on a pitch and the squad list." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">Coach desk and matchday lineup: availability in, selection out.</p>
+ </div>
+
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Summary</h2>
+ <p class="proj-caption-body">The Club Hub collapses a season&rsquo;s worth of admin into one dashboard, and makes the weekly availability question something a player answers in a single tap.</p>
+ </div>
+
+ <div class="proj-panel-group">
+ <div class="proj-panel-new proj-panel--dark proj-panel--media" style="background:#000;">
+ <img src="assets/ucrfc-club-hub-summary.webp" alt="The player fixture card, coach availability counts and admin club health tiles." width="1560" height="974" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; display:block;" />
+ </div>
+ <p class="proj-image-caption">One hub, three roles: player, coach and admin.</p>
+ </div>
+
+ <div class="proj-caption">
+ <h2 class="proj-caption-label">Next Steps</h2>
+ <p class="proj-caption-body">The screens are designed and prototyped; what comes next is putting them in front of the club. The proposed first step is a single match week with one squad, with RSVPs read from TeamSnap, dues status from Stripe and notices sent over SMS, so the coach can compare it against how selection works today. From there the open questions are ones only the club can answer: how many players respond before the Thursday deadline compared with the group chat, whether the treasurer trusts the dues view enough to stop keeping a separate list, and what the guardians of youth players need that adult players do not. Youth programs and guardian accounts are the largest piece still to design.</p>
+ </div>
+ </main>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">
