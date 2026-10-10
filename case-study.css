@@ -254,7 +254,7 @@
      loads first — anything set here would win on source order and undo it. */
   /* Extra bottom clearance so the last section clears the pinned Music Box
      (~116px tall incl. its offset) with a comfortable gap above it. */
-  padding: var(--page-top) var(--page-x) var(--page-bottom);
+  padding: var(--page-top) 0 var(--page-bottom);  /* no side padding — the column margin is the gutter, so content runs flush to it */
   display: flex;
   flex-direction: column;
   gap: 3rem;

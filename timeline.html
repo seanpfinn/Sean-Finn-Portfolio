@@ -30,7 +30,7 @@
 
     .tl-main {
       /* width and margins come from the shared column rule in styles.css */
-      padding: var(--page-top) var(--page-x) var(--page-bottom);
+      padding: var(--page-top) 0 var(--page-bottom);  /* no side padding — the column margin is the gutter, so content runs flush to it */
     }
     /* .tl-title runs at line-height:normal, which parks its cap 10.75px into
        the line box — twice the case-study title's 5px. Without this the page
