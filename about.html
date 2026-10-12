@@ -164,8 +164,34 @@
       pointer-events: none;
     }
 
+    /* ── Live 3D ───────────────────────────────────────────────────────
+       Items with a `model` swap the flown-in photo for a spinnable 3D object
+       once the flight lands. The photo stays underneath until the model has
+       rendered, so a slow network or missing WebGL just leaves the photo. */
+    .iso-zoom-live {
+      position: fixed;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      --iso-shadow-opacity: 0.22;
+      --iso-hint-bg: var(--bg-card);
+      --iso-hint-fg: var(--text);
+      --iso-focus: #FF401A;
+    }
+    .dark .iso-zoom-live { --iso-shadow-opacity: 0.55; }
+    .iso-zoom-live.is-live { opacity: 1; }
+    .iso-zoom-live::part(hint) {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.02rem;
+      border: 1px solid var(--border);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .iso-zoom-art.is-hidden { opacity: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease; }
+
     @media (prefers-reduced-motion: reduce) {
-      .iso-zoom-art, .iso-zoom-detail, .ab-wrap, .iso-zoom::before { transition: none; }
+      .iso-zoom-art, .iso-zoom-detail, .ab-wrap, .iso-zoom::before, .iso-zoom-live { transition: none; }
       .ab-wrap.is-zoomed { transform: none; filter: none; }
     }
 
@@ -344,7 +370,7 @@
   <p class="ab-hint" id="ab-hint">Drag to explore</p>
 
   <div class="iso-zoom" id="iso-zoom" role="dialog" aria-modal="true" aria-labelledby="iso-zoom-name" hidden>
-    <div class="iso-zoom-stage" id="iso-zoom-stage" aria-hidden="true"></div>
+    <div class="iso-zoom-stage" id="iso-zoom-stage"></div>
     <div class="iso-zoom-detail" id="iso-zoom-detail">
       <p class="iso-zoom-eyebrow" id="iso-zoom-eyebrow"></p>
       <h2 class="iso-zoom-name" id="iso-zoom-name"></h2>
@@ -383,7 +409,12 @@
       { emoji:'🏀', name:'Basketball',   desc:'Watching the Nets suffer. Hoping annually. Somehow still a fan.',                     top:'#FED7AA', left:'#F97316', right:'#7C2D12' },
       { emoji:'🏄', name:'Surfing',      desc:'Weekend trips to Rockaway. Never getting good. Always going back.',                   top:'#6EE7F7', left:'#0891B2', right:'#164E63' },
       { emoji:'🍺', name:'Craft Beer',   desc:'Sours, IPAs, and anything from Other Half. Brooklyn biased.',                         top:'#FDE68A', left:'#D97706', right:'#78350F' },
-      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.webp', top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
+      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.webp', top:'#FF6A57', left:'#E03A24', right:'#A5240F',
+        // Opens as a live 3D object: front/back photos extruded and sculpted
+        // from their relief maps (see lib/iso-object.js).
+        model:{ front:'assets/iso/switch-2-front.webp', relief:'assets/iso/switch-2.relief.json',
+                back:'assets/iso/switch-2-back.webp',   backRelief:'assets/iso/switch-2-back.relief.json',
+                depth:0.06, bevel:0.28, gloss:0.6, exposure:1.35, fit:1.15 } },
     ];
 
     // ── Geometry ────────────────────────────────────────────────────────────
@@ -564,13 +595,51 @@
     const zName    = document.getElementById('iso-zoom-name');
     const zDesc    = document.getElementById('iso-zoom-desc');
     const zClose   = document.getElementById('iso-zoom-close');
-    let zoomOpen = false, lastFocus = null;
+    let zoomOpen = false, lastFocus = null, liveTimer = 0;
+
+    // ── Live 3D ─────────────────────────────────────────────────────────────
+    // The component (and three.js behind it) loads only the first time a
+    // model opens, so the canvas itself stays as light as before.
+    let isoReady = null;
+    function loadIso() {
+      if (!isoReady) isoReady = import('./lib/iso-object.js').catch(() => (isoReady = null));
+      return isoReady;
+    }
+
+    function mountModel(m, cx, cy, art) {
+      const w = Math.min(window.innerWidth * 0.94, 760);
+      const h = Math.min(w * 0.66, window.innerHeight * 0.62);
+      const el = document.createElement('iso-object');
+      el.className = 'iso-zoom-live';
+      Object.assign(el.style, { left: (cx - w / 2) + 'px', top: (cy - h / 2) + 'px', width: w + 'px', height: h + 'px' });
+      el.setAttribute('src', m.front);
+      if (m.relief) el.setAttribute('relief-spec', m.relief);
+      if (m.back) el.setAttribute('back', m.back);
+      if (m.backRelief) el.setAttribute('back-relief-spec', m.backRelief);
+      for (const k of ['depth', 'bevel', 'gloss', 'exposure', 'fit']) if (m[k] != null) el.setAttribute(k, m[k]);
+      el.setAttribute('hint-idle', 'Click to spin');
+      el.setAttribute('hint-active', 'Drag to rotate');
+      el.setAttribute('aria-label', 'Interactive 3D model. Press Enter to spin, arrow keys to rotate.');
+      // Swap only once the model has actually rendered; otherwise keep the photo.
+      el.addEventListener('iso-ready', () => {
+        if (!zoomOpen || !el.isConnected) return;
+        requestAnimationFrame(() => {
+          el.classList.add('is-live');
+          art.classList.add('is-hidden');
+          setTimeout(() => { if (zoomOpen && el.isConnected) el.spin(); }, 260);
+        });
+      }, { once: true });
+      stage.appendChild(el);
+    }
 
     function closeZoom() {
       if (!zoomOpen) return;
       zoomOpen = false;
-      const art = stage.firstElementChild;
-      if (art) art.style.transform = '';        // flies back to where it started
+      clearTimeout(liveTimer);
+      const live = stage.querySelector('.iso-zoom-live');
+      if (live) live.classList.remove('is-live');  // fades out; removed with the stage below
+      const art = stage.querySelector('.iso-zoom-art');
+      if (art) { art.classList.remove('is-hidden'); art.style.transform = ''; }  // flies back to where it started
       zoom.classList.remove('is-open');
       wrap.classList.remove('is-zoomed');
       setTimeout(() => {
@@ -589,6 +658,7 @@
       const art = src.cloneNode(true);
       art.removeAttribute('style');
       art.classList.add('iso-zoom-art');
+      art.setAttribute('aria-hidden', 'true');
       art.style.left = r.left + 'px';
       art.style.top = r.top + 'px';
       art.style.width = r.width + 'px';
@@ -615,6 +685,15 @@
         art.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
       });
       if (zClose) zClose.focus();
+
+      if (it.model) {
+        const ready = loadIso();
+        liveTimer = setTimeout(() => {
+          ready.then((mod) => {
+            if (mod && zoomOpen && lastFocus === btn) mountModel(it.model, window.innerWidth / 2, window.innerHeight * 0.36, art);
+          });
+        }, 560);
+      }
     }
 
     field.addEventListener('keydown', (e) => {
