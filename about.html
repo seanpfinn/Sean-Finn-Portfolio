@@ -108,6 +108,13 @@
     }
     img.iso-zoom-art { border-radius: 0.75rem; object-fit: contain; }
 
+    /* An item with an `iso` config swaps its photo for a live <iso-object>
+       once the flight lands. It sits exactly where the photo ended up and the
+       two cross-fade, so the hand-off reads as the photo coming to life. */
+    .iso-zoom-3d { position: fixed; z-index: 1; display: block; opacity: 0; transition: opacity 0.35s ease; }
+    .iso-zoom-3d.is-shown { opacity: 1; }
+    .iso-zoom-art.is-handed-off { opacity: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease; }
+
     .iso-zoom-detail {
       position: absolute;
       left: 50%;
@@ -383,7 +390,12 @@
       { emoji:'🏀', name:'Basketball',   desc:'Watching the Nets suffer. Hoping annually. Somehow still a fan.',                     top:'#FED7AA', left:'#F97316', right:'#7C2D12' },
       { emoji:'🏄', name:'Surfing',      desc:'Weekend trips to Rockaway. Never getting good. Always going back.',                   top:'#6EE7F7', left:'#0891B2', right:'#164E63' },
       { emoji:'🍺', name:'Craft Beer',   desc:'Sours, IPAs, and anything from Other Half. Brooklyn biased.',                         top:'#FDE68A', left:'#D97706', right:'#78350F' },
-      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.webp', top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
+      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.webp',
+        // 3D object shown in the zoom view only; the canvas tiles keep the photo.
+        iso:{ src:'assets/switch-2/device.png', reliefSpec:'assets/switch-2/device.relief.json',
+              back:'assets/switch-2/device-back.png', backReliefSpec:'assets/switch-2/device-back.relief.json',
+              depth:'0.06', bevel:'0.28', gloss:'0.6', grid:true },
+        top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
     ];
 
     // ── Geometry ────────────────────────────────────────────────────────────
@@ -566,10 +578,55 @@
     const zClose   = document.getElementById('iso-zoom-close');
     let zoomOpen = false, lastFocus = null;
 
+    // ── 3D hand-off ──────────────────────────────────────────────────────
+    // The component is only fetched the first time a 3D item is opened, and
+    // only used if both the script and its front image load. Anything missing
+    // leaves the photo in place, so the zoom never shows an empty stage.
+    let isoReady = null, isoTimer = 0;
+    function loadIso(cfg) {
+      if (!isoReady) {
+        isoReady = import('./js/iso-object.js')
+          .then(() => Promise.race([
+            customElements.whenDefined('iso-object'),
+            new Promise((_, no) => setTimeout(no, 4000)),
+          ]))
+          .then(() => true, () => false);
+      }
+      return isoReady.then((ok) => ok && fetch(cfg.src, { method: 'HEAD' }).then((r) => r.ok, () => false));
+    }
+
+    function showIso(cfg, art) {
+      if (!zoomOpen || stage.firstElementChild !== art) return;
+      const r = art.getBoundingClientRect();
+      const el = document.createElement('iso-object');
+      el.className = 'iso-zoom-3d';
+      el.setAttribute('src', cfg.src);
+      if (cfg.reliefSpec)     el.setAttribute('relief-spec', cfg.reliefSpec);
+      if (cfg.back)           el.setAttribute('back', cfg.back);
+      if (cfg.backReliefSpec) el.setAttribute('back-relief-spec', cfg.backReliefSpec);
+      if (cfg.depth) el.setAttribute('depth', cfg.depth);
+      if (cfg.bevel) el.setAttribute('bevel', cfg.bevel);
+      if (cfg.gloss) el.setAttribute('gloss', cfg.gloss);
+      if (cfg.grid)  el.setAttribute('grid', '');
+      el.style.left = r.left + 'px';
+      el.style.top = r.top + 'px';
+      el.style.width = r.width + 'px';
+      el.style.height = r.height + 'px';
+      stage.appendChild(el);
+      requestAnimationFrame(() => {
+        el.classList.add('is-shown');
+        art.classList.add('is-handed-off');
+      });
+    }
+
     function closeZoom() {
       if (!zoomOpen) return;
       zoomOpen = false;
       const art = stage.firstElementChild;
+      clearTimeout(isoTimer);
+      const iso = stage.querySelector('.iso-zoom-3d');
+      if (iso) iso.remove();
+      if (art) art.classList.remove('is-handed-off');
       if (art) art.style.transform = '';        // flies back to where it started
       zoom.classList.remove('is-open');
       wrap.classList.remove('is-zoomed');
@@ -614,6 +671,11 @@
         zoom.classList.add('is-open');
         art.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
       });
+      if (it.iso) {
+        // Wait for both the flight (0.62s) and the component, then hand off.
+        const landed = new Promise((ok) => { isoTimer = setTimeout(ok, 660); });
+        Promise.all([loadIso(it.iso), landed]).then(([ok]) => { if (ok) showIso(it.iso, art); });
+      }
       if (zClose) zClose.focus();
     }
 
