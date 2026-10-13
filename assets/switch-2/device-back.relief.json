@@ -1,0 +1,24 @@
+{
+  "size": [750, 422],
+  "shapes": [
+    { "label": "left grip",  "kind": "rect", "x": 162, "y": 121, "w": 56, "h": 177, "r": 28, "profile": "pillow", "height": 0.14, "edge": 14 },
+    { "label": "right grip", "kind": "rect", "x": 531, "y": 121, "w": 57, "h": 177, "r": 28, "profile": "pillow", "height": 0.14, "edge": 14 },
+    { "label": "left trigger (ZL)",  "kind": "rect", "x": 163, "y": 121, "w": 52, "h": 40, "r": 18, "profile": "pillow", "height": 0.30, "edge": 6 },
+    { "label": "right trigger (ZR)", "kind": "rect", "x": 535, "y": 121, "w": 52, "h": 40, "r": 18, "profile": "pillow", "height": 0.30, "edge": 6 },
+    { "label": "left trigger nub",  "kind": "rect", "x": 201, "y": 145, "w": 14, "h": 11, "r": 2, "profile": "button", "height": 0.12 },
+    { "label": "right trigger nub", "kind": "rect", "x": 535, "y": 145, "w": 14, "h": 11, "r": 2, "profile": "button", "height": 0.12 },
+    { "label": "left rail seam",  "kind": "line", "x1": 218, "y1": 122, "x2": 218, "y2": 297, "width": 2, "profile": "groove", "height": 0.10 },
+    { "label": "right rail seam", "kind": "line", "x1": 530, "y1": 122, "x2": 530, "y2": 297, "width": 2, "profile": "groove", "height": 0.10 },
+    { "label": "top vent", "kind": "pill", "x": 247, "y": 125, "w": 38, "h": 5, "profile": "recess", "height": 0.10 },
+    { "label": "left speaker",  "kind": "pill", "x": 205, "y": 176, "w": 6, "h": 22, "profile": "recess", "height": 0.06 },
+    { "label": "right speaker", "kind": "pill", "x": 538, "y": 176, "w": 6, "h": 22, "profile": "recess", "height": 0.06 },
+    { "label": "kickstand panel", "kind": "rect", "x": 235, "y": 209, "w": 282, "h": 83, "r": 4, "profile": "plateau", "height": 0.04, "edge": 1.5 },
+    { "label": "kickstand outer left",  "kind": "line", "x1": 236, "y1": 210, "x2": 236, "y2": 291, "width": 1.5, "profile": "groove", "height": 0.10 },
+    { "label": "kickstand outer right", "kind": "line", "x1": 516, "y1": 210, "x2": 516, "y2": 291, "width": 1.5, "profile": "groove", "height": 0.10 },
+    { "label": "kickstand bottom",      "kind": "line", "x1": 236, "y1": 291, "x2": 516, "y2": 291, "width": 1.5, "profile": "groove", "height": 0.10 },
+    { "label": "kickstand inner left",  "kind": "line", "x1": 252, "y1": 210, "x2": 252, "y2": 284, "width": 1.5, "profile": "groove", "height": 0.08 },
+    { "label": "kickstand inner right", "kind": "line", "x1": 500, "y1": 210, "x2": 500, "y2": 284, "width": 1.5, "profile": "groove", "height": 0.08 },
+    { "label": "kickstand top left",    "kind": "line", "x1": 236, "y1": 210, "x2": 252, "y2": 210, "width": 1.5, "profile": "groove", "height": 0.08 },
+    { "label": "kickstand top right",   "kind": "line", "x1": 500, "y1": 210, "x2": 516, "y2": 210, "width": 1.5, "profile": "groove", "height": 0.08 }
+  ]
+}
