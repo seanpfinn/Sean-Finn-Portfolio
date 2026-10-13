@@ -67,6 +67,9 @@
     .iso-photo {
       display: block;
       width: calc(7.5rem * var(--w, 1));
+      /* styles.css caps images at 100% of their parent; the tile button is
+         only as wide as its label, which shrank the Switch to ~55px. */
+      max-width: none;
       height: auto;
       border-radius: 0.5rem;
       pointer-events: none;
@@ -127,7 +130,7 @@
     .iso-zoom-detail {
       position: absolute;
       left: 50%;
-      bottom: max(2rem, 5vh);
+      bottom: 12vh;
       transform: translate(-50%, 0.75rem);
       width: min(28rem, calc(100vw - 2.5rem));
       text-align: center;
@@ -645,22 +648,18 @@
 
     // Where the live object's frame sits on screen. Its still (the tile
     // image) is a crop of that frame, so the still lands inside it exactly.
-    // Sized by the device rather than the frame. The device gets the full
-    // width it can (about 1,140px on a laptop) and everything above the
-    // description panel, which sits low on the screen while an object is open.
-    // The frame around it is transparent and may run past the screen edges.
+    // Sized by the device rather than the frame: the frame is grown until the
+    // device (the `crop` region) is about 760px wide on a laptop, and placed so
+    // the device, not the empty frame around it, is centred above the text.
+    // The frame may run past the top of the screen; it is transparent.
     function isoBox(cfg) {
       const a = cfg.aspect || 4 / 3;
       const [fx, fy, fw, fh] = cfg.crop || [0, 0, 1, 1];
       const vw = window.innerWidth, vh = window.innerHeight;
-      const ratio = (fw * a) / fh;                        // device width ÷ height
-      const top = vh * 0.04;
-      const avail = vh - top - 165;                       // room above the text
-      let dw = Math.min(vw * (vw < 700 ? 1 : 0.96), 1140);
-      let dh = dw / ratio;
-      if (dh > avail) { dh = avail; dw = dh * ratio; }
-      const bw = dw / fw, h = bw / a;
-      const cx = vw / 2, cy = top + avail / 2;            // device centre
+      let bw = Math.min(vw * 0.96, 920);
+      let h = bw / a;
+      if (h * fh > vh * 0.52) { h = (vh * 0.52) / fh; bw = h * a; }   // device ≤ 52% of the screen height
+      const cx = vw / 2, cy = vh * 0.36;                                  // device centre
       return {
         left: cx - bw * (fx + fw / 2),
         top: cy - h * (fy + fh / 2),
