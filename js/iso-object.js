@@ -31,7 +31,8 @@
  *   hint-idle / hint-active   custom pill text for the resting and rotating states
  *
  * Events: "iso-ready" (detail: body, reliefFeatures, reliefSource), "iso-rotate" (detail: {yaw, pitch} in degrees), "iso-mode".
- * Methods: spin(), reset().
+ * Methods: spin(), reset(), setPose(yawDeg, pitchDeg), getPose(),
+ *          exportPNG({ yaw, pitch, width, height, shadow, grid }) → Promise<Blob> (transparent PNG).
  * Styling: --iso-grid-color, --iso-shadow-opacity, ::part(hint).
  */
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
@@ -940,6 +941,13 @@ class IsoObject extends HTMLElement {
       this.mesh = new THREE.Mesh(geo, [frontMat, backMat, sideMat]);
       this.mesh.castShadow = true;
       this.pivot.add(this.mesh);
+      // Start exactly at the resting pose (no spring-in), so a page can hand off from a
+      // still render of this pose without a visible jump.
+      if (!this._posed) {
+        this._posed = true;
+        this._yaw = this.num('yaw', 22) * DEG; this._pitch = 0; this._t = 0;
+        this._clock?.getDelta();
+      }
 
       // Relief: the front surface rises and recesses where the photo shows buttons, sticks and a screen.
       const reliefStrength = Math.max(0, this.num('relief', 1));
@@ -1044,6 +1052,16 @@ class IsoObject extends HTMLElement {
     if (!this.renderer) return;
     const w = this.clientWidth || 1, h = this.clientHeight || 1;
     this.renderer.setSize(w, h, false);
+    this._frameCamera(w, h);
+    this.renderer.toneMappingExposure = this.num('exposure', 1.05);
+    const css = getComputedStyle(this);
+    const gc = css.getPropertyValue('--iso-grid-color').trim();
+    if (gc) this._gridUniforms.uColor.value.set(gc);
+    const so = parseFloat(css.getPropertyValue('--iso-shadow-opacity'));
+    if (Number.isFinite(so)) this._floor.material.opacity = so;
+  }
+
+  _frameCamera(w, h) {
     const r = this._radius || 1.2;
     const aspect = w / h;
     const half = Math.max(r * 1.0, (r * 1.28) / aspect) / Math.max(0.3, this.num('fit', 1));
@@ -1054,12 +1072,63 @@ class IsoObject extends HTMLElement {
     cam.position.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(20).add(target);
     cam.lookAt(target);
     cam.updateProjectionMatrix();
-    this.renderer.toneMappingExposure = this.num('exposure', 1.05);
-    const css = getComputedStyle(this);
-    const gc = css.getPropertyValue('--iso-grid-color').trim();
-    if (gc) this._gridUniforms.uColor.value.set(gc);
-    const so = parseFloat(css.getPropertyValue('--iso-shadow-opacity'));
-    if (Number.isFinite(so)) this._floor.material.opacity = so;
+  }
+
+  /* ---------- pose + export ---------- */
+
+  /** Hold the object at a yaw/pitch (degrees) until the viewer moves it or it is reset. */
+  setPose(yawDeg, pitchDeg = 0) {
+    this._vel = 0;
+    this._yaw = yawDeg * DEG;
+    this._pitch = Math.max(-0.6, Math.min(0.6, pitchDeg * DEG));
+    this._hold = true;
+    this._setMode('active');
+  }
+
+  /** Current pose in degrees: yaw 0–360, pitch (positive tilts the top toward the viewer). */
+  getPose() {
+    return { yaw: ((this._yaw / DEG) % 360 + 360) % 360, pitch: this._pitch / DEG };
+  }
+
+  /**
+   * Render the object at a pose to a PNG with a transparent background.
+   *   exportPNG({ yaw, pitch, width = 2400, height = 1500, shadow = true, grid = false }) → Promise<Blob>
+   * yaw/pitch default to the current pose. Size is in pixels (capped at 4096 per side); the
+   * framing matches what the element shows at that aspect ratio. The on-screen view is untouched.
+   */
+  async exportPNG({ yaw, pitch, width = 2400, height = 1500, shadow = true, grid = false } = {}) {
+    if (!this.mesh) await new Promise((ok) => this.addEventListener('iso-ready', ok, { once: true }));
+    const R = this.renderer, cap = Math.min(4096, R.capabilities.maxTextureSize || 4096);
+    const W = Math.max(16, Math.min(cap, Math.round(width))), H = Math.max(16, Math.min(cap, Math.round(height)));
+    const pose = this.getPose();
+    const y = (yaw ?? pose.yaw) * DEG, p = Math.max(-0.6, Math.min(0.6, (pitch ?? pose.pitch) * DEG));
+    const saved = {
+      ratio: R.getPixelRatio(), rot: this.pivot.rotation.clone(), bob: this.bob.position.y,
+      floor: this._floor.visible, grid: this._grid.visible, shift: this._sheenUniforms?.uShift.value,
+    };
+    try {
+      R.setPixelRatio(1);
+      R.setSize(W, H, false);
+      this._frameCamera(W, H);
+      this.pivot.rotation.set(p, y, 0, 'YXZ');
+      this.bob.position.y = 0;
+      this._floor.visible = shadow;
+      this._grid.visible = grid;
+      if (this._sheenUniforms) this._sheenUniforms.uShift.value = 0.18 + (y - this.num('yaw', 22) * DEG) * 0.55 + p * 0.3;
+      R.render(this.scene, this.camera);
+      // toBlob snapshots the drawing buffer synchronously, before the browser can clear it.
+      const blob = await new Promise((ok, no) => R.domElement.toBlob((b) => (b ? ok(b) : no(new Error('PNG encoding failed'))), 'image/png'));
+      return blob;
+    } finally {
+      R.setPixelRatio(saved.ratio);
+      this.pivot.rotation.copy(saved.rot);
+      this.bob.position.y = saved.bob;
+      this._floor.visible = saved.floor;
+      this._grid.visible = saved.grid;
+      if (this._sheenUniforms) this._sheenUniforms.uShift.value = saved.shift;
+      this._resize();
+      R.render(this.scene, this.camera);
+    }
   }
 
   /* ---------- interaction ---------- */
@@ -1076,12 +1145,13 @@ class IsoObject extends HTMLElement {
 
   spin() {
     this._spinFrom = this._yaw; this._spinT = 0; this._vel = 0;
+    this._hold = false;
     this._lastInput = this._t;
     if (this._reduced) { this._setMode('active'); return; }
     this._setMode('spin');
   }
 
-  reset() { this._vel = 0; this._setMode('idle'); }
+  reset() { this._vel = 0; this._hold = false; this._setMode('idle'); }
 
   _bindInput() {
     let down = null, last = null;
@@ -1110,6 +1180,7 @@ class IsoObject extends HTMLElement {
       this._vel = this._vel * 0.6 + ((dx * s) / dt) * 0.4;
       last = { x: e.clientX, y: e.clientY, t: now };
       this._lastInput = this._t;
+      this._hold = false;
     });
     const end = (e) => {
       if (!down || e.pointerId !== down.id) return;
@@ -1164,7 +1235,7 @@ class IsoObject extends HTMLElement {
         this._yaw += this._vel * dt;
         this._vel *= Math.exp(-dt * 2.2);
       }
-      if (t - this._lastInput > 7 && Math.abs(this._vel) < 0.05) this.reset();
+      if (!this._hold && t - this._lastInput > 7 && Math.abs(this._vel) < 0.05) this.reset();
     }
 
     this.pivot.rotation.set(this._pitch, this._yaw, 0, 'YXZ');

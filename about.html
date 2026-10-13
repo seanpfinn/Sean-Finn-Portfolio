@@ -66,7 +66,7 @@
        render at its natural pixel size. */
     .iso-photo {
       display: block;
-      width: 7.5rem;
+      width: calc(7.5rem * var(--w, 1));
       height: auto;
       border-radius: 0.5rem;
       pointer-events: none;
@@ -108,48 +108,36 @@
     }
     img.iso-zoom-art { border-radius: 0.75rem; object-fit: contain; }
 
-    /* An item with an `iso` config hands its photo off to a live <iso-object>.
-       The component sits underneath at its final size from the start; the
-       photo lands on the device's footprint and the two cross-fade, in both
-       directions. The mask dissolves the floor grid into the page so there is
-       no box edge. */
-    /* The photo and the model are different shots, so a straight cross-fade
-       shows two outlines. A short blur dissolve hides that: the photo softens
-       out as the model sharpens in from a touch smaller, which reads as one
-       object resolving rather than a swap. */
-    .iso-zoom-art {
-      transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, filter 0.55s ease;
-    }
-    .iso-zoom-art.is-handed-off { opacity: 0; filter: blur(12px); }
+    /* An item with an `iso` config swaps its photo for a live <iso-object>
+       once the flight lands. It sits exactly where the photo ended up and the
+       two cross-fade, so the hand-off reads as the photo coming to life. */
+    /* The tile image is a still render of this same object in its resting
+       pose, so the swap is instant: nothing changes on screen until it spins.
+       Closing fades back the other way while the still flies home. */
     .iso-zoom-3d {
-      position: fixed;
-      z-index: 1;
-      display: block;
-      opacity: 0;
-      filter: blur(12px);
-      transform: scale(0.96);
-      transition: opacity 0.6s ease, filter 0.6s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-      -webkit-mask-image: var(--iso-mask);
-      mask-image: var(--iso-mask);
+      position: fixed; z-index: 1; display: block; opacity: 0;
+      transition: opacity 0.25s ease;
+      --iso-focus: #FF401A;
     }
-    .iso-zoom-3d.is-shown { opacity: 1; filter: none; transform: none; }
-    @media (prefers-reduced-motion: reduce) {
-      .iso-zoom-3d, .iso-zoom-art.is-handed-off { transition: opacity 0.2s linear; filter: none; transform: none; }
-    }
+    .iso-zoom-3d.is-shown { opacity: 1; transition: none; }
+    .iso-zoom-3d:not(.is-shown) { pointer-events: none; }
     /* The component's hint is a dark pill by default. Here it matches the
        page's own "Drag to explore" line: small mono text, no chrome, sitting
        just under the device. */
     .iso-zoom-3d::part(hint) {
       background: none;
+      border: 0;
       -webkit-backdrop-filter: none;
       backdrop-filter: none;
       padding: 0;
       gap: 0.375rem;
-      bottom: var(--iso-hint-bottom, 0);
+      bottom: var(--iso-hint-bottom, 14px);
       font: 400 0.6875rem/1 var(--mono);
       letter-spacing: 0;
       color: var(--text-dim);
     }
+    img.iso-zoom-art[data-iso] { border-radius: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease; }
+    .iso-zoom-art.is-handed-off { opacity: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1); }
 
     .iso-zoom-detail {
       position: absolute;
@@ -227,7 +215,7 @@
 
     @media (max-width: 50.5625rem) {
       .iso-svg { width: 5rem; }
-      .iso-photo { width: 5.75rem; }
+      .iso-photo { width: calc(5.75rem * var(--w, 1)); }
       .ab-hint { bottom: 7.5rem; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -424,14 +412,15 @@
       { emoji:'🏀', name:'Basketball',   desc:'Watching the Nets suffer. Hoping annually. Somehow still a fan.',                     top:'#FED7AA', left:'#F97316', right:'#7C2D12' },
       { emoji:'🏄', name:'Surfing',      desc:'Weekend trips to Rockaway. Never getting good. Always going back.',                   top:'#6EE7F7', left:'#0891B2', right:'#164E63' },
       { emoji:'🍺', name:'Craft Beer',   desc:'Sours, IPAs, and anything from Other Half. Brooklyn biased.',                         top:'#FDE68A', left:'#D97706', right:'#78350F' },
-      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/canvas-switch-2.webp',
-        // 3D object shown in the zoom view only; the canvas tiles keep the photo.
+      { emoji:'🎮', name:'Switch 2',     desc:'Handheld gaming, mostly on the subway. The one console that actually leaves the apartment.', img:'assets/switch-2/canvas.webp', imgScale:1.35,
+        // The tile is a still render of the 3D object at rest (rendered at
+        // 640×480 with the settings below, then cropped to `crop`, given as
+        // x, y, w, h fractions of that frame). The zoom flies the still into
+        // place and swaps in the live object, which then spins.
         iso:{ src:'assets/switch-2/device.png', reliefSpec:'assets/switch-2/device.relief.json',
               back:'assets/switch-2/device-back.png', backReliefSpec:'assets/switch-2/device-back.relief.json',
-              depth:'0.06', bevel:'0.28', gloss:'0.6', grid:true,
-              // camera mirrored from the default so the device tilts up to the
-              // right like the canvas photo it replaces
-              azimuth:'-45', yaw:'-30', elevation:'42' },
+              depth:'0.06', bevel:'0.28', gloss:'0.6', exposure:'1.3', fit:'1.0',
+              aspect:4 / 3, crop:[0.15375, 0.1775, 0.82375, 0.66833] },
         top:'#FF6A57', left:'#E03A24', right:'#A5240F' },
     ];
 
@@ -516,6 +505,7 @@
           // onerror swaps in the cube, so the canvas never shows a broken image.
           (it.img
             ? '<img class="iso-photo" src="' + it.img + '" alt="" decoding="async"' +
+              (it.imgScale ? ' style="--w:' + it.imgScale + '"' : '') +
               ' onerror="this.outerHTML=\'<svg class=\\\'iso-svg\\\' viewBox=\\\'0 0 120 106\\\'>' +
               '<use href=\\\'#iso-cube-' + i + '\\\'/></svg>\'" />'
             : '<svg class="iso-svg" viewBox="0 0 120 106" aria-hidden="true">' +
@@ -615,25 +605,23 @@
     let zoomOpen = false, lastFocus = null;
 
     // ── 3D hand-off ──────────────────────────────────────────────────────
-    // An item with an `iso` config lands as a live <iso-object> instead of a
-    // photo. The component is built hidden the moment the item is clicked, at
-    // its final size, so it is ready by the time the photo arrives. The photo
-    // flies to exactly where the device will sit and the two cross-fade there.
-    // If the script or images fail, the photo simply stays.
+    // The component is only fetched the first time a 3D item is opened, and
+    // only used if both the script and its front image load. Anything missing
+    // leaves the photo in place, so the zoom never shows an empty stage.
     let isoReady = null, isoTimer = 0;
     function loadIso(cfg) {
       if (!isoReady) {
         isoReady = import('./js/iso-object.js')
           .then(() => Promise.race([
             customElements.whenDefined('iso-object'),
-            new Promise((_, no) => setTimeout(no, 6000)),
+            new Promise((_, no) => setTimeout(no, 4000)),
           ]))
           .then(() => true, () => false);
       }
       return isoReady.then((ok) => ok && fetch(cfg.src, { method: 'HEAD' }).then((r) => r.ok, () => false));
     }
-    // Fetch the component in the background once the canvas has settled, so
-    // even the first open usually has it ready.
+    // Fetch the component once the canvas has settled, so even the first
+    // open has it ready by the time the still lands.
     const isoItem = ITEMS.find((it) => it.iso);
     if (isoItem) {
       const warm = () => loadIso(isoItem.iso);
@@ -641,70 +629,66 @@
       else setTimeout(warm, 2500);
     }
 
-    // Where the 3D device lands. Measured from the component in this pose: at
-    // fit 1 in a box at least 1.28:1, the device spans 0.846 × the box height
-    // and sits 4.8% of the box height above its middle (0.714 tall per unit
-    // wide). Re-measure if the pose attributes change.
-    function isoLayout() {
+    // Where the live object's frame sits on screen. Its still (the tile
+    // image) is a crop of that frame, so the still lands inside it exactly.
+    // Sized by the device rather than the frame: the frame is grown until the
+    // device (the `crop` region) is about 760px wide on a laptop, and placed so
+    // the device, not the empty frame around it, is centred above the text.
+    // The frame may run past the top of the screen; it is transparent.
+    function isoBox(cfg) {
+      const a = cfg.aspect || 4 / 3;
+      const [fx, fy, fw, fh] = cfg.crop || [0, 0, 1, 1];
       const vw = window.innerWidth, vh = window.innerHeight;
-      const D = Math.min(vw * 0.82, 760, (vh * 0.56) / 0.714);   // device width
-      const cx = vw / 2, cy = vh * 0.37;                             // device centre
-      // The box may run past the screen edges; the mask fades it out well
-      // inside, and this keeps it wider than 1.28:1 so the framing below holds.
-      const W = D * 1.9;
-      const H = Math.min(vh, D * 1.15);
-      const fit = (W / H >= 1.28) ? D / (0.846 * H) : D / (0.661 * W);
+      let bw = Math.min(vw * 0.96, 920);
+      let h = bw / a;
+      if (h * fh > vh * 0.52) { h = (vh * 0.52) / fh; bw = h * a; }   // device ≤ 52% of the screen height
+      const cx = vw / 2, cy = vh * 0.36;                                  // device centre
       return {
-        D, cx, cy, fit,
-        box: { left: cx - W / 2, top: cy - H / 2 + 0.048 * H, width: W, height: H },
-        // fade the grid out well before the box edge, centred on the device
-        mask: (() => {
-          const x = W / 2, y = H / 2 - 0.048 * H + D * 0.06;
-          return { x, y, rx: Math.min(D * 0.98, x), ry: Math.min(D * 0.72, y, H - y) };
-        })(),
-        origin: { x: W / 2, y: H / 2 - 0.048 * H },
-        hintBottom: Math.max(8, H / 2 + 0.048 * H - D * 0.357 - 36),
+        left: cx - bw * (fx + fw / 2),
+        top: cy - h * (fy + fh / 2),
+        width: bw,
+        height: h,
+        hintBottom: h * (1 - fy - fh) - 22,                                // just under the device
       };
     }
 
-    function buildIso(cfg, L) {
+    function showIso(cfg, art, landed) {
+      if (!zoomOpen || stage.firstElementChild !== art) return;
+      const box = isoBox(cfg);
       const el = document.createElement('iso-object');
       el.className = 'iso-zoom-3d';
       el.setAttribute('src', cfg.src);
       if (cfg.reliefSpec)     el.setAttribute('relief-spec', cfg.reliefSpec);
       if (cfg.back)           el.setAttribute('back', cfg.back);
       if (cfg.backReliefSpec) el.setAttribute('back-relief-spec', cfg.backReliefSpec);
-      if (cfg.depth) el.setAttribute('depth', cfg.depth);
-      if (cfg.bevel) el.setAttribute('bevel', cfg.bevel);
-      if (cfg.gloss) el.setAttribute('gloss', cfg.gloss);
-      if (cfg.grid)  el.setAttribute('grid', '');
-      if (cfg.azimuth)   el.setAttribute('azimuth', cfg.azimuth);
-      if (cfg.yaw)       el.setAttribute('yaw', cfg.yaw);
-      if (cfg.elevation) el.setAttribute('elevation', cfg.elevation);
-      el.setAttribute('fit', L.fit.toFixed(3));
+      for (const k of ['depth', 'bevel', 'gloss', 'exposure', 'fit']) if (cfg[k]) el.setAttribute(k, cfg[k]);
       el.setAttribute('hint-idle', 'Click to spin');
       el.setAttribute('hint-active', 'Drag to rotate');
-      const b = L.box, m = L.mask;
-      el.style.left = b.left + 'px';
-      el.style.top = b.top + 'px';
-      el.style.width = b.width + 'px';
-      el.style.height = b.height + 'px';
-      el.style.setProperty('--iso-mask',
-        'radial-gradient(' + m.rx + 'px ' + m.ry + 'px at ' + m.x + 'px ' + m.y + 'px, #000 68%, transparent 100%)');
-      el.style.setProperty('--iso-hint-bottom', L.hintBottom + 'px');
-      el.style.transformOrigin = L.origin.x + 'px ' + L.origin.y + 'px';
-      return el;
+      el.style.left = box.left + 'px';
+      el.style.top = box.top + 'px';
+      el.style.width = box.width + 'px';
+      el.style.height = box.height + 'px';
+      el.style.setProperty('--iso-hint-bottom', Math.max(8, box.hintBottom) + 'px');
+      // The object builds (hidden) while the still is in flight. Swap once it
+      // has drawn a frame and the still has landed, then let it come alive.
+      const drawn = new Promise((ok) => el.addEventListener('iso-ready', () =>
+        requestAnimationFrame(() => requestAnimationFrame(ok)), { once: true }));
+      Promise.all([drawn, landed]).then(() => {
+        if (!zoomOpen || !el.isConnected) return;
+        el.classList.add('is-shown');
+        art.classList.add('is-handed-off');
+        setTimeout(() => { if (zoomOpen && el.isConnected) el.spin(); }, 180);
+      });
+      stage.appendChild(el);
     }
 
     function closeZoom() {
       if (!zoomOpen) return;
       zoomOpen = false;
-      const art = stage.querySelector('.iso-zoom-art');
+      const art = stage.firstElementChild;
       clearTimeout(isoTimer);
-      // The 3D object fades out while the photo fades back in and flies home,
-      // the same cross-fade as the way in, reversed.
       const iso = stage.querySelector('.iso-zoom-3d');
-      if (iso) iso.classList.remove('is-shown');
+      if (iso) iso.classList.remove('is-shown');   // fades out; cleared with the stage
       if (art) art.classList.remove('is-handed-off');
       if (art) art.style.transform = '';        // flies back to where it started
       zoom.classList.remove('is-open');
@@ -739,39 +723,29 @@
       zoomOpen = true;
       lastFocus = btn;
 
-      // 3D items fly to the device's footprint; everything else keeps the
-      // original framing.
-      const L = it.iso ? isoLayout() : null;
-      const targetW = L ? L.D : Math.min(window.innerWidth * 0.72, 544);
-      const tx = L ? L.cx : window.innerWidth / 2;
-      const ty = L ? L.cy : window.innerHeight * 0.36;
+      let targetW = Math.min(window.innerWidth * 0.72, 544);
+      let cx = window.innerWidth / 2, cy = window.innerHeight * 0.36;
+      if (it.iso && it.iso.crop) {
+        // Land the still exactly where it sits inside the live object's frame.
+        const box = isoBox(it.iso), [fx, fy, fw, fh] = it.iso.crop;
+        targetW = box.width * fw;
+        cx = box.left + box.width * (fx + fw / 2);
+        cy = box.top + box.height * (fy + fh / 2);
+        art.dataset.iso = '';
+      }
       const scale = targetW / r.width;
-      const dx = tx - (r.left + r.width / 2);
-      const dy = ty - (r.top + r.height / 2);
+      const dx = cx - (r.left + r.width / 2);
+      const dy = cy - (r.top + r.height / 2);
 
       requestAnimationFrame(() => {
         wrap.classList.add('is-zoomed');
         zoom.classList.add('is-open');
         art.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
       });
-
-      if (L) {
-        let el = null, built = false;
-        const landed = new Promise((ok) => { isoTimer = setTimeout(ok, 360); });
-        loadIso(it.iso).then((ok) => {
-          if (!ok || !zoomOpen || !art.isConnected) return;
-          el = buildIso(it.iso, L);
-          stage.insertBefore(el, art);
-          // Wait for the first rendered frame, not just the script.
-          return new Promise((done) => {
-            el.addEventListener('iso-ready', () => requestAnimationFrame(() => requestAnimationFrame(done)), { once: true });
-            setTimeout(done, 5000);
-          }).then(() => { built = true; });
-        }).then(() => landed).then(() => {
-          if (!built || !zoomOpen || !el || !el.isConnected) return;
-          el.classList.add('is-shown');
-          art.classList.add('is-handed-off');
-        });
+      if (it.iso) {
+        // Wait for both the flight (0.62s) and the component, then hand off.
+        const landed = new Promise((ok) => { isoTimer = setTimeout(ok, 660); });
+        loadIso(it.iso).then((ok) => { if (ok) showIso(it.iso, art, landed); });
       }
       if (zClose) zClose.focus();
     }
