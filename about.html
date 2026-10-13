@@ -121,21 +121,6 @@
     }
     .iso-zoom-3d.is-shown { opacity: 1; transition: none; }
     .iso-zoom-3d:not(.is-shown) { pointer-events: none; }
-    /* The component's hint is a dark pill by default. Here it matches the
-       page's own "Drag to explore" line: small mono text, no chrome, sitting
-       just under the device. */
-    .iso-zoom-3d::part(hint) {
-      background: none;
-      border: 0;
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-      padding: 0;
-      gap: 0.375rem;
-      bottom: var(--iso-hint-bottom, 14px);
-      font: 400 0.6875rem/1 var(--mono);
-      letter-spacing: 0;
-      color: var(--text-dim);
-    }
     img.iso-zoom-art[data-iso] { border-radius: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease; }
     .iso-zoom-art.is-handed-off { opacity: 0; transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1); }
 
@@ -168,18 +153,45 @@
       margin: 0.5rem 0 0;
     }
     .iso-zoom-close {
-      margin-top: 1.25rem;
-      padding: 0.4375rem 1rem;
-      font-family: var(--mono);
-      font-size: 0.75rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0;
       color: var(--text);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 999px;
+      background: none;
+      border: 0;
+      border-radius: 50%;
       cursor: pointer;
-      transition: background 0.15s ease;
+      opacity: 0;
+      transition: opacity 0.3s ease 0.2s, background 0.15s ease;
     }
+    .iso-zoom.is-open .iso-zoom-close { opacity: 1; }
+    /* The nav steps aside while an object is open, so the X is the only
+       control in the corner. */
+    .splash-nav { transition: opacity 0.3s ease; }
+    body.is-iso-zoomed .splash-nav { opacity: 0; pointer-events: none; }
+    body.is-iso-zoomed .splash-nav * { pointer-events: none !important; }
     .iso-zoom-close:hover { background: var(--badge-bg); }
+    .iso-zoom-close:focus-visible { outline: 2px solid #FF401A; outline-offset: 2px; }
+    /* The live object sits above the zoom layer so it can fly out of the
+       canvas tile; it flies on the same curve as everything else. */
+    .iso-live {
+      position: fixed;
+      z-index: 501;
+      display: block;
+      left: -99999px;
+      opacity: 0;
+      pointer-events: none;
+      transform-origin: 0 0;
+      --iso-focus: #FF401A;
+      transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .iso-live.is-live { pointer-events: auto; }
 
     /* The whoosh: the whole canvas pushes past the viewer and blurs out. */
     .ab-wrap {
@@ -375,10 +387,12 @@
 
   <div class="iso-zoom" id="iso-zoom" role="dialog" aria-modal="true" aria-labelledby="iso-zoom-name" hidden>
     <div class="iso-zoom-stage" id="iso-zoom-stage" aria-hidden="true"></div>
+    <button class="iso-zoom-close" id="iso-zoom-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
     <div class="iso-zoom-detail" id="iso-zoom-detail">
       <h2 class="iso-zoom-name" id="iso-zoom-name"></h2>
       <p class="iso-zoom-desc" id="iso-zoom-desc"></p>
-      <button class="iso-zoom-close" id="iso-zoom-close" type="button">Close</button>
     </div>
   </div>
 
@@ -624,7 +638,7 @@
     // open has it ready by the time the still lands.
     const isoItem = ITEMS.find((it) => it.iso);
     if (isoItem) {
-      const warm = () => loadIso(isoItem.iso);
+      const warm = () => loadIso(isoItem.iso).then((ok) => { if (ok) buildLive(isoItem.iso); });
       if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 4000 });
       else setTimeout(warm, 2500);
     }
@@ -652,23 +666,114 @@
       };
     }
 
-    function showIso(cfg, art, landed) {
-      if (!zoomOpen || stage.firstElementChild !== art) return;
-      const box = isoBox(cfg);
-      const el = document.createElement('iso-object');
-      el.className = 'iso-zoom-3d';
+    // ── Live 3D object ──────────────────────────────────────────────────
+    // One <iso-object> is built in the background and kept ready. The canvas
+    // tile is a still render of it at rest, so on click the live object itself
+    // flies out of the tile — there is no swap to see — and starts its spin
+    // while it grows. Closing flies it back onto the tile and only then puts
+    // the still back. Until it is ready (a click in the first second or two),
+    // the older path runs: the still flies and the live object cross-fades in.
+    function isoAttrs(el, cfg) {
       el.setAttribute('src', cfg.src);
       if (cfg.reliefSpec)     el.setAttribute('relief-spec', cfg.reliefSpec);
       if (cfg.back)           el.setAttribute('back', cfg.back);
       if (cfg.backReliefSpec) el.setAttribute('back-relief-spec', cfg.backReliefSpec);
       for (const k of ['depth', 'bevel', 'gloss', 'exposure', 'fit']) if (cfg[k]) el.setAttribute(k, cfg[k]);
-      el.setAttribute('hint-idle', 'Click to spin');
-      el.setAttribute('hint-active', 'Drag to rotate');
+      el.setAttribute('no-hint', '');
+    }
+    function placeBox(el, box) {
       el.style.left = box.left + 'px';
       el.style.top = box.top + 'px';
       el.style.width = box.width + 'px';
       el.style.height = box.height + 'px';
-      el.style.setProperty('--iso-hint-bottom', Math.max(8, box.hintBottom) + 'px');
+    }
+    const frames = (n) => new Promise((ok) => {
+      const step = () => (n-- <= 0 ? ok() : requestAnimationFrame(step));
+      requestAnimationFrame(step);
+    });
+
+    let live = null, liveReady = false, liveKey = '', liveBusy = false;
+    const PARK = '-99999px';
+    // Draw a frame at the current size, invisibly, then park it off-screen.
+    // Off-screen it stops rendering but keeps its last frame, so it can be
+    // brought back instantly.
+    function primeLive(cfg) {
+      if (!live || liveBusy) return;
+      const box = isoBox(cfg);
+      const key = Math.round(box.width) + 'x' + Math.round(box.height);
+      if (key === liveKey) return;
+      liveReady = false;
+      placeBox(live, box);
+      live.style.opacity = '0';
+      frames(4).then(() => {
+        if (zoomOpen && live.classList.contains('is-live')) return;
+        liveKey = key;
+        liveReady = true;
+        live.style.left = PARK;
+      });
+    }
+    function buildLive(cfg) {
+      if (live) return;
+      live = document.createElement('iso-object');
+      live.className = 'iso-live';
+      isoAttrs(live, cfg);
+      placeBox(live, isoBox(cfg));
+      live.addEventListener('iso-ready', () => primeLive(cfg), { once: true });
+      document.body.appendChild(live);
+    }
+
+    // Transform that puts the live object's device exactly over the tile.
+    function tileTransform(cfg, box, r) {
+      const [fx, fy, fw] = cfg.crop;
+      const s = r.width / (box.width * fw);
+      const tx = r.left - box.left - s * fx * box.width;
+      const ty = r.top - box.top - s * fy * box.height;
+      return 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+    }
+
+    function openLive(cfg, src) {
+      const box = isoBox(cfg);
+      const r = src.getBoundingClientRect();
+      liveBusy = true;
+      live.classList.add('is-live');
+      live.style.transition = 'none';
+      placeBox(live, box);
+      live.style.transform = tileTransform(cfg, box, r);
+      live.style.opacity = '1';
+      src.style.visibility = 'hidden';
+      live._tile = src;
+      live.getBoundingClientRect();              // commit the start position
+      requestAnimationFrame(() => {
+        live.style.transition = '';
+        live.style.transform = 'none';
+        setTimeout(() => { if (zoomOpen) live.spin(); }, 60);
+      });
+    }
+
+    function closeLive(cfg) {
+      const src = live._tile;
+      live.reset();
+      live.classList.remove('is-live');
+      const box = isoBox(cfg);
+      live.style.transform = tileTransform(cfg, box, src.getBoundingClientRect());
+      setTimeout(() => {
+        if (zoomOpen && live.classList.contains('is-live')) return;
+        src.style.visibility = '';
+        live.style.transition = 'none';
+        live.style.left = PARK;
+        live.style.transform = 'none';
+        live.style.opacity = '0';
+        liveBusy = false;
+      }, 640);
+    }
+
+    function showIso(cfg, art, landed) {
+      if (!zoomOpen || stage.firstElementChild !== art) return;
+      const box = isoBox(cfg);
+      const el = document.createElement('iso-object');
+      el.className = 'iso-zoom-3d';
+      isoAttrs(el, cfg);
+      placeBox(el, box);
       // The object builds (hidden) while the still is in flight. Swap once it
       // has drawn a frame and the still has landed, then let it come alive.
       const drawn = new Promise((ok) => el.addEventListener('iso-ready', () =>
@@ -682,17 +787,20 @@
       stage.appendChild(el);
     }
 
+    let liveItem = null;
     function closeZoom() {
       if (!zoomOpen) return;
       zoomOpen = false;
       const art = stage.firstElementChild;
       clearTimeout(isoTimer);
+      if (liveItem) { closeLive(liveItem.iso); liveItem = null; }
       const iso = stage.querySelector('.iso-zoom-3d');
       if (iso) iso.classList.remove('is-shown');   // fades out; cleared with the stage
       if (art) art.classList.remove('is-handed-off');
       if (art) art.style.transform = '';        // flies back to where it started
       zoom.classList.remove('is-open');
       wrap.classList.remove('is-zoomed');
+      document.body.classList.remove('is-iso-zoomed');
       setTimeout(() => {
         if (!zoomOpen) { zoom.hidden = true; stage.innerHTML = ''; }
       }, 640);
@@ -704,6 +812,27 @@
       const src = btn.querySelector('.iso-photo, .iso-svg');
       if (!it || !src || !zoom || zoomOpen) return;
 
+      zName.textContent = it.name;
+      zDesc.textContent = it.desc;
+      stage.innerHTML = '';
+
+      // The live object is ready at this size: fly it straight out of the tile.
+      if (it.iso && it.iso.crop && live && liveReady && !liveBusy &&
+          liveKey === Math.round(isoBox(it.iso).width) + 'x' + Math.round(isoBox(it.iso).height)) {
+        zoom.hidden = false;
+        zoomOpen = true;
+        lastFocus = btn;
+        liveItem = it;
+        openLive(it.iso, src);
+        requestAnimationFrame(() => {
+          wrap.classList.add('is-zoomed');
+        document.body.classList.add('is-iso-zoomed');
+          zoom.classList.add('is-open');
+        });
+        if (zClose) zClose.focus();
+        return;
+      }
+
       // Start the clone exactly over the original, then transform from there.
       const r = src.getBoundingClientRect();
       const art = src.cloneNode(true);
@@ -713,11 +842,7 @@
       art.style.top = r.top + 'px';
       art.style.width = r.width + 'px';
       art.style.height = r.height + 'px';
-      stage.innerHTML = '';
       stage.appendChild(art);
-
-      zName.textContent = it.name;
-      zDesc.textContent = it.desc;
 
       zoom.hidden = false;
       zoomOpen = true;
@@ -739,6 +864,7 @@
 
       requestAnimationFrame(() => {
         wrap.classList.add('is-zoomed');
+        document.body.classList.add('is-iso-zoomed');
         zoom.classList.add('is-open');
         art.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
       });
@@ -767,7 +893,7 @@
     let rt = 0;
     window.addEventListener('resize', () => {
       clearTimeout(rt);
-      rt = setTimeout(() => { buildField(); apply(); }, 150);
+      rt = setTimeout(() => { buildField(); apply(); if (isoItem && !zoomOpen) primeLive(isoItem.iso); }, 150);
     });
   })();
   </script>
