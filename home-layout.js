@@ -32,13 +32,13 @@ let loading = false;
 
 function readKey(key, allowed) {
   try {
-    const v = localStorage.getItem(key);
+    const v = sessionStorage.getItem(key);   // a layout choice lasts for the visit
     return allowed.includes(v) ? v : null;
   } catch (e) { return null; }
 }
 
 function writeKey(key, v) {
-  try { localStorage.setItem(key, v); } catch (e) {}
+  try { sessionStorage.setItem(key, v); } catch (e) {}
 }
 
 // ── Category filter ───────────────────────────────────────────────────────
@@ -127,6 +127,7 @@ async function startGlobe() {
 
 function stopGlobe() {
   if (globe) globe.pause();
+  window.cursorTag?.hide();
 }
 
 function rebuildGlobe() {
@@ -498,15 +499,12 @@ function createGlobe(THREE, mount, tiles) {
     document.head.appendChild(spec);
   }
 
-  // ── hover tooltip ───────────────────────────────────────────────────────
-  const tip = document.createElement('div');
-  tip.className = 'globe-tip';
-  tip.setAttribute('role', 'status');
-  tip.hidden = true;
-  mount.appendChild(tip);
+  // ── hover label ─────────────────────────────────────────────────────────
+  // The cursor tag (home-canvas.js) names the panel under the pointer.
+  const tag = window.cursorTag || { show() {}, hide() {} };
 
   function hideTip() {
-    tip.hidden = true;
+    tag.hide();
     el.style.cursor = '';
   }
 
@@ -515,11 +513,7 @@ function createGlobe(THREE, mount, tiles) {
     const name = hit?.object?.userData?.tile?.title;
     if (!name) { hideTip(); return; }
     prerender(hit.object.userData.tile.href);
-    const r = mount.getBoundingClientRect();
-    tip.textContent = name;
-    tip.style.left = (e.clientX - r.left) + 'px';
-    tip.style.top  = (e.clientY - r.top) + 'px';
-    tip.hidden = false;
+    if (e.pointerType !== 'touch') tag.show(name, e.clientX, e.clientY);
     el.style.cursor = 'pointer';
   }
 
@@ -652,7 +646,7 @@ function createGlobe(THREE, mount, tiles) {
       renderer.dispose();
       el.remove();
       pool.remove();
-      tip.remove();
+      hideTip();
     },
   };
 }
@@ -703,8 +697,7 @@ if (grid && buttons.length) {
   // The filter tabs were removed: always show every project, whatever an
   // earlier visit saved.
   applyFilter('all', false);
-  // "cols2" was the two-across grid, retired when the grid went three-across.
-  applyLayout(readKey(LAYOUT_KEY, [...MODES, 'cols2'])?.replace('cols2', 'cols3') || 'canvas', false);
+  applyLayout(readKey(LAYOUT_KEY, MODES) || 'canvas', false);
 
   // The pre-paint guard in the document head has done its job: `hidden` on the
   // grid now carries the state, so release the class rather than leaving two
