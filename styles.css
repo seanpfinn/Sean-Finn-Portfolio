@@ -1065,18 +1065,18 @@ body {
     width: 2.5rem;
     height: 2.5rem;
   }
-  .splash-page .project-grid,
+  /* Three across holds on a phone too: a contact sheet of square tiles,
+     names only. */
   .splash-page .project-grid.is-cols-3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  /* Tile sizing for this lives at the end of the file, under CANVAS. */
   .globe-canvas { height: min(19rem, 46vh); }
 
   /* The grid is always one column on a phone, so the 2-up/3-up density icons
      have nothing to switch between. A single list glyph stands in for them.
      Scoped to .layout-toggle so it outranks the desktop `display: none`,
      which sits later in the file and would otherwise win on equal specificity. */
-  .layout-toggle .layout-btn--list { display: block; }
-  .layout-btn:not(.layout-btn--list):not(.layout-btn--globe) { display: none; }
   /* Pull the two glyphs close together, then hand each one an invisible tap
      target that reaches past it — the icons read as a pair without the hit
      areas shrinking. Same approach as .miniplayer-progress::before below. */
@@ -2936,4 +2936,120 @@ html.pw-return::view-transition-new(root) {
 
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
+}
+
+
+/* ================================
+   CANVAS — the homepage's default layout
+   An endless field of project tiles that drifts on its own and drags in any
+   direction (home-canvas.js). It runs past the content column to the window
+   edges, and fades out on every side, so it reads as a window onto something
+   larger rather than a box. Each tile is a real .gallery-card-visual, which
+   page-transition.js grows straight into the project.
+   ================================ */
+.canvas-stage {
+  position: relative;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  height: min(46rem, 74vh);
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+    linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+    linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+          mask-composite: intersect;
+}
+.canvas-stage[hidden] { display: none; }
+.canvas-stage.is-dragging { cursor: grabbing; }
+/* 100vw counts the scrollbar where there is one; never let that scroll. */
+html:has(.canvas-stage:not([hidden])) { overflow-x: clip; }
+
+.canvas-field { position: absolute; inset: 0; }
+
+.canvas-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--tile-w, 18rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  transform-origin: 50% 28%;           /* the middle of the visual, not the caption */
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+.canvas-tile .gallery-card-visual {
+  aspect-ratio: 16 / 9;
+  transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.45s ease;
+}
+.canvas-tile .gv-video { pointer-events: none; }
+.canvas-tile .gallery-card-info { transition: opacity 0.3s ease; opacity: 0.7; }
+.canvas-tile .gallery-card-title { font-size: 0.8125rem; }
+
+@media (hover: hover) {
+  .canvas-tile:hover .gallery-card-visual {
+    transform: scale(1.035);
+    box-shadow: 0 0.75rem 2rem -0.5rem rgba(0, 0, 0, 0.28);
+  }
+  .canvas-tile:hover .gallery-card-info { opacity: 1; }
+}
+.canvas-stage.is-dragging .canvas-tile .gallery-card-visual { transform: none; }
+.canvas-tile:focus-visible { outline: none; }
+.canvas-tile:focus-visible .gallery-card-visual {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* First arrival: tiles surface from the middle outward. */
+.canvas-tile.is-entering > * {
+  animation: canvasTileIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0s) both;
+}
+@keyframes canvasTileIn {
+  from { opacity: 0; filter: blur(8px); transform: translateY(0.75rem) scale(0.94); }
+}
+
+/* The canvas sits under the hero like the globe does. */
+.projects-block:has(.canvas-stage:not([hidden])) { gap: 0; }
+
+@media (max-width: 50.5625rem) {
+  .canvas-stage {
+    height: min(34rem, 64vh);
+    margin-top: -0.75rem;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+      linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+            mask-image:
+      linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+      linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  }
+  .canvas-tile { gap: 0.375rem; }
+  .canvas-tile .gallery-card-visual { border-radius: 0.75rem; }
+  .canvas-tile .gallery-card-title { font-size: 0.75rem; }
+  .canvas-tile .gallery-card-logo,
+  .canvas-tile .gallery-card-company { display: none; }
+
+  /* The three-across grid on a phone: a contact sheet, names only. */
+  .splash-page .project-grid.is-cols-3 { row-gap: 1rem; column-gap: 0.625rem; }
+  .splash-page .project-grid.is-cols-3 .gallery-card { gap: 0.375rem; }
+  .splash-page .project-grid.is-cols-3 .gallery-card-visual { aspect-ratio: 1 / 1; border-radius: 0.625rem; }
+  .splash-page .project-grid.is-cols-3 .gallery-card-logo,
+  .splash-page .project-grid.is-cols-3 .gallery-card-company { display: none; }
+  .splash-page .project-grid.is-cols-3 .gallery-card-title {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas-tile.is-entering > * { animation: none; }
 }

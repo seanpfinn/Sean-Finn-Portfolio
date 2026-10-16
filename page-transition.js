@@ -24,6 +24,7 @@
     rules.textContent = JSON.stringify({
       prerender: [{ where: { or: [
         { selector_matches: 'a.gallery-card' },
+        { selector_matches: 'a.canvas-tile' },
         { selector_matches: 'a.nav-project-item' },
         { selector_matches: '.splash-nav a[href="/"], a[href="index.html"]' }
       ] }, eagerness: 'moderate' }],
@@ -61,6 +62,10 @@
   function inView(el) {
     var r = el.getBoundingClientRect();
     return r.width > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+  }
+  function mid(el) {
+    var r = el.getBoundingClientRect();
+    return Math.hypot(r.left + r.width / 2 - innerWidth / 2, r.top + r.height / 2 - innerHeight / 2);
   }
   function name(el, vt) {
     el.style.viewTransitionName = NAME;
@@ -124,11 +129,18 @@
       syncVideo(h, info.t);
     } else if (info.back && isHome(location.href)) {
       // Back on the homepage: shrink into the card if it is on screen.
-      var card = document.querySelector('a.gallery-card[href="' + info.back.slice(1) + '.html"] .gallery-card-visual, a.gallery-card[href="' + info.back.slice(1) + '"] .gallery-card-visual');
+      // The grid holds one card per project; the canvas may hold several
+      // copies of a tile, so take the one on screen nearest the middle.
+      var b = info.back.slice(1);
+      var card = Array.prototype.slice.call(document.querySelectorAll(
+        ['a.gallery-card', 'a.canvas-tile'].map(function (c) {
+          return c + '[href="' + b + '.html"] .gallery-card-visual, ' + c + '[href="' + b + '"] .gallery-card-visual';
+        }).join(', ')
+      )).filter(inView).sort(function (x, y) { return mid(x) - mid(y); })[0];
       // In globe mode a page restored from the back/forward cache still has
       // the flat stand-in lying exactly over its tile: shrink into that.
       var standin = document.querySelector('.pw-standin') || globeStandin(info.back);
-      if (card && inView(card)) {
+      if (card) {
         name(card, e.viewTransition);
         syncVideo(card, info.t);
       } else if (standin) {

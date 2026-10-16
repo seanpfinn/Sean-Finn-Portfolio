@@ -11,7 +11,7 @@
 
 const LAYOUT_KEY = 'home-layout';
 const FILTER_KEY = 'home-filter';
-const MODES = ['cols2', 'cols3', 'globe'];
+const MODES = ['canvas', 'globe', 'cols3'];   // same order as the toggle
 const CATS  = ['all', 'apps', 'brand', 'web'];   // same order as the tab row
 
 const grid     = document.getElementById('project-grid');
@@ -22,7 +22,7 @@ const tabs     = Array.from(document.querySelectorAll('.filter-tab'));
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-let mode    = 'globe';
+let mode    = 'canvas';
 let filter  = 'all';
 let globe   = null;
 let THREE   = null;
@@ -83,26 +83,29 @@ function applyFilter(next, userInitiated) {
 
 // ── Layout ────────────────────────────────────────────────────────────────
 
-function commitLayout(next) {
+function commitLayout(next, animate) {
   mode = next;
   buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layout === mode)));
-  grid.classList.toggle('is-cols-3', mode === 'cols3');
+  grid.classList.add('is-cols-3');      // the grid is always three across now
 
   const globeOn = mode === 'globe';
-  grid.hidden = globeOn;
+  grid.hidden = mode !== 'cols3';
   if (stage) stage.hidden = !globeOn;
   if (globeOn) startGlobe(); else stopGlobe();
+  // The canvas lives in home-canvas.js, which has usually started already.
+  const canvas = window.homeCanvas;
+  if (canvas) { if (mode === 'canvas') canvas.start(animate); else canvas.stop(); }
 }
 
 // Every state change uses the same entrance: the tiles restagger, the way
 // they do coming back from the globe. The globe itself fades in via CSS.
 function applyLayout(next, userInitiated) {
-  const target = MODES.includes(next) ? next : 'globe';
+  const target = MODES.includes(next) ? next : 'canvas';
   if (userInitiated && target === mode) return;
-  commitLayout(target);
+  commitLayout(target, userInitiated);
   // Same reasoning as applyFilter: on first load the grid's entrance is
   // already running, so replaying it is the blink rather than the polish.
-  if (target !== 'globe' && userInitiated) staggerCards();
+  if (target === 'cols3' && userInitiated) staggerCards();
   if (userInitiated) writeKey(LAYOUT_KEY, target);
 }
 
@@ -700,7 +703,8 @@ if (grid && buttons.length) {
   // The filter tabs were removed: always show every project, whatever an
   // earlier visit saved.
   applyFilter('all', false);
-  applyLayout(readKey(LAYOUT_KEY, MODES) || 'globe', false);
+  // "cols2" was the two-across grid, retired when the grid went three-across.
+  applyLayout(readKey(LAYOUT_KEY, [...MODES, 'cols2'])?.replace('cols2', 'cols3') || 'canvas', false);
 
   // The pre-paint guard in the document head has done its job: `hidden` on the
   // grid now carries the state, so release the class rather than leaving two
