@@ -21,6 +21,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
@@ -69,7 +72,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -187,7 +190,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">Led interaction design for Codec Avatars, Meta's research-driven system for rendering photorealistic digital humans in VR. Defined how users scan, customize, and express themselves through high-fidelity representations in social environments.</p>
     </div>
-    <div class="proj-panel-new" style="background:#090502;">
+    <div id="proj-hero" class="proj-panel-new" style="background:#090502;">
       <video src="assets/codec-avatars.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-codec-avatars.webp"></video>
     </div>
     <div class="proj-caption">
@@ -241,6 +244,8 @@
       <p class="proj-caption-body">As a research initiative, Codec Avatars continued evolving toward broader deployment — expanding capture accessibility beyond controlled scanning setups, and extending real-time expressiveness as rendering technology matured.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

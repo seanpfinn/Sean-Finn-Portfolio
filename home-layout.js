@@ -411,9 +411,67 @@ function createGlobe(THREE, mount, tiles) {
     return ray.intersectObjects(panels, false)[0] || null;
   }
 
+  // ── open a tile ─────────────────────────────────────────────────────────
+  // The globe turns the tile to face the viewer, then lays a flat copy of it
+  // (its current video frame) exactly over it. page-transition.js grows that
+  // copy into the project's header visual as the page changes. Without View
+  // Transition support it just navigates.
+  let focus = null;                       // { from, to, t0, mesh }
+  const DUR = reduceMotion ? 0 : 420;
+
   function openAt(e) {
     const hit = pick(e);
-    if (hit?.object?.userData?.tile?.href) location.href = hit.object.userData.tile.href;
+    const mesh = hit?.object;
+    const href = mesh?.userData?.tile?.href;
+    if (!href || focus) return;
+    hideTip();
+    if (!('onpagereveal' in window)) { location.href = href; return; }
+    // Facing the camera means the panel's world rotation is identity:
+    // world · mesh = I, so the world turns to the inverse of the panel's own.
+    focus = {
+      from: world.quaternion.clone(),
+      to: mesh.quaternion.clone().invert(),
+      t0: performance.now(),
+      mesh,
+    };
+    velX = velY = 0;
+  }
+
+  const corner = new THREE.Vector3();
+  function liftAndGo(mesh) {
+    const { tile } = mesh.userData;
+    const r = el.getBoundingClientRect();
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      corner.set((sx * TW) / 2, (sy * TH) / 2, 0);
+      mesh.localToWorld(corner).project(camera);
+      const px = r.left + ((corner.x + 1) / 2) * r.width;
+      const py = r.top + ((1 - corner.y) / 2) * r.height;
+      x0 = Math.min(x0, px); x1 = Math.max(x1, px);
+      y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+    const w = x1 - x0, h = y1 - y0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const c = document.createElement('canvas');
+    c.className = 'pw-standin';
+    c.width = Math.round(w * dpr);
+    c.height = Math.round(h * dpr);
+    Object.assign(c.style, {
+      position: 'fixed', left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px',
+      borderRadius: (w * 0.031) + 'px', zIndex: 50, pointerEvents: 'none',
+    });
+    const v = mesh.userData.video;
+    const src = mesh.userData.showing === 'video' && v && v.readyState >= 2 ? v : mesh.userData.stillTex?.image;
+    const g = c.getContext('2d');
+    if (src) {
+      const sw = src.videoWidth || src.naturalWidth || src.width;
+      const sh = src.videoHeight || src.naturalHeight || src.height;
+      const k = Math.max(c.width / sw, c.height / sh);           // cover, like the texture
+      g.drawImage(src, (c.width - sw * k) / 2, (c.height - sh * k) / 2, sw * k, sh * k);
+    }
+    document.body.appendChild(c);
+    window.projectWindow?.(c, tile.href, v && src === v ? v.currentTime : null);
+    requestAnimationFrame(() => { location.href = tile.href; });
   }
 
   // ── hover tooltip ───────────────────────────────────────────────────────
@@ -459,12 +517,23 @@ function createGlobe(THREE, mount, tiles) {
   function frame() {
     raf = requestAnimationFrame(frame);
     const now = performance.now();
-    if (!dragging) {
-      velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;
-      velX *= 0.94;
+    if (focus) {
+      const k = DUR ? Math.min(1, (now - focus.t0) / DUR) : 1;
+      const ease = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      world.quaternion.slerpQuaternions(focus.from, focus.to, ease);
+      if (k >= 1 && !focus.done) {
+        focus.done = true;
+        renderer.render(scene, camera);
+        liftAndGo(focus.mesh);
+      }
+    } else {
+      if (!dragging) {
+        velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;
+        velX *= 0.94;
+      }
+      if (velY) { spin.setFromAxisAngle(AXIS_Y, velY); world.quaternion.premultiply(spin); }
+      if (velX) { spin.setFromAxisAngle(AXIS_X, velX); world.quaternion.premultiply(spin); }
     }
-    if (velY) { spin.setFromAxisAngle(AXIS_Y, velY); world.quaternion.premultiply(spin); }
-    if (velX) { spin.setFromAxisAngle(AXIS_X, velX); world.quaternion.premultiply(spin); }
 
     // Fill in any free slots, then keep the front hemisphere playing. Panels
     // still waiting on a video are showing their poster, so nothing is blank.
@@ -498,14 +567,39 @@ function createGlobe(THREE, mount, tiles) {
     }
     renderer.render(scene, camera);
   }
+  // Back from a project: start with its tile facing front, exactly where
+  // page-transition.js put the stand-in, and hold there until it is gone.
+  const facing = window.projectWindowFacing && panels.find((m) => m.userData.tile.href === window.projectWindowFacing);
+  if (facing) {
+    const q = facing.quaternion.clone().invert();
+    world.quaternion.copy(q);
+    focus = { from: q, to: q, t0: 0, mesh: facing, done: true };
+    window.projectWindowFacing = null;
+    velX = velY = 0;
+  }
   frame();
   pump();
+  if (facing) {
+    // Tell the page once the tile's still texture has loaded and drawn.
+    const t0 = performance.now();
+    const wait = () => {
+      const img = facing.userData.stillTex.image;
+      if ((img && img.complete && img.naturalWidth) || performance.now() - t0 > 1500) {
+        requestAnimationFrame(() => requestAnimationFrame(() =>
+          window.dispatchEvent(new Event('projectwindow:globe-ready'))));
+      } else requestAnimationFrame(wait);
+    };
+    wait();
+  }
 
   const onVis = () => {
     if (document.hidden) cancelAnimationFrame(raf);
     else if (active) frame();
   };
   document.addEventListener('visibilitychange', onVis);
+  // Back from a project: page-transition.js lets go of the tile's stand-in once
+  // the way back has used it; the globe starts turning again then.
+  window.addEventListener('projectwindow:released', () => { focus = null; });
 
   return {
     pause() {
@@ -588,7 +682,9 @@ if (grid && buttons.length) {
   buttons.forEach((b) => b.addEventListener('click', () => applyLayout(b.dataset.layout, true)));
   tabs.forEach((t) => t.addEventListener('click', () => applyFilter(t.dataset.cat, true)));
 
-  applyFilter(readKey(FILTER_KEY, CATS) || 'all', false);
+  // The filter tabs were removed: always show every project, whatever an
+  // earlier visit saved.
+  applyFilter('all', false);
   applyLayout(readKey(LAYOUT_KEY, MODES) || 'globe', false);
 
   // The pre-paint guard in the document head has done its job: `hidden` on the

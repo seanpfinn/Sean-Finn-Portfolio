@@ -20,6 +20,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
@@ -68,7 +71,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -197,7 +200,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">The most valuable moments in the CLEAR app are also the briefest: a member checking whether it's time to head to the gate. Home-screen widgets bring that answer to the surface, turning a full app session into a single glance.</p>
     </div>
-    <div class="proj-panel-new proj-panel--media" style="background:#ededed;">
+    <div id="proj-hero" class="proj-panel-new proj-panel--media" style="background:#ededed;">
       <img src="assets/tile-widgets.webp" alt="Widgets — Context" style="width:100%; height:100%; object-fit:cover; display:block;" decoding="async" width="575" height="314" />
     </div>
 
@@ -236,6 +239,8 @@
       <p class="proj-caption-body">Live and iterating. Next up: Lock Screen widgets and interactive controls that let members act on the day without opening the app.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

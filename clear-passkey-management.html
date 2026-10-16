@@ -20,6 +20,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
@@ -68,7 +71,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -197,7 +200,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">An account is only as good as how easily — and safely — a member can get into it. Bringing passkeys to CLEAR replaces passwords with device-based authentication, making sign-in faster while raising the security floor for every member.</p>
     </div>
-    <div class="proj-panel-new" style="background:#efefef;">
+    <div id="proj-hero" class="proj-panel-new" style="background:#efefef;">
       <video src="assets/gallery-passkeys.mp4" muted loop playsinline autoplay preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-gallery-passkeys.webp"></video>
     </div>
 
@@ -236,6 +239,8 @@
       <p class="proj-caption-body">Live and iterating. Next up: cross-device passkey sync guidance and streamlined recovery for members setting up a new phone.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

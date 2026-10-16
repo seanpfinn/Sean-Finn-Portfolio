@@ -20,6 +20,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
@@ -68,7 +71,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -197,7 +200,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">Airports are one of the most stressful environments travelers navigate — tight timing, unfamiliar terminals, and constant uncertainty about "am I going to make it." Ahead of a flight, the CLEAR Live Activity surfaces directly on a member's iPhone Lock Screen and Dynamic Island, so they always know what to do next without opening the app.</p>
     </div>
-    <div class="proj-panel-new">
+    <div id="proj-hero" class="proj-panel-new">
       <video src="assets/gallery-live-activity.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-gallery-live-activity.webp"></video>
     </div>
 
@@ -270,6 +273,8 @@
       <p class="proj-caption-body">Live and iterating. Next up: an AI-generated summary for faster at-a-glance guidance, expanded coverage to more airports, and exploring predictive "When to Leave" timing based on live TSA and security line data as accuracy improves.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

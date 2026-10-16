@@ -1,0 +1,248 @@
+/* ================================
+   CASE STUDY — "the window stays"
+   case-layout.js regroups the page into a story column and a stage. Every
+   rule is scoped to html.cs-v2, which that script sets, so without it the
+   original single column in case-study.css is untouched.
+
+   Layout:   nav | story (≈23rem)  | stage, pinned and centred in the viewport
+                 |  title, meta    |  ┌──────────────────────────────┐
+                 |  01 Context  ●  |  │ the chapter's visual          │
+                 |  02 Problem     |  └──────────────────────────────┘
+                 |  …              |  ━━━━ ━━ ── ── ── ──   Problem  2 of 8
+   Phone: the stage pins under the nav bar and the story scrolls beneath it.
+   Colors and type come from the site's tokens (styles.css), so dark mode and
+   the Geist pairing carry over unchanged.
+   ================================ */
+
+.cs-v2 .proj-col {
+  --stage-ratio: 1.6421;                 /* 780 / 475, the panels' own shape */
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  max-width: 96rem;
+  margin-left: var(--nav-clear-left);
+  margin-right: max(1.5rem, var(--page-x));
+  padding: var(--page-top) 0 0;
+  gap: 0;
+}
+.cs-body {
+  display: grid;
+  grid-template-columns: minmax(17rem, 23rem) minmax(0, 1fr);
+  column-gap: clamp(2.5rem, 4.5vw, 4.5rem);
+  align-items: start;
+}
+/* The window lands by morphing; nothing about the stage's frame may move. */
+.cs-v2 .proj-col > .cs-body { animation: none; }
+.cs-v2 .cs-story { animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ── Story ─────────────────────────────────────────────────────────────── */
+.cs-story {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-bottom: 42vh;                  /* lets the last chapter reach the reading line */
+}
+.cs-v2 .proj-header-group { gap: 1.25rem; padding-bottom: 1.5rem; }
+.cs-v2 .proj-title-new {
+  font-size: clamp(2.125rem, 2.9vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.cs-v2 .proj-subtitle-new {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.cs-v2 .proj-meta-row-new { justify-content: flex-start; gap: 2rem; flex-wrap: wrap; }
+.cs-v2 .proj-dl-btn { align-self: flex-start; }
+
+.cs-chapter {
+  min-height: calc(var(--n, 1) * 62vh);
+  padding-top: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0.26;
+  transition: opacity 0.5s ease;
+}
+.cs-chapter.is-active { opacity: 1; }
+.cs-chapter:last-child { min-height: 0; }
+
+.cs-v2 .proj-caption { display: flex; flex-direction: column; gap: 0.75rem; }
+.cs-v2 .proj-caption-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-transform: none;
+  text-wrap: balance;
+}
+.cs-num {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  min-width: 1.25rem;
+}
+.cs-v2 .proj-caption-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 34em;
+  padding-left: 2rem;                    /* hangs under the label, clear of the number */
+}
+.cs-v2 .cs-note {
+  margin-left: 2rem;
+  padding-left: 0.875rem;
+  border-left: 1px solid var(--border);
+  text-align: left;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+/* ── Stage ─────────────────────────────────────────────────────────────── */
+.cs-stage-wrap {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: var(--wrap-top, var(--page-top));  /* set by case-layout.js to centre the stage in the viewport */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.875rem;
+  min-width: 0;
+}
+.cs-stage {
+  position: relative;
+  width: 100%;
+  max-width: calc((100vh - 7.5rem) * var(--stage-ratio));
+  aspect-ratio: 780 / 475;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--stage-bg, #e7e7e7);
+  transition: background-color 0.6s ease;
+  isolation: isolate;
+}
+.cs-v2:not(.pw-arrive) .cs-stage {
+  animation: blurIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Each chapter's visual is its original panel, kept at its native size so
+   the layered phone mockups stay intact, and scaled to the stage. */
+.cs-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(3%) scale(0.98);
+  transition: opacity 0.5s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.cs-slide.is-past  { transform: translateY(-3%) scale(0.98); }
+.cs-slide.is-ahead { transform: translateY(3%) scale(0.98); }
+.cs-slide.is-on    { opacity: 1; transform: none; pointer-events: auto; }
+.cs-slide > .proj-panel-new {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48.75rem;
+  height: 29.6875rem;
+  margin: 0;
+  border-radius: 0;
+  transform: scale(var(--fit, 1));
+  transform-origin: 0 0;
+}
+.cs-slide > .proj-panel-new::after { display: none; }
+
+/* ── Chapter strip ─────────────────────────────────────────────────────── */
+.cs-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: calc((100vh - 7.5rem) * var(--stage-ratio));
+}
+.cs-segs { flex: 1; display: flex; gap: 0.3125rem; min-width: 0; }
+.cs-seg {
+  position: relative;
+  flex: 1;
+  height: 1.25rem;                       /* comfortable hit area around a 2px line */
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.cs-seg::before,
+.cs-seg-fill {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 0.125rem;
+  margin-top: -0.0625rem;
+  border-radius: 0.125rem;
+}
+.cs-seg::before { right: 0; background: var(--border); transition: background-color 0.2s ease; }
+.cs-seg-fill { width: calc(var(--p, 0) * 100%); background: var(--text); }
+.cs-seg:hover::before { background: var(--text-dim); }
+.cs-seg:hover .cs-seg-fill { background: #FF401A; }
+.cs-seg:focus-visible { outline: 2px solid #FF401A; outline-offset: 2px; border-radius: 0.25rem; }
+.cs-now {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.cs-now-label { color: var(--text); }
+
+/* ── The end: the next windows ─────────────────────────────────────────── */
+.cs-v2 .proj-more {
+  margin-top: 0;
+  padding: 3rem 0 var(--page-bottom);
+}
+.cs-v2 .proj-more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+
+/* ── Phone: stage on top, story beneath ────────────────────────────────── */
+@media (max-width: 50.5625rem) {
+  .cs-v2 .proj-col {
+    margin-left: var(--page-x);
+    margin-right: var(--page-x);
+  }
+  .cs-body { display: flex; flex-direction: column; align-items: stretch; }
+  .cs-story { display: contents; }
+  .cs-v2 .proj-header-group { order: 0; }
+  .cs-stage-wrap {
+    order: 1;
+    top: 3.25rem;
+    z-index: 2;
+    padding: 0.75rem 0 0.25rem;
+    width: 100%;
+    background: var(--bg);
+    box-shadow: 0 -3.25rem 0 var(--bg);  /* covers the strip above it, under the nav bar */
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .cs-stage, .cs-strip { max-width: none; }
+  .cs-stage { border-radius: 0.75rem; }
+  .cs-chapter { order: 2; min-height: calc(var(--n, 1) * 46vh); padding-top: 1.75rem; }
+  .cs-chapter:last-of-type { padding-bottom: 30vh; }
+  .cs-v2 .proj-caption-body,
+  .cs-v2 .cs-note { padding-left: 0; margin-left: 0; }
+  .cs-v2 .cs-note { padding-left: 0.75rem; }
+  .cs-v2 .proj-more-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-slide, .cs-chapter, .cs-stage { transition: none; }
+  .cs-v2:not(.pw-arrive) .cs-stage { animation: none; }
+}

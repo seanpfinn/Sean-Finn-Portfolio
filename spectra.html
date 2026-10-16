@@ -21,11 +21,14 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
 
   <!-- Live brand plates: the guide's own elements, scoped so nothing leaks into
        the portfolio's styles. The colour, type and motion below are the real
        system running, not screenshots of it. -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500&family=Azeret+Mono:wght@400;500&display=swap" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     .gp{--gp-ink:#E9ECEE;--gp-graphite:#0D1114;--gp-soft:#93A1AB;--gp-slate:#5B6874;
         --gp-rule:#2A343B;--gp-rule2:#1E262C;--gp-oxide:#D9552F;--gp-oxide-t:#EC7A55;
@@ -122,7 +125,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -245,7 +248,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">Spectra models an industrial operation as a knowledge graph, and ships agents that traverse it &mdash; from a raw sensor reading to a dispatched work order. Finrez was brought in for the identity: a logo, a PowerPoint template, and an asset set ready for immediate use. The product marketing site followed from the same system.</p>
     </div>
-    <div class="proj-panel-new proj-panel--media" style="background:#D9552F;">
+    <div id="proj-hero" class="proj-panel-new proj-panel--media" style="background:#D9552F;">
       <video src="assets/gallery-spectra.mp4" muted loop playsinline preload="metadata" data-play-in-view poster="assets/tile-spectra.webp" aria-label="The Spectra identity: lockup, mark construction, palette, the line, the product marketing site, app icon and mascot, and the brand, web and product surfaces it lands on" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
     </div>
     <div class="proj-caption">
@@ -495,6 +498,8 @@
       <p class="proj-caption-body">Spectra is self-directed work, so there is no launch to report &mdash; what exists is a complete system and the evidence it survives use. The identity, the thirteen-slide template, eight applied surfaces and a four-page marketing site are all built and consistent with one another, which was the point: the claim was that one decision about what the product is would hold across a mark, a deck and a site, and it can now be checked rather than asserted. What is untested is the part no spec project can test on its own &mdash; whether an operator reading a real console at 3am still finds the orange point first. The obvious next move is to take the system into the product interface proper, where oxide competes with live data rather than with layout, and see whether the one-colour rule holds when something is genuinely at stake.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

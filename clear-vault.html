@@ -20,6 +20,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
@@ -68,7 +71,7 @@
                 </a> -->
                 <!-- <a href="clear-referrals.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  CLEAR+ Referrals
+                  CLEAR+ Guest Passes
                 </a> -->
                 <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
                   <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -197,7 +200,7 @@
       <h2 class="proj-caption-label">Context</h2>
       <p class="proj-caption-body">CLEAR verification doesn't stop at the airport lane — it also applies to healthcare check-in, building access, and other moments where a member needs to prove who they are. Vault gives members a secure, persistent place to store their verified credentials and share them in seconds, wherever CLEAR shows up.</p>
     </div>
-    <div class="proj-panel-new">
+    <div id="proj-hero" class="proj-panel-new">
       <video src="assets/gallery-vault-video.mp4" muted loop playsinline preload="metadata" data-play-in-view style="width:100%; height:100%; object-fit:cover; display:block;" poster="assets/poster-gallery-vault-video.webp"></video>
     </div>
 
@@ -270,6 +273,8 @@
       <p class="proj-caption-body">Live and iterating. Next up: expanding the set of supported credential types, deepening healthcare and access-scenario integrations, and refining sharing controls as Vault extends into more contexts.</p>
     </div>
   </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="social-links">

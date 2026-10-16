@@ -2051,7 +2051,7 @@ body {
 
 /* Cards filtered out of the current category. */
 .gallery-card[hidden] { display: none; }
-.layout-toggle { display: flex; align-items: center; gap: 1rem; }
+.layout-toggle { display: flex; align-items: center; gap: 1rem; margin-left: auto; }  /* stays right now the filter tabs are gone */
 .layout-btn {
   appearance: none;
   background: none;
@@ -2870,3 +2870,62 @@ body {
 .splash-page { --col-w: 62.5rem; }   /* 1000px */
 .proj-col    { --col-w: 48.75rem; }  /* 780px — a reading measure, not the page */
 .tl-main     { --col-w: 52rem; }     /* 832px */
+
+/* ================================
+   PROJECT WINDOWS — page transitions
+   A homepage thumbnail grows into its project's header visual
+   (page-transition.js names the pair). Same-origin navigations everywhere
+   else get a short cross-fade instead of a hard cut.
+   ================================ */
+@view-transition { navigation: auto; }
+
+::view-transition-group(root) { animation-duration: 0.35s; }
+
+::view-transition-group(project-window) {
+  /* Moves from the first frame and settles gently. A strong ease-out
+     front-loads the travel so the window seems to jump; a strong ease-in-out
+     sits still for the first third. */
+  animation-duration: 0.75s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Thumbnail and header have different proportions: crop rather than stretch.
+   The two images swap in the middle of the flight, while it is moving fastest,
+   so the hand-off is never seen standing still. */
+::view-transition-image-pair(project-window) { overflow: hidden; border-radius: 1rem; }
+::view-transition-old(project-window),
+::view-transition-new(project-window) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: normal;
+  animation-duration: 0.75s;
+  animation-timing-function: linear;
+}
+::view-transition-old(project-window) { animation-name: pw-window-out; }
+::view-transition-new(project-window) { animation-name: pw-window-in; }
+@keyframes pw-window-out { 0%, 35% { opacity: 1; } 65%, 100% { opacity: 0; } }
+@keyframes pw-window-in  { 0%, 30% { opacity: 0; } 60%, 100% { opacity: 1; } }
+
+/* Into a project: the homepage falls back and softens behind the window
+   while the case study blurs in around it (its own entrance stagger). */
+html.pw-arrive::view-transition-old(root) {
+  animation: pw-recede 0.6s cubic-bezier(0.33, 0, 0.2, 1) both;
+}
+html.pw-arrive::view-transition-new(root) {
+  animation: pw-appear 0.4s ease 0.3s both;
+}
+/* Back home: the case study lifts away and the homepage settles in. */
+html.pw-return::view-transition-old(root) {
+  animation: pw-lift 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+html.pw-return::view-transition-new(root) {
+  animation: pw-settle 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes pw-recede { to { opacity: 0; transform: scale(0.94); filter: blur(0.5rem); } }
+@keyframes pw-appear { from { opacity: 0; } }
+@keyframes pw-lift   { to { opacity: 0; transform: translateY(-1.5rem); filter: blur(0.5rem); } }
+@keyframes pw-settle { from { opacity: 0; transform: scale(1.04); filter: blur(0.5rem); } }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
