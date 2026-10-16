@@ -2968,7 +2968,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .is-canvas .splash-page { pointer-events: none; height: 100%; overflow: visible; padding-bottom: 0; }
 .is-canvas .splash-hero { z-index: 1; }
 /* Just the layout toggle stays: the intro steps aside for the work. */
-.is-canvas .splash-hero > :not(.layout-toggle) { display: none; }
+.is-canvas .splash-hero > :not(.layout-toggle):not(.hero-line) { display: none; }
 .is-canvas .splash-hero > .layout-toggle { pointer-events: auto; }
 /* The nav (and the full-screen menu it opens on a phone) stays above the
    intro and footer panes, which are layered over the canvas. */
@@ -3299,3 +3299,74 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .nav-icon .splash-nav { pointer-events: none; }
 .nav-icon .nav-hamburger,
 .nav-icon .dark-toggle { pointer-events: auto; }
+
+/* ── The top bar (homepage) ────────────────────────────────────────────────
+   One line across the top at every width: the menu button, the intro line,
+   then the layout toggle and the dark-mode dot on the right. The line and the
+   toggle live in the hero but are pinned into the bar; the rest of the hero
+   (the "Currently…" line) stays in the page for the grid and globe, and is
+   hidden on the canvas. */
+.nav-icon .splash-hero > .hero-line,
+.nav-icon .splash-hero > .layout-toggle {
+  position: fixed;
+  top: 0;
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;              /* the nav bar's height; centers on its icons */
+  margin: 0;
+  pointer-events: none;
+}
+.nav-icon .splash-hero > .hero-line {
+  left: 3.25rem;                    /* just past the menu button */
+  right: 10rem;                     /* clear of the toggle */
+  font-size: 0.875rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-icon .splash-hero > .layout-toggle {
+  right: 3rem;                      /* just left of the dark-mode dot */
+  pointer-events: auto;
+}
+/* A fixed child would be positioned against an ancestor that still holds an
+   animated transform or filter, so the hero simply fades in here. */
+.nav-icon .splash-hero {
+  animation-name: heroFade;
+  animation-fill-mode: backwards;
+}
+@keyframes heroFade { from { opacity: 0; } }
+/* The grid and globe start below the bar. */
+.nav-icon .splash-page { --page-top: 3.5rem; }
+
+/* Legible over anything: the bar's icons and line carry a soft halo in the
+   page's background color, so they read against a dark tile as clearly as
+   against the white page. */
+.nav-icon { --halo: rgba(255, 255, 255, 0.92); --halo-soft: rgba(255, 255, 255, 0.6); }
+.nav-icon.dark { --halo: rgba(9, 9, 11, 0.92); --halo-soft: rgba(9, 9, 11, 0.6); }
+.nav-icon .nav-hamburger,
+.nav-icon .layout-btn,
+.nav-icon .dark-toggle {
+  filter: drop-shadow(0 0 1px var(--halo)) drop-shadow(0 0 5px var(--halo-soft));
+}
+.nav-icon .splash-hero > .hero-line {
+  text-shadow: 0 0 1px var(--halo), 0 0 6px var(--halo), 0 0 14px var(--halo-soft);
+}
+/* Unchosen layouts dim by opacity rather than turning pale gray, which
+   vanished against light tiles. */
+.nav-icon .layout-btn { color: var(--text); opacity: 0.32; transition: opacity 0.15s ease; }
+.nav-icon .layout-btn:hover { opacity: 0.6; }
+.nav-icon .layout-btn[aria-pressed="true"] { opacity: 1; }
+.nav-icon.dark .layout-btn { color: var(--text); }
+
+@media (max-width: 50.5625rem) {
+  .nav-icon .splash-hero > .hero-line {
+    right: 7.75rem;
+    font-size: 0.8125rem;
+    white-space: normal;            /* two short lines on a phone */
+    padding: 0.25rem 0;
+  }
+  .nav-icon .splash-hero > .layout-toggle { right: 3.125rem; }
+  .nav-icon .splash-page { --page-top: 4.25rem; }
+}

@@ -101,8 +101,12 @@ window.cursorTag = window.cursorTag || (function () {
     var top = 0, bottom = 0;
     // Layout boxes, not painted ones: both are mid-entrance (blurIn slides
     // them up 10px) the first time this runs.
-    if (hero && hero.offsetParent) top = hero.offsetParent.getBoundingClientRect().top + hero.offsetTop + hero.offsetHeight;
-    if (nav) top = Math.max(top, nav.offsetTop + nav.offsetHeight);
+    // On the canvas the top bar (nav, intro line, toggle) is all that sits
+    // over the field; they're fixed, so offsetTop is from the window's top.
+    [nav, document.querySelector('.hero-line'), document.querySelector('.layout-toggle')].forEach(function (el) {
+      if (el && el.offsetParent === null && el.offsetHeight) top = Math.max(top, el.offsetTop + el.offsetHeight);
+    });
+    if (!top && hero && hero.offsetParent) top = hero.offsetParent.getBoundingClientRect().top + hero.offsetTop + hero.offsetHeight;
     if (foot) { var fr = foot.getBoundingClientRect(); if (fr.height) bottom = Math.max(0, H - fr.top); }
     top = Math.min(top, H * 0.45); bottom = Math.min(bottom, H * 0.3);
     stage.style.setProperty('--clear-top', Math.round(top) + 'px');
