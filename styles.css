@@ -2960,6 +2960,7 @@ html.pw-return::view-transition-new(root) {
   --frost-x: 14%;                       /* how far the glass reaches in from each side */
   --frost-y: 16%;
   --frost-tint: rgba(255, 255, 255, 0.22);
+  --frost-rim: rgba(0, 0, 0, 0.06);
 }
 
 /* ── Frosted edges ──
@@ -2991,10 +2992,12 @@ html.pw-return::view-transition-new(root) {
   --frost-x: 7%;
   --frost-y: 8%;
   background: var(--frost-tint);
+  /* A hairline where the pane meets the page, so the edge reads as glass. */
+  box-shadow: inset 0 1px 0 var(--frost-rim), inset 0 -1px 0 var(--frost-rim);
   -webkit-backdrop-filter: blur(22px) saturate(1.6);
           backdrop-filter: blur(22px) saturate(1.6);
 }
-.dark .canvas-stage { --frost-tint: rgba(24, 24, 27, 0.25); }
+.dark .canvas-stage { --frost-tint: rgba(24, 24, 27, 0.25); --frost-rim: rgba(255, 255, 255, 0.08); }
 .canvas-stage[hidden] { display: none; }
 .canvas-stage.is-dragging { cursor: grabbing; }
 /* 100vw counts the scrollbar where there is one; never let that scroll. */
