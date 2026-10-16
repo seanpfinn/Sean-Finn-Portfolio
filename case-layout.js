@@ -154,6 +154,27 @@
     document.body.appendChild(titlebar);
   }
 
+  // ── Close ─────────────────────────────────────────────────────────────
+  // On a phone the menu button becomes a close button: the project opened
+  // like a window, so it closes like one. Back to the homepage when that is
+  // where the reader came from (the window shrinks home and the homepage
+  // keeps its scroll), otherwise to the homepage fresh.
+  var nav = document.querySelector('.splash-nav');
+  if (nav) {
+    var close = document.createElement('a');
+    close.className = 'cs-close';
+    close.href = '/';
+    close.setAttribute('aria-label', 'Close project');
+    close.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+    close.addEventListener('click', function (e) {
+      var from = '';
+      try { from = document.referrer ? new URL(document.referrer) : ''; } catch (err) {}
+      var home = from && from.origin === location.origin && /(^|\/)(index(\.html)?|home\.html)?$/.test(from.pathname);
+      if (home && history.length > 1) { e.preventDefault(); history.back(); }
+    });
+    nav.insertBefore(close, nav.firstChild);
+  }
+
   // ── Fit the panels to the stage ─────────────────────────────────────────
   function fit() {
     var w = stage.clientWidth;
@@ -201,10 +222,12 @@
   function reelAt(y) {
     var A = anchors();
     var pull = Math.min(window.innerHeight * 0.55, 420);    // scroll distance one pull-in takes
+    var rest = line() + 60;                // where the reading line sits before any scrolling, plus a little
     var pos = 0;
     for (var n = 1; n < A.length; n++) {
-      var span = Math.min(pull, (A[n] - A[n - 1]) * 0.9);
-      var t = (y - (A[n] - span)) / span;
+      var start = Math.max(A[n] - Math.min(pull, (A[n] - A[n - 1]) * 0.9), n === 1 ? rest : -Infinity);
+      var span = Math.max(80, A[n] - start);
+      var t = (y - start) / span;
       if (t <= 0) break;
       pos = n - 1 + Math.min(1, t);
       if (t < 1) break;

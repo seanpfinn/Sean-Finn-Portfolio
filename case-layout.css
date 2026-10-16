@@ -36,6 +36,9 @@
 }
 /* The window lands by morphing; nothing about the stage's frame may move. */
 .cs-v2 .proj-col > .cs-body { animation: none; }
+/* The stage and header sit on their own layers; the nav (and the menu it
+   opens) has to stay above them. */
+.cs-v2 .splash-nav { z-index: 50; }
 .cs-v2 .cs-story { animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
 /* ── Story ─────────────────────────────────────────────────────────────── */
@@ -88,7 +91,7 @@
   transition: opacity 0.5s ease;
 }
 .cs-chapter.is-active { opacity: 1; }
-.cs-chapter:first-child { padding-top: 0; }
+.cs-chapter:first-child { padding-top: 0; min-height: max(calc(var(--n, 1) * 62vh), 85vh); }
 .cs-chapter:last-child { min-height: 0; }
 
 .cs-v2 .proj-caption { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -256,6 +259,59 @@
   transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cs-titled .cs-titlebar { opacity: 1; transform: none; }
+
+/* ── Close button (phone) ────────────────────────────────────────────────
+   Liquid Glass: a clear disc that blurs and brightens what passes beneath
+   it, with a bright rim on top, a soft one below and a faint sheen. */
+.cs-close { display: none; }
+@media (max-width: 50.5625rem) {
+  .cs-v2 .nav-hamburger { display: none; }
+  .cs-close {
+    --glass-tint: rgba(255, 255, 255, 0.22);
+    --glass-rim: rgba(255, 255, 255, 0.85);
+    --glass-rim-low: rgba(255, 255, 255, 0.25);
+    --glass-edge: rgba(0, 0, 0, 0.08);
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: -0.5rem 0 -0.5rem -0.5rem;   /* same footprint in the bar as the menu icon it replaces */
+    border-radius: 50%;
+    color: var(--text);
+    background: var(--glass-tint);
+    -webkit-backdrop-filter: blur(0.75rem) saturate(190%) brightness(1.08);
+    backdrop-filter: blur(0.75rem) saturate(190%) brightness(1.08);
+    box-shadow:
+      inset 0 1px 0 var(--glass-rim),
+      inset 0 -1px 0 var(--glass-rim-low),
+      inset 0 0 0 0.5px var(--glass-edge),
+      0 0.375rem 1.25rem rgba(0, 0, 0, 0.12),
+      0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.08);
+    pointer-events: auto;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1.4), box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cs-close::before {                    /* the sheen across the top of the glass */
+    content: '';
+    position: absolute;
+    inset: 1px 1px 50%;
+    border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+    background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .cs-close svg { position: relative; }
+  .cs-close:active { transform: scale(0.9); }
+  .cs-close:focus-visible { outline: 2px solid #FF401A; outline-offset: 3px; }
+  .dark .cs-close {
+    --glass-tint: rgba(40, 40, 46, 0.35);
+    --glass-rim: rgba(255, 255, 255, 0.35);
+    --glass-rim-low: rgba(255, 255, 255, 0.08);
+    --glass-edge: rgba(255, 255, 255, 0.12);
+  }
+  .dark .cs-close::before { opacity: 0.25; }
+}
 
 /* ── The end: the next windows ─────────────────────────────────────────── */
 .cs-v2 .proj-more {
