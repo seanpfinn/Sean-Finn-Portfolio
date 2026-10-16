@@ -115,10 +115,11 @@ window.cursorTag = window.cursorTag || (function () {
     var fx = cw ? (CX - pan.x) / cw : 0, fy = ch ? (CY - pan.y) / ch : 0;
     W = r.width; H = r.height;
     clearArea();
-    tw = Math.round(Math.max(168, Math.min(320, W * 0.2)));
+    // Big windows: about a third of a wide screen, most of a phone's width.
+    tw = Math.round(W < 810 ? W * 0.66 : Math.max(300, Math.min(520, W * 0.3)));
     th = tw * 9 / 16;
-    cw = tw * 1.75;                    // generous air between columns
-    ch = th + tw * 0.6;                // visual and gap; no captions on the canvas
+    cw = tw * 1.45;                    // generous air between columns
+    ch = th + tw * 0.38;               // visual and gap; no captions on the canvas
     field.style.setProperty('--tile-w', tw + 'px');
     if (fx || fy) { pan.x = CX - fx * cw; pan.y = CY - fy * ch; }
   }
@@ -307,23 +308,30 @@ window.cursorTag = window.cursorTag || (function () {
 
   // Mouse and pen. Touch has its own handlers below: iOS hands a finger on a
   // link to its own gestures, and pointer events alone don't reliably keep it.
-  stage.addEventListener('pointerdown', function (e) {
-    if (e.pointerType === 'touch' || e.button !== 0) return;
+  // A drag can start anywhere over the canvas that isn't a control of the
+  // page's own (the nav, the toggle, the footer's links), and is followed on
+  // the whole document so it never drops when the pointer crosses the
+  // frosted frame or leaves the window.
+  var CONTROLS = 'button, input, .splash-nav, .layout-toggle, .splash-footer a, .music-box, [class*="miniplayer"]';
+  document.addEventListener('pointerdown', function (e) {
+    if (!on || e.pointerType === 'touch' || e.button !== 0) return;
+    if (e.target.closest && e.target.closest(CONTROLS)) return;
     begin(e.pointerId, e.clientX, e.clientY);
   });
-  stage.addEventListener('pointermove', function (e) {
-    if (e.pointerType === 'touch') return;
-    pointer = { x: e.clientX, y: e.clientY };
-    tag.move(e.clientX, e.clientY);
+  // Stop the browser's own drag of a link or image, and text selection, so
+  // the first few pixels of a drag pan the field instead.
+  stage.addEventListener('mousedown', function (e) { if (e.button === 0) e.preventDefault(); });
+  document.addEventListener('pointermove', function (e) {
+    if (!on || e.pointerType === 'touch') return;
+    pointer = stage.contains(e.target) || (drag && drag.moved) ? { x: e.clientX, y: e.clientY } : null;
+    if (pointer) tag.move(e.clientX, e.clientY);
     if (!drag || e.pointerId !== drag.id) return;
-    var wasMoved = drag.moved;
-    if (move(e.clientX, e.clientY) && !wasMoved) {
-      try { stage.setPointerCapture(e.pointerId); } catch (err) {}
-    }
+    move(e.clientX, e.clientY);
   });
   function endPointer(e) { if (drag && e.pointerId === drag.id) finish(); }
-  stage.addEventListener('pointerup', endPointer);
-  stage.addEventListener('pointercancel', endPointer);
+  document.addEventListener('pointerup', endPointer);
+  document.addEventListener('pointercancel', endPointer);
+  addEventListener('blur', function () { if (drag && drag.id !== 'touch') finish(); });
 
   stage.addEventListener('touchstart', function (e) {
     if (e.touches.length !== 1) { if (drag) finish(); return; }
