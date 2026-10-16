@@ -380,6 +380,7 @@ function createGlobe(THREE, mount, tiles) {
   const el = renderer.domElement;
 
   el.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') prerender(pick(e)?.object?.userData?.tile?.href);   // no hover on touch
     dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
     el.setPointerCapture(e.pointerId);
   });
@@ -412,12 +413,12 @@ function createGlobe(THREE, mount, tiles) {
   }
 
   // ── open a tile ─────────────────────────────────────────────────────────
-  // The globe turns the tile to face the viewer, then lays a flat copy of it
-  // (its current video frame) exactly over it. page-transition.js grows that
-  // copy into the project's header visual as the page changes. Without View
-  // Transition support it just navigates.
-  let focus = null;                       // { from, to, t0, mesh }
-  const DUR = reduceMotion ? 0 : 420;
+  // A flat copy of the tile (its current video frame) is laid exactly over it,
+  // tilt and all, and page-transition.js grows that copy into the project's
+  // header visual as the page changes. No pause first: the copy matches the
+  // tile where it already is. Without View Transition support it just
+  // navigates.
+  let focus = null;                       // holds the globe still on the way back from a project
 
   function openAt(e) {
     const hit = pick(e);
@@ -426,38 +427,44 @@ function createGlobe(THREE, mount, tiles) {
     if (!href || focus) return;
     hideTip();
     if (!('onpagereveal' in window)) { location.href = href; return; }
-    // Facing the camera means the panel's world rotation is identity:
-    // world · mesh = I, so the world turns to the inverse of the panel's own.
-    focus = {
-      from: world.quaternion.clone(),
-      to: mesh.quaternion.clone().invert(),
-      t0: performance.now(),
-      mesh,
-    };
     velX = velY = 0;
+    liftAndGo(mesh);
+  }
+
+  // The perspective transform that takes a w × h rectangle onto the quad
+  // p0 p1 p2 p3 (clockwise from top left), as a CSS matrix3d.
+  function quadMatrix(w, h, p) {
+    const [x0, y0] = p[0], [x1, y1] = p[1], [x2, y2] = p[2], [x3, y3] = p[3];
+    const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3;
+    const dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
+    const den = dx1 * dy2 - dx2 * dy1;
+    const g = den ? (dx3 * dy2 - dx2 * dy3) / den : 0;
+    const k = den ? (dx1 * dy3 - dx3 * dy1) / den : 0;
+    const a = x1 - x0 + g * x1, b = x3 - x0 + k * x3;
+    const d = y1 - y0 + g * y1, e = y3 - y0 + k * y3;
+    return 'matrix3d(' + [a / w, d / w, 0, g / w, b / h, e / h, 0, k / h, 0, 0, 1, 0, x0, y0, 0, 1].join(',') + ')';
   }
 
   const corner = new THREE.Vector3();
   function liftAndGo(mesh) {
     const { tile } = mesh.userData;
     const r = el.getBoundingClientRect();
-    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-    for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    // Top left, top right, bottom right, bottom left, on screen.
+    const quad = [[-1, 1], [1, 1], [1, -1], [-1, -1]].map(([sx, sy]) => {
       corner.set((sx * TW) / 2, (sy * TH) / 2, 0);
       mesh.localToWorld(corner).project(camera);
-      const px = r.left + ((corner.x + 1) / 2) * r.width;
-      const py = r.top + ((1 - corner.y) / 2) * r.height;
-      x0 = Math.min(x0, px); x1 = Math.max(x1, px);
-      y0 = Math.min(y0, py); y1 = Math.max(y1, py);
-    }
-    const w = x1 - x0, h = y1 - y0;
+      return [r.left + ((corner.x + 1) / 2) * r.width, r.top + ((1 - corner.y) / 2) * r.height];
+    });
+    const w = Math.hypot(quad[1][0] - quad[0][0], quad[1][1] - quad[0][1]);
+    const h = w * (TH / TW);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const c = document.createElement('canvas');
     c.className = 'pw-standin';
-    c.width = Math.round(w * dpr);
-    c.height = Math.round(h * dpr);
+    c.width = Math.max(1, Math.round(w * dpr));
+    c.height = Math.max(1, Math.round(h * dpr));
     Object.assign(c.style, {
-      position: 'fixed', left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px',
+      position: 'fixed', left: '0', top: '0', width: w + 'px', height: h + 'px',
+      transformOrigin: '0 0', transform: quadMatrix(w, h, quad),
       borderRadius: (w * 0.031) + 'px', zIndex: 50, pointerEvents: 'none',
     });
     const v = mesh.userData.video;
@@ -471,7 +478,21 @@ function createGlobe(THREE, mount, tiles) {
     }
     document.body.appendChild(c);
     window.projectWindow?.(c, tile.href, v && src === v ? v.currentTime : null);
-    requestAnimationFrame(() => { location.href = tile.href; });
+    location.href = tile.href;
+  }
+
+  // Start loading the project under the pointer, so a click opens a page
+  // that is already rendered. Speculation rules, where the browser has them.
+  const canSpeculate = window.HTMLScriptElement?.supports?.('speculationrules');
+  let spec = null, specHref = '';
+  function prerender(href) {
+    if (!canSpeculate || !href || href === specHref) return;
+    specHref = href;
+    spec?.remove();
+    spec = document.createElement('script');
+    spec.type = 'speculationrules';
+    spec.textContent = JSON.stringify({ prerender: [{ source: 'list', urls: [href], eagerness: 'immediate' }] });
+    document.head.appendChild(spec);
   }
 
   // ── hover tooltip ───────────────────────────────────────────────────────
@@ -490,6 +511,7 @@ function createGlobe(THREE, mount, tiles) {
     const hit = pick(e);
     const name = hit?.object?.userData?.tile?.title;
     if (!name) { hideTip(); return; }
+    prerender(hit.object.userData.tile.href);
     const r = mount.getBoundingClientRect();
     tip.textContent = name;
     tip.style.left = (e.clientX - r.left) + 'px';
@@ -518,14 +540,7 @@ function createGlobe(THREE, mount, tiles) {
     raf = requestAnimationFrame(frame);
     const now = performance.now();
     if (focus) {
-      const k = DUR ? Math.min(1, (now - focus.t0) / DUR) : 1;
-      const ease = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      world.quaternion.slerpQuaternions(focus.from, focus.to, ease);
-      if (k >= 1 && !focus.done) {
-        focus.done = true;
-        renderer.render(scene, camera);
-        liftAndGo(focus.mesh);
-      }
+      world.quaternion.copy(focus.to);    // held with the returning tile facing front
     } else {
       if (!dragging) {
         velY += ((reduceMotion ? 0 : 0.0026) - velY) * 0.04;

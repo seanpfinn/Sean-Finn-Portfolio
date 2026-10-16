@@ -13,6 +13,24 @@
   if (!('onpagereveal' in window)) return;
 
   var NAME = 'project-window';
+
+  // Have the next page ready before it is asked for: links to projects (and
+  // home) start rendering in the background on hover, or as a finger lands,
+  // and the homepage fetches every project's HTML up front. A click then
+  // swaps to a page that is already drawn, so the transition starts at once.
+  if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+    var rules = document.createElement('script');
+    rules.type = 'speculationrules';
+    rules.textContent = JSON.stringify({
+      prerender: [{ where: { or: [
+        { selector_matches: 'a.gallery-card' },
+        { selector_matches: 'a.nav-project-item' },
+        { selector_matches: '.splash-nav a[href="/"], a[href="index.html"]' }
+      ] }, eagerness: 'moderate' }],
+      prefetch: [{ where: { selector_matches: 'a.gallery-card' }, eagerness: 'eager' }]
+    });
+    document.head.appendChild(rules);
+  }
   var KEY = 'project-window';
 
   // Pages are compared by file name alone ("/clear-vault"; "/" for the
@@ -91,6 +109,8 @@
       // Arriving on a project through its window.
       var h = hero();
       h.style.animation = 'none';            // it arrives by morphing, not by blurring in
+      var st = document.querySelector('.cs-story');
+      if (st) st.style.animationDuration = '0.5s';   // the story settles in quickly around it
       name(h, e.viewTransition);
       root.classList.add('pw-arrive');
       e.viewTransition.finished.finally(function () { root.classList.remove('pw-arrive'); });
