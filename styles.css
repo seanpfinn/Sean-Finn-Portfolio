@@ -858,10 +858,19 @@ body {
 
 .splash-hero {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;   /* intro on the left, layout toggles on its first line */
+  column-gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;                                  /* the page column aligns its children to the start */
+  row-gap: 0.5rem;
+  align-items: start;
   text-align: left;
+}
+.splash-hero > :not(.layout-toggle) { grid-column: 1; }
+.splash-hero > .layout-toggle {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
 }
 
 .splash-hero .hero-current {

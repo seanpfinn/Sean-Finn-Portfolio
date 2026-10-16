@@ -156,19 +156,27 @@
   animation: blurIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Each chapter's visual is its original panel, kept at its native size so
-   the layered phone mockups stay intact, and scaled to the stage. */
+/* Each visual is its original panel, kept at its native size so the layered
+   phone mockups stay intact and scaled to the stage. The slides are moved by
+   case-layout.js as the reader scrolls: the next one rises over the current
+   one, which eases back and dims (--dim) underneath it. */
 .cs-slide {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transform: translateY(3%) scale(0.98);
-  transition: opacity 0.5s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--slide-bg, #e7e7e7);
+  transform: translateY(100%);
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+.cs-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--dim, 0);
   pointer-events: none;
 }
-.cs-slide.is-past  { transform: translateY(-3%) scale(0.98); }
-.cs-slide.is-ahead { transform: translateY(3%) scale(0.98); }
-.cs-slide.is-on    { opacity: 1; transform: none; pointer-events: auto; }
+.cs-slide.is-in { box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.12); border-radius: 1rem 1rem 0 0; overflow: hidden; }
 .cs-slide > .proj-panel-new {
   position: absolute;
   left: 0;

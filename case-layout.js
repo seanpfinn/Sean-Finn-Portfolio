@@ -163,7 +163,7 @@
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
 
   // ── Follow the reader ───────────────────────────────────────────────────
-  var shown = -1, active = -1, ticking = false;
+  var active = -1, ticking = false;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function line() {
@@ -173,24 +173,79 @@
     return window.innerWidth <= 809 ? r.bottom + 48 : window.innerHeight * 0.42;
   }
 
-  function show(n, forward) {
-    if (n === shown || n < 0) return;
-    var prev = slides[shown];
-    var next = slides[n];
-    if (prev) {
-      prev.slot.classList.remove('is-on');
-      prev.slot.classList.toggle('is-past', forward);
-      prev.slot.classList.toggle('is-ahead', !forward);
-      Array.prototype.forEach.call(prev.slot.querySelectorAll('video'), function (v) { v.pause(); });
-    }
-    next.slot.classList.remove('is-past', 'is-ahead');
-    next.slot.classList.add('is-on');
-    var bg = getComputedStyle(next.el).backgroundColor;
-    stage.style.setProperty('--stage-bg', bg && bg !== 'rgba(0, 0, 0, 0)' ? bg : '');
-    Array.prototype.forEach.call(next.slot.querySelectorAll('video'), function (v) {
-      v.play().catch(function () {});
+  // ── The reel ───────────────────────────────────────────────────────────
+  // The stage is a window onto a vertical reel of the project's visuals. Each
+  // visual has an anchor in the story (where its chapter, or its share of a
+  // chapter, begins). Over the stretch of scrolling before an anchor, that
+  // visual is pulled up from the bottom of the stage and over the one before,
+  // in step with the scroll, which eases back and dims as it is covered.
+  // Scrolling back lowers it away again. reel is a continuous index: 2.4 means
+  // the third visual is in place and the fourth is 40% of the way in.
+  var playing = [];
+  slides.forEach(function (s) {
+    var bg = getComputedStyle(s.el).backgroundColor;
+    s.slot.style.setProperty('--slide-bg', bg && bg !== 'rgba(0, 0, 0, 0)' ? bg : '#e7e7e7');
+  });
+
+  function anchors() {
+    var out = [];
+    chapters.forEach(function (ch) {
+      if (!ch.count) return;
+      var r = ch.section.getBoundingClientRect();
+      var top = r.top + window.scrollY;
+      for (var k = 0; k < ch.count; k++) out.push(top + (k / ch.count) * r.height);
     });
-    shown = n;
+    return out;
+  }
+
+  function reelAt(y) {
+    var A = anchors();
+    var pull = Math.min(window.innerHeight * 0.55, 420);    // scroll distance one pull-in takes
+    var pos = 0;
+    for (var n = 1; n < A.length; n++) {
+      var span = Math.min(pull, (A[n] - A[n - 1]) * 0.9);
+      var t = (y - (A[n] - span)) / span;
+      if (t <= 0) break;
+      pos = n - 1 + Math.min(1, t);
+      if (t < 1) break;
+    }
+    return pos;
+  }
+
+  function paint(pos) {
+    var on = [];
+    slides.forEach(function (s, i) {
+      var d = i - pos;                     // > 0 below the stage, < 0 covered
+      var st = s.slot.style;
+      if (d >= 1 || d <= -1.001) {
+        s.slot.classList.remove('is-on', 'is-in');
+        st.transform = d >= 1 ? 'translateY(100%)' : 'scale(0.94)';
+        st.visibility = 'hidden';
+        return;
+      }
+      st.visibility = '';
+      if (d > 0) {                         // being pulled in from below
+        var e = 1 - Math.pow(1 - (1 - d), 2) ;   // ease the last stretch so it lands softly
+        st.transform = 'translateY(' + ((1 - e) * 100).toFixed(3) + '%)';
+        st.setProperty('--dim', '0');
+        s.slot.classList.add('is-in');
+      } else {                             // in place, or going under the next one
+        var c = -d;
+        st.transform = 'scale(' + (1 - 0.06 * c).toFixed(4) + ')';
+        st.setProperty('--dim', (0.35 * c).toFixed(3));
+        s.slot.classList.remove('is-in');
+      }
+      s.slot.classList.toggle('is-on', d > -0.5 && d <= 0.5);
+      on.push(s);
+    });
+    // Play what can be seen, pause the rest.
+    playing.forEach(function (s) {
+      if (on.indexOf(s) === -1) Array.prototype.forEach.call(s.slot.querySelectorAll('video'), function (v) { v.pause(); });
+    });
+    on.forEach(function (s) {
+      if (playing.indexOf(s) === -1) Array.prototype.forEach.call(s.slot.querySelectorAll('video'), function (v) { v.play().catch(function () {}); });
+    });
+    playing = on;
   }
 
   function update() {
@@ -212,9 +267,7 @@
       ch.seg.classList.toggle('is-active', i === a);
     });
     var ch = chapters[a];
-    var n = ch.count ? ch.first + Math.min(ch.count - 1, Math.floor(progress * ch.count)) : ch.hold;
-    if (n < 0) n = 0;
-    show(n, n > shown);
+    paint(reelAt(window.scrollY + y));
     if (h1) {
       var titled = h1.getBoundingClientRect().bottom < wrap.getBoundingClientRect().bottom;
       document.documentElement.classList.toggle('cs-titled', titled);
