@@ -2966,7 +2966,10 @@ html.is-canvas,
 html.is-canvas body { overflow: hidden; overscroll-behavior: none; height: 100%; }
 html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .is-canvas .splash-page { pointer-events: none; height: 100%; overflow: visible; padding-bottom: 0; }
-.is-canvas .splash-hero { z-index: 1; pointer-events: auto; }
+.is-canvas .splash-hero { z-index: 1; }
+/* Just the layout toggle stays: the intro steps aside for the work. */
+.is-canvas .splash-hero > :not(.layout-toggle) { display: none; }
+.is-canvas .splash-hero > .layout-toggle { pointer-events: auto; }
 /* The nav (and the full-screen menu it opens on a phone) stays above the
    intro and footer panes, which are layered over the canvas. */
 .is-canvas .splash-nav { z-index: 200; }
@@ -3038,7 +3041,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   flex-direction: column;
   gap: 0.5rem;
   text-decoration: none;
-  transform-origin: 50% 28%;           /* the middle of the visual, not the caption */
+  transform-origin: 50% 50%;
   will-change: transform;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
@@ -3048,15 +3051,12 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.45s ease;
 }
 .canvas-tile .gv-video { pointer-events: none; }
-.canvas-tile .gallery-card-info { transition: opacity 0.3s ease; opacity: 0.7; }
-.canvas-tile .gallery-card-title { font-size: 0.8125rem; }
 
 @media (hover: hover) {
   .canvas-tile:hover .gallery-card-visual {
     transform: scale(1.035);
     box-shadow: 0 0.75rem 2rem -0.5rem rgba(0, 0, 0, 0.28);
   }
-  .canvas-tile:hover .gallery-card-info { opacity: 1; }
 }
 .canvas-stage.is-dragging .canvas-tile .gallery-card-visual { transform: none; }
 .canvas-tile:focus-visible { outline: none; }
@@ -3095,12 +3095,55 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   }
   .is-canvas .splash-footer .social-links,
   .is-canvas .splash-footer .sidebar-meta { pointer-events: auto; }
-  .canvas-tile { gap: 0.375rem; }
   .canvas-tile .gallery-card-visual { border-radius: 0.75rem; }
-  .canvas-tile .gallery-card-title { font-size: 0.75rem; }
-  .canvas-tile .gallery-card-logo,
-  .canvas-tile .gallery-card-company { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .canvas-tile.is-entering > * { animation: none; }
+}
+
+/* ── Cursor tag ──────────────────────────────────────────────────────────
+   Names the project under the pointer on the canvas and the globe
+   (home-canvas.js moves it). It rides just below-right of the cursor and
+   pops in from the cursor's tip. */
+.cursor-tag {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+  will-change: transform;
+}
+.cursor-tag span {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.875rem 0 0 0.875rem;
+  padding: 0.375rem 0.625rem 0.375rem 0.75rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 0.5rem 1.5rem -0.5rem rgba(0, 0, 0, 0.35);
+  transform-origin: 0 0;
+  transform: scale(0.4);
+  opacity: 0;
+  transition: transform 0.18s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.14s ease;
+}
+.cursor-tag span::after {
+  content: '↗';
+  font-size: 0.75rem;
+  opacity: 0.55;
+}
+.cursor-tag.is-on span {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.32s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.16s ease;
+}
+@media (hover: none) { .cursor-tag { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .cursor-tag span, .cursor-tag.is-on span { transition: opacity 0.12s ease; transform: none; }
 }

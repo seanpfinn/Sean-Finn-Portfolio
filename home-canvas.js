@@ -16,7 +16,48 @@
 // the page is revealed and the transition looks for somewhere to land.
 // home-layout.js switches between this and the other layouts through
 // window.homeCanvas.
+// ── Cursor tag ──────────────────────────────────────────────────────────────
+// A small label that rides along with the cursor and names the project under
+// it. Shared by the canvas (below) and the globe (home-layout.js), through
+// window.cursorTag. It trails the pointer slightly on a spring, so it feels
+// attached rather than pinned, and pops in and out on a little scale.
+// Mouse and pen only — there's no cursor to follow on a touch screen.
+window.cursorTag = window.cursorTag || (function () {
+  var el = document.createElement('div');
+  el.className = 'cursor-tag';
+  el.setAttribute('aria-hidden', 'true');
+  var label = document.createElement('span');
+  el.appendChild(label);
+  var x = 0, y = 0, tx = 0, ty = 0, raf = 0, shown = false, placed = false;
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function step() {
+    var k = still ? 1 : 0.28;
+    x += (tx - x) * k; y += (ty - y) * k;
+    el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
+    raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.2 ? requestAnimationFrame(step) : 0;
+  }
+  function attach() { if (!el.isConnected) document.body.appendChild(el); }
+  return {
+    show: function (name, cx, cy) {
+      if (!name) return this.hide();
+      attach();
+      tx = cx; ty = cy;
+      if (!placed || !shown) { x = tx; y = ty; placed = true; }
+      if (label.textContent !== name) label.textContent = name;
+      if (!shown) { shown = true; el.classList.add('is-on'); }
+      if (!raf) raf = requestAnimationFrame(step);
+    },
+    move: function (cx, cy) { tx = cx; ty = cy; if (shown && !raf) raf = requestAnimationFrame(step); },
+    hide: function () {
+      if (!shown) return;
+      shown = false;
+      el.classList.remove('is-on');
+    },
+  };
+})();
+
 (function () {
+  var tag = window.cursorTag;
   var grid  = document.getElementById('project-grid');
   var stage = document.getElementById('canvas-stage');
   var field = document.getElementById('canvas-field');
@@ -77,7 +118,7 @@
     tw = Math.round(Math.max(168, Math.min(320, W * 0.2)));
     th = tw * 9 / 16;
     cw = tw * 1.75;                    // generous air between columns
-    ch = th + 30 + tw * 0.6;           // visual, caption, gap
+    ch = th + tw * 0.6;                // visual and gap; no captions on the canvas
     field.style.setProperty('--tile-w', tw + 'px');
     if (fx || fy) { pan.x = CX - fx * cw; pan.y = CY - fy * ch; }
   }
@@ -89,11 +130,11 @@
 
   // ── Tiles ─────────────────────────────────────────────────────────────────
   // The frosted frame: three layers of increasing blur (styles.css).
-  var frame = document.createElement('div');
-  frame.className = 'canvas-frame';
-  frame.setAttribute('aria-hidden', 'true');
-  for (var f = 0; f < 3; f++) frame.appendChild(document.createElement('div')).className = 'canvas-frost';
-  stage.appendChild(frame);
+  var frost = document.createElement('div');
+  frost.className = 'canvas-frame';
+  frost.setAttribute('aria-hidden', 'true');
+  for (var f = 0; f < 3; f++) frost.appendChild(document.createElement('div')).className = 'canvas-frost';
+  stage.appendChild(frost);
 
   var live = new Map();                 // "j,i" -> tile on the field
   var spare = cards.map(function () { return []; });   // off-field, per project
@@ -105,18 +146,21 @@
     a.href = src.getAttribute('href');
     a.draggable = false;
     var vis = src.querySelector('.gallery-card-visual').cloneNode(true);
-    var info = src.querySelector('.gallery-card-info');
     vis.querySelectorAll('video').forEach(function (v) {
       v.removeAttribute('data-play-in-view');   // this script decides what plays
       v.preload = 'none';
       v.muted = true;
     });
     a.appendChild(vis);
-    if (info) a.appendChild(info.cloneNode(true));
+    a.setAttribute('aria-label', title(p));    // the visible name lives in the cursor tag
     a.querySelectorAll('img').forEach(function (im) { im.draggable = false; });
     a._p = p;
     a._v = vis.querySelector('video');
     return a;
+  }
+  function title(p) {
+    var t = cards[p].querySelector('.gallery-card-title');
+    return t ? t.textContent.trim() : '';
   }
   function take(p) { return spare[p].pop() || make(p); }
   function drop(key, el) {
@@ -214,37 +258,36 @@
       }
     }
     layout();
+    hitTest(now);
     playNearest(now);
   }
 
-  // Drag with a finger or the mouse. Pointer capture waits until the gesture
-  // is clearly a drag, so a plain click still lands on the tile's link.
-  var suppressClick = false;
-  stage.addEventListener('pointerdown', function (e) {
-    if (e.button !== 0) return;
-    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, samples: [] };
+  // Drag with the mouse, or swipe with a finger. Nothing is captured until
+  // the gesture is clearly a drag, so a plain click or tap still lands on
+  // the tile's link.
+  var suppressUntil = 0;
+  function begin(id, x, y) {
+    drag = { id: id, x: x, y: y, moved: false, samples: [] };
     glide = null;
-  });
-  stage.addEventListener('pointermove', function (e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  }
+  function move(x, y) {
+    var dx = x - drag.x, dy = y - drag.y;
     if (!drag.moved) {
-      if (Math.abs(dx) + Math.abs(dy) < 6) return;
+      if (Math.abs(dx) + Math.abs(dy) < 6) return false;
       drag.moved = true;
       stage.classList.add('is-dragging');
-      try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+      tag.hide();
     }
     pan.x += dx; pan.y += dy;
-    drag.x = e.clientX; drag.y = e.clientY;
+    drag.x = x; drag.y = y;
     var now = performance.now();
     drag.samples.push({ t: now, x: dx, y: dy });
     while (drag.samples.length && now - drag.samples[0].t > 90) drag.samples.shift();
-  });
-  function endDrag(e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    if (drag.moved) {
-      suppressClick = true;
-      setTimeout(function () { suppressClick = false; }, 0);
+    return true;
+  }
+  function finish() {
+    if (drag && drag.moved) {
+      suppressUntil = performance.now() + 400;
       var s = drag.samples, sx = 0, sy = 0;
       s.forEach(function (p) { sx += p.x; sy += p.y; });
       var span = s.length ? Math.max(16, performance.now() - s[0].t) / 1000 : 1;
@@ -255,10 +298,43 @@
     }
     drag = null;
   }
-  stage.addEventListener('pointerup', endDrag);
-  stage.addEventListener('pointercancel', endDrag);
+
+  // Mouse and pen. Touch has its own handlers below: iOS hands a finger on a
+  // link to its own gestures, and pointer events alone don't reliably keep it.
+  stage.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'touch' || e.button !== 0) return;
+    begin(e.pointerId, e.clientX, e.clientY);
+  });
+  stage.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'touch') return;
+    pointer = { x: e.clientX, y: e.clientY };
+    tag.move(e.clientX, e.clientY);
+    if (!drag || e.pointerId !== drag.id) return;
+    var wasMoved = drag.moved;
+    if (move(e.clientX, e.clientY) && !wasMoved) {
+      try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+  });
+  function endPointer(e) { if (drag && e.pointerId === drag.id) finish(); }
+  stage.addEventListener('pointerup', endPointer);
+  stage.addEventListener('pointercancel', endPointer);
+
+  stage.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { if (drag) finish(); return; }
+    var t = e.touches[0];
+    begin('touch', t.clientX, t.clientY);
+  }, { passive: true });
+  stage.addEventListener('touchmove', function (e) {
+    if (!drag || drag.id !== 'touch') return;
+    e.preventDefault();
+    var t = e.touches[0];
+    if (t) move(t.clientX, t.clientY);
+  }, { passive: false });
+  stage.addEventListener('touchend', function () { if (drag && drag.id === 'touch') finish(); });
+  stage.addEventListener('touchcancel', function () { if (drag && drag.id === 'touch') finish(); });
+
   stage.addEventListener('click', function (e) {
-    if (suppressClick) { e.preventDefault(); e.stopPropagation(); }
+    if (performance.now() < suppressUntil) { e.preventDefault(); e.stopPropagation(); }
   }, true);
   stage.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
@@ -280,11 +356,23 @@
     e.preventDefault();
   }, { passive: false });
 
-  stage.addEventListener('pointerover', function (e) {
+  // Hover: the drift slows over the field and stops over a tile, and the
+  // cursor tag names the tile. Tiles drift under a still cursor, so this is
+  // checked every few frames rather than only when the mouse moves.
+  var pointer = null, lastHit = 0;
+  stage.addEventListener('pointerleave', function (e) {
     if (e.pointerType === 'touch') return;
-    hover = e.target.closest && e.target.closest('.canvas-tile') ? 2 : 1;
+    pointer = null; hover = 0; tag.hide();
   });
-  stage.addEventListener('pointerleave', function () { hover = 0; });
+  function hitTest(now) {
+    if (!pointer || now - lastHit < 80) return;
+    lastHit = now;
+    if (drag && drag.moved) return;
+    var el = document.elementFromPoint(pointer.x, pointer.y);
+    var a = el && el.closest && el.closest('.canvas-tile');
+    if (a && stage.contains(a)) { hover = 2; tag.show(title(a._p), pointer.x, pointer.y); }
+    else { hover = stage.contains(el) ? 1 : 0; tag.hide(); }
+  }
 
   // Tabbing onto a tile glides it to the middle.
   stage.addEventListener('focusin', function (e) {
@@ -344,6 +432,7 @@
   function stop() {
     on = false;
     halt();
+    tag.hide();
     stage.hidden = true;
     document.documentElement.classList.remove('is-canvas');
   }
