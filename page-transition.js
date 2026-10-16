@@ -100,6 +100,13 @@
   });
 
   addEventListener('pagereveal', function (e) {
+    // A page opened from a link starts at its top, even when the browser
+    // rendered it ahead of time or the page sits in a frame that kept its
+    // scroll. Back and forward keep the position they return to.
+    var nav = window.navigation && navigation.activation;
+    if (!location.hash && (!nav || nav.navigationType === 'push' || nav.navigationType === 'replace')) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });   // the site scrolls smoothly by default
+    }
     var info = read();
     clear();
     if (!e.viewTransition || !info) return;

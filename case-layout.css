@@ -4,11 +4,14 @@
    rule is scoped to html.cs-v2, which that script sets, so without it the
    original single column in case-study.css is untouched.
 
-   Layout:   nav | story (≈23rem)  | stage, pinned and centred in the viewport
-                 |  title, meta    |  ┌──────────────────────────────┐
-                 |  01 Context  ●  |  │ the chapter's visual          │
-                 |  02 Problem     |  └──────────────────────────────┘
-                 |  …              |  ━━━━ ━━ ── ── ── ──   Problem  2 of 8
+   Layout:   nav | story (≈23rem)  | stage, pinned at the top
+                 |  01 Context  ●  |  ┌──────────────────────────────┐
+                 |  02 Problem     |  │ the chapter's visual          │
+                 |  …              |  └──────────────────────────────┘
+                 |                 |  ━━━━ ━━ ── ── ── ──   Problem  2 of 8
+                 |                 |  Title, description, details (scrolls
+                 |                 |  away under the stage; the name then
+                 |                 |  runs at the top of the screen)
    Phone: the stage pins under the nav bar and the story scrolls beneath it.
    Colors and type come from the site's tokens (styles.css), so dark mode and
    the Geist pairing carry over unchanged.
@@ -43,7 +46,23 @@
   min-width: 0;
   padding-bottom: 42vh;                  /* lets the last chapter reach the reading line */
 }
-.cs-v2 .proj-header-group { gap: 1.25rem; padding-bottom: 1.5rem; }
+.cs-side {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: stretch;                   /* as tall as the story, so the stage stays pinned */
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cs-v2 .proj-header-group {
+  position: relative;
+  z-index: 1;                            /* slides under the pinned stage */
+  gap: 1.25rem;
+  width: 100%;
+  max-width: calc((100vh - 7.5rem) * var(--stage-ratio));
+  margin-left: auto;
+  padding-top: 2rem;
+}
 .cs-v2 .proj-title-new {
   font-size: clamp(2.125rem, 2.9vw, 3rem);
   line-height: 1.02;
@@ -61,6 +80,7 @@
 .cs-chapter {
   min-height: calc(var(--n, 1) * 62vh);
   padding-top: 2.25rem;
+  scroll-margin-top: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -68,6 +88,7 @@
   transition: opacity 0.5s ease;
 }
 .cs-chapter.is-active { opacity: 1; }
+.cs-chapter:first-child { padding-top: 0; }
 .cs-chapter:last-child { min-height: 0; }
 
 .cs-v2 .proj-caption { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -109,10 +130,11 @@
 
 /* ── Stage ─────────────────────────────────────────────────────────────── */
 .cs-stage-wrap {
-  grid-column: 2;
-  grid-row: 1;
   position: sticky;
-  top: var(--wrap-top, var(--page-top));  /* set by case-layout.js to centre the stage in the viewport */
+  z-index: 2;
+  background: var(--bg);
+  box-shadow: 0 calc(-1 * var(--page-top)) 0 var(--bg);   /* hides the header passing above it too */
+  top: var(--page-top);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -205,6 +227,28 @@
 }
 .cs-now-label { color: var(--text); }
 
+/* ── Running title ─────────────────────────────────────────────────────── */
+.cs-titlebar {
+  position: fixed;
+  top: 0;
+  left: var(--nav-clear-left);
+  z-index: 6;
+  width: min(23rem, 30vw);
+  padding: calc(var(--nav-top) + 0.0625rem) 0 1.25rem;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.26rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  background: linear-gradient(var(--bg) 65%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-0.375rem);
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cs-titled .cs-titlebar { opacity: 1; transform: none; }
+
 /* ── The end: the next windows ─────────────────────────────────────────── */
 .cs-v2 .proj-more {
   margin-top: 0;
@@ -219,10 +263,10 @@
     margin-right: var(--page-x);
   }
   .cs-body { display: flex; flex-direction: column; align-items: stretch; }
-  .cs-story { display: contents; }
-  .cs-v2 .proj-header-group { order: 0; }
+  .cs-story, .cs-side { display: contents; }
+  .cs-v2 .proj-header-group { order: 1; max-width: none; padding-top: 1.25rem; padding-bottom: 0.5rem; }
   .cs-stage-wrap {
-    order: 1;
+    order: 0;
     top: 3.25rem;
     z-index: 2;
     padding: 0.75rem 0 0.25rem;
@@ -240,6 +284,21 @@
   .cs-v2 .cs-note { padding-left: 0; margin-left: 0; }
   .cs-v2 .cs-note { padding-left: 0.75rem; }
   .cs-v2 .proj-more-grid { grid-template-columns: 1fr; }
+  .cs-titlebar {
+    left: 50%;
+    width: auto;
+    max-width: 60vw;
+    padding: 0;
+    top: 0.5rem;                         /* level with the menu and theme icons */
+    z-index: 8002;                       /* above the phone nav bar's frosted strip */
+    background: none;
+    transform: translate(-50%, -0.375rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cs-titled .cs-titlebar { transform: translate(-50%, 0); }
+  .splash-nav.menu-open ~ .cs-titlebar { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

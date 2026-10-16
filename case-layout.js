@@ -57,7 +57,6 @@
 
   var story = document.createElement('div');
   story.className = 'cs-story';
-  if (header) story.appendChild(header);
 
   chapters.forEach(function (ch, i) {
     var sec = document.createElement('section');
@@ -128,25 +127,37 @@
   // Story and stage share one section, so the pinned stage lets go when the
   // story ends instead of riding over what follows (the next-project cards
   // main.js appends to the column).
+  // The project's header sits under the stage: the window lands first, the
+  // name and details follow it, and both scroll in step until the stage pins
+  // and the header slides away beneath it.
+  var side = document.createElement('div');
+  side.className = 'cs-side';
+  side.appendChild(wrap);
+  if (header) side.appendChild(header);
   var body = document.createElement('div');
   body.className = 'cs-body';
   body.appendChild(story);
-  body.appendChild(wrap);
+  body.appendChild(side);
   col.textContent = '';
   col.appendChild(body);
+
+  // Once the name has gone under the stage it reappears as a running title
+  // at the top of the screen. It repeats the page's h1, so it is hidden
+  // from assistive tech.
+  var h1 = header && header.querySelector('.proj-title-new');
+  var titlebar = null;
+  if (h1) {
+    titlebar = document.createElement('div');
+    titlebar.className = 'cs-titlebar';
+    titlebar.setAttribute('aria-hidden', 'true');
+    titlebar.textContent = h1.textContent.trim();
+    document.body.appendChild(titlebar);
+  }
 
   // ── Fit the panels to the stage ─────────────────────────────────────────
   function fit() {
     var w = stage.clientWidth;
     if (w) stage.style.setProperty('--fit', (w / PANEL_W).toFixed(4));
-    // Centre the pinned stage and its strip in the viewport (desktop only;
-    // the phone rule pins it under the nav bar instead).
-    if (window.innerWidth > 809) {
-      var top = Math.max(24, (window.innerHeight - wrap.offsetHeight) / 2);
-      wrap.style.setProperty('--wrap-top', top + 'px');
-    } else {
-      wrap.style.removeProperty('--wrap-top');
-    }
   }
   fit();
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
@@ -204,6 +215,10 @@
     var n = ch.count ? ch.first + Math.min(ch.count - 1, Math.floor(progress * ch.count)) : ch.hold;
     if (n < 0) n = 0;
     show(n, n > shown);
+    if (h1) {
+      var titled = h1.getBoundingClientRect().bottom < wrap.getBoundingClientRect().bottom;
+      document.documentElement.classList.toggle('cs-titled', titled);
+    }
     if (a !== active) {
       active = a;
       now.innerHTML = '<span class="cs-now-label"></span><span class="cs-now-count"></span>';
