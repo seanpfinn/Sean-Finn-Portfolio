@@ -48,23 +48,43 @@
   }
 
   // ── Geometry ──────────────────────────────────────────────────────────────
-  var W = 0, H = 0, tw = 0, th = 0, cw = 0, ch = 0;
+  // The stage fills the window behind the page. The hero text (and nav) above
+  // and the footer below sit on frosted glass; the clear area between them is
+  // where the lens is centered and where a returning project lands.
+  var W = 0, H = 0, tw = 0, th = 0, cw = 0, ch = 0, CX = 0, CY = 0;
   var pan = { x: 0, y: 0 };
+  var hero = document.querySelector('.splash-hero');
+  var nav = document.querySelector('.splash-nav');
+  var foot = document.querySelector('.splash-footer');
+  function clearArea() {
+    var top = 0, bottom = 0;
+    // Layout boxes, not painted ones: both are mid-entrance (blurIn slides
+    // them up 10px) the first time this runs.
+    if (hero && hero.offsetParent) top = hero.offsetParent.getBoundingClientRect().top + hero.offsetTop + hero.offsetHeight;
+    if (nav) top = Math.max(top, nav.offsetTop + nav.offsetHeight);
+    if (foot) { var fr = foot.getBoundingClientRect(); if (fr.height) bottom = Math.max(0, H - fr.top); }
+    top = Math.min(top, H * 0.45); bottom = Math.min(bottom, H * 0.3);
+    stage.style.setProperty('--clear-top', Math.round(top) + 'px');
+    stage.style.setProperty('--clear-bottom', Math.round(bottom) + 'px');
+    CX = W / 2;
+    CY = (top + (H - bottom)) / 2;
+  }
   function measure() {
     var r = stage.getBoundingClientRect();
-    var fx = cw ? (W / 2 - pan.x) / cw : 0, fy = ch ? (H / 2 - pan.y) / ch : 0;
+    var fx = cw ? (CX - pan.x) / cw : 0, fy = ch ? (CY - pan.y) / ch : 0;
     W = r.width; H = r.height;
+    clearArea();
     tw = Math.round(Math.max(168, Math.min(320, W * 0.2)));
     th = tw * 9 / 16;
     cw = tw * 1.75;                    // generous air between columns
     ch = th + 30 + tw * 0.6;           // visual, caption, gap
     field.style.setProperty('--tile-w', tw + 'px');
-    if (fx || fy) { pan.x = W / 2 - fx * cw; pan.y = H / 2 - fy * ch; }
+    if (fx || fy) { pan.x = CX - fx * cw; pan.y = CY - fy * ch; }
   }
   // Put slot (j, 0) — project j — dead center.
   function centerOn(j) {
-    pan.x = W / 2 - (j * cw + tw / 2);
-    pan.y = H / 2 - (lift(j) * ch + th / 2);
+    pan.x = CX - (j * cw + tw / 2);
+    pan.y = CY - (lift(j) * ch + th / 2);
   }
 
   // ── Tiles ─────────────────────────────────────────────────────────────────
@@ -104,7 +124,7 @@
 
   var entering = false;
   function layout() {
-    var cx = W / 2, cy = H / 2, R2 = (W * W + H * H) / 4;
+    var cx = CX, cy = CY, R2 = (W * W + H * H) / 4;
     var seen = new Set();
     var j0 = Math.floor((-pan.x - cw) / cw), j1 = Math.ceil((W - pan.x) / cw);
     for (var j = j0; j <= j1; j++) {
@@ -235,12 +255,15 @@
   }, true);
   stage.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
-  // Sideways scrolling (trackpads, shift+wheel) pans; plain vertical scrolling
-  // is left to the page.
-  stage.addEventListener('wheel', function (e) {
-    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+  // The page doesn't scroll while the canvas is up, so the wheel and
+  // two-finger trackpad swipes pan the field in both directions.
+  addEventListener('wheel', function (e) {
+    if (!on || e.ctrlKey) return;               // ctrl + wheel is pinch-zoom
+    if (e.target.closest && e.target.closest('.nav-dropdown, .splash-nav-links, .music-box, [class*="miniplayer"]')) return;
     e.preventDefault();
-    pan.x -= e.deltaX;
+    var k = e.deltaMode === 1 ? 16 : 1;
+    pan.x -= e.deltaX * k;
+    pan.y -= e.deltaY * k;
     glide = null;
   }, { passive: false });
 
@@ -256,8 +279,8 @@
     if (!a || !a.matches(':focus-visible')) return;
     var r = a.getBoundingClientRect(), sr = stage.getBoundingClientRect();
     glide = {
-      x: pan.x + (sr.left + W / 2) - (r.left + r.width / 2),
-      y: pan.y + (sr.top + H / 2) - (r.top + r.height / 2),
+      x: pan.x + (sr.left + CX) - (r.left + r.width / 2),
+      y: pan.y + (sr.top + CY) - (r.top + r.height / 2),
     };
   });
 
@@ -287,6 +310,7 @@
   var placed = false;
   function start(animate) {
     stage.hidden = false;
+    document.documentElement.classList.add('is-canvas');
     on = true;
     measure();
     if (!placed) { centerOn(0); placed = true; }
@@ -308,13 +332,13 @@
     on = false;
     halt();
     stage.hidden = true;
+    document.documentElement.classList.remove('is-canvas');
   }
   window.homeCanvas = { start: start, stop: stop };
 
   // ── First paint ───────────────────────────────────────────────────────────
   var mode;
-  try { mode = localStorage.getItem('home-layout'); } catch (e) {}
-  if (mode === 'cols2') mode = 'cols3';
+  try { mode = sessionStorage.getItem('home-layout'); } catch (e) {}   // see the head of index.html
   if (MODES.indexOf(mode) === -1) mode = 'canvas';
   if (mode !== 'canvas') return;
 
