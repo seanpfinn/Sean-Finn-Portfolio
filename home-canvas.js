@@ -133,7 +133,13 @@ window.cursorTag = window.cursorTag || (function () {
   var frost = document.createElement('div');
   frost.className = 'canvas-frame';
   frost.setAttribute('aria-hidden', 'true');
-  for (var f = 0; f < 3; f++) frost.appendChild(document.createElement('div')).className = 'canvas-frost';
+  for (var f = 0; f < 3; f++) {
+    var layer = frost.appendChild(document.createElement('div'));
+    layer.className = 'canvas-frost';
+    ['t', 'b', 'l', 'r'].forEach(function (side) {
+      layer.appendChild(document.createElement('div')).className = 'frost-edge ' + side;
+    });
+  }
   stage.appendChild(frost);
 
   var live = new Map();                 // "j,i" -> tile on the field
@@ -234,7 +240,7 @@ window.cursorTag = window.cursorTag || (function () {
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    var dt = Math.min(0.05, (now - last) / 1000 || 0);
+    var dt = Math.min(0.1, (now - last) / 1000 || 0);
     last = now;
 
     if (!drag) {

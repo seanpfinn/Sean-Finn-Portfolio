@@ -2976,47 +2976,59 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .is-canvas .projects-block { display: none; }
 
 /* ── Frosted frame ──
-   Around the window's edge — under the intro and nav at the top, the footer
+   Around the window's edge — under the nav and toggle at the top, the footer
    at the bottom, and along both sides — the tiles pass beneath a soft frost,
    and the middle stays clear. Three layers (home-canvas.js adds them), each
    blurring a little more and reaching a little less far in, so the frost
    deepens gradually toward the edge with no line where it starts. --clear-top
-   and --clear-bottom (also from home-canvas.js) are where the text ends. */
+   and --clear-bottom (also from home-canvas.js) are where the text ends.
+
+   Each layer is four strips, one per edge, sized to its band. A blur costs
+   by the area it covers, and full-window layers masked down to a ring still
+   paid for the whole window every frame, which slowed the drift and the
+   drag to a crawl. */
 .canvas-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.canvas-frost {
+.canvas-frost { position: absolute; inset: 0; pointer-events: none; }
+.frost-edge {
   position: absolute;
-  inset: 0;
-  z-index: 2;
   pointer-events: none;
-  --v: linear-gradient(to bottom,
-         #000 0,
-         #000 max(0px, calc(var(--clear-top) - var(--hold))),
-         transparent calc(var(--clear-top) + var(--reach)),
-         transparent calc(100% - var(--clear-bottom) - var(--reach)),
-         #000 calc(100% - var(--clear-bottom) + var(--hold)),
-         #000 100%);
-  --h: linear-gradient(to right, #000, transparent var(--side), transparent calc(100% - var(--side)), #000);
-  -webkit-mask-image: var(--v), var(--h);
-  -webkit-mask-composite: source-over;
-          mask-image: var(--v), var(--h);
-          mask-composite: add;
+  background: var(--tint, transparent);
+  -webkit-backdrop-filter: var(--blur);
+          backdrop-filter: var(--blur);
 }
-.canvas-frost:nth-child(1) {
-  --hold: 0px; --reach: 8rem; --side: 9%;
-  -webkit-backdrop-filter: blur(3px);
-          backdrop-filter: blur(3px);
+.frost-edge.t {
+  top: 0; left: 0; right: 0;
+  height: calc(var(--clear-top) + var(--reach));
+  -webkit-mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), transparent);
+          mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), transparent);
 }
-.canvas-frost:nth-child(2) {
-  --hold: 0px; --reach: 4rem; --side: 5%;
-  -webkit-backdrop-filter: blur(7px) saturate(1.15);
-          backdrop-filter: blur(7px) saturate(1.15);
+.frost-edge.b {
+  bottom: 0; left: 0; right: 0;
+  height: calc(var(--clear-bottom) + var(--reach));
+  -webkit-mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), transparent);
+          mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), transparent);
 }
-.canvas-frost:nth-child(3) {
-  --hold: 0.5rem; --reach: 1.5rem; --side: 2%;
-  background: var(--frost-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-          backdrop-filter: blur(14px) saturate(1.3);
+/* The side strips run between the top and bottom ones, so no corner is
+   blurred twice. */
+.frost-edge.l,
+.frost-edge.r {
+  top: calc(var(--clear-top) + var(--reach));
+  bottom: calc(var(--clear-bottom) + var(--reach));
+  width: var(--side);
 }
+.frost-edge.l {
+  left: 0;
+  -webkit-mask-image: linear-gradient(to right, #000, transparent);
+          mask-image: linear-gradient(to right, #000, transparent);
+}
+.frost-edge.r {
+  right: 0;
+  -webkit-mask-image: linear-gradient(to left, #000, transparent);
+          mask-image: linear-gradient(to left, #000, transparent);
+}
+.canvas-frost:nth-child(1) { --hold: 0px;    --reach: 8rem;   --side: 9%; --blur: blur(3px); }
+.canvas-frost:nth-child(2) { --hold: 0px;    --reach: 4rem;   --side: 5%; --blur: blur(7px) saturate(1.15); }
+.canvas-frost:nth-child(3) { --hold: 0.5rem; --reach: 1.5rem; --side: 2%; --blur: blur(14px) saturate(1.3); --tint: var(--frost-tint); }
 .canvas-stage {
   --clear-top: 12%;
   --clear-bottom: 8%;
