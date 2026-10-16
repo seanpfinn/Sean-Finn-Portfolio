@@ -48,9 +48,9 @@
   }
 
   // ── Geometry ──────────────────────────────────────────────────────────────
-  // The stage fills the window behind the page. The hero text (and nav) above
-  // and the footer below sit on frosted glass; the clear area between them is
-  // where the lens is centered and where a returning project lands.
+  // The stage fills the window behind the page. The intro (and nav) above
+  // and the footer below sit on its frosted frame; the clear area between
+  // them is where the lens is centered and where a returning project lands.
   var W = 0, H = 0, tw = 0, th = 0, cw = 0, ch = 0, CX = 0, CY = 0;
   var pan = { x: 0, y: 0 };
   var hero = document.querySelector('.splash-hero');
@@ -88,6 +88,13 @@
   }
 
   // ── Tiles ─────────────────────────────────────────────────────────────────
+  // The frosted frame: three layers of increasing blur (styles.css).
+  var frame = document.createElement('div');
+  frame.className = 'canvas-frame';
+  frame.setAttribute('aria-hidden', 'true');
+  for (var f = 0; f < 3; f++) frame.appendChild(document.createElement('div')).className = 'canvas-frost';
+  stage.appendChild(frame);
+
   var live = new Map();                 // "j,i" -> tile on the field
   var spare = cards.map(function () { return []; });   // off-field, per project
 
@@ -265,6 +272,12 @@
     pan.x -= e.deltaX * k;
     pan.y -= e.deltaY * k;
     glide = null;
+  }, { passive: false });
+  // Nor does it scroll by touch: iOS will rubber-band a page whose body
+  // can't scroll unless the move itself is cancelled. The menu is exempt.
+  document.addEventListener('touchmove', function (e) {
+    if (!on || (e.target.closest && e.target.closest('.splash-nav'))) return;
+    e.preventDefault();
   }, { passive: false });
 
   stage.addEventListener('pointerover', function (e) {

@@ -2942,8 +2942,8 @@ html.pw-return::view-transition-new(root) {
    CANVAS — the homepage's default layout
    An endless field of project tiles that drifts on its own and drags in any
    direction (home-canvas.js). It fills the whole window, behind the nav, the
-   intro and the footer, which float over it as panes of glass; the page
-   itself doesn't scroll while it's up. Each tile is a real
+   intro and the footer, framed by a soft frost at its edges; the page itself
+   doesn't scroll while it's up. Each tile is a real
    .gallery-card-visual, which page-transition.js grows into the project.
    ================================ */
 .canvas-stage {
@@ -2967,183 +2967,65 @@ html.is-canvas body { overflow: hidden; overscroll-behavior: none; height: 100%;
 html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .is-canvas .splash-page { pointer-events: none; height: 100%; overflow: visible; padding-bottom: 0; }
 .is-canvas .splash-hero { z-index: 1; pointer-events: auto; }
+/* The nav (and the full-screen menu it opens on a phone) stays above the
+   intro and footer panes, which are layered over the canvas. */
+.is-canvas .splash-nav { z-index: 200; }
 .is-canvas .projects-block { display: none; }
 
-/* ── Glass ──
-   Each thing that sits over the canvas — the intro, the nav, the footer's
-   two groups — is its own pane of Liquid Glass, and blurs only what passes
-   directly behind it. Same material as the case-study chrome. */
-.is-canvas {
-  --glass-tint: rgba(255, 255, 255, 0.62);
-  --glass-rim: rgba(255, 255, 255, 0.9);
-  --glass-rim-low: rgba(255, 255, 255, 0.35);
-  --glass-edge: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.1), 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
-}
-.is-canvas.dark,
-.is-canvas .dark,
-.dark .is-canvas {
-  --glass-tint: rgba(28, 28, 32, 0.58);
-  --glass-rim: rgba(255, 255, 255, 0.2);
-  --glass-rim-low: rgba(255, 255, 255, 0.06);
-  --glass-edge: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.45);
-}
-.is-canvas .splash-hero,
-.is-canvas .nav-hamburger,
-.is-canvas .splash-footer .social-links,
-.is-canvas .splash-footer .sidebar-meta {
-  position: relative;
-  isolation: isolate;
-  --r: 1rem;                            /* the pane's corner radius */
-  border-radius: var(--r);
-  box-shadow: var(--glass-shadow);
-}
-/* The frost itself. A backdrop blur only samples what lies inside its own
-   box, so a tile sliding under a pane's edge shows a hard line where the
-   blur begins. This layer reaches 3rem past the pane on every side — so the
-   blur near the edge takes in what's just outside it — and is masked back
-   to the pane's exact shape. */
-.is-canvas .splash-hero::before,
-.is-canvas .nav-hamburger::before,
-.is-canvas .splash-footer .social-links::before,
-.is-canvas .splash-footer .sidebar-meta::before {
-  content: '';
-  position: absolute;
-  inset: -3rem;
-  z-index: -1;
-  pointer-events: none;
-  background: var(--glass-tint);
-  -webkit-backdrop-filter: blur(1.5rem) saturate(180%) brightness(1.05);
-          backdrop-filter: blur(1.5rem) saturate(180%) brightness(1.05);
-  /* Cut back to the pane's rounded shape with a mask, not clip-path: a
-     clip-path also limits what the blur can see, which brings the hard edge
-     right back. Two crossed bars plus four corner dots make the shape. */
-  padding: 3rem;
-  box-sizing: border-box;
-  --dot: radial-gradient(closest-side, #000 calc(100% - 0.75px), transparent);
-  --bar: linear-gradient(#000 0 0);
-  -webkit-mask-image: var(--bar), var(--bar), var(--dot), var(--dot), var(--dot), var(--dot);
-          mask-image: var(--bar), var(--bar), var(--dot), var(--dot), var(--dot), var(--dot);
-  -webkit-mask-size:
-    100% calc(100% - 2 * var(--r)), calc(100% - 2 * var(--r)) 100%,
-    calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r)),
-    calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r));
-          mask-size:
-    100% calc(100% - 2 * var(--r)), calc(100% - 2 * var(--r)) 100%,
-    calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r)),
-    calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r));
-  -webkit-mask-position: center, center, left top, right top, left bottom, right bottom;
-          mask-position: center, center, left top, right top, left bottom, right bottom;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-origin: content-box;
-          mask-origin: content-box;
-  -webkit-mask-clip: content-box;
-          mask-clip: content-box;
-}
-/* The rims sit on top of the frost. */
-.is-canvas .splash-hero::after,
-.is-canvas .nav-hamburger::after,
-.is-canvas .splash-footer .social-links::after,
-.is-canvas .splash-footer .sidebar-meta::after {
-  content: '';
+/* ── Frosted frame ──
+   Around the window's edge — under the intro and nav at the top, the footer
+   at the bottom, and along both sides — the tiles pass beneath a soft frost,
+   and the middle stays clear. Three layers (home-canvas.js adds them), each
+   blurring a little more and reaching a little less far in, so the frost
+   deepens gradually toward the edge with no line where it starts. --clear-top
+   and --clear-bottom (also from home-canvas.js) are where the text ends. */
+.canvas-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.canvas-frost {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  border-radius: inherit;
+  z-index: 2;
   pointer-events: none;
-  box-shadow:
-    inset 0 1px 0 var(--glass-rim),
-    inset 0 -1px 0 var(--glass-rim-low),
-    inset 0 0 0 0.5px var(--glass-edge);
+  --v: linear-gradient(to bottom,
+         #000 0,
+         #000 max(0px, calc(var(--clear-top) - var(--hold))),
+         transparent calc(var(--clear-top) + var(--reach)),
+         transparent calc(100% - var(--clear-bottom) - var(--reach)),
+         #000 calc(100% - var(--clear-bottom) + var(--hold)),
+         #000 100%);
+  --h: linear-gradient(to right, #000, transparent var(--side), transparent calc(100% - var(--side)), #000);
+  -webkit-mask-image: var(--v), var(--h);
+  -webkit-mask-composite: source-over;
+          mask-image: var(--v), var(--h);
+          mask-composite: add;
 }
-/* Padding grows outward (negative margins), so the text stays exactly where
-   it sits in the other layouts. */
-.is-canvas .splash-hero {
-  padding: 0.875rem 1.125rem;
-  margin: -0.875rem -1.125rem;
-  width: calc(100% + 2.25rem);
-  --r: 1.25rem;
-  box-sizing: border-box;
+.canvas-frost:nth-child(1) {
+  --hold: 0px; --reach: 8rem; --side: 9%;
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
 }
-/* The nav links get a pane only where they're a list beside the page; on a
-   phone they're the full-screen menu, which brings its own background. */
-@media (min-width: 50.625rem) {
-  .is-canvas .splash-nav-links {
-    position: relative;
-    isolation: isolate;
-    --r: 1rem;
-    border-radius: var(--r);
-    box-shadow: var(--glass-shadow);
-    padding: 0.625rem 0.875rem;
-    margin: -0.625rem -0.875rem;
-  }
-  .is-canvas .splash-nav-links::before,
-  .is-canvas .splash-nav-links::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    pointer-events: none;
-  }
-  .is-canvas .splash-nav-links::before {
-    inset: -3rem;
-    background: var(--glass-tint);
-    -webkit-backdrop-filter: blur(1.5rem) saturate(180%) brightness(1.05);
-            backdrop-filter: blur(1.5rem) saturate(180%) brightness(1.05);
-    /* Cut back to the pane's rounded shape with a mask, not clip-path: a
-       clip-path also limits what the blur can see, which brings the hard edge
-       right back. Two crossed bars plus four corner dots make the shape. */
-    padding: 3rem;
-    box-sizing: border-box;
-    --dot: radial-gradient(closest-side, #000 calc(100% - 0.75px), transparent);
-    --bar: linear-gradient(#000 0 0);
-    -webkit-mask-image: var(--bar), var(--bar), var(--dot), var(--dot), var(--dot), var(--dot);
-            mask-image: var(--bar), var(--bar), var(--dot), var(--dot), var(--dot), var(--dot);
-    -webkit-mask-size:
-      100% calc(100% - 2 * var(--r)), calc(100% - 2 * var(--r)) 100%,
-      calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r)),
-      calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r));
-            mask-size:
-      100% calc(100% - 2 * var(--r)), calc(100% - 2 * var(--r)) 100%,
-      calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r)),
-      calc(2 * var(--r)) calc(2 * var(--r)), calc(2 * var(--r)) calc(2 * var(--r));
-    -webkit-mask-position: center, center, left top, right top, left bottom, right bottom;
-            mask-position: center, center, left top, right top, left bottom, right bottom;
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-origin: content-box;
-            mask-origin: content-box;
-    -webkit-mask-clip: content-box;
-            mask-clip: content-box;
-  }
-  .is-canvas .splash-nav-links::after {
-    inset: 0;
-    border-radius: inherit;
-    box-shadow:
-      inset 0 1px 0 var(--glass-rim),
-      inset 0 -1px 0 var(--glass-rim-low),
-      inset 0 0 0 0.5px var(--glass-edge);
-  }
+.canvas-frost:nth-child(2) {
+  --hold: 0px; --reach: 4rem; --side: 5%;
+  -webkit-backdrop-filter: blur(7px) saturate(1.15);
+          backdrop-filter: blur(7px) saturate(1.15);
 }
-.is-canvas .splash-footer .social-links,
-.is-canvas .splash-footer .sidebar-meta {
-  padding: 0.5rem 0.875rem;
-  margin: -0.5rem -0.875rem;
-  --r: 0.875rem;
+.canvas-frost:nth-child(3) {
+  --hold: 0.5rem; --reach: 1.5rem; --side: 2%;
+  background: var(--frost-tint);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+          backdrop-filter: blur(14px) saturate(1.3);
 }
-.is-canvas .splash-footer .sidebar-meta { margin-right: 0; }   /* the footer already sits 10px off the edge */
-/* An element (or ancestor) still holding an animated filter or opacity
-   cuts its glass off from the canvas behind, and blurIn's `both` fill keeps
-   that hold forever. Fade these in instead, and let go once they're in. */
-.is-canvas .splash-nav.blur-in,
-.is-canvas .splash-footer.blur-in,
-.is-canvas .splash-hero {
-  animation-name: glassIn;
-  animation-duration: 0.8s;
-  animation-fill-mode: backwards;
+.canvas-stage {
+  --clear-top: 12%;
+  --clear-bottom: 8%;
+  --frost-tint: rgba(255, 255, 255, 0.18);
 }
-@keyframes glassIn { from { opacity: 0; } }
+.dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.2); }
+@media (max-width: 50.5625rem) {
+  .canvas-stage { --frost-tint: rgba(255, 255, 255, 0.26); }   /* more text sits on it here */
+  .canvas-frost:nth-child(1) { --reach: 5rem; --side: 7%; }
+  .canvas-frost:nth-child(2) { --reach: 2.5rem; --side: 4%; }
+  .canvas-frost:nth-child(3) { --reach: 1rem; --side: 1.5%; }
+}
 
 .canvas-field { position: absolute; inset: 0; }
 
@@ -3198,8 +3080,6 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   .layout-btn .lb-wide { display: none; }
   .layout-btn .lb-narrow { display: block; }
 
-  .is-canvas .splash-hero { padding: 0.875rem 1rem; margin: -0.875rem -1rem; width: calc(100% + 2rem); }
-  .is-canvas .nav-hamburger { padding: 0.625rem; margin: -0.625rem; --r: 0.875rem; }
   /* The footer normally follows the grid down the page; over the canvas it
      pins to the bottom of the glass instead. */
   .is-canvas .splash-footer {
@@ -3214,7 +3094,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
     pointer-events: none;
   }
   .is-canvas .splash-footer .social-links,
-  .is-canvas .splash-footer .sidebar-meta { margin: 0; pointer-events: auto; }
+  .is-canvas .splash-footer .sidebar-meta { pointer-events: auto; }
   .canvas-tile { gap: 0.375rem; }
   .canvas-tile .gallery-card-visual { border-radius: 0.75rem; }
   .canvas-tile .gallery-card-title { font-size: 0.75rem; }
