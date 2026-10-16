@@ -56,8 +56,8 @@
     W = r.width; H = r.height;
     tw = Math.round(Math.max(168, Math.min(320, W * 0.2)));
     th = tw * 9 / 16;
-    cw = tw * 1.2;
-    ch = th + 30 + tw * 0.16;          // visual, caption, gap
+    cw = tw * 1.75;                    // generous air between columns
+    ch = th + 30 + tw * 0.6;           // visual, caption, gap
     field.style.setProperty('--tile-w', tw + 'px');
     if (fx || fy) { pan.x = W / 2 - fx * cw; pan.y = H / 2 - fy * ch; }
   }
@@ -154,7 +154,7 @@
 
   // ── Motion ────────────────────────────────────────────────────────────────
   var vel = { x: 0, y: 0 };
-  var DRIFT = reduce ? 0 : (coarse ? 12 : 16);    // px per second
+  var DRIFT = reduce ? 0 : (coarse ? 30 : 42);    // px per second
   var hover = 0;          // 0 outside, 1 over the field, 2 over a tile
   var holdUntil = 0;      // after arriving back, keep still for a moment
   var glide = null;       // a tile brought to the middle by keyboard focus
