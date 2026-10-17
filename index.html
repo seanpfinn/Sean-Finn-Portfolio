@@ -55,8 +55,8 @@
       try {
         // Every visit opens on the canvas; a layout picked from the toggle
         // holds for the rest of the visit (this tab), not for the next one.
-        var m = sessionStorage.getItem('home-layout');
-        if (['canvas', 'globe', 'cols3'].indexOf(m) === -1) m = 'canvas';
+        // The layout toggle is gone: the homepage is always the canvas.
+        var m = 'canvas';
         var r = document.documentElement;
         if (m === 'canvas') { r.classList.add('is-canvas'); return; }
         if (m !== 'globe') return;
@@ -214,9 +214,6 @@
     <div class="splash-hero">
       <h1 class="hero-line">Sean Finn is a brand and product designer in Brooklyn, NY.</h1>
       <p class="hero-current">Currently <a href="https://www.linkedin.com/in/seanpfinn" class="hero-link" target="_blank" rel="noopener"><strong>Senior Product Designer</strong></a> for digital travel experiences at <a href="https://www.clearme.com" class="hero-link" target="_blank" rel="noopener"><strong>CLEAR</strong></a> and <a href="https://www.linkedin.com/in/seanpfinn" class="hero-link" target="_blank" rel="noopener"><strong>Creative Director</strong></a> at <a href="https://www.finrez.xyz" class="hero-link" target="_blank" rel="noopener"><strong>Finrez</strong></a>.</p>
-      <div class="layout-toggle" role="group" aria-label="Layout">
-        <button type="button" class="layout-btn layout-btn--canvas" data-layout="canvas" aria-label="Canvas" aria-pressed="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="1.6" cy="4.6" r="1.25"/><circle cx="1.6" cy="11.4" r="1.25"/><circle cx="8" cy="1.6" r="1.25"/><circle cx="8" cy="8" r="2.2"/><circle cx="8" cy="14.4" r="1.25"/><circle cx="14.4" cy="4.6" r="1.25"/><circle cx="14.4" cy="11.4" r="1.25"/></svg></button><button type="button" class="layout-btn layout-btn--globe" data-layout="globe" aria-label="Globe" aria-pressed="false"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="1.6" r="1.5"/><circle cx="12.5" cy="3.5" r="1.5"/><circle cx="14.4" cy="8" r="1.5"/><circle cx="12.5" cy="12.5" r="1.5"/><circle cx="8" cy="14.4" r="1.5"/><circle cx="3.5" cy="12.5" r="1.5"/><circle cx="1.6" cy="8" r="1.5"/><circle cx="3.5" cy="3.5" r="1.5"/><circle cx="8" cy="8" r="1.5"/></svg></button><button type="button" class="layout-btn layout-btn--grid" data-layout="cols3" aria-label="Grid" aria-pressed="false"><svg class="lb-wide" viewBox="0 0 18 16" width="18" height="16" aria-hidden="true"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="9" cy="1.5" r="1.5"/><circle cx="16.5" cy="1.5" r="1.5"/><circle cx="1.5" cy="8" r="1.5"/><circle cx="9" cy="8" r="1.5"/><circle cx="16.5" cy="8" r="1.5"/><circle cx="1.5" cy="14.5" r="1.5"/><circle cx="9" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg><svg class="lb-narrow" viewBox="0 0 4 16" width="4" height="16" aria-hidden="true"><circle cx="2" cy="1.5" r="1.5"/><circle cx="2" cy="8" r="1.5"/><circle cx="2" cy="14.5" r="1.5"/></svg></button>
-      </div>
     </div>
 
     <div class="projects-block">

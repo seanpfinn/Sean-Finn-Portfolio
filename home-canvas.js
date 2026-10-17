@@ -458,7 +458,7 @@ window.cursorTag = window.cursorTag || (function () {
 
   // ── First paint ───────────────────────────────────────────────────────────
   var mode;
-  try { mode = sessionStorage.getItem('home-layout'); } catch (e) {}   // see the head of index.html
+  mode = 'canvas';                       // the only homepage layout now (see index.html)
   if (MODES.indexOf(mode) === -1) mode = 'canvas';
   if (mode !== 'canvas') return;
 

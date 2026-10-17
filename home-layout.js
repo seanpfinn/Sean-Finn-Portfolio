@@ -690,14 +690,14 @@ function stillTexture(THREE, tile) {
 // ── Bootstrap ─────────────────────────────────────────────────────────────
 // Last, so every binding above is initialised before anything runs.
 
-if (grid && buttons.length) {
+if (grid) {
   buttons.forEach((b) => b.addEventListener('click', () => applyLayout(b.dataset.layout, true)));
   tabs.forEach((t) => t.addEventListener('click', () => applyFilter(t.dataset.cat, true)));
 
   // The filter tabs were removed: always show every project, whatever an
   // earlier visit saved.
   applyFilter('all', false);
-  applyLayout(readKey(LAYOUT_KEY, MODES) || 'canvas', false);
+  applyLayout('canvas', false);   // the toggle was removed; the canvas is the homepage
 
   // The pre-paint guard in the document head has done its job: `hidden` on the
   // grid now carries the state, so release the class rather than leaving two

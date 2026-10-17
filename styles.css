@@ -3370,8 +3370,8 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 
 @media (max-width: 50.5625rem) {
   .nav-icon .splash-hero > .hero-line {
-    left: 7.25rem;                  /* clear of the layout icons on the right, */
-    right: 7.25rem;                 /* mirrored on the left to stay centered */
+    left: 3.5rem;                   /* clear of the menu button and the dark-mode dot */
+    right: 3.5rem;
     font-size: 0.75rem;
     line-height: 1.25;
     white-space: normal;            /* wraps to a short stack on a phone */
