@@ -3305,7 +3305,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
    then the layout toggle and the dark-mode dot on the right. The line and the
    toggle live in the hero but are pinned into the bar; the rest of the hero
    (the "Currently…" line) stays in the page for the grid and globe, and is
-   hidden on the canvas. */
+   hidden on the canvas. The line is centered on the window. */
 .nav-icon .splash-hero > .hero-line,
 .nav-icon .splash-hero > .layout-toggle {
   position: fixed;
@@ -3318,8 +3318,10 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   pointer-events: none;
 }
 .nav-icon .splash-hero > .hero-line {
-  left: 3.25rem;                    /* just past the menu button */
-  right: 10rem;                     /* clear of the toggle */
+  left: 10rem;                      /* equal on both sides, clear of the icons, */
+  right: 10rem;                     /* so the line sits at the window's center */
+  justify-content: center;
+  text-align: center;
   font-size: 0.875rem;
   line-height: 1.2;
   white-space: nowrap;
@@ -3340,19 +3342,6 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 /* The grid and globe start below the bar. */
 .nav-icon .splash-page { --page-top: 3.5rem; }
 
-/* Legible over anything: the bar's icons and line carry a soft halo in the
-   page's background color, so they read against a dark tile as clearly as
-   against the white page. */
-.nav-icon { --halo: rgba(255, 255, 255, 0.92); --halo-soft: rgba(255, 255, 255, 0.6); }
-.nav-icon.dark { --halo: rgba(9, 9, 11, 0.92); --halo-soft: rgba(9, 9, 11, 0.6); }
-.nav-icon .nav-hamburger,
-.nav-icon .layout-btn,
-.nav-icon .dark-toggle {
-  filter: drop-shadow(0 0 1px var(--halo)) drop-shadow(0 0 5px var(--halo-soft));
-}
-.nav-icon .splash-hero > .hero-line {
-  text-shadow: 0 0 1px var(--halo), 0 0 6px var(--halo), 0 0 14px var(--halo-soft);
-}
 /* Unchosen layouts dim by opacity rather than turning pale gray, which
    vanished against light tiles. */
 .nav-icon .layout-btn { color: var(--text); opacity: 0.32; transition: opacity 0.15s ease; }
@@ -3362,9 +3351,12 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 
 @media (max-width: 50.5625rem) {
   .nav-icon .splash-hero > .hero-line {
-    right: 7.75rem;
-    font-size: 0.8125rem;
-    white-space: normal;            /* two short lines on a phone */
+    left: 7.25rem;                  /* clear of the layout icons on the right, */
+    right: 7.25rem;                 /* mirrored on the left to stay centered */
+    font-size: 0.75rem;
+    line-height: 1.25;
+    white-space: normal;            /* wraps to a short stack on a phone */
+    text-wrap: balance;
     padding: 0.25rem 0;
   }
   .nav-icon .splash-hero > .layout-toggle { right: 3.125rem; }
