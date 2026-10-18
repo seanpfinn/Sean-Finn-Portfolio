@@ -376,6 +376,7 @@ function mixInk(inkEl, volEl, seed) {
     // The marker scrawl on a burned disc — written once the disc is back in.
     if (videoId !== swappingTo) setInk(t, artist, videoId);
     setArt(videoId);
+    mediaMeta(t, artist, videoId);
   }
 
   function setTrackNumber() {
@@ -426,6 +427,52 @@ function mixInk(inkEl, volEl, seed) {
     playBtn.setAttribute('aria-pressed', String(playing));
     playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
     if (playing) window.dispatchEvent(new CustomEvent('musicbox:play', { detail: MB_ID }));
+    mediaState();
+  }
+
+  // ── Lock screen + media keys (Media Session API): title, artist and cover
+  // on the phone's lock screen / control center and the OS media overlay;
+  // play/pause, previous/next and seeking from there, headphones or keyboard
+  // media keys. Browsers that route the session to the YouTube frame show
+  // YouTube's own info instead; nothing breaks either way.
+  const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
+  let msVid = null, msPosAt = 0;
+  function mediaMeta(title, artist, vid) {
+    if (!ms || !window.MediaMetadata || !vid) return;
+    msVid = vid;
+    try {
+      ms.metadata = new MediaMetadata({
+        title: title || 'Mix CD',
+        artist: artist || '',
+        album: 'Mix CD',
+        artwork: [
+          { src: `https://i.ytimg.com/vi/${vid}/mqdefault.jpg`, sizes: '320x180', type: 'image/jpeg' },
+          { src: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`, sizes: '480x360', type: 'image/jpeg' },
+          { src: `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg`, sizes: '1280x720', type: 'image/jpeg' },
+        ],
+      });
+    } catch (e) {}
+  }
+  function mediaState() {
+    if (!ms) return;
+    try { ms.playbackState = isPlaying ? 'playing' : 'paused'; } catch (e) {}
+  }
+  function mediaPosition(position) {
+    if (!ms || !ms.setPositionState || !(duration > 0)) return;
+    const now = Date.now();
+    if (now - msPosAt < 1000) return;
+    msPosAt = now;
+    try { ms.setPositionState({ duration, position: Math.min(duration, Math.max(0, position)), playbackRate: 1 }); } catch (e) {}
+  }
+  if (ms) {
+    const on = (action, fn) => { try { ms.setActionHandler(action, fn); } catch (e) {} };
+    on('play', () => { try { player.playVideo(); } catch (e) {} });
+    on('pause', () => { try { player.pauseVideo(); } catch (e) {} });
+    on('previoustrack', () => loadTrack(orderPos - 1, true, 'prev'));
+    on('nexttrack', () => loadTrack(orderPos + 1, true, 'next'));
+    on('seekto', (d) => { if (d && d.seekTime != null) { try { player.seekTo(d.seekTime, true); } catch (e) {} } });
+    on('seekbackward', (d) => { try { player.seekTo(Math.max(0, player.getCurrentTime() - ((d && d.seekOffset) || 10)), true); } catch (e) {} });
+    on('seekforward', (d) => { try { player.seekTo(Math.min(duration, player.getCurrentTime() + ((d && d.seekOffset) || 10)), true); } catch (e) {} });
   }
   // Pause if another Music Box / player on the page starts playing.
   window.addEventListener('musicbox:play', (e) => {
@@ -470,6 +517,7 @@ function mixInk(inkEl, volEl, seed) {
     } catch (e) { return; }
     lastFraction = duration > 0 ? Math.min(1, current / duration) : 0;
     renderProgress(lastFraction, current);
+    if (isPlaying) mediaPosition(current);
   }
 
   function fracFromX(clientX) {
