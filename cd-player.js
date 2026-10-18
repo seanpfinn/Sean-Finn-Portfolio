@@ -549,6 +549,8 @@
     backFace.setAttribute('aria-hidden', String(!open));
     caseList.querySelectorAll('.cd-case-row').forEach((r) => { r.tabIndex = open ? 0 : -1; });
     if (open) {
+      // Start with the rows around the current track; the rest load on scroll.
+      for (let i = Math.max(0, orderPos - 4); i < Math.min(order.length, orderPos + 12); i++) queueRowMeta(tracks[order[i]]);
       const cur = caseList.querySelector('.cd-case-row.is-current');
       if (cur) caseList.scrollTop = cur.offsetTop - caseList.clientHeight / 2 + cur.offsetHeight / 2;
     }
