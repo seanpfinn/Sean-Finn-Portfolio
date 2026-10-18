@@ -630,6 +630,10 @@
   pointer-events: none;
 }
 
+/* Showcase disc (display-only, see the end of cdplayer.js). */
+.cd--showcase { gap: 1.25rem; }
+.cd--showcase .cd-meta { margin-top: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   .cd-title-clip.is-ticking .cd-title { animation: none; }
   .cd-flip { transition: none; }

@@ -644,3 +644,100 @@
   });
   nextBtn.addEventListener('click', () => loadTrack(orderPos + 1, true, 'next'));
 })();
+
+// ── Showcase discs ──────────────────────────────────────────────────────────
+// <div class="cd-showcase" data-video="YOUTUBE_ID" data-disc="printed"></div>
+// A display-only disc for feature images: it pulls one video's cover art from
+// YouTube's thumbnail CDN and its title/artist via oEmbed, then spins. No
+// audio, no controls, and it doesn't touch the main player above.
+(function () {
+  const mounts = document.querySelectorAll('.cd-showcase[data-video]:not([data-built])');
+  if (!mounts.length) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const SECONDS_PER_REV = 5;
+
+  function clean(title, artist) {
+    if (!artist && title && title.includes(' - ')) {
+      const i = title.indexOf(' - ');
+      artist = title.slice(0, i);
+      title = title.slice(i + 3);
+    }
+    if (artist) artist = artist.replace(/\s*[-–]\s*Topic\s*$/i, '');
+    return [title, artist];
+  }
+
+  mounts.forEach((el, n) => {
+    const id = el.dataset.video;
+    el.dataset.built = '1';
+    el.classList.add('cd', 'cd--showcase', 'is-playing');
+    if (!el.dataset.disc) el.dataset.disc = 'printed';
+    const pathId = `cd-show-path-${n}`;
+    el.innerHTML = `
+      <div class="cd-deck" aria-hidden="true">
+        <div class="cd-glow"><img alt="" /></div>
+        <div class="cd-spin">
+          <span class="cd-turntable"></span>
+          <div class="cd-disc">
+            <span class="cd-base"></span>
+            <span class="cd-print"><img alt="" /></span>
+            <svg class="cd-micro" viewBox="0 0 200 200">
+              <defs><path id="${pathId}" d="M100 100 m-26.6 0 a26.6 26.6 0 1 1 53.2 0 a26.6 26.6 0 1 1 -53.2 0" /></defs>
+              <text textLength="165" lengthAdjust="spacing"><textPath href="#${pathId}" textLength="165" lengthAdjust="spacing">CD-R · 80 MIN · 700 MB · 1×–52× · MADE IN BROOKLYN · ID 0417-A7 ★</textPath></text>
+            </svg>
+            <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span>
+          </div>
+          <span class="cd-hub"><i></i><i></i><i></i></span>
+        </div>
+        <span class="cd-iris"></span>
+        <span class="cd-gloss"></span>
+      </div>
+      <div class="cd-meta">
+        <span class="cd-title-clip"><span class="cd-title">&nbsp;</span></span>
+        <span class="cd-artist">&nbsp;</span>
+      </div>`;
+
+    const printImg = el.querySelector('.cd-print img');
+    const glowImg = el.querySelector('.cd-glow img');
+    const spinEl = el.querySelector('.cd-spin');
+    const fallback = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+
+    // Cover art straight from YouTube: maxres when it exists, else mqdefault.
+    const probe = new Image();
+    const show = (src) => {
+      printImg.onload = () => printImg.classList.add('is-shown');
+      printImg.src = src;
+      glowImg.src = fallback;
+      el.classList.add('has-art');
+    };
+    probe.onload = () => show(probe.naturalWidth > 120 ? probe.src : fallback);
+    probe.onerror = () => show(fallback);
+    probe.src = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+
+    // Title and artist from YouTube via oEmbed.
+    fetch(`https://noembed.com/embed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data || !data.title) return;
+        const [title, artist] = clean(data.title, data.author_name);
+        el.querySelector('.cd-title').textContent = title;
+        el.querySelector('.cd-artist').textContent = artist || '';
+        el.querySelector('.cd-ink-title').textContent = title;
+        el.querySelector('.cd-ink-artist').textContent = artist || '';
+        el.setAttribute('aria-label', `CD with ${title}${artist ? ' by ' + artist : ''}`);
+      })
+      .catch(() => {});
+
+    // Constant, slow spin (eases in on load).
+    let angle = 0, velocity = 0, last = 0;
+    function tick(t) {
+      const dt = last ? Math.min(0.1, (t - last) / 1000) : 0;
+      last = t;
+      const target = reduceMotion.matches ? 0 : 360 / SECONDS_PER_REV;
+      velocity += (target - velocity) * (1 - Math.exp(-dt / 0.35));
+      angle = (angle + velocity * dt) % 360;
+      spinEl.style.transform = `rotate(${angle}deg)`;
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+})();

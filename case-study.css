@@ -846,6 +846,15 @@
 .cdp-embed .cd-progress { grid-column: 2; grid-row: 3; margin: 0; }
 .cdp-embed .cd-controls { grid-column: 2; grid-row: 4; margin: 0; }
 
+.cdp-hero {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cdp-hero .cd { --cd-size: 18.5rem; }
+
 .cdp-face {
   position: absolute;
   top: 1.25rem;
