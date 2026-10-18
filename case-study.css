@@ -818,6 +818,63 @@
   }
 }
 
+/* Live CD Player (cd-player.html "Try it" panel). The panel is a fixed
+   48.75rem × 29.6875rem stage, so the player is laid out landscape: the disc
+   on the left, title / scrubber / transport on the right. */
+.proj-panel-new.proj-panel--cdp { background: #ebebeb; }
+.dark .proj-panel-new.proj-panel--cdp { background: #0f0f10; }
+
+.cdp-embed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cdp-embed .cd {
+  --cd-size: 19.5rem;
+  width: auto;
+  display: grid;
+  grid-template-columns: var(--cd-size) 16.5rem;
+  grid-template-rows: 1fr auto auto auto 1fr;
+  column-gap: 3.25rem;
+  row-gap: 1.5rem;
+  align-items: center;
+}
+.cdp-embed .cd-deck     { grid-column: 1; grid-row: 1 / -1; }
+.cdp-embed .cd-meta     { grid-column: 2; grid-row: 2; margin: 0; }
+.cdp-embed .cd-progress { grid-column: 2; grid-row: 3; margin: 0; }
+.cdp-embed .cd-controls { grid-column: 2; grid-row: 4; margin: 0; }
+
+.cdp-face {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 2;
+  display: inline-flex;
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+}
+.cdp-face-btn {
+  padding: 0.3125rem 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  color: inherit;
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.cdp-face-btn:hover { opacity: 0.85; }
+.cdp-face-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.cdp-face-btn.is-active { opacity: 1; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14); }
+.dark .cdp-face { background: rgba(255, 255, 255, 0.08); }
+.dark .cdp-face-btn.is-active { background: rgba(255, 255, 255, 0.16); box-shadow: none; }
+
 /* Panel color variants for new layout (higher specificity beats the default bg) */
 /* Music Box case-study images carry their own flat gray canvas baked in. The
    panel matches that exact gray so the letterboxed edges disappear into it and

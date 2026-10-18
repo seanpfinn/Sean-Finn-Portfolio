@@ -1,0 +1,437 @@
+/* CD Player — a YouTube-playlist disc player.
+   Pair with cdplayer.js. Everything is scoped under .cd.
+
+   Theme hooks:
+   - Light by default; a `.dark` class on <html> (or any ancestor) switches
+     the text, controls and spindle to the dark variant.
+   - `data-disc="printed|burned"` on .cd picks the disc face:
+       printed — full-face inkjet print of the cover art
+       burned  — silver CD-R top, cover art as a round sticker, title and
+                 artist written on in marker
+   - `--cd-size` sets the disc's diameter.
+
+   Disc geometry follows the real thing (120 mm disc = 100%):
+     center hole 0–12.5% · clear hub to 30% (stacking ring at ~24%)
+     mirror band 30–38% · data/print area 38–97% · clear rim 97–100%.
+   All radial gradients use `closest-side`, so 100% = the disc's edge. */
+
+/* Seven-segment digits for the time readouts (DSEG, SIL Open Font License). */
+@font-face {
+  font-family: 'DSEG7 Classic';
+  src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+.cd {
+  --cd-size: min(22rem, 78vw);
+  --cd-ink: #0c0a09;
+  --cd-ink-soft: #78716c;
+  --cd-rail: rgba(12, 10, 9, 0.12);
+  --cd-ghost: rgba(12, 10, 9, 0.07);
+  --cd-btn-bg: #0c0a09;
+  --cd-btn-ink: #fafaf9;
+  --cd-well: #1c1b1f;
+  --cd-font: var(--font, 'Geist', -apple-system, BlinkMacSystemFont, sans-serif);
+  --cd-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --cd-lcd: 'DSEG7 Classic', var(--cd-mono);
+  --cd-marker: 'Permanent Marker', 'Marker Felt', 'Comic Sans MS', cursive;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  width: var(--cd-size);
+  font-family: var(--cd-font);
+  color: var(--cd-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dark .cd {
+  --cd-ink: #fafaf9;
+  --cd-ink-soft: #a8a29e;
+  --cd-rail: rgba(250, 250, 249, 0.16);
+  --cd-ghost: rgba(250, 250, 249, 0.08);
+  --cd-btn-bg: #fafaf9;
+  --cd-btn-ink: #0c0a09;
+  --cd-well: #0a0a0b;
+}
+
+/* ── Deck ─────────────────────────────────────────────────────────────── */
+.cd-deck {
+  position: relative;
+  width: var(--cd-size);
+  aspect-ratio: 1;
+}
+
+/* A blurred copy of the art blooms behind the disc. */
+.cd-glow {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  overflow: hidden;
+  filter: blur(46px) saturate(1.6);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+.cd-glow img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.8); }
+.cd.has-art .cd-glow { opacity: 0.4; }
+.cd.is-playing .cd-glow { opacity: 0.6; }
+.dark .cd.has-art .cd-glow { opacity: 0.45; }
+.dark .cd.is-playing .cd-glow { opacity: 0.7; }
+
+/* Everything that turns with the disc. */
+.cd-spin {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  will-change: transform;
+  filter: drop-shadow(0 1.1rem 1.4rem rgba(0, 0, 0, 0.28)) drop-shadow(0 0.15rem 0.3rem rgba(0, 0, 0, 0.18));
+}
+
+/* The player's turntable, visible through the clear hub. */
+.cd-turntable {
+  position: absolute;
+  inset: 21%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(closest-side, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px),
+    radial-gradient(closest-side, #34333a, var(--cd-well) 92%, #000);
+}
+
+/* The disc itself — masked so the center hole is a real hole. */
+.cd-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  -webkit-mask: radial-gradient(closest-side, transparent 0 12.4%, #000 12.7%);
+          mask: radial-gradient(closest-side, transparent 0 12.4%, #000 12.7%);
+}
+
+/* Polycarbonate + metal layer. */
+.cd-base {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255,255,255,0.55) 12.5%, rgba(255,255,255,0.14) 13.6%,       /* hole bevel */
+    rgba(255,255,255,0.10) 14% 22.8%,
+    rgba(255,255,255,0.42) 23.2%, rgba(255,255,255,0.12) 24.4%,       /* stacking ring */
+    rgba(255,255,255,0.10) 25% 29.4%,
+    rgba(255,255,255,0.55) 29.8%,                                    /* edge of the metal */
+    #cfd2d8 30.2%, #e9eaee 34%, #bfc3ca 37.6%,                        /* mirror band */
+    #dfe1e6 38% 96.6%,                                                /* metal under the print */
+    rgba(255,255,255,0.6) 97%, rgba(255,255,255,0.16) 97.6% 99.2%,  /* clear rim */
+    rgba(255,255,255,0.5) 99.6%, transparent 100%);
+}
+
+/* Printed face: the art covers 38–97%. */
+.cd-print {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f4f4f5;
+  -webkit-mask: radial-gradient(closest-side, transparent 0 37.9%, #000 38.2% 96.8%, transparent 97.1%);
+          mask: radial-gradient(closest-side, transparent 0 37.9%, #000 38.2% 96.8%, transparent 97.1%);
+}
+.cd-print img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.cd-print img.is-shown { opacity: 1; }
+/* Inkjet print sits on a white base coat with a soft inner edge. */
+.cd-print::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(255,255,255,0.7) 38.2%, transparent 39.6% 95.4%, rgba(0,0,0,0.18) 96.8%);
+  pointer-events: none;
+}
+
+/* Laser-etched microtext in the clear hub. */
+.cd-micro {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+  font-family: var(--cd-mono);
+  font-size: 2.6px;
+  letter-spacing: 0.06em;
+  fill: rgba(255, 255, 255, 0.55);
+}
+
+/* Burned CD-R: silver top, art as a round sticker, marker handwriting. */
+.cd-ink { display: none; }
+.cd[data-disc="burned"] .cd-print {
+  background: none;
+  -webkit-mask: radial-gradient(closest-side, transparent 0 37.9%, #000 38.2% 54.6%, transparent 54.9%);
+          mask: radial-gradient(closest-side, transparent 0 37.9%, #000 38.2% 54.6%, transparent 54.9%);
+}
+.cd[data-disc="burned"] .cd-print::after {
+  background: radial-gradient(closest-side,
+    rgba(255,255,255,0.75) 38.2%, transparent 39.4% 52.6%, rgba(255,255,255,0.9) 53.3% 54.8%);
+}
+.cd[data-disc="burned"] .cd-ink {
+  display: flex;
+  position: absolute;
+  left: 20%; right: 20%;
+  top: 85.5%;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-50%) rotate(-5deg);
+  font-family: var(--cd-marker);
+  color: #17171a;
+  text-align: center;
+  line-height: 1.05;
+  pointer-events: none;
+}
+.cd-ink-title {
+  max-width: 100%;
+  font-size: calc(var(--cd-size) * 0.052);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cd-ink-artist {
+  max-width: 82%;
+  margin-top: 0.15em;
+  font-size: calc(var(--cd-size) * 0.034);
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cd-ink-title.is-long { font-size: calc(var(--cd-size) * 0.04); }
+
+/* The spindle hub with its three clamp balls. Turns with the disc. */
+.cd-hub {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 13.2%; aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 40% 35%, #4a4950, #222126 60%, #121114);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 1px rgba(0,0,0,0.4);
+}
+.cd-hub i {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 17%; aspect-ratio: 1;
+  margin: -8.5% 0 0 -8.5%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #c4c4cc 40%, #6b6b74);
+}
+.cd-hub i:nth-child(1) { transform: rotate(0deg)   translateY(-205%); }
+.cd-hub i:nth-child(2) { transform: rotate(120deg) translateY(-205%); }
+.cd-hub i:nth-child(3) { transform: rotate(240deg) translateY(-205%); }
+.cd-hub::after {
+  content: '';
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #6b6b74, #2a2a30);
+}
+
+/* ── Light that doesn't turn: diffraction rainbow + specular gloss ─────── */
+.cd-iris, .cd-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* Rainbow on the bare metal: mirror band and clear rim (and the whole top
+   on a burned disc). Two opposed wedges, like light off a real CD. */
+.cd-iris {
+  background: conic-gradient(from -28deg,
+    transparent 0deg,
+    #ff7ac6 14deg, #ffd27a 30deg, #9dfba8 46deg, #77e3ff 62deg, #a990ff 78deg,
+    transparent 100deg 180deg,
+    #ff7ac6 194deg, #ffd27a 210deg, #9dfba8 226deg, #77e3ff 242deg, #a990ff 258deg,
+    transparent 280deg 360deg);
+  mix-blend-mode: color-burn;
+  opacity: 0.9;
+  -webkit-mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 96.8%, rgba(0,0,0,0.8) 97.2% 99.6%, transparent 100%);
+          mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 96.8%, rgba(0,0,0,0.8) 97.2% 99.6%, transparent 100%);
+}
+.cd[data-disc="burned"] .cd-iris {
+  -webkit-mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 54.8%, rgba(0,0,0,0.75) 55.2% 99.6%, transparent 100%);
+          mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 54.8%, rgba(0,0,0,0.75) 55.2% 99.6%, transparent 100%);
+}
+/* Glossy sweep across the whole face. */
+.cd-gloss {
+  background:
+    linear-gradient(128deg, transparent 22%, rgba(255,255,255,0.38) 34%, transparent 46%),
+    linear-gradient(128deg, transparent 58%, rgba(255,255,255,0.16) 66%, transparent 74%);
+  mix-blend-mode: soft-light;
+  -webkit-mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
+          mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
+}
+
+/* ── Meta ─────────────────────────────────────────────────────────────── */
+.cd-meta {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+.cd-track {
+  font-family: var(--cd-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cd-ink-soft);
+  margin-bottom: 0.2rem;
+}
+.cd-title-clip {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cd-title {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+.cd-title-clip.is-ticking {
+  text-align: left;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.cd-title-clip.is-ticking .cd-title {
+  padding: 0 6%;
+  animation: cd-ticker 22s ease-in-out infinite;
+}
+@keyframes cd-ticker {
+  0%, 18%  { transform: translateX(0); }
+  50%, 68% { transform: translateX(var(--cd-ticker-shift, 0)); }
+  100%     { transform: translateX(0); }
+}
+.cd-artist {
+  max-width: 100%;
+  font-size: 0.875rem;
+  color: var(--cd-ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Progress, with seven-segment readouts ────────────────────────────── */
+.cd-progress {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 3.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: -0.5rem;
+}
+.cd-lcd {
+  position: relative;
+  font-family: var(--cd-lcd);
+  font-size: 0.8125rem;
+  font-style: normal;
+  color: var(--cd-ink);
+  white-space: nowrap;
+}
+/* Unlit segments behind the lit ones, like a real LCD. */
+.cd-lcd::before {
+  content: attr(data-ghost);
+  position: absolute;
+  inset: 0;
+  color: var(--cd-ghost);
+}
+.cd-lcd span { position: relative; }
+.cd-lcd--end { text-align: right; }
+.cd-lcd--end::before { text-align: right; }
+
+.cd-bar {
+  position: relative;
+  height: 1.5rem;
+  cursor: pointer;
+  touch-action: none;
+}
+.cd-bar-track, .cd-bar-fill {
+  position: absolute;
+  left: 0; top: 50%;
+  height: 3px;
+  border-radius: 3px;
+  transform: translateY(-50%);
+}
+.cd-bar-track { right: 0; background: var(--cd-rail); }
+.cd-bar-fill { width: 0; background: var(--cd-ink); }
+.cd-bar-thumb {
+  position: absolute;
+  top: 50%; left: 0;
+  width: 0.75rem; height: 0.75rem;
+  border-radius: 50%;
+  background: var(--cd-ink);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.15s ease;
+}
+.cd-bar:hover .cd-bar-thumb,
+.cd-bar:focus-visible .cd-bar-thumb,
+.cd-bar.is-scrubbing .cd-bar-thumb { transform: translate(-50%, -50%) scale(1); }
+.cd-bar:focus-visible { outline: none; }
+
+/* ── Transport ────────────────────────────────────────────────────────── */
+.cd-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  margin-top: -0.75rem;
+}
+.cd-btn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem; height: 2.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--cd-ink);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.cd-btn:hover { opacity: 0.7; }
+.cd-btn:active { transform: scale(0.92); }
+.cd-btn:focus-visible { outline: 2px solid var(--cd-ink); outline-offset: 2px; }
+.cd-btn--play {
+  width: 4rem; height: 4rem;
+  background: var(--cd-btn-bg);
+  color: var(--cd-btn-ink);
+  box-shadow: 0 0.5rem 1.25rem -0.5rem rgba(0, 0, 0, 0.5);
+}
+.cd-btn--play:hover { opacity: 1; transform: scale(1.04); }
+.cd-btn--play:active { transform: scale(0.95); }
+.cd-btn--play .cd-icon-pause { display: none; }
+.cd.is-playing .cd-btn--play .cd-icon-play { display: none; }
+.cd.is-playing .cd-btn--play .cd-icon-pause { display: block; }
+.cd-btn--play .cd-icon-play { transform: translateX(1px); }
+
+/* Off-screen YouTube player — audio only. */
+.cd-yt-host {
+  position: fixed;
+  bottom: 0; right: 0;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-title-clip.is-ticking .cd-title { animation: none; }
+}

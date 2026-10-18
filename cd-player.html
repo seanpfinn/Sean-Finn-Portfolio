@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CD Player – Sean Finn</title>
+  <meta name="description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <link rel="canonical" href="https://www.seanpfinn.com/cd-player" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sean Finn" />
+  <meta property="og:title" content="CD Player – Sean Finn" />
+  <meta property="og:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <meta property="og:url" content="https://www.seanpfinn.com/cd-player" />
+  <meta property="og:image" content="https://www.seanpfinn.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CD Player – Sean Finn" />
+  <meta name="twitter:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" />
+  <link rel="stylesheet" href="cd-player.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
+</head>
+<body class="proj-page">
+
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+          <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+        <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0C3.10457 0 4 0.89543 4 2Z" fill="currentColor"/>
+          <path d="M11 2C11 3.10457 10.1046 4 9 4C7.89543 4 7 3.10457 7 2C7 0.89543 7.89543 0 9 0C10.1046 0 11 0.89543 11 2Z" fill="currentColor"/>
+          <path d="M18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2C14 0.89543 14.8954 0 16 0C17.1046 0 18 0.89543 18 2Z" fill="currentColor"/>
+          <path d="M4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6C3.10457 6 4 6.89543 4 8Z" fill="currentColor"/>
+          <path d="M11 8C11 9.10457 10.1046 10 9 10C7.89543 10 7 9.10457 7 8C7 6.89543 7.89543 6 9 6C10.1046 6 11 6.89543 11 8Z" fill="currentColor"/>
+          <path d="M18 8C18 9.10457 17.1046 10 16 10C14.8954 10 14 9.10457 14 8C14 6.89543 14.8954 6 16 6C17.1046 6 18 6.89543 18 8Z" fill="currentColor"/>
+          <path d="M4 14C4 15.1046 3.10457 16 2 16C0.89543 16 0 15.1046 0 14C0 12.8954 0.89543 12 2 12C3.10457 12 4 12.8954 4 14Z" fill="currentColor"/>
+          <path d="M11 14C11 15.1046 10.1046 16 9 16C7.89543 16 7 15.1046 7 14C7 12.8954 7.89543 12 9 12C10.1046 12 11 12.8954 11 14Z" fill="currentColor"/>
+          <path d="M18 14C18 15.1046 17.1046 16 16 16C14.8954 16 14 15.1046 14 14C14 12.8954 14.8954 12 16 12C17.1046 12 18 12.8954 18 14Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="splash-nav-links" id="splash-nav-links">
+            <button class="nav-close-btn" id="nav-close-btn" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-overlay-scroll">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Projects</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">CLEAR</span>
+              </div>
+              <div class="nav-company-projects">
+                <!-- <a href="clear-watchos-app.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  watchOS App
+                </a> -->
+                <!-- <a href="clear-referrals.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  CLEAR+ Guest Passes
+                </a> -->
+                <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Flight Sharing
+                </a> -->
+                <!-- <a href="clear-onboarding.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  App Onboarding
+                </a> -->
+                <!-- <a href="clear-widgets.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Widgets
+                </a> -->
+                <!-- <a href="clear-messages.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Messages
+                </a> -->
+                <!-- <a href="clear-passkey-management.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Passkey Management
+                </a> -->
+                <a href="clear-live-activity.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Live Activities
+                </a>
+                <a href="clear-terminal-guide.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Terminal Guide
+                </a>
+                <a href="clear-location-details.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Locations
+                </a>
+                <a href="clear-vault.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Vault
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">FINREZ</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="spectra.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Spectra
+                </a>
+                <a href="ucrfc-club-hub.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  UCRFC Club Hub
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">PERSONAL</span>
+              </div>
+              <div class="nav-company-projects">
+                <!-- <a href="plate.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Plate
+                </a> -->
+                <a href="music-box.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Music Box
+                </a>
+                <a href="cd-player.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  CD Player
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="timeline.html" class="splash-nav-link">About</a>
+      </div>
+        </div>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
+
+  <main class="proj-col" style="animation-delay:0.05s">
+    <div class="proj-header-group">
+      <div class="proj-title-block">
+        <h1 class="proj-title-new">CD Player</h1>
+        <p class="proj-subtitle-new">Music Box, burned to disc. Each track's cover art is printed on a CD that spins while it plays.</p>
+      </div>
+      <div class="proj-meta-row-new">
+        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Year</span><span class="proj-meta-value">October 2026</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
+      </div>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Context</h2>
+      <p class="proj-caption-body">Music Box put a working player on every page of this site. CD Player keeps everything underneath it (the same YouTube playlist, the same shuffle, the same metadata lookups) and asks a different question: what if the player were the object itself? The current track's cover art is printed onto a compact disc, and the disc spins while the song plays.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div id="proj-hero" class="proj-panel-new proj-panel--mbcs proj-panel--mbcs-context">
+        <video src="assets/cd-player.mp4" muted loop playsinline autoplay preload="metadata" style="width:100%; height:100%; object-fit:contain; display:block;" poster="assets/poster-cd-player.webp"></video>
+      </div>
+      <p class="proj-image-caption">The cover art becomes the disc. Title, artist and transport controls sit beneath it.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Problem</h2>
+      <p class="proj-caption-body">A thumbnail in a pill tells you what's playing, but it doesn't feel like putting something on. Cover art used to arrive on a physical thing you held, loaded and watched turn. The goal was to bring that back without adding weight: a player people want to watch, that still works like every other player they know.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--mbcs">
+        <img src="assets/cdp-cs-printed.webp" alt="CD Player — printed disc with title, progress and controls" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" width="1400" height="854" />
+      </div>
+      <p class="proj-image-caption">Track number, title and artist, then a scrubber with seven-segment time readouts, unlit segments included.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Role &amp; Approach</h2>
+      <p class="proj-caption-body">I designed and built it myself. The first pass was a turntable: a vinyl record with the art as its label and a tonearm that tracked inward as the song played. I moved it to a compact disc, which suits a shuffled playlist better than an LP, and gave it two faces. A printed disc carries the art edge to edge. A burned CD-R has the art as a round sticker, with the title and artist written on in marker.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--mbcs">
+        <img src="assets/cdp-cs-faces.webp" alt="CD Player — printed disc and burned CD-R side by side" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="853" />
+      </div>
+      <p class="proj-image-caption">Two faces: a full-face print, or a burned CD-R with a sticker and a marker scrawl.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Process</h2>
+      <p class="proj-caption-body">The disc follows real proportions: a 15&nbsp;mm center hole, a clear hub with its stacking ring and laser-etched microtext, a mirror band, the print area and a clear outer rim. The player's spindle shows through the hole. The rainbow off the metal layer stays still while the disc turns, the way light behaves on a real CD. That one detail does most of the work in making the spin read as real. The disc spins up when you press play and coasts to a stop when you pause.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--mbcs">
+        <img src="assets/cdp-cs-hub.webp" alt="CD Player — close-up of the hub, spindle and microtext" style="width:100%; height:100%; object-fit:cover; display:block;" decoding="async" loading="lazy" width="1400" height="854" />
+      </div>
+      <p class="proj-image-caption">Up close: the spindle with its three clamp balls, the stacking ring and the etched microtext.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Constraints</h2>
+      <p class="proj-caption-body">YouTube only provides 16:9 thumbnails, so the disc crops to the centered square where music uploads place their album art. The sharpest size is missing for some videos, so it falls back to a smaller one. YouTube also refuses to play from a local file or a sandboxed preview, so every test had to run from a real web address. Visitors who prefer reduced motion get a still disc.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new" style="background:#0f0f10;">
+        <img src="assets/cdp-cs-burned.webp" alt="CD Player — burned CD-R on a dark page" style="width:100%; height:100%; object-fit:contain; display:block;" decoding="async" loading="lazy" width="1400" height="854" />
+      </div>
+      <p class="proj-image-caption">The burned face on a dark page. The cover art also blooms softly behind the disc.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Try it</h2>
+      <p class="proj-caption-body">This one is live. It plays the same playlist as the Music Box bar, and the two take turns: starting one pauses the other.</p>
+    </div>
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--embed proj-panel--cdp">
+        <div class="cdp-embed">
+          <div class="cdp-face" role="group" aria-label="Disc face">
+            <button type="button" class="cdp-face-btn is-active" data-disc="printed" aria-pressed="true">Printed</button>
+            <button type="button" class="cdp-face-btn" data-disc="burned" aria-pressed="false">Burned CD-R</button>
+          </div>
+          <div id="cd-player" data-disc="printed"></div>
+        </div>
+      </div>
+      <p class="proj-image-caption">Not a mockup. Press play, skip around the shuffle, drag the scrubber, and switch the disc face.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Summary</h2>
+      <p class="proj-caption-body">CD Player is Music Box with a body. The engine is unchanged; the interface is an object you watch. Each song changes the disc's art, and the spin and stillness follow the playback.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Next Steps</h2>
+      <p class="proj-caption-body">Ideas for what comes next: a quick eject-and-load animation between tracks, and a jewel-case view that shows the full playlist as a track listing.</p>
+    </div>
+  </main>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
+
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
+    <div class="social-links">
+      <a href="mailto:sean@seanpfinn.com" class="social-link">Email</a>
+      <a href="https://x.com/seanpfinn" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://linkedin.com/in/seanpfinn" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/seanpfinn" class="social-link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.spottedinprod.com/sean" class="social-link" target="_blank" rel="noopener">SIP</a>
+    </div>
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: October 17th, 2026</p>
+      <p class="weather">
+        <span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span>
+        <span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script type="module" src="sound.js"></script>
+  <!-- Live CD Player in the "Try it" panel. -->
+  <script src="cd-player.js"></script>
+  <script>
+    (function () {
+      var player = document.getElementById('cd-player');
+      var btns = document.querySelectorAll('.cdp-face-btn');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          player.dataset.disc = b.dataset.disc;
+          btns.forEach(function (x) {
+            x.classList.toggle('is-active', x === b);
+            x.setAttribute('aria-pressed', String(x === b));
+          });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
