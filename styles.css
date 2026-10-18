@@ -3014,37 +3014,50 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 }
 .frost-edge.t {
   top: 0; left: 0; right: 0;
-  height: calc(var(--clear-top) + var(--reach));
-  -webkit-mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), transparent);
-          mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), transparent);
+  /* Each strip runs 4rem past where its frost has faded out, and the mask
+     hides that overhang. A backdrop blur only samples inside its own box,
+     so a strip that ended where the frost ends would blur less and less
+     toward that edge and leave a faint line; with the overhang the blur
+     near the visible edge takes in what's beyond it. */
+  height: calc(var(--clear-top) + var(--reach) + 4rem);
+  -webkit-mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
+          mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
 }
 .frost-edge.b {
   bottom: 0; left: 0; right: 0;
-  height: calc(var(--clear-bottom) + var(--reach));
-  -webkit-mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), transparent);
-          mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), transparent);
+  height: calc(var(--clear-bottom) + var(--reach) + 4rem);
+  -webkit-mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
+          mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
 }
-/* The side strips run between the top and bottom ones, so no corner is
-   blurred twice. */
+/* The side strips run the full height and fade in below the top band (and
+   out above the bottom one) instead of starting abruptly where it ends,
+   which drew a short horizontal line at each side. */
 .frost-edge.l,
 .frost-edge.r {
-  top: calc(var(--clear-top) + var(--reach));
-  bottom: calc(var(--clear-bottom) + var(--reach));
-  width: var(--side);
+  top: 0;
+  bottom: 0;
+  width: calc(var(--side) + 4rem);
+  --fade: linear-gradient(to bottom,
+            transparent max(0px, calc(var(--clear-top) - 1rem)),
+            #000 calc(var(--clear-top) + var(--reach)),
+            #000 calc(100% - var(--clear-bottom) - var(--reach)),
+            transparent calc(100% - max(0px, calc(var(--clear-bottom) - 1rem))));
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
 }
 .frost-edge.l {
   left: 0;
-  -webkit-mask-image: linear-gradient(to right, #000, transparent);
-          mask-image: linear-gradient(to right, #000, transparent);
+  -webkit-mask-image: linear-gradient(to right, #000, transparent calc(100% - 4rem)), var(--fade);
+          mask-image: linear-gradient(to right, #000, transparent calc(100% - 4rem)), var(--fade);
 }
 .frost-edge.r {
   right: 0;
-  -webkit-mask-image: linear-gradient(to left, #000, transparent);
-          mask-image: linear-gradient(to left, #000, transparent);
+  -webkit-mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
+          mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
 }
-.canvas-frost:nth-child(1) { --hold: 0px;    --reach: 9rem;   --side: 10%; --blur: blur(6px); }
-.canvas-frost:nth-child(2) { --hold: 0px;    --reach: 4.5rem; --side: 6%;  --blur: blur(16px) saturate(1.2); }
-.canvas-frost:nth-child(3) { --hold: 0.5rem; --reach: 2rem;   --side: 3%;  --blur: blur(32px) saturate(1.4); --tint: var(--frost-tint); }
+.canvas-frost:nth-child(1) { --hold: 0px; --reach: 12rem; --side: 10%; --blur: blur(6px); }
+.canvas-frost:nth-child(2) { --hold: 0px; --reach: 7rem;  --side: 6%;  --blur: blur(16px) saturate(1.2); }
+.canvas-frost:nth-child(3) { --hold: 0px; --reach: 3.5rem; --side: 3%; --blur: blur(32px) saturate(1.4); --tint: var(--frost-tint); }
 .canvas-stage {
   --clear-top: 12%;
   --clear-bottom: 8%;
@@ -3053,9 +3066,9 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.2); }
 @media (max-width: 50.5625rem) {
   .canvas-stage { --frost-tint: rgba(255, 255, 255, 0.26); }   /* more text sits on it here */
-  .canvas-frost:nth-child(1) { --reach: 5rem; --side: 7%; }
-  .canvas-frost:nth-child(2) { --reach: 2.5rem; --side: 4%; }
-  .canvas-frost:nth-child(3) { --reach: 1rem; --side: 1.5%; }
+  .canvas-frost:nth-child(1) { --reach: 7rem; --side: 7%; }
+  .canvas-frost:nth-child(2) { --reach: 4rem; --side: 4%; }
+  .canvas-frost:nth-child(3) { --reach: 2rem; --side: 1.5%; }
 }
 
 .canvas-field { position: absolute; inset: 0; }
