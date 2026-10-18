@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mix CD Player – Sean Finn</title>
+  <meta name="description" content="Mix CD, standalone: a YouTube playlist pressed onto a spinning CD. Press play." />
+  <link rel="canonical" href="https://www.seanpfinn.com/mix-cd-player" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <meta name="theme-color" content="#ebebeb" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f0f10" media="(prefers-color-scheme: dark)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sean Finn" />
+  <meta property="og:title" content="Mix CD Player – Sean Finn" />
+  <meta property="og:description" content="A YouTube playlist pressed onto a spinning CD. Press play." />
+  <meta property="og:url" content="https://www.seanpfinn.com/mix-cd-player" />
+  <meta property="og:image" content="https://www.seanpfinn.com/assets/og/mix-cd.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mix CD Player – Sean Finn" />
+  <meta name="twitter:description" content="A YouTube playlist pressed onto a spinning CD. Press play." />
+  <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/mix-cd.jpg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script>
+    // Same theme switch as the rest of the site.
+    try { if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark'); } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" />
+  <link rel="stylesheet" href="mix-cd.css" />
+  <style>
+    @font-face { font-family: 'Geist'; font-weight: 400; font-display: swap; src: url('assets/fonts/geist-sans-400.woff2') format('woff2'); }
+    @font-face { font-family: 'Geist'; font-weight: 500; font-display: swap; src: url('assets/fonts/geist-sans-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Geist'; font-weight: 600; font-display: swap; src: url('assets/fonts/geist-sans-600.woff2') format('woff2'); }
+    @font-face { font-family: 'Geist Mono'; font-weight: 400; font-display: swap; src: url('assets/fonts/geist-mono-400.woff2') format('woff2'); }
+
+    :root {
+      --bg: #ebebeb;
+      --ink: #0c0a09;
+      --ink-soft: #78716c;
+      --chip: rgba(255, 255, 255, 0.6);
+      --chip-line: rgba(0, 0, 0, 0.08);
+      --chip-on: #fff;
+      color-scheme: light;
+    }
+    .dark {
+      --bg: #0f0f10;
+      --ink: #fafaf9;
+      --ink-soft: #a8a29e;
+      --chip: rgba(255, 255, 255, 0.07);
+      --chip-line: rgba(255, 255, 255, 0.12);
+      --chip-on: rgba(255, 255, 255, 0.16);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding:
+        max(1rem, env(safe-area-inset-top))
+        max(1.25rem, env(safe-area-inset-right))
+        max(1rem, env(safe-area-inset-bottom))
+        max(1.25rem, env(safe-area-inset-left));
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────────── */
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      position: relative;
+      z-index: 5;
+    }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 2.5rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .back svg { transition: transform 0.15s ease; }
+    .back:hover svg { transform: translateX(-2px); }
+    .back span { color: var(--ink-soft); font-weight: 400; }
+    .tools { display: flex; align-items: center; gap: 0.5rem; }
+    .seg {
+      display: inline-flex;
+      gap: 0.125rem;
+      padding: 0.1875rem;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--chip-line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .seg button, .theme {
+      min-height: 2.125rem;
+      padding: 0 0.8rem;
+      border: none;
+      border-radius: 999px;
+      background: none;
+      font: inherit;
+      font-size: 0.8125rem;
+      color: var(--ink);
+      opacity: 0.55;
+      cursor: pointer;
+      transition: opacity 0.15s ease, background-color 0.15s ease;
+    }
+    .seg button:hover { opacity: 0.85; }
+    .seg button.is-active { opacity: 1; background: var(--chip-on); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+    .dark .seg button.is-active { box-shadow: none; }
+    .theme {
+      width: 2.5rem;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      opacity: 0.8;
+      background: var(--chip);
+      border: 1px solid var(--chip-line);
+    }
+    .theme:hover { opacity: 1; }
+    .theme .moon { display: none; }
+    .dark .theme .sun { display: none; }
+    .dark .theme .moon { display: block; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+    /* ── Stage ───────────────────────────────────────────────────────── */
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 1.5rem 0;
+    }
+    /* Phone / narrow: one column, disc sized to the screen. */
+    .stage .cd {
+      --cd-size: min(82vw, 48dvh, 34rem);
+      gap: 1.75rem;
+    }
+    .stage .cd-progress { width: min(100%, 30rem); }
+
+    /* Wide screens: disc on the left, title and transport on the right. */
+    @media (min-width: 56rem) and (min-height: 32rem) and (orientation: landscape) {
+      .stage .cd {
+        --cd-size: min(44vw, 68dvh, 36rem);
+        width: auto;
+        display: grid;
+        grid-template-columns: var(--cd-size) minmax(18rem, 22rem);
+        grid-template-rows: 1fr auto auto auto 1fr;
+        column-gap: clamp(3rem, 6vw, 6rem);
+        row-gap: 1.75rem;
+        align-items: center;
+      }
+      .stage .cd-deck     { grid-column: 1; grid-row: 1 / -1; }
+      .stage .cd-meta     { grid-column: 2; grid-row: 2; margin: 0; }
+      .stage .cd-progress { grid-column: 2; grid-row: 3; margin: 0; width: 100%; }
+      .stage .cd-controls { grid-column: 2; grid-row: 4; margin: 0; }
+      .stage .cd-title { font-size: 2rem; }
+      .stage .cd-artist { font-size: 1.0625rem; }
+      .stage .cd-lcd { font-size: 0.9375rem; }
+      .stage .cd-progress { grid-template-columns: 4rem 1fr 4rem; }
+      .stage .cd-btn { width: 3.25rem; height: 3.25rem; }
+      .stage .cd-btn svg { width: 26px; height: 26px; }
+      .stage .cd-btn--play { width: 4.75rem; height: 4.75rem; }
+      .stage .cd-btn--play svg { width: 28px; height: 28px; }
+    }
+    /* Short landscape phones: shrink the disc so everything fits. */
+    @media (max-height: 32rem) and (orientation: landscape) {
+      .stage .cd {
+        --cd-size: min(42vw, 72dvh);
+        width: auto;
+        display: grid;
+        grid-template-columns: var(--cd-size) minmax(14rem, 18rem);
+        grid-template-rows: 1fr auto auto auto 1fr;
+        column-gap: 2rem;
+        row-gap: 0.9rem;
+        align-items: center;
+      }
+      .stage .cd-deck     { grid-column: 1; grid-row: 1 / -1; }
+      .stage .cd-meta     { grid-column: 2; grid-row: 2; margin: 0; }
+      .stage .cd-progress { grid-column: 2; grid-row: 3; margin: 0; width: 100%; }
+      .stage .cd-controls { grid-column: 2; grid-row: 4; margin: 0; }
+      .stage { padding: 0.5rem 0; }
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────── */
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .foot a { color: inherit; text-decoration: none; }
+    .foot a:hover { color: var(--ink); }
+    .keys kbd {
+      font: inherit;
+      padding: 0.1rem 0.35rem;
+      border: 1px solid var(--chip-line);
+      border-radius: 0.3rem;
+    }
+    @media (hover: none), (max-width: 40rem) { .keys { display: none; } }
+    @media (max-width: 30rem) {
+      .back span { display: none; }
+      .seg button { padding: 0 0.65rem; }
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
+</head>
+<body>
+  <header class="bar">
+    <a class="back" href="mix-cd.html">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Mix CD <span>· Case study</span>
+    </a>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Disc face">
+        <button type="button" data-disc="printed" class="is-active" aria-pressed="true">Printed</button>
+        <button type="button" data-disc="burned" aria-pressed="false">Burned</button>
+      </div>
+      <button class="theme" type="button" aria-label="Toggle dark mode">
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div id="cd-player" data-disc="printed"></div>
+  </main>
+
+  <footer class="foot">
+    <a href="/">Sean Finn</a>
+    <span class="keys"><kbd>Space</kbd> play · <kbd>←</kbd> <kbd>→</kbd> skip · <kbd>L</kbd> track list</span>
+  </footer>
+
+  <script src="mix-cd.js"></script>
+  <script>
+    (function () {
+      const player = document.getElementById('cd-player');
+      const root = document.documentElement;
+
+      // Disc face
+      const faceBtns = document.querySelectorAll('.seg button');
+      faceBtns.forEach((b) => b.addEventListener('click', () => {
+        player.dataset.disc = b.dataset.disc;
+        faceBtns.forEach((x) => {
+          x.classList.toggle('is-active', x === b);
+          x.setAttribute('aria-pressed', String(x === b));
+        });
+      }));
+
+      // Theme (shared with the rest of the site)
+      document.querySelector('.theme').addEventListener('click', () => {
+        const on = root.classList.toggle('dark');
+        try { localStorage.setItem('dark', on ? '1' : '0'); } catch (e) {}
+      });
+
+      // Keyboard: Space play/pause, arrows skip, L track list.
+      document.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const t = e.target;
+        if (t && (t.closest('button, a, input, [role="slider"]'))) return;
+        const q = (s) => player.querySelector(s);
+        if (e.code === 'Space') { e.preventDefault(); q('.cd-btn--play')?.click(); }
+        else if (e.key === 'ArrowRight') q('.cd-next')?.click();
+        else if (e.key === 'ArrowLeft') q('.cd-prev')?.click();
+        else if (e.key === 'l' || e.key === 'L') q('.cd-track')?.click();
+      });
+    })();
+  </script>
+</body>
+</html>
