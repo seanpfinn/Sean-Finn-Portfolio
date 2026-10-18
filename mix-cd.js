@@ -178,14 +178,21 @@
     // disc has settled on the spindle.
     const target = isPlaying && !driveBusy && !reduceMotion.matches ? 360 / SECONDS_PER_REV : 0;
     const tau = driveBusy ? 0.06 : (target > velocity ? SPIN_UP_SECONDS : SPIN_DOWN_SECONDS) / 4;
-    velocity += (target - velocity) * (1 - Math.exp(-dt / tau));
-    if (Math.abs(velocity) < 0.05 && target === 0) velocity = 0;
-    angle = (angle + velocity * dt) % 360;
+    // While scratching, the pointer owns the angle (set in the handlers).
+    if (!scratching) {
+      // After a fling the disc coasts on its own spin before settling.
+      const k = coasting ? 0.55 : tau;
+      velocity += (target - velocity) * (1 - Math.exp(-dt / k));
+      if (coasting && Math.abs(velocity - target) < 4) coasting = false;
+      if (Math.abs(velocity) < 0.05 && target === 0) velocity = 0;
+      angle = (angle + velocity * dt) % 360;
+    }
     spinEl.style.transform = `rotate(${angle}deg)`;
     hubEl.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
     requestAnimationFrame(spin);
   }
   let driveBusy = false;
+  let scratching = false, coasting = false;
   requestAnimationFrame(spin);
 
   // ── Metadata + cover art ────────────────────────────────────────────────
@@ -649,6 +656,91 @@
     }
   }
   whenYTReady(createPlayer);
+
+  // ── Scratch to scrub: drag the disc round to move through the song.
+  // Mouse/pen everywhere; touch only where the page opts in with
+  // data-scratch="touch" (the full-screen player), so the case study
+  // still scrolls under a thumb. One turn = SCRATCH_SECONDS, more when
+  // you spin faster. A tap without dragging plays/pauses.
+  const SCRATCH_SECONDS = 8;
+  const deckEl = $('.cd-deck');
+  let scratchId = null, lastA = 0, lastTs = 0, scratchTime = 0, scratchW = 0;
+  let scratchMoved = 0, scratchWasPlaying = false, seekTimer = 0;
+  function pointerPolar(e) {
+    const r = deckEl.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    return {
+      a: Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI,
+      d: Math.hypot(e.clientX - cx, e.clientY - cy) / (r.width / 2),
+    };
+  }
+  deckEl.addEventListener('pointerdown', (e) => {
+    if (e.button > 0 || scratchId !== null) return;
+    if (root.classList.contains('is-flipped') || driveBusy || !player || !player.getDuration) return;
+    if (e.pointerType === 'touch' && root.dataset.scratch !== 'touch') return;
+    const p = pointerPolar(e);
+    if (p.d < 0.14 || p.d > 1.02) return;            // the spindle and outside the rim don't count
+    try { duration = player.getDuration() || 0; } catch (err) { duration = 0; }
+    if (duration <= 0) return;
+    scratchId = e.pointerId;
+    scratching = true; coasting = false; velocity = 0;
+    scratchMoved = 0; scratchW = 0;
+    lastA = p.a; lastTs = performance.now();
+    try { scratchTime = player.getCurrentTime() || 0; } catch (err) { scratchTime = 0; }
+    scratchWasPlaying = isPlaying;
+    try { deckEl.setPointerCapture(e.pointerId); } catch (err) {}
+    e.preventDefault();
+  });
+  deckEl.addEventListener('pointermove', (e) => {
+    if (e.pointerId !== scratchId) return;
+    const p = pointerPolar(e);
+    let d = p.a - lastA;
+    if (d > 180) d -= 360; else if (d < -180) d += 360;
+    lastA = p.a;
+    const now = performance.now();
+    const dt = Math.max(8, now - lastTs) / 1000;
+    lastTs = now;
+    scratchW = scratchW * 0.6 + (d / dt) * 0.4;      // deg/s, smoothed
+    scratchMoved += Math.abs(d);
+    if (scratchMoved > 4 && !root.classList.contains('is-scratching')) {
+      root.classList.add('is-scratching');
+      isScrubbing = true;
+      if (scratchWasPlaying) { try { player.pauseVideo(); } catch (err) {} }
+    }
+    if (!root.classList.contains('is-scratching')) return;
+    angle = (angle + d) % 360;
+    const boost = 1 + Math.min(4, Math.abs(scratchW) / 720);
+    scratchTime = Math.min(Math.max(0, scratchTime + (d / 360) * SCRATCH_SECONDS * boost), Math.max(0, duration - 0.5));
+    lastFraction = scratchTime / duration;
+    renderProgress(lastFraction, scratchTime);
+    if (!seekTimer) {
+      seekTimer = setTimeout(() => {
+        seekTimer = 0;
+        try { player.seekTo(scratchTime, false); } catch (err) {}
+      }, 160);
+    }
+  });
+  function endScratch(e) {
+    if (e.pointerId !== scratchId) return;
+    scratchId = null;
+    scratching = false;
+    try { deckEl.releasePointerCapture(e.pointerId); } catch (err) {}
+    if (!root.classList.contains('is-scratching')) {
+      if (e.type === 'pointerup') togglePlay();        // a tap on the disc
+      return;
+    }
+    root.classList.remove('is-scratching');
+    clearTimeout(seekTimer); seekTimer = 0;
+    isScrubbing = false;
+    try { player.seekTo(scratchTime, true); } catch (err) {}
+    if (scratchWasPlaying) { try { player.playVideo(); } catch (err) {} }
+    // Let go: the disc keeps some of your spin, then eases back to speed.
+    velocity = Math.max(-1440, Math.min(1440, scratchW));
+    coasting = true;
+    window.dispatchEvent(new CustomEvent('mixcd:scratch'));
+  }
+  deckEl.addEventListener('pointerup', endScratch);
+  deckEl.addEventListener('pointercancel', endScratch);
 
   playBtn.addEventListener('click', togglePlay);
   prevBtn.addEventListener('click', () => {

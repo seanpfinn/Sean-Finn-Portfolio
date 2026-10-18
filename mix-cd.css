@@ -286,6 +286,12 @@
           mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
 }
 
+/* Scratch to scrub (see mix-cd.js). */
+.cd:not(.cd--showcase) .cd-face--front { cursor: grab; }
+.cd.is-scratching .cd-face--front { cursor: grabbing; }
+.cd[data-scratch="touch"] .cd-deck { touch-action: none; -webkit-user-select: none; user-select: none; }
+.cd.is-scratching .cd-lcd--now { color: var(--cd-ink); }
+
 /* ── Flip: the disc on the front, the jewel case on the back ─────────────
    Two steps, each face with its own perspective: the disc turns to edge-on,
    then the case turns in from edge-on (and the reverse to close). This

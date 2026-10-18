@@ -218,6 +218,8 @@
       border-radius: 0.3rem;
     }
     @media (hover: none), (max-width: 40rem) { .keys { display: none; } }
+    .hint { flex: 1; text-align: center; transition: opacity 0.4s ease; }
+    .hint.is-gone { opacity: 0; }
     @media (max-width: 30rem) {
       .back span { display: none; }
       .seg button { padding: 0 0.65rem; }
@@ -245,11 +247,12 @@
   </header>
 
   <main class="stage">
-    <div id="cd-player" data-disc="printed"></div>
+    <div id="cd-player" data-disc="printed" data-scratch="touch"></div>
   </main>
 
   <footer class="foot">
-    <span class="keys"><kbd>Space</kbd> play · <kbd>←</kbd> <kbd>→</kbd> skip · <kbd>L</kbd> track list</span>
+    <span class="hint" hidden>Spin the disc with your finger to scrub</span>
+    <span class="keys">Drag the disc to scrub · <kbd>Space</kbd> play · <kbd>←</kbd> <kbd>→</kbd> skip · <kbd>L</kbd> track list</span>
   </footer>
 
   <script src="mix-cd.js"></script>
@@ -272,6 +275,16 @@
       document.querySelector('.theme').addEventListener('click', () => {
         const on = root.classList.toggle('dark');
         try { localStorage.setItem('dark', on ? '1' : '0'); } catch (e) {}
+      });
+
+      // First-visit hint on touch screens, until the disc has been scratched.
+      const hint = document.querySelector('.hint');
+      let seen = false;
+      try { seen = localStorage.getItem('mixcd-scratched') === '1'; } catch (e) {}
+      if (!seen && window.matchMedia('(hover: none)').matches) hint.hidden = false;
+      window.addEventListener('mixcd:scratch', () => {
+        hint.classList.add('is-gone');
+        try { localStorage.setItem('mixcd-scratched', '1'); } catch (e) {}
       });
 
       // Keyboard: Space play/pause, arrows skip, L track list.
