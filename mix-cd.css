@@ -250,15 +250,19 @@
 }
 /* Rainbow on the bare metal: mirror band and clear rim (and the whole top
    on a burned disc). Two opposed wedges, like light off a real CD. */
+/* Tilt light: mix-cd.js sets --cd-light-angle (deg), --cd-light-shift (%)
+   and --cd-light-k (0–1, how far from rest) on :root from the phone's
+   orientation (or the mouse on desktop). The rainbow sweeps round the disc
+   and the gloss slides across it, like a real CD catching the light. */
 .cd-iris {
-  background: conic-gradient(from -28deg,
+  background: conic-gradient(from calc(-28deg + var(--cd-light-angle, 0deg)),
     transparent 0deg,
     #ff7ac6 14deg, #ffd27a 30deg, #9dfba8 46deg, #77e3ff 62deg, #a990ff 78deg,
     transparent 100deg 180deg,
     #ff7ac6 194deg, #ffd27a 210deg, #9dfba8 226deg, #77e3ff 242deg, #a990ff 258deg,
     transparent 280deg 360deg);
   mix-blend-mode: color-burn;
-  opacity: 0.9;
+  opacity: calc(0.8 + 0.2 * var(--cd-light-k, 0.5));
   -webkit-mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 96.8%, rgba(0,0,0,0.8) 97.2% 99.6%, transparent 100%);
           mask: radial-gradient(closest-side, transparent 0 30%, #000 30.4% 37.8%, transparent 38.2% 96.8%, rgba(0,0,0,0.8) 97.2% 99.6%, transparent 100%);
 }
@@ -269,8 +273,14 @@
 /* Glossy sweep across the whole face. */
 .cd-gloss {
   background:
-    linear-gradient(128deg, transparent 22%, rgba(255,255,255,0.38) 34%, transparent 46%),
-    linear-gradient(128deg, transparent 58%, rgba(255,255,255,0.16) 66%, transparent 74%);
+    linear-gradient(calc(128deg + 0.35 * var(--cd-light-angle, 0deg)),
+      transparent calc(22% + var(--cd-light-shift, 0%)),
+      rgba(255,255,255, calc(0.32 + 0.3 * var(--cd-light-k, 0.2))) calc(34% + var(--cd-light-shift, 0%)),
+      transparent calc(46% + var(--cd-light-shift, 0%))),
+    linear-gradient(calc(128deg + 0.35 * var(--cd-light-angle, 0deg)),
+      transparent calc(58% + var(--cd-light-shift, 0%)),
+      rgba(255,255,255, calc(0.12 + 0.18 * var(--cd-light-k, 0.2))) calc(66% + var(--cd-light-shift, 0%)),
+      transparent calc(74% + var(--cd-light-shift, 0%)));
   mix-blend-mode: soft-light;
   -webkit-mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
           mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);

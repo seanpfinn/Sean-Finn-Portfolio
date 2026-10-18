@@ -824,3 +824,77 @@
     requestAnimationFrame(tick);
   });
 })();
+
+// ── Tilt light ─────────────────────────────────────────────────────────────
+// The rainbow off the disc and its gloss follow how the phone is held, so
+// tilting it makes the CD catch the light. Drives three CSS variables on
+// :root (see .cd-iris / .cd-gloss in mix-cd.css). On desktop, the mouse
+// stands in for the tilt, more subtly. iOS asks permission for motion the
+// first time the player itself is tapped.
+(function () {
+  if (!document.querySelector('.cd')) return;
+  const root = document.documentElement;
+  let tx = 0, ty = 0;          // target tilt, degrees from the resting pose
+  let x = 0, y = 0;            // smoothed
+  let base = null;             // resting pose, taken from the first reading
+  let source = null;           // 'motion' | 'pointer'
+  let running = false;
+  const clampN = (v, m) => Math.max(-m, Math.min(m, v));
+
+  function frame() {
+    x += (tx - x) * 0.12;
+    y += (ty - y) * 0.12;
+    const angle = x * 2.4 + y * 1.6;                       // rainbow sweeps
+    const k = Math.min(1, Math.hypot(x, y) / 28);          // brighter when tilted
+    const shift = clampN(x * 0.45 - y * 0.3, 18);          // gloss slides
+    root.style.setProperty('--cd-light-angle', angle.toFixed(2) + 'deg');
+    root.style.setProperty('--cd-light-shift', shift.toFixed(2) + '%');
+    root.style.setProperty('--cd-light-k', (0.2 + 0.8 * k).toFixed(3));
+    if (Math.abs(tx - x) > 0.02 || Math.abs(ty - y) > 0.02) requestAnimationFrame(frame);
+    else running = false;
+  }
+  function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+
+  function onOrient(e) {
+    if (e.beta == null || e.gamma == null) return;
+    source = 'motion';
+    // Undo screen rotation so "left/right" stays left/right in landscape.
+    const a = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    let g = e.gamma, b = e.beta;
+    if (a === 90) [g, b] = [b, -g];
+    else if (a === -90 || a === 270) [g, b] = [-b, g];
+    if (!base) base = { g, b };
+    // Let the resting pose drift slowly, so a new grip becomes the new rest.
+    base.g += (g - base.g) * 0.004;
+    base.b += (b - base.b) * 0.004;
+    tx = clampN(g - base.g, 40);
+    ty = clampN(b - base.b, 40);
+    kick();
+  }
+  function listenMotion() { window.addEventListener('deviceorientation', onOrient); }
+
+  const DOE = window.DeviceOrientationEvent;
+  if (DOE && typeof DOE.requestPermission === 'function') {
+    // iOS: must be asked from a tap.
+    // Only from a tap on the player itself, so reading the page never prompts.
+    const ask = (e) => {
+      if (!e.target.closest || !e.target.closest('.cd')) return;
+      document.removeEventListener('pointerup', ask);
+      DOE.requestPermission().then((r) => { if (r === 'granted') listenMotion(); }).catch(() => {});
+    };
+    document.addEventListener('pointerup', ask);
+  } else if (DOE) {
+    listenMotion();
+  }
+
+  // Desktop: the pointer over the page plays the part of the tilt.
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    window.addEventListener('pointermove', (e) => {
+      if (source === 'motion') return;
+      source = 'pointer';
+      tx = ((e.clientX / window.innerWidth) - 0.5) * 24;
+      ty = ((e.clientY / window.innerHeight) - 0.5) * 18;
+      kick();
+    }, { passive: true });
+  }
+})();
