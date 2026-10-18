@@ -289,7 +289,9 @@
 /* Scratch to scrub (see mix-cd.js). */
 .cd:not(.cd--showcase) .cd-face--front { cursor: grab; }
 .cd.is-scratching .cd-face--front { cursor: grabbing; }
-.cd[data-scratch="touch"] .cd-deck { touch-action: none; -webkit-user-select: none; user-select: none; }
+.cd:not(.cd--showcase) .cd-deck { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+.cd[data-scratch="touch"] .cd-deck { touch-action: none; }
+.cd.is-flinging .cd-face--front { cursor: grabbing; }
 .cd.is-scratching .cd-lcd--now { color: var(--cd-ink); }
 
 /* ── Flip: the disc on the front, the jewel case on the back ─────────────
@@ -369,6 +371,20 @@
 .cd-load.is-out[data-dir="prev"] .cd-shadow { animation-name: cd-shadow-out-prev; }
 .cd-load.is-in[data-dir="prev"] .cd-lift    { animation-name: cd-lift-in-prev; }
 .cd-load.is-in[data-dir="prev"] .cd-shadow  { animation-name: cd-shadow-in-prev; }
+
+/* Flung: the disc is already up and moving, so it just carries on off. */
+.cd-load.is-out[data-fling="1"] .cd-lift   { animation: cd-fling-out 0.3s cubic-bezier(0.3, 0.4, 0.6, 1) forwards; }
+.cd-load.is-out[data-fling="1"] .cd-shadow { animation: cd-fling-shadow 0.3s ease-out forwards; }
+.cd-load.is-out[data-fling="1"][data-dir="prev"] .cd-lift { animation-name: cd-fling-out-prev; }
+@keyframes cd-fling-out {
+  from { transform: translate(var(--fx, 0%), -2.5%) scale(1.06) rotate(var(--frot, 0deg)); opacity: 1; }
+  to   { transform: translate(90%, -2.5%) scale(1.06) rotate(18deg); opacity: 0; }
+}
+@keyframes cd-fling-out-prev {
+  from { transform: translate(var(--fx, 0%), -2.5%) scale(1.06) rotate(var(--frot, 0deg)); opacity: 1; }
+  to   { transform: translate(-90%, -2.5%) scale(1.06) rotate(-18deg); opacity: 0; }
+}
+@keyframes cd-fling-shadow { to { opacity: 0; } }
 
 /* Out: brake (hold), lift straight up off the spindle, then carry it away. */
 @keyframes cd-lift-out {
