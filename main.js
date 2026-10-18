@@ -645,7 +645,7 @@
       // { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
       // { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
-      { href: 'cd-player.html',              title: 'CD Player',      clear: false, video: 'assets/tiles/cd-player.mp4',      bg: '#e5e5e5' },
+      { href: 'cd-player.html',              title: 'CD Player',      clear: false, img: 'assets/tiles/cd-player.webp', cdTile: 'NMRhx71bGo4', bg: '#e5e5e5' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
       { href: 'clear-vault.html',            title: 'Vault',          clear: true, video: 'assets/gallery-vault-video.mp4',   bg: '#e1e1e1' },
@@ -661,7 +661,7 @@
 
     const media = (p) => p.video
       ? `<video class="gv-video" src="${p.video}" muted loop playsinline preload="metadata" data-play-in-view></video>`
-      : `<img class="gv-video" src="${p.img}" alt="" />`;
+      : `<img class="gv-video" src="${p.img}"${p.cdTile ? ` data-cd-tile="${p.cdTile}"` : ''} alt="" />`;
     const tag = (p) => p.clear
       ? `<img class="gallery-card-logo gcl-clear" src="assets/logo-clear.svg" alt="CLEAR" />`
       : `<span class="gallery-card-company">Personal</span>`;
@@ -1324,3 +1324,68 @@
 
 })();
 
+// ── CD Player tile: pressed live from YouTube ──────────────────────────────
+// Any <img data-cd-tile="VIDEO_ID"> (the home tile, the "more case studies"
+// card) starts as a blank printable disc and gets that video's cover art
+// printed onto it in a canvas: YouTube thumbnail in, finished tile out.
+(function () {
+  if (!document.querySelector('img[data-cd-tile]')) return;
+  const first = document.querySelector('img[data-cd-tile]');
+  const id = first.dataset.cdTile;
+  const load = (src, cors) => new Promise((resolve, reject) => {
+    const im = new Image();
+    if (cors) im.crossOrigin = 'anonymous';
+    im.onload = () => resolve(im);
+    im.onerror = reject;
+    im.src = src;
+  });
+  const art = load(`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`, true)
+    .then((im) => im.naturalWidth > 120 ? im : load(`https://i.ytimg.com/vi/${id}/mqdefault.jpg`, true));
+  Promise.all([load('assets/tiles/cd-player-disc.webp'), art]).then(([disc, cover]) => {
+    const W = disc.naturalWidth, H = disc.naturalHeight;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    const cx = W / 2, cy = H / 2, R = H * (300 / 812);   // disc radius in the base image
+    const s = Math.min(cover.naturalWidth, cover.naturalHeight);
+    const sx = (cover.naturalWidth - s) / 2, sy = (cover.naturalHeight - s) / 2;
+    g.fillStyle = '#e5e5e5';
+    g.fillRect(0, 0, W, H);
+    // Soft bloom of the art behind the disc: draw it tiny, then scale it up.
+    const t = document.createElement('canvas');
+    t.width = t.height = 12;
+    t.getContext('2d').drawImage(cover, sx, sy, s, s, 0, 0, 12, 12);
+    g.save();
+    g.globalAlpha = 0.45;
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(t, cx - R * 1.3, cy - R * 1.3, R * 2.6, R * 2.6);
+    g.restore();
+    const fade = g.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.24);
+    fade.addColorStop(0, 'rgba(229,229,229,0)');
+    fade.addColorStop(1, 'rgba(229,229,229,1)');
+    g.fillStyle = fade;
+    g.fillRect(0, 0, W, H);
+    // The blank disc, then the art printed on its face (38–97% of the radius).
+    g.drawImage(disc, 0, 0);
+    g.save();
+    g.beginPath();
+    g.arc(cx, cy, R * 0.968, 0, Math.PI * 2);
+    g.arc(cx, cy, R * 0.382, 0, Math.PI * 2, true);
+    g.clip();
+    g.globalCompositeOperation = 'multiply';
+    g.drawImage(cover, sx, sy, s, s, cx - R, cy - R, R * 2, R * 2);
+    g.restore();
+    c.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const apply = (root) => root.querySelectorAll(`img[data-cd-tile="${id}"]`).forEach((im) => { im.src = url; });
+      apply(document);
+      // Tiles the home canvas clones later pick it up too.
+      new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach((n) => {
+        if (n.nodeType !== 1) return;
+        if (n.matches && n.matches(`img[data-cd-tile="${id}"]`)) n.src = url;
+        else if (n.querySelectorAll) apply(n);
+      }))).observe(document.body, { childList: true, subtree: true });
+    }, 'image/jpeg', 0.9);
+  }).catch(() => {});   // the blank disc stays as the fallback
+})();

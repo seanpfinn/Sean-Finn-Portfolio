@@ -854,6 +854,33 @@
   justify-content: center;
 }
 .cdp-hero .cd { --cd-size: 18.5rem; }
+.cdp-hero--player .cd { --cd-size: 12rem; gap: 1.4rem; }
+
+/* Printed and burned faces side by side, both live. */
+.cdp-faces {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+}
+.cdp-faces figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.cdp-faces .cd { --cd-size: 15.5rem; }
+.cdp-faces .cd-meta { display: none; }
+.cdp-faces figcaption {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #78716c;
+}
 
 .cdp-face {
   position: absolute;

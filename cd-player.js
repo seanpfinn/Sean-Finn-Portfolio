@@ -649,12 +649,38 @@
 // <div class="cd-showcase" data-video="YOUTUBE_ID" data-disc="printed"></div>
 // A display-only disc for feature images: it pulls one video's cover art from
 // YouTube's thumbnail CDN and its title/artist via oEmbed, then spins. No
-// audio, no controls, and it doesn't touch the main player above.
+// audio, and it doesn't touch the main player above.
+// Optional data-chrome="player" adds an inert (non-interactive) track pill,
+// progress readout and transport row, set by data-track, data-time and
+// data-duration (seconds) — for screenshots-that-aren't-screenshots.
 (function () {
   const mounts = document.querySelectorAll('.cd-showcase[data-video]:not([data-built])');
   if (!mounts.length) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const SECONDS_PER_REV = 5;
+  const SKIP_BACK_PATH = 'M19.5 4.48875V19.5112C19.4972 19.7772 19.4237 20.0376 19.2872 20.2658C19.1506 20.494 18.9558 20.6818 18.7227 20.8099C18.4896 20.938 18.2267 21.0019 17.9608 20.9949C17.695 20.988 17.4357 20.9105 17.2097 20.7703L6 13.7597V20.25C6 20.4489 5.92098 20.6397 5.78033 20.7803C5.63968 20.921 5.44891 21 5.25 21C5.05109 21 4.86032 20.921 4.71967 20.7803C4.57902 20.6397 4.5 20.4489 4.5 20.25V3.75C4.5 3.55109 4.57902 3.36032 4.71967 3.21967C4.86032 3.07902 5.05109 3 5.25 3C5.44891 3 5.63968 3.07902 5.78033 3.21967C5.92098 3.36032 6 3.55109 6 3.75V10.2403L17.2097 3.22969C17.4354 3.08797 17.695 3.00918 17.9614 3.00146C18.2278 2.99374 18.4915 3.05737 18.7251 3.18578C18.9586 3.31418 19.1536 3.50269 19.2899 3.73178C19.4261 3.96086 19.4987 4.22221 19.5 4.48875Z';
+  const PAUSE_PATH = 'M20.25 4.5V19.5C20.25 19.8978 20.092 20.2794 19.8107 20.5607C19.5294 20.842 19.1478 21 18.75 21H15C14.6022 21 14.2206 20.842 13.9393 20.5607C13.658 20.2794 13.5 19.8978 13.5 19.5V4.5C13.5 4.10218 13.658 3.72064 13.9393 3.43934C14.2206 3.15804 14.6022 3 15 3H18.75C19.1478 3 19.5294 3.15804 19.8107 3.43934C20.092 3.72064 20.25 4.10218 20.25 4.5ZM9 3H5.25C4.85218 3 4.47064 3.15804 4.18934 3.43934C3.90804 3.72064 3.75 4.10218 3.75 4.5V19.5C3.75 19.8978 3.90804 20.2794 4.18934 20.5607C4.47064 20.842 4.85218 21 5.25 21H9C9.39782 21 9.77936 20.842 10.0607 20.5607C10.342 20.2794 10.5 19.8978 10.5 19.5V4.5C10.5 4.10218 10.342 3.72064 10.0607 3.43934C9.77936 3.15804 9.39782 3 9 3Z';
+  const SKIP_FORWARD_PATH = 'M19.5 3.75V20.25C19.5 20.4489 19.421 20.6397 19.2803 20.7803C19.1397 20.921 18.9489 21 18.75 21C18.5511 21 18.3603 20.921 18.2197 20.7803C18.079 20.6397 18 20.4489 18 20.25V13.7597L6.79031 20.7703C6.56456 20.912 6.30504 20.9908 6.0386 20.9985C5.77217 21.0063 5.50852 20.9426 5.27494 20.8142C5.04137 20.6858 4.84636 20.4973 4.71011 20.2682C4.57386 20.0391 4.50132 19.7778 4.5 19.5112V4.48875C4.50132 4.22221 4.57386 3.96086 4.71011 3.73178C4.84636 3.50269 5.04137 3.31418 5.27494 3.18578C5.50852 3.05737 5.77217 2.99374 6.0386 3.00146C6.30504 3.00918 6.56456 3.08797 6.79031 3.22969L18 10.2403V3.75C18 3.55109 18.079 3.36032 18.2197 3.21967C18.3603 3.07902 18.5511 3 18.75 3C18.9489 3 19.1397 3.07902 19.2803 3.21967C19.421 3.36032 19.5 3.55109 19.5 3.75Z';
+  const fmt = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+  const lcd = (cls, text) => `<span class="cd-lcd ${cls}" data-ghost="${text.replace(/\d/g, '8')}"><span>${text}</span></span>`;
+  function chrome(el) {
+    const t = +el.dataset.time || 0, d = +el.dataset.duration || 0;
+    const pct = d ? Math.min(100, (t / d) * 100).toFixed(2) + '%' : '0%';
+    return {
+      pill: `<span class="cd-track" aria-hidden="true"><svg class="cd-track-icon" viewBox="0 0 16 16" width="12" height="12"><path d="M2 3.5h12M2 8h12M2 12.5h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="cd-track-label">${el.dataset.track || ''}</span></span>`,
+      rest: `
+      <div class="cd-progress" aria-hidden="true">
+        ${lcd('cd-lcd--now', fmt(t))}
+        <div class="cd-bar"><span class="cd-bar-track"></span><span class="cd-bar-fill" style="width:${pct}"></span></div>
+        ${lcd('cd-lcd--end', '-' + fmt(Math.max(0, d - t)))}
+      </div>
+      <div class="cd-controls" aria-hidden="true">
+        <span class="cd-btn"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="${SKIP_BACK_PATH}"/></svg></span>
+        <span class="cd-btn cd-btn--play"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="${PAUSE_PATH}"/></svg></span>
+        <span class="cd-btn"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="${SKIP_FORWARD_PATH}"/></svg></span>
+      </div>`,
+    };
+  }
 
   function clean(title, artist) {
     if (!artist && title && title.includes(' - ')) {
@@ -672,6 +698,7 @@
     el.classList.add('cd', 'cd--showcase', 'is-playing');
     if (!el.dataset.disc) el.dataset.disc = 'printed';
     const pathId = `cd-show-path-${n}`;
+    const ch = el.dataset.chrome === 'player' ? chrome(el) : { pill: '', rest: '' };
     el.innerHTML = `
       <div class="cd-deck" aria-hidden="true">
         <div class="cd-glow"><img alt="" /></div>
@@ -692,9 +719,10 @@
         <span class="cd-gloss"></span>
       </div>
       <div class="cd-meta">
+        ${ch.pill}
         <span class="cd-title-clip"><span class="cd-title">&nbsp;</span></span>
         <span class="cd-artist">&nbsp;</span>
-      </div>`;
+      </div>${ch.rest}`;
 
     const printImg = el.querySelector('.cd-print img');
     const glowImg = el.querySelector('.cd-glow img');
