@@ -1,4 +1,4 @@
-// CD Player — a YouTube-playlist disc player.
+// Mix CD — a YouTube-playlist disc player.
 // Pair with cdplayer.css. The current track's cover art is printed onto a
 // compact disc (or stuck onto a burned CD-R, with the title written on in
 // marker). The disc spins up when playback starts and coasts to a stop when

@@ -2,6 +2,15 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/clear-passkeys", "destination": "/clear-passkey-management", "permanent": true }
+    {
+      "source": "/clear-passkeys",
+      "destination": "/clear-passkey-management",
+      "permanent": true
+    },
+    {
+      "source": "/cd-player",
+      "destination": "/mix-cd",
+      "permanent": true
+    }
   ]
 }
