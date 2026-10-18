@@ -256,8 +256,54 @@
   }
   // Puts art on the disc. `instant` swaps it with no crossfade — used while
   // the disc is out of the drive.
+  // ── Tint from the cover: the cover's main color tints the page and the
+  // progress bar (see --mix-h / --mix-s in mix-cd.css). Colorful pixels
+  // count most; a black-and-white cover gives a neutral tint.
+  const tintCache = {};
+  function tintFrom(videoId) {
+    const apply = (t) => {
+      if (shownArt !== videoId && swappingTo !== videoId) return;
+      const de = document.documentElement;
+      de.style.setProperty('--mix-h', t.h.toFixed(1));
+      de.style.setProperty('--mix-s', t.s.toFixed(1) + '%');
+      root.classList.add('is-tinted');
+    };
+    if (tintCache[videoId]) { apply(tintCache[videoId]); return; }
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = () => {
+      try {
+        const N = 24, c = document.createElement('canvas');
+        c.width = c.height = N;
+        const g = c.getContext('2d', { willReadFrequently: true });
+        const side = Math.min(im.naturalWidth, im.naturalHeight);
+        g.drawImage(im, (im.naturalWidth - side) / 2, (im.naturalHeight - side) / 2, side, side, 0, 0, N, N);
+        const d = g.getImageData(0, 0, N, N).data;
+        let x = 0, y = 0, sw = 0, ws = 0;
+        for (let i = 0; i < d.length; i += 4) {
+          const r = d[i] / 255, gg = d[i + 1] / 255, b = d[i + 2] / 255;
+          const mx = Math.max(r, gg, b), mn = Math.min(r, gg, b), l = (mx + mn) / 2, ch = mx - mn;
+          if (ch < 0.02) continue;
+          const sat = ch / (1 - Math.abs(2 * l - 1) || 1);
+          let h = mx === r ? ((gg - b) / ch) % 6 : mx === gg ? (b - r) / ch + 2 : (r - gg) / ch + 4;
+          h *= 60;
+          const w = sat * sat * Math.sqrt(Math.max(0, 1 - Math.abs(2 * l - 1)));
+          x += Math.cos(h * Math.PI / 180) * w; y += Math.sin(h * Math.PI / 180) * w;
+          sw += sat * w; ws += w;
+        }
+        const t = ws < 2
+          ? { h: 30, s: 0 }
+          : { h: (Math.atan2(y, x) * 180 / Math.PI + 360) % 360, s: Math.min(85, (sw / ws) * 100) };
+        tintCache[videoId] = t;
+        apply(t);
+      } catch (e) { /* cross-origin blocked: keep the neutral look */ }
+    };
+    im.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+  }
+
   function applyArt(videoId, src, instant) {
     shownArt = videoId;
+    tintFrom(videoId);
     glowImg.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
     root.classList.add('has-art');
     const next = printImgs[1 - frontImg], prev = printImgs[frontImg];

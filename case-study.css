@@ -823,6 +823,10 @@
    on the left, title / scrubber / transport on the right. */
 .proj-panel-new.proj-panel--cdp { background: #ebebeb; }
 .dark .proj-panel-new.proj-panel--cdp { background: #0f0f10; }
+/* The live player tints its panel from the current cover. */
+.proj-panel-new.proj-panel--cdp { transition: background-color 1.2s ease; }
+.proj-panel-new.proj-panel--cdp:has(.cd.is-tinted) { background: hsl(var(--mix-h) min(var(--mix-s), 40%) 90%); }
+.dark .proj-panel-new.proj-panel--cdp:has(.cd.is-tinted) { background: hsl(var(--mix-h) min(var(--mix-s), 30%) 8%); }
 
 .cdp-embed {
   position: absolute;

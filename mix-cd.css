@@ -698,7 +698,12 @@
   transform: translateY(-50%);
 }
 .cd-bar-track { right: 0; background: var(--cd-rail); }
-.cd-bar-fill { width: 0; background: var(--cd-ink); }
+.cd-bar-fill { width: 0; background: var(--cd-ink); transition: background-color 0.8s ease; }
+/* Tinted by the current cover (mix-cd.js sets --mix-h / --mix-s on :root). */
+.cd.is-tinted .cd-bar-fill,
+.cd.is-tinted .cd-bar-thumb { background: hsl(var(--mix-h) min(var(--mix-s), 65%) 40%); }
+.dark .cd.is-tinted .cd-bar-fill,
+.dark .cd.is-tinted .cd-bar-thumb { background: hsl(var(--mix-h) min(var(--mix-s), 70%) 70%); }
 .cd-bar-thumb {
   position: absolute;
   top: 50%; left: 0;

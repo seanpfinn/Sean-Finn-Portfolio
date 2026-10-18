@@ -54,6 +54,7 @@
       --chip-on: rgba(255, 255, 255, 0.16);
       color-scheme: dark;
     }
+    .dark body { background: hsl(var(--mix-h, 0) min(var(--mix-s, 0%), 30%) 7%); }
     * { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
     body {
@@ -61,6 +62,7 @@
       display: grid;
       grid-template-rows: auto 1fr auto;
       background: var(--bg);
+      background: hsl(var(--mix-h, 0) min(var(--mix-s, 0%), 40%) 91%);
       color: var(--ink);
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -69,7 +71,7 @@
         max(1.25rem, env(safe-area-inset-right))
         max(1rem, env(safe-area-inset-bottom))
         max(1.25rem, env(safe-area-inset-left));
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 1.2s ease, color 0.3s ease;
       overflow-x: hidden;
     }
 
