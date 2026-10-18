@@ -592,11 +592,18 @@ function mixInk(inkEl, volEl, seed, label) {
     renderProgress(0, 0);
     setTrackNumber();
     // Swap discs when there's already one in the drive.
-    if (shownArt && shownArt !== vid) ejectAndLoad(vid, dir || (orderPos >= prevPos ? 'next' : 'prev'));
+    const swapping = !!(shownArt && shownArt !== vid);
+    if (swapping) ejectAndLoad(vid, dir || (orderPos >= prevPos ? 'next' : 'prev'));
     fetchMetaByVideoId(vid);
-    if (autoplay) player.loadVideoById(vid);
+    // The music waits for the disc: while one is being ejected and the next
+    // loaded, the track is only cued; it starts once the new disc has
+    // settled on the spindle (see the cd-lift-in animationend handler).
+    const animated = swapping && !reduceMotion.matches;
+    playOnSettle = autoplay && animated ? vid : null;
+    if (autoplay && !animated) player.loadVideoById(vid);
     else player.cueVideoById(vid);
   }
+  let playOnSettle = null;
 
   // ── Eject + load: the drive brakes, the disc lifts off the spindle (its
   // shadow dropping away beneath it) and slides out; the next disc, its art
@@ -646,6 +653,11 @@ function mixInk(inkEl, volEl, seed, label) {
   loadEl.addEventListener('animationend', (e) => {
     if (/^cd-lift-in/.test(e.animationName)) {
       buzz(14);                                        // the disc lands on the spindle
+      // Now the needle drops, so to speak: start the track that was waiting.
+      if (playOnSettle && playOnSettle === currentVideoId()) {
+        try { player.playVideo(); } catch (err) {}
+      }
+      playOnSettle = null;
       loadEl.classList.remove('is-in');
       delete loadEl.dataset.fling;
       driveBusy = false;
