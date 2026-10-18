@@ -301,15 +301,100 @@
 .cd:not(.is-flipped) .cd-face--back { pointer-events: none; }
 
 /* ── Eject + load between tracks ──────────────────────────────────────── */
+/* The drive: turntable and spindle stay put while discs come and go. A faint
+   recessed well marks the spot when the drive is empty. */
+.cd-drive { position: absolute; inset: 0; }
+.cd-drive::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.035);
+  box-shadow: inset 0 0.35rem 0.9rem rgba(0, 0, 0, 0.12);
+}
+.dark .cd-drive::before, .cd--dark .cd-drive::before {
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0.35rem 0.9rem rgba(0, 0, 0, 0.5);
+}
+.cd-drive .cd-hub { will-change: transform; }
+
 .cd-load { position: absolute; inset: 0; }
-.cd-load.is-out { animation: cd-eject 0.34s cubic-bezier(0.55, 0, 0.8, 0.3) forwards; }
-.cd-load.is-out[data-dir="prev"] { animation-name: cd-eject-prev; }
-.cd-load.is-in { animation: cd-load-in 0.56s cubic-bezier(0.2, 0.9, 0.25, 1.06) both; }
-.cd-load.is-in[data-dir="prev"] { animation-name: cd-load-in-prev; }
-@keyframes cd-eject      { to { transform: translateX(64%) scale(0.94); opacity: 0; } }
-@keyframes cd-eject-prev { to { transform: translateX(-64%) scale(0.94); opacity: 0; } }
-@keyframes cd-load-in      { from { transform: translateX(-64%) scale(0.94); opacity: 0; } }
-@keyframes cd-load-in-prev { from { transform: translateX(64%) scale(0.94); opacity: 0; } }
+.cd-lift { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.cd-lift .cd-spin { filter: none; }
+/* The disc's shadow is its own layer so it can fall away as the disc rises.
+   A ring, so it never darkens the spindle through the center hole. */
+.cd-shadow {
+  position: absolute;
+  inset: 1%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.42);
+  filter: blur(0.9rem);
+  transform: translateY(3%);
+  -webkit-mask: radial-gradient(closest-side, transparent 0 22%, #000 40%);
+          mask: radial-gradient(closest-side, transparent 0 22%, #000 40%);
+  opacity: 0.75;
+}
+
+.cd-load.is-out .cd-lift   { animation: cd-lift-out 0.9s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+.cd-load.is-out .cd-shadow { animation: cd-shadow-out 0.9s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+.cd-load.is-in .cd-lift    { animation: cd-lift-in 0.95s cubic-bezier(0.3, 0.6, 0.3, 1) both; }
+.cd-load.is-in .cd-shadow  { animation: cd-shadow-in 0.95s cubic-bezier(0.3, 0.6, 0.3, 1) both; }
+.cd-load.is-out[data-dir="prev"] .cd-lift   { animation-name: cd-lift-out-prev; }
+.cd-load.is-out[data-dir="prev"] .cd-shadow { animation-name: cd-shadow-out-prev; }
+.cd-load.is-in[data-dir="prev"] .cd-lift    { animation-name: cd-lift-in-prev; }
+.cd-load.is-in[data-dir="prev"] .cd-shadow  { animation-name: cd-shadow-in-prev; }
+
+/* Out: brake (hold), lift straight up off the spindle, then carry it away. */
+@keyframes cd-lift-out {
+  0%, 12% { transform: none; }
+  40%, 50% { transform: translateY(-4%) scale(1.1); opacity: 1; }
+  88%     { opacity: 1; }
+  100%    { transform: translate(84%, -4%) scale(1.1); opacity: 0; }
+}
+@keyframes cd-lift-out-prev {
+  0%, 12% { transform: none; }
+  40%, 50% { transform: translateY(-4%) scale(1.1); opacity: 1; }
+  88%     { opacity: 1; }
+  100%    { transform: translate(-84%, -4%) scale(1.1); opacity: 0; }
+}
+@keyframes cd-shadow-out {
+  0%, 12% { transform: translateY(3%); opacity: 0.75; filter: blur(0.9rem); }
+  40%, 50% { transform: translate(1.5%, 12%) scale(1.04); opacity: 0.35; filter: blur(1.8rem); }
+  100%    { transform: translate(84%, 10%) scale(1.02); opacity: 0; filter: blur(1.8rem); }
+}
+@keyframes cd-shadow-out-prev {
+  0%, 12% { transform: translateY(3%); opacity: 0.75; filter: blur(0.9rem); }
+  40%, 50% { transform: translate(-1.5%, 12%) scale(1.04); opacity: 0.35; filter: blur(1.8rem); }
+  100%    { transform: translate(-84%, 10%) scale(1.02); opacity: 0; filter: blur(1.8rem); }
+}
+/* In: arrive raised from the other side, hover over the spindle, drop and
+   settle with a touch of give. */
+@keyframes cd-lift-in {
+  0%   { transform: translate(-84%, -4%) scale(1.1); opacity: 0; }
+  12%  { opacity: 1; }
+  52%, 60% { transform: translateY(-4%) scale(1.1); }
+  86%  { transform: translateY(0.4%) scale(0.992); }
+  100% { transform: none; }
+}
+@keyframes cd-lift-in-prev {
+  0%   { transform: translate(84%, -4%) scale(1.1); opacity: 0; }
+  12%  { opacity: 1; }
+  52%, 60% { transform: translateY(-4%) scale(1.1); }
+  86%  { transform: translateY(0.4%) scale(0.992); }
+  100% { transform: none; }
+}
+@keyframes cd-shadow-in {
+  0%   { transform: translate(-84%, 10%) scale(1.02); opacity: 0; filter: blur(1.8rem); }
+  52%, 60% { transform: translate(1.5%, 12%) scale(1.04); opacity: 0.35; filter: blur(1.8rem); }
+  86%  { transform: translateY(2.6%); opacity: 0.8; filter: blur(0.8rem); }
+  100% { transform: translateY(3%); opacity: 0.75; filter: blur(0.9rem); }
+}
+@keyframes cd-shadow-in-prev {
+  0%   { transform: translate(84%, 10%) scale(1.02); opacity: 0; filter: blur(1.8rem); }
+  52%, 60% { transform: translate(-1.5%, 12%) scale(1.04); opacity: 0.35; filter: blur(1.8rem); }
+  86%  { transform: translateY(2.6%); opacity: 0.8; filter: blur(0.8rem); }
+  100% { transform: translateY(3%); opacity: 0.75; filter: blur(0.9rem); }
+}
 
 /* ── Jewel case (back of the flip) ────────────────────────────────────────
    A rear tray insert: paper with two folded spines, under clear plastic. */

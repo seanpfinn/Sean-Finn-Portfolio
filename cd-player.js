@@ -50,9 +50,14 @@
       <div class="cd-glow" aria-hidden="true"><img alt="" /></div>
       <div class="cd-flip">
       <div class="cd-face cd-face--front">
-      <div class="cd-load">
-      <div class="cd-spin" aria-hidden="true">
+      <div class="cd-drive" aria-hidden="true">
         <span class="cd-turntable"></span>
+        <span class="cd-hub"><i></i><i></i><i></i></span>
+      </div>
+      <div class="cd-load">
+      <span class="cd-shadow" aria-hidden="true"></span>
+      <div class="cd-lift">
+      <div class="cd-spin" aria-hidden="true">
         <div class="cd-disc">
           <span class="cd-base"></span>
           <span class="cd-print"><img alt="" /><img alt="" /></span>
@@ -62,10 +67,10 @@
           </svg>
           <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span>
         </div>
-        <span class="cd-hub"><i></i><i></i><i></i></span>
       </div>
       <span class="cd-iris" aria-hidden="true"></span>
       <span class="cd-gloss" aria-hidden="true"></span>
+      </div>
       </div>
       </div>
       <div class="cd-face cd-face--back" id="${CASE_ID}" aria-hidden="true">
@@ -130,6 +135,7 @@
 
   const $ = (sel) => root.querySelector(sel);
   const spinEl = $('.cd-spin');
+  const hubEl = $('.cd-drive .cd-hub');
   const printImgs = root.querySelectorAll('.cd-print img');
   const glowImg = $('.cd-glow img');
   const inkTitle = $('.cd-ink-title');
@@ -168,14 +174,18 @@
   function spin(t) {
     const dt = lastT ? Math.min(0.1, (t - lastT) / 1000) : 0;
     lastT = t;
-    const target = isPlaying && !reduceMotion.matches ? 360 / SECONDS_PER_REV : 0;
-    const tau = (target > velocity ? SPIN_UP_SECONDS : SPIN_DOWN_SECONDS) / 4;
+    // The drive brakes hard before an eject and stays still until the next
+    // disc has settled on the spindle.
+    const target = isPlaying && !driveBusy && !reduceMotion.matches ? 360 / SECONDS_PER_REV : 0;
+    const tau = driveBusy ? 0.06 : (target > velocity ? SPIN_UP_SECONDS : SPIN_DOWN_SECONDS) / 4;
     velocity += (target - velocity) * (1 - Math.exp(-dt / tau));
     if (Math.abs(velocity) < 0.05 && target === 0) velocity = 0;
     angle = (angle + velocity * dt) % 360;
     spinEl.style.transform = `rotate(${angle}deg)`;
+    hubEl.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
     requestAnimationFrame(spin);
   }
+  let driveBusy = false;
   requestAnimationFrame(spin);
 
   // ── Metadata + cover art ────────────────────────────────────────────────
@@ -434,9 +444,11 @@
     else player.cueVideoById(vid);
   }
 
-  // ── Eject + load: the old disc slides out of the drive, the new one (with
-  // the next track's art already on it) slides in. Audio isn't held up.
-  const EJECT_MS = 340;
+  // ── Eject + load: the drive brakes, the disc lifts off the spindle (its
+  // shadow dropping away beneath it) and slides out; the next disc, its art
+  // already printed, slides in still raised and settles onto the spindle.
+  // Audio isn't held up.
+  const EJECT_MS = 900;
   let swapToken = 0;
   function ejectAndLoad(vid, dir) {
     if (reduceMotion.matches) {
@@ -450,6 +462,7 @@
     }
     const token = ++swapToken;
     swappingTo = vid;
+    driveBusy = true;
     loadEl.dataset.dir = dir;
     loadEl.classList.remove('is-in');
     void loadEl.offsetWidth;
@@ -472,7 +485,10 @@
     });
   }
   loadEl.addEventListener('animationend', (e) => {
-    if (/^cd-load-in/.test(e.animationName)) loadEl.classList.remove('is-in');
+    if (/^cd-lift-in/.test(e.animationName)) {
+      loadEl.classList.remove('is-in');
+      driveBusy = false;
+    }
   });
 
   // ── Jewel case: flip the disc over to see the whole shuffle as a track list.
