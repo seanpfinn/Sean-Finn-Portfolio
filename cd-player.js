@@ -696,9 +696,32 @@
     const id = el.dataset.video;
     el.dataset.built = '1';
     el.classList.add('cd', 'cd--showcase', 'is-playing');
+    if (el.dataset.theme === 'dark') el.classList.add('cd--dark');
     if (!el.dataset.disc) el.dataset.disc = 'printed';
     const pathId = `cd-show-path-${n}`;
-    const ch = el.dataset.chrome === 'player' ? chrome(el) : { pill: '', rest: '' };
+    const isCase = el.dataset.chrome === 'case';
+    if (isCase) el.classList.add('cd--case');
+    const ch = el.dataset.chrome === 'player' || isCase ? chrome(el) : { pill: '', rest: '' };
+    // data-chrome="case": the deck shows the jewel-case track list instead of
+    // the disc, listing data-tracks (comma-separated video IDs).
+    const caseIds = isCase ? (el.dataset.tracks || id).split(',').map((x) => x.trim()).filter(Boolean) : [];
+    const cur = +el.dataset.current || 0;
+    const pad2 = (k) => String(k).padStart(2, '0');
+    const caseHtml = isCase ? `
+        <div class="cd-face cd-face--static">
+          <div class="cd-case">
+            <div class="cd-case-spine"><span>MUSIC BOX · SHUFFLE</span><span>${el.dataset.count || ''}</span></div>
+            <div class="cd-case-insert">
+              <div class="cd-case-head"><span class="cd-case-title">Track List</span><span class="cd-case-count">${el.dataset.count || ''}</span></div>
+              <ol class="cd-case-list">${caseIds.map((v, i) => `
+                <li><span class="cd-case-row${i === cur ? ' is-current' : ''}" data-vid="${v}">
+                  <span class="cd-case-n">${pad2(i + 1)}</span><span class="cd-case-t">Loading…</span><span class="cd-case-a"></span>
+                </span></li>`).join('')}</ol>
+              <div class="cd-case-foot"><span class="cd-case-barcode"></span><span class="cd-case-cat">SPF-0417 · Shuffled</span></div>
+            </div>
+            <div class="cd-case-spine"><span>MUSIC BOX · SHUFFLE</span><span>${el.dataset.count || ''}</span></div>
+          </div>
+        </div>` : '';
     el.innerHTML = `
       <div class="cd-deck" aria-hidden="true">
         <div class="cd-glow"><img alt="" /></div>
@@ -716,7 +739,7 @@
           <span class="cd-hub"><i></i><i></i><i></i></span>
         </div>
         <span class="cd-iris"></span>
-        <span class="cd-gloss"></span>
+        <span class="cd-gloss"></span>${caseHtml}
       </div>
       <div class="cd-meta">
         ${ch.pill}
@@ -754,6 +777,22 @@
         el.setAttribute('aria-label', `CD with ${title}${artist ? ' by ' + artist : ''}`);
       })
       .catch(() => {});
+
+    // Fill the track list's titles from YouTube.
+    caseIds.forEach((v) => {
+      fetch(`https://noembed.com/embed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + v)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data || !data.title) return;
+          const [t, a] = clean(data.title, data.author_name);
+          el.querySelectorAll(`.cd-case-row[data-vid="${v}"]`).forEach((row) => {
+            row.querySelector('.cd-case-t').textContent = t;
+            row.querySelector('.cd-case-a').textContent = a || '';
+            row.classList.add('is-loaded');
+          });
+        })
+        .catch(() => {});
+    });
 
     // Constant, slow spin (eases in on load).
     let angle = 0, velocity = 0, last = 0;

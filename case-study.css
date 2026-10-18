@@ -855,6 +855,34 @@
 }
 .cdp-hero .cd { --cd-size: 18.5rem; }
 .cdp-hero--player .cd { --cd-size: 12rem; gap: 1.4rem; }
+/* Track-list panel: landscape like the live player, the case on the left. */
+.cdp-hero--case .cd {
+  --cd-size: 19.5rem;
+  width: auto;
+  display: grid;
+  grid-template-columns: var(--cd-size) 16.5rem;
+  grid-template-rows: 1fr auto auto auto 1fr;
+  column-gap: 3.25rem;
+  row-gap: 1.5rem;
+  align-items: center;
+}
+.cdp-hero--case .cd-deck     { grid-column: 1; grid-row: 1 / -1; }
+.cdp-hero--case .cd-meta     { grid-column: 2; grid-row: 2; margin: 0; }
+.cdp-hero--case .cd-progress { grid-column: 2; grid-row: 3; margin: 0; }
+.cdp-hero--case .cd-controls { grid-column: 2; grid-row: 4; margin: 0; }
+
+/* Close-up of the hub: a very large live disc, cropped by the panel. */
+.cdp-hub {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cdp-hub .cd { --cd-size: 80rem; flex: none; }
+.cdp-hub .cd-meta { display: none; }
+.cdp-hub .cd-glow { display: none; }
 
 /* Printed and burned faces side by side, both live. */
 .cdp-faces {
