@@ -187,12 +187,25 @@
       if (Math.abs(velocity) < 0.05 && target === 0) velocity = 0;
       angle = (angle + velocity * dt) % 360;
     }
-    spinEl.style.transform = `rotate(${angle}deg)`;
+    // A little weight: while the disc is changing speed (spin-up, coasting
+    // to a stop, after a fling) it wobbles slightly on the spindle, like a
+    // real disc settling. The wobble follows the rotation and dies away
+    // once it's at speed.
+    const full = 360 / SECONDS_PER_REV;
+    const want = scratching || reduceMotion.matches ? 0
+      : Math.min(1, Math.abs(velocity - target) / full) * (Math.abs(velocity) > 2 ? 1 : 0);
+    wobble += (want - wobble) * (1 - Math.exp(-dt / 0.25));
+    const rad = angle * Math.PI / 180, w = wobble * 3.5;
+    spinEl.style.transform = w > 0.02
+      ? `perspective(1400px) rotateX(${(w * Math.sin(rad)).toFixed(3)}deg) rotateY(${(w * Math.cos(rad)).toFixed(3)}deg) rotate(${angle}deg)`
+      : `rotate(${angle}deg)`;
     hubEl.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
     requestAnimationFrame(spin);
   }
   let driveBusy = false;
-  let scratching = false, coasting = false;
+  let scratching = false, coasting = false, wobble = 0;
+  // Haptics: a short tick on phones that support it (Android). Silent elsewhere.
+  const buzz = (ms) => { try { if (navigator.vibrate && !reduceMotion.matches) navigator.vibrate(ms); } catch (e) {} };
   requestAnimationFrame(spin);
 
   // ── Metadata + cover art ────────────────────────────────────────────────
@@ -498,6 +511,7 @@
   }
   loadEl.addEventListener('animationend', (e) => {
     if (/^cd-lift-in/.test(e.animationName)) {
+      buzz(14);                                        // the disc lands on the spindle
       loadEl.classList.remove('is-in');
       delete loadEl.dataset.fling;
       driveBusy = false;
@@ -804,6 +818,7 @@
         // Swipe left = next (exits left), swipe right = previous (exits right).
         if (flingDX < 0) loadTrack(orderPos + 1, true, 'prev');
         else loadTrack(orderPos - 1, true, 'next');
+        buzz(8);
         window.dispatchEvent(new CustomEvent('mixcd:fling'));
       } else {
         // Not far enough: settle back onto the spindle.
