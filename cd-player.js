@@ -3,6 +3,8 @@
 // compact disc (or stuck onto a burned CD-R, with the title written on in
 // marker). The disc spins up when playback starts and coasts to a stop when
 // it pauses; the rainbow off its metal layer stays put while it turns.
+// Changing tracks ejects the disc and loads the next one. Tapping the track
+// number flips the disc over to a jewel case with the whole shuffle listed.
 // Title, artist, a scrubber with seven-segment readouts and transport
 // controls sit beneath it.
 //
@@ -41,10 +43,14 @@
   if (!root.dataset.disc) root.dataset.disc = 'printed';
   root.dataset.built = '1';
 
+  const CASE_ID = 'cd-case-' + Math.random().toString(36).slice(2, 8);
   const MICRO = 'CD-R · 80 MIN · 700 MB · 1×–52× · MADE IN BROOKLYN · ID 0417-A7 ★';
   root.innerHTML = `
     <div class="cd-deck">
       <div class="cd-glow" aria-hidden="true"><img alt="" /></div>
+      <div class="cd-flip">
+      <div class="cd-face cd-face--front">
+      <div class="cd-load">
       <div class="cd-spin" aria-hidden="true">
         <span class="cd-turntable"></span>
         <div class="cd-disc">
@@ -60,10 +66,33 @@
       </div>
       <span class="cd-iris" aria-hidden="true"></span>
       <span class="cd-gloss" aria-hidden="true"></span>
+      </div>
+      </div>
+      <div class="cd-face cd-face--back" id="${CASE_ID}" aria-hidden="true">
+        <div class="cd-case">
+          <div class="cd-case-spine" aria-hidden="true"><span>MUSIC BOX · SHUFFLE</span><span class="cd-case-spine-n">--</span></div>
+          <div class="cd-case-insert">
+            <div class="cd-case-head">
+              <span class="cd-case-title">Track List</span>
+              <span class="cd-case-count">--</span>
+            </div>
+            <ol class="cd-case-list"></ol>
+            <div class="cd-case-foot" aria-hidden="true">
+              <span class="cd-case-barcode"></span>
+              <span class="cd-case-cat">SPF-0417 · Shuffled</span>
+            </div>
+          </div>
+          <div class="cd-case-spine" aria-hidden="true"><span>MUSIC BOX · SHUFFLE</span><span class="cd-case-spine-n">--</span></div>
+        </div>
+      </div>
+      </div>
     </div>
 
     <div class="cd-meta" aria-live="polite">
-      <span class="cd-track">Track --</span>
+      <button class="cd-track" type="button" aria-expanded="false" aria-controls="${CASE_ID}" title="Show the track list">
+        <svg class="cd-track-icon" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 3.5h12M2 8h12M2 12.5h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="cd-track-label">Track --</span>
+      </button>
       <span class="cd-title-clip"><span class="cd-title">Music</span></span>
       <span class="cd-artist">Connecting…</span>
     </div>
@@ -105,7 +134,14 @@
   const glowImg = $('.cd-glow img');
   const inkTitle = $('.cd-ink-title');
   const inkArtist = $('.cd-ink-artist');
-  const trackEl = $('.cd-track');
+  const trackBtn = $('.cd-track');
+  const trackEl = $('.cd-track-label');
+  const loadEl = $('.cd-load');
+  const frontFace = $('.cd-face--front');
+  const backFace = $('.cd-face--back');
+  const caseList = $('.cd-case-list');
+  const caseCount = $('.cd-case-count');
+  const spineNums = root.querySelectorAll('.cd-case-spine-n');
   const titleEl = $('.cd-title');
   const titleClip = $('.cd-title-clip');
   const artistEl = $('.cd-artist');
@@ -169,41 +205,73 @@
   // so object-fit: cover inside the disc lands right on it. maxresdefault is
   // sharpest but missing for some videos (YouTube returns a 120×90
   // placeholder), so fall back to mqdefault.
-  let shownArt = null, frontImg = 0;
-  function setArt(videoId) {
-    if (!videoId || videoId === shownArt) return;
-    shownArt = videoId;
+  let shownArt = null, frontImg = 0, swappingTo = null;
+  const artCache = {};
+  // Resolves to the best available thumbnail URL, already downloaded.
+  function resolveArt(videoId) {
+    if (artCache[videoId]) return artCache[videoId];
     const fallback = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
-    const show = (src) => {
-      if (shownArt !== videoId) return;
-      const next = printImgs[1 - frontImg], prev = printImgs[frontImg];
-      next.onload = () => {
-        next.classList.add('is-shown');
-        prev.classList.remove('is-shown');
-        frontImg = 1 - frontImg;
+    artCache[videoId] = new Promise((resolve) => {
+      const probe = new Image();
+      probe.onload = () => {
+        if (probe.naturalWidth > 120) { resolve(probe.src); return; }
+        const fb = new Image();
+        fb.onload = fb.onerror = () => resolve(fallback);
+        fb.src = fallback;
       };
+      probe.onerror = () => resolve(fallback);
+      probe.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+    });
+    return artCache[videoId];
+  }
+  // Puts art on the disc. `instant` swaps it with no crossfade — used while
+  // the disc is out of the drive.
+  function applyArt(videoId, src, instant) {
+    shownArt = videoId;
+    glowImg.src = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+    root.classList.add('has-art');
+    const next = printImgs[1 - frontImg], prev = printImgs[frontImg];
+    if (instant) {
+      next.style.transition = prev.style.transition = 'none';
       next.src = src;
-      glowImg.src = fallback;
-      root.classList.add('has-art');
+      next.classList.add('is-shown');
+      prev.classList.remove('is-shown');
+      frontImg = 1 - frontImg;
+      requestAnimationFrame(() => { next.style.transition = prev.style.transition = ''; });
+      return (next.decode ? next.decode() : Promise.resolve()).catch(() => {});
+    }
+    next.onload = () => {
+      if (shownArt !== videoId) return;
+      next.classList.add('is-shown');
+      prev.classList.remove('is-shown');
+      frontImg = 1 - frontImg;
     };
-    const probe = new Image();
-    probe.onload = () => show(probe.naturalWidth > 120 ? probe.src : fallback);
-    probe.onerror = () => show(fallback);
-    probe.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+    next.src = src;
+    return Promise.resolve();
+  }
+  function setArt(videoId) {
+    if (!videoId || videoId === shownArt || videoId === swappingTo) return;
+    shownArt = videoId;
+    resolveArt(videoId).then((src) => { if (shownArt === videoId) applyArt(videoId, src, false); });
   }
 
+  const metaCache = {};
+  function setInk(t, artist) {
+    inkTitle.textContent = t;
+    inkTitle.classList.toggle('is-long', t.length > 16);
+    inkArtist.textContent = artist || '';
+  }
   function setMeta(rawTitle, rawArtist, videoId) {
     const [title, artist] = splitTitleArtist(rawTitle, rawArtist);
     const t = title || 'Music';
+    if (videoId && title) { metaCache[videoId] = { title: t, artist: artist || '' }; fillCaseRow(videoId); }
     if (titleEl.textContent !== t) {
       titleEl.textContent = t;
       updateTicker();
     }
     artistEl.textContent = artist || '';
-    // The marker scrawl on a burned disc.
-    inkTitle.textContent = t;
-    inkTitle.classList.toggle('is-long', t.length > 16);
-    inkArtist.textContent = artist || '';
+    // The marker scrawl on a burned disc — written once the disc is back in.
+    if (videoId !== swappingTo) setInk(t, artist);
     setArt(videoId);
   }
 
@@ -211,6 +279,7 @@
     if (!order.length) return;
     const pad = (n) => String(n).padStart(2, '0');
     trackEl.textContent = `Track ${pad(orderPos + 1)} / ${pad(order.length)}`;
+    markCurrentRow();
   }
 
   function currentVideoId() {
@@ -350,17 +419,153 @@
     }
     return a;
   }
-  function loadTrack(pos, autoplay) {
+  function loadTrack(pos, autoplay, dir) {
     if (!player || !order.length) return;
+    const prevPos = orderPos;
     orderPos = ((pos % order.length) + order.length) % order.length;
     const vid = tracks[order[orderPos]];
     lastFraction = 0;
     renderProgress(0, 0);
     setTrackNumber();
+    // Swap discs when there's already one in the drive.
+    if (shownArt && shownArt !== vid) ejectAndLoad(vid, dir || (orderPos >= prevPos ? 'next' : 'prev'));
     fetchMetaByVideoId(vid);
     if (autoplay) player.loadVideoById(vid);
     else player.cueVideoById(vid);
   }
+
+  // ── Eject + load: the old disc slides out of the drive, the new one (with
+  // the next track's art already on it) slides in. Audio isn't held up.
+  const EJECT_MS = 340;
+  let swapToken = 0;
+  function ejectAndLoad(vid, dir) {
+    if (reduceMotion.matches) {
+      swappingTo = null;
+      resolveArt(vid).then((src) => {
+        if (currentVideoId() !== vid) return;
+        applyArt(vid, src, false);
+        const m = metaCache[vid]; if (m) setInk(m.title, m.artist);
+      });
+      return;
+    }
+    const token = ++swapToken;
+    swappingTo = vid;
+    loadEl.dataset.dir = dir;
+    loadEl.classList.remove('is-in');
+    void loadEl.offsetWidth;
+    loadEl.classList.add('is-out');
+    const art = Promise.race([resolveArt(vid), new Promise((r) => setTimeout(() => r(null), 1400))]);
+    const out = new Promise((r) => setTimeout(r, EJECT_MS));
+    Promise.all([art, out]).then(([src]) => {
+      if (token !== swapToken) return;
+      const done = src ? applyArt(vid, src, true) : Promise.resolve();
+      const m = metaCache[vid];
+      setInk(m ? m.title : '', m ? m.artist : '');
+      return done.then(() => {
+        if (token !== swapToken) return;
+        swappingTo = null;
+        if (!src) setArt(vid);
+        loadEl.classList.remove('is-out');
+        void loadEl.offsetWidth;
+        loadEl.classList.add('is-in');
+      });
+    });
+  }
+  loadEl.addEventListener('animationend', (e) => {
+    if (/^cd-load-in/.test(e.animationName)) loadEl.classList.remove('is-in');
+  });
+
+  // ── Jewel case: flip the disc over to see the whole shuffle as a track list.
+  const pad2 = (n) => String(n).padStart(2, '0');
+  function buildCase() {
+    caseCount.textContent = `${order.length} tracks`;
+    spineNums.forEach((el) => { el.textContent = `${order.length} TRACKS`; });
+    caseList.innerHTML = order.map((_, i) => `
+      <li><button type="button" class="cd-case-row" data-pos="${i}" data-vid="${tracks[order[i]]}" tabindex="-1">
+        <span class="cd-case-n">${pad2(i + 1)}</span>
+        <span class="cd-case-t">Loading…</span>
+        <span class="cd-case-a"></span>
+      </button></li>`).join('');
+    Object.keys(metaCache).forEach(fillCaseRow);
+    markCurrentRow();
+    rowObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+          entries.forEach((en) => { if (en.isIntersecting) queueRowMeta(en.target.dataset.vid); });
+        }, { root: caseList, rootMargin: '120px 0px' })
+      : null;
+    caseList.querySelectorAll('.cd-case-row').forEach((row) => {
+      if (rowObserver) rowObserver.observe(row);
+    });
+  }
+  let rowObserver = null;
+  function fillCaseRow(vid) {
+    const m = metaCache[vid];
+    if (!m) return;
+    caseList.querySelectorAll(`.cd-case-row[data-vid="${vid}"]`).forEach((row) => {
+      row.querySelector('.cd-case-t').textContent = m.title;
+      row.querySelector('.cd-case-a').textContent = m.artist;
+      row.classList.add('is-loaded');
+      if (rowObserver) rowObserver.unobserve(row);
+    });
+  }
+  function markCurrentRow() {
+    const cur = caseList.querySelector('.cd-case-row.is-current');
+    if (cur) { cur.classList.remove('is-current'); cur.removeAttribute('aria-current'); }
+    const row = caseList.querySelector(`.cd-case-row[data-pos="${orderPos}"]`);
+    if (row) { row.classList.add('is-current'); row.setAttribute('aria-current', 'true'); }
+  }
+  // Fetch titles a few at a time, only for rows that scroll into view.
+  const metaQueue = [], metaQueued = {};
+  let metaInFlight = 0;
+  function queueRowMeta(vid) {
+    if (!vid || metaCache[vid] || metaQueued[vid]) return;
+    metaQueued[vid] = true;
+    metaQueue.push(vid);
+    pumpMeta();
+  }
+  function pumpMeta() {
+    while (metaInFlight < 3 && metaQueue.length) {
+      const vid = metaQueue.shift();
+      metaInFlight++;
+      fetch(`https://noembed.com/embed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + vid)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data || !data.title) return;
+          const [title, artist] = splitTitleArtist(data.title, data.author_name);
+          metaCache[vid] = { title: title || 'Untitled', artist: artist || '' };
+          fillCaseRow(vid);
+        })
+        .catch(() => {})
+        .finally(() => { metaInFlight--; pumpMeta(); });
+    }
+  }
+
+  function setCaseOpen(open) {
+    if (open && !order.length) return;
+    root.classList.toggle('is-flipped', open);
+    trackBtn.setAttribute('aria-expanded', String(open));
+    trackBtn.title = open ? 'Show the disc' : 'Show the track list';
+    frontFace.setAttribute('aria-hidden', String(open));
+    backFace.setAttribute('aria-hidden', String(!open));
+    caseList.querySelectorAll('.cd-case-row').forEach((r) => { r.tabIndex = open ? 0 : -1; });
+    if (open) {
+      const cur = caseList.querySelector('.cd-case-row.is-current');
+      if (cur) caseList.scrollTop = cur.offsetTop - caseList.clientHeight / 2 + cur.offsetHeight / 2;
+    }
+  }
+  trackBtn.addEventListener('click', () => setCaseOpen(!root.classList.contains('is-flipped')));
+  caseList.addEventListener('click', (e) => {
+    const row = e.target.closest('.cd-case-row');
+    if (!row) return;
+    const pos = +row.dataset.pos;
+    setCaseOpen(false);
+    if (pos === orderPos) { if (!isPlaying) player.playVideo(); return; }
+    // Let the case flip shut before the disc swaps.
+    setTimeout(() => loadTrack(pos, true, pos > orderPos ? 'next' : 'prev'), reduceMotion.matches ? 0 : 420);
+  });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.classList.contains('is-flipped')) { setCaseOpen(false); trackBtn.focus(); }
+  });
 
   function createPlayer() {
     player = new YT.Player(hostTarget, {
@@ -393,12 +598,13 @@
               shuffledOnce = true;
               tracks = list.slice();
               order = buildShuffleOrder(tracks.length);
+              buildCase();
               loadTrack(0, false);
               return;
             }
           }
           if (e.data === S.ENDED && order.length) {
-            loadTrack(orderPos + 1, true);
+            loadTrack(orderPos + 1, true, 'next');
             return;
           }
           refreshFromPlayer();
@@ -432,7 +638,7 @@
     let t = 0;
     try { t = player.getCurrentTime() || 0; } catch (e) {}
     if (t > 4) { player.seekTo(0, true); return; }
-    loadTrack(orderPos - 1, true);
+    loadTrack(orderPos - 1, true, 'prev');
   });
-  nextBtn.addEventListener('click', () => loadTrack(orderPos + 1, true));
+  nextBtn.addEventListener('click', () => loadTrack(orderPos + 1, true, 'next'));
 })();
