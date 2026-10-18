@@ -24,7 +24,7 @@ function mixHash(str) {
   for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
   return h >>> 0;
 }
-function mixInk(inkEl, volEl, seed) {
+function mixInk(inkEl, volEl, seed, label) {
   const h = mixHash(seed || 'mix');
   const pick = (arr, k) => arr[(h >>> k) % arr.length];
   const color = pick(MIX_INKS, 3);
@@ -34,7 +34,7 @@ function mixInk(inkEl, volEl, seed) {
   inkEl.dataset.deco = pick(MIX_DECOS, 15);
   if (volEl) {
     const d = new Date();
-    volEl.textContent = `Vol. 1 \u00b7 ${d.getMonth() + 1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+    volEl.textContent = `${label || 'Vol. 1'} \u00b7 ${d.getMonth() + 1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
     volEl.style.setProperty('--ink', color);
   }
 }
@@ -66,7 +66,18 @@ function mixInk(inkEl, volEl, seed) {
     document.body.appendChild(root);
   }
   root.classList.add('cd');
-  if (!root.dataset.disc) root.dataset.disc = 'printed';
+  // Burn your own: pages that opt in with data-deeplink read ?list= (any
+  // public or unlisted YouTube / YouTube Music playlist) and ?title= (the
+  // name written on the disc and case). Defaults to Sean's playlist.
+  const QS = root.dataset.deeplink ? new URLSearchParams(location.search) : null;
+  const qList = QS && QS.get('list');
+  const LIST_ID = (qList && /^[\w-]{10,64}$/.test(qList)) ? qList : (root.dataset.playlist || YT_PLAYLIST_ID);
+  const isCustom = LIST_ID !== YT_PLAYLIST_ID;
+  const MIX_TITLE = ((QS && QS.get('title')) || root.dataset.title || '').trim().slice(0, 32);
+  const escapeHtml = (t) => t.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const SPINE = escapeHtml((MIX_TITLE || 'Music Box').toUpperCase()) + ' · SHUFFLE';
+  if (isCustom) root.classList.add('is-custom');
+  if (!root.dataset.disc) root.dataset.disc = isCustom ? 'burned' : 'printed';
   root.dataset.built = '1';
 
   const CASE_ID = 'cd-case-' + Math.random().toString(36).slice(2, 8);
@@ -101,10 +112,10 @@ function mixInk(inkEl, volEl, seed) {
       </div>
       <div class="cd-face cd-face--back" id="${CASE_ID}" aria-hidden="true">
         <div class="cd-case">
-          <div class="cd-case-spine" aria-hidden="true"><span>MUSIC BOX · SHUFFLE</span><span class="cd-case-spine-n">--</span></div>
+          <div class="cd-case-spine" aria-hidden="true"><span>${SPINE}</span><span class="cd-case-spine-n">--</span></div>
           <div class="cd-case-insert">
             <div class="cd-case-head">
-              <span class="cd-case-title">Track List</span>
+              <span class="cd-case-title">${MIX_TITLE ? escapeHtml(MIX_TITLE) : 'Track List'}</span>
               <span class="cd-case-count">--</span>
             </div>
             <ol class="cd-case-list"></ol>
@@ -113,7 +124,7 @@ function mixInk(inkEl, volEl, seed) {
               <span class="cd-case-cat">SPF-0417 · Shuffled</span>
             </div>
           </div>
-          <div class="cd-case-spine" aria-hidden="true"><span>MUSIC BOX · SHUFFLE</span><span class="cd-case-spine-n">--</span></div>
+          <div class="cd-case-spine" aria-hidden="true"><span>${SPINE}</span><span class="cd-case-spine-n">--</span></div>
         </div>
       </div>
       </div>
@@ -359,7 +370,7 @@ function mixInk(inkEl, volEl, seed) {
 
   const metaCache = {};
   function setInk(t, artist, vid) {
-    mixInk(inkTitle.parentElement, root.querySelector('.cd-face--front .cd-vol'), vid || currentVideoId());
+    mixInk(inkTitle.parentElement, root.querySelector('.cd-face--front .cd-vol'), vid || currentVideoId(), MIX_TITLE);
     inkTitle.textContent = t;
     inkTitle.classList.toggle('is-long', t.length > 16);
     inkArtist.textContent = artist || '';
@@ -740,17 +751,28 @@ function mixInk(inkEl, volEl, seed) {
       host: 'https://www.youtube.com',
       playerVars: {
         listType: 'playlist',
-        list: YT_PLAYLIST_ID,
+        list: LIST_ID,
         controls: 0,
         disablekb: 1,
         modestbranding: 1,
         playsinline: 1,
       },
       events: {
+        onError: function (e) {
+          // 2: bad ID, 100: not found/private, 101/150: embedding not allowed.
+          // Before anything has loaded it's the playlist itself; later it's one
+          // video, so skip past it.
+          if (!shuffledOnce) {
+            artistEl.textContent = 'Couldn\u2019t load this playlist';
+            window.dispatchEvent(new CustomEvent('mixcd:error', { detail: { code: e.data, list: LIST_ID } }));
+          } else if (order.length > 1) {
+            loadTrack(orderPos + 1, isPlaying, 'next');
+          }
+        },
         onReady: function () {
           // cuePlaylist loads without autoplaying — the disc sits ready
           // until the visitor presses play.
-          player.cuePlaylist({ listType: 'playlist', list: YT_PLAYLIST_ID });
+          player.cuePlaylist({ listType: 'playlist', list: LIST_ID });
           setInterval(updateProgress, 250);
         },
         onStateChange: function (e) {
