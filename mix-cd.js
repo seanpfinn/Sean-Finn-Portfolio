@@ -368,6 +368,7 @@ function mixInk(inkEl, volEl, seed) {
     const [title, artist] = splitTitleArtist(rawTitle, rawArtist);
     const t = title || 'Music';
     if (videoId && title) { metaCache[videoId] = { title: t, artist: artist || '' }; fillCaseRow(videoId); }
+    root.dataset.nowTitle = t; root.dataset.nowArtist = artist || '';
     if (titleEl.textContent !== t) {
       titleEl.textContent = t;
       updateTicker();
@@ -384,6 +385,7 @@ function mixInk(inkEl, volEl, seed) {
     const pad = (n) => String(n).padStart(2, '0');
     trackEl.textContent = `Track ${pad(orderPos + 1)} / ${pad(order.length)}`;
     markCurrentRow();
+    window.dispatchEvent(new CustomEvent('mixcd:track', { detail: { vid: currentVideoId() } }));
   }
 
   function currentVideoId() {
@@ -764,6 +766,20 @@ function mixInk(inkEl, volEl, seed) {
               shuffledOnce = true;
               tracks = list.slice();
               order = buildShuffleOrder(tracks.length);
+              // Deep link (pages that opt in with data-deeplink): ?track=ID
+              // starts on that song; a song that isn't in the playlist is
+              // added to the front of the shuffle.
+              const startVid = root.dataset.deeplink ? new URLSearchParams(location.search).get('track') : null;
+              if (startVid && /^[\w-]{6,20}$/.test(startVid)) {
+                const idx = tracks.indexOf(startVid);
+                if (idx >= 0) {
+                  const at = order.indexOf(idx);
+                  [order[0], order[at]] = [order[at], order[0]];
+                } else {
+                  tracks.push(startVid);
+                  order.unshift(tracks.length - 1);
+                }
+              }
               buildCase();
               loadTrack(0, false);
               return;

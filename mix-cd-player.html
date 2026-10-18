@@ -220,6 +220,24 @@
       border-radius: 0.3rem;
     }
     @media (hover: none), (max-width: 40rem) { .keys { display: none; } }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 2.5rem);
+      transform: translate(-50%, 0.5rem);
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--bg);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 20;
+    }
+    .dark .toast { color: #0f0f10; }
+    .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
     .hint { flex: 1; text-align: center; transition: opacity 0.4s ease; }
     .hint.is-gone { opacity: 0; }
     @media (max-width: 30rem) {
@@ -241,6 +259,9 @@
         <button type="button" data-disc="printed" class="is-active" aria-pressed="true">Printed</button>
         <button type="button" data-disc="burned" aria-pressed="false">Burned</button>
       </div>
+      <button class="theme share" type="button" aria-label="Share this track">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+      </button>
       <button class="theme" type="button" aria-label="Toggle dark mode">
         <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
         <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
@@ -249,9 +270,10 @@
   </header>
 
   <main class="stage">
-    <div id="cd-player" data-disc="printed" data-scratch="touch"></div>
+    <div id="cd-player" data-disc="printed" data-scratch="touch" data-deeplink="1"></div>
   </main>
 
+  <div class="toast" role="status" aria-live="polite"></div>
   <footer class="foot">
     <span class="hint" hidden>Spin the disc to scrub · swipe it away to skip</span>
     <span class="keys">Spin the disc to scrub · swipe it to skip · <kbd>Space</kbd> play · <kbd>←</kbd> <kbd>→</kbd> skip · <kbd>L</kbd> track list</span>
@@ -273,8 +295,40 @@
         });
       }));
 
+      // Keep the address bar on the current disc, so copying the URL shares it.
+      let nowVid = null;
+      window.addEventListener('mixcd:track', (e) => {
+        nowVid = e.detail && e.detail.vid;
+        if (!nowVid) return;
+        const u = new URL(location.href);
+        u.searchParams.set('track', nowVid);
+        try { history.replaceState(null, '', u); } catch (err) {}
+      });
+
+      // Share: the phone's share sheet, or copy the link on desktop.
+      const toast = document.querySelector('.toast');
+      let toastT = 0;
+      const say = (msg) => {
+        toast.textContent = msg;
+        toast.classList.add('is-on');
+        clearTimeout(toastT);
+        toastT = setTimeout(() => toast.classList.remove('is-on'), 1800);
+      };
+      document.querySelector('.share').addEventListener('click', async () => {
+        const url = new URL('/mix-cd-player', location.origin);
+        if (nowVid) url.searchParams.set('track', nowVid);
+        const t = player.dataset.nowTitle, a = player.dataset.nowArtist;
+        const title = t ? `${t}${a ? ' — ' + a : ''} · Mix CD` : 'Mix CD';
+        if (navigator.share && window.matchMedia('(hover: none)').matches) {
+          try { await navigator.share({ title, url: url.href }); } catch (err) {}
+          return;
+        }
+        try { await navigator.clipboard.writeText(url.href); say('Link copied'); }
+        catch (err) { say(url.href); }
+      });
+
       // Theme (shared with the rest of the site)
-      document.querySelector('.theme').addEventListener('click', () => {
+      document.querySelector('.theme:not(.share)').addEventListener('click', () => {
         const on = root.classList.toggle('dark');
         try { localStorage.setItem('dark', on ? '1' : '0'); } catch (e) {}
       });
