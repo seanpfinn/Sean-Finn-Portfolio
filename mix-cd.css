@@ -194,6 +194,38 @@
   line-height: 1.05;
   pointer-events: none;
 }
+/* Per-track scrawl (mix-cd.js mixInk): color, angle, nudge, decoration. */
+.cd[data-disc="burned"] .cd-ink {
+  color: var(--ink, #17171a);
+  transform: translateY(calc(-50% + var(--ink-dy, 0%))) rotate(var(--ink-rot, -5deg));
+}
+.cd-ink[data-deco="underline"] .cd-ink-title {
+  background: linear-gradient(currentColor, currentColor) 4% 96% / 92% 0.09em no-repeat;
+  padding-bottom: 0.06em;
+}
+.cd-ink[data-deco="double"] .cd-ink-title {
+  background:
+    linear-gradient(currentColor, currentColor) 2% 88% / 94% 0.08em no-repeat,
+    linear-gradient(currentColor, currentColor) 8% 100% / 84% 0.08em no-repeat;
+  padding-bottom: 0.12em;
+}
+.cd-ink[data-deco="star"] .cd-ink-title::before { content: '\2605\00a0'; font-size: 0.8em; }
+/* "Vol. 1 · date" along the top of a burned disc. */
+.cd-vol { display: none; }
+.cd[data-disc="burned"] .cd-vol {
+  display: block;
+  position: absolute;
+  left: 30%; right: 30%;
+  top: 11.5%;
+  text-align: center;
+  font-family: var(--cd-marker);
+  font-size: calc(var(--cd-size) * 0.033);
+  color: var(--ink, #17171a);
+  opacity: 0.85;
+  transform: rotate(4deg);
+  white-space: nowrap;
+  pointer-events: none;
+}
 .cd-ink-title {
   max-width: 100%;
   font-size: calc(var(--cd-size) * 0.052);

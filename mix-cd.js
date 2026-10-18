@@ -13,6 +13,32 @@
 // Mounting: put <div id="cd-player"></div> wherever you want it. If the page
 // has no such element, the player appends itself to <body>.
 
+// ── Marker handwriting on a burned CD-R ──────────────────────────────────
+// Each track gets its own, consistent scrawl (seeded by its video ID):
+// angle, a Sharpie color, sometimes an underline, a double underline or a
+// star. The disc is also signed "Vol. 1" with today's date along the top.
+const MIX_INKS = ['#17171a', '#17171a', '#1e3a8a', '#b42318', '#14532d', '#4c1d95'];
+const MIX_DECOS = ['none', 'none', 'underline', 'double', 'star', 'underline'];
+function mixHash(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function mixInk(inkEl, volEl, seed) {
+  const h = mixHash(seed || 'mix');
+  const pick = (arr, k) => arr[(h >>> k) % arr.length];
+  const color = pick(MIX_INKS, 3);
+  inkEl.style.setProperty('--ink', color);
+  inkEl.style.setProperty('--ink-rot', (-9 + ((h >>> 7) % 120) / 10).toFixed(1) + 'deg');   // -9..+3
+  inkEl.style.setProperty('--ink-dy', (((h >>> 11) % 50) / 10 - 2.5).toFixed(1) + '%');
+  inkEl.dataset.deco = pick(MIX_DECOS, 15);
+  if (volEl) {
+    const d = new Date();
+    volEl.textContent = `Vol. 1 \u00b7 ${d.getMonth() + 1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+    volEl.style.setProperty('--ink', color);
+  }
+}
+
 (function () {
   // Paste a YouTube / YouTube Music playlist ID here — the part after
   // `list=` in the playlist's share URL.
@@ -65,7 +91,7 @@
             <defs><path id="cd-micro-path" d="M100 100 m-26.6 0 a26.6 26.6 0 1 1 53.2 0 a26.6 26.6 0 1 1 -53.2 0" /></defs>
             <text textLength="165" lengthAdjust="spacing"><textPath href="#cd-micro-path" textLength="165" lengthAdjust="spacing">${MICRO}</textPath></text>
           </svg>
-          <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span>
+          <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span><span class="cd-vol"></span>
         </div>
       </div>
       <span class="cd-iris" aria-hidden="true"></span>
@@ -332,7 +358,8 @@
   }
 
   const metaCache = {};
-  function setInk(t, artist) {
+  function setInk(t, artist, vid) {
+    mixInk(inkTitle.parentElement, root.querySelector('.cd-face--front .cd-vol'), vid || currentVideoId());
     inkTitle.textContent = t;
     inkTitle.classList.toggle('is-long', t.length > 16);
     inkArtist.textContent = artist || '';
@@ -347,7 +374,7 @@
     }
     artistEl.textContent = artist || '';
     // The marker scrawl on a burned disc — written once the disc is back in.
-    if (videoId !== swappingTo) setInk(t, artist);
+    if (videoId !== swappingTo) setInk(t, artist, videoId);
     setArt(videoId);
   }
 
@@ -524,7 +551,7 @@
       resolveArt(vid).then((src) => {
         if (currentVideoId() !== vid) return;
         applyArt(vid, src, false);
-        const m = metaCache[vid]; if (m) setInk(m.title, m.artist);
+        const m = metaCache[vid]; if (m) setInk(m.title, m.artist, vid);
       });
       return;
     }
@@ -544,7 +571,7 @@
       if (token !== swapToken) return;
       const done = src ? applyArt(vid, src, true) : Promise.resolve();
       const m = metaCache[vid];
-      setInk(m ? m.title : '', m ? m.artist : '');
+      setInk(m ? m.title : '', m ? m.artist : '', vid);
       return done.then(() => {
         if (token !== swapToken) return;
         swappingTo = null;
@@ -978,7 +1005,7 @@
               <defs><path id="${pathId}" d="M100 100 m-26.6 0 a26.6 26.6 0 1 1 53.2 0 a26.6 26.6 0 1 1 -53.2 0" /></defs>
               <text textLength="165" lengthAdjust="spacing"><textPath href="#${pathId}" textLength="165" lengthAdjust="spacing">CD-R · 80 MIN · 700 MB · 1×–52× · MADE IN BROOKLYN · ID 0417-A7 ★</textPath></text>
             </svg>
-            <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span>
+            <span class="cd-ink"><span class="cd-ink-title"></span><span class="cd-ink-artist"></span></span><span class="cd-vol"></span>
           </div>
           <span class="cd-hub"><i></i><i></i><i></i></span>
         </div>
@@ -1016,6 +1043,7 @@
         const [title, artist] = clean(data.title, data.author_name);
         el.querySelector('.cd-title').textContent = title;
         el.querySelector('.cd-artist').textContent = artist || '';
+        mixInk(el.querySelector('.cd-ink'), el.querySelector('.cd-vol'), id);
         el.querySelector('.cd-ink-title').textContent = title;
         el.querySelector('.cd-ink-artist').textContent = artist || '';
         el.setAttribute('aria-label', `CD with ${title}${artist ? ' by ' + artist : ''}`);
