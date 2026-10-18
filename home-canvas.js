@@ -76,10 +76,22 @@ window.cursorTag = window.cursorTag || (function () {
   // a copy of itself, and every column cycles through all of them.
   var STEP = N > 4 ? Math.max(2, Math.round(N * 0.38)) : 1;
   function mod(a, n) { return ((a % n) + n) % n; }
-  function project(j, i) { return mod(j + i * STEP, N); }
+  // Shuffled on every load, so the field is arranged differently each visit:
+  // which project sits where (a random order around the same no-neighbors
+  // pattern), how the columns are staggered, and which one starts in the
+  // middle. Projects still never touch a copy of themselves.
+  var order = cards.map(function (_, k) { return k; });
+  for (var k = N - 1; k > 0; k--) {
+    var r = Math.floor(Math.random() * (k + 1)), t = order[k];
+    order[k] = order[r]; order[r] = t;
+  }
+  var SEED = Math.random() * 1000;
+  function project(j, i) { return order[mod(j + i * STEP, N)]; }
+  // The column for project p in row 0.
+  function columnOf(p) { return order.indexOf(p); }
   // Columns are staggered by the golden ratio, which never lines up into
   // rows however far the field is dragged.
-  function lift(j) { var f = j * 0.6180339887; return f - Math.floor(f); }
+  function lift(j) { var f = (j + SEED) * 0.6180339887; return f - Math.floor(f); }
 
   function page(u) {
     try {
@@ -127,7 +139,7 @@ window.cursorTag = window.cursorTag || (function () {
     field.style.setProperty('--tile-w', tw + 'px');
     if (fx || fy) { pan.x = CX - fx * cw; pan.y = CY - fy * ch; }
   }
-  // Put slot (j, 0) — project j — dead center.
+  // Put slot (column j, row 0) dead center.
   function centerOn(j) {
     pan.x = CX - (j * cw + tw / 2);
     pan.y = CY - (lift(j) * ch + th / 2);
@@ -432,7 +444,7 @@ window.cursorTag = window.cursorTag || (function () {
     document.documentElement.classList.add('is-canvas');
     on = true;
     measure();
-    if (!placed) { centerOn(0); placed = true; }
+    if (!placed) { centerOn(Math.floor(Math.random() * N)); placed = true; }
     entering = !!animate && !reduce;
     if (entering) {
       live.forEach(function (el, key) { drop(key, el); });
@@ -469,9 +481,10 @@ window.cursorTag = window.cursorTag || (function () {
   var back = null;
   try { back = (JSON.parse(sessionStorage.getItem('project-window') || 'null') || {}).back; } catch (e) {}
   var home = back && cards.findIndex(function (c) { return page(c.getAttribute('href')) === back; });
+  stage.hidden = false;                  // measured visible, or it reads as zero size
   measure();
   if (back && home >= 0) {
-    centerOn(home);
+    centerOn(columnOf(home));
     placed = true;
     holdUntil = performance.now() + 900;
     start(false);
