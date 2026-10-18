@@ -17,12 +17,16 @@
 
   // ── Dark mode toggle ─────────────────────────────────────────────────────
   if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
+  const darkLabel = () => document.documentElement.classList.contains('dark') ? 'Switch to light mode' : 'Switch to dark mode';
   document.querySelectorAll('.dark-toggle').forEach(btn => {
+    btn.setAttribute('aria-label', darkLabel());
     btn.addEventListener('click', () => {
       const on = document.documentElement.classList.toggle('dark');
       localStorage.setItem('dark', on ? '1' : '0');
+      document.querySelectorAll('.dark-toggle').forEach(b => b.setAttribute('aria-label', darkLabel()));
     });
   });
+  requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('dt-ready')));
 
   // ── Custom cursor ────────────────────────────────────────────────────────
   const cursor = document.createElement('div');

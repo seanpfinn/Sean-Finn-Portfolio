@@ -3486,3 +3486,56 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
   :root { --page-top: calc(4rem + var(--safe-top)); }
   .nav-icon .splash-page { --page-top: calc(4.25rem + var(--safe-top)); }
 }
+
+/* ================================
+   LIGHT / DARK TOGGLE — a sun and a moon
+   One drawing that changes between them: in light mode a small sun with its
+   rays out; switching to dark, the rays turn and draw in while the disc grows
+   and a shadow slides across it to leave a crescent. The shadow is a mask
+   (#dt-bite in the button's SVG), so the moon stays a clean cut-out against
+   whatever sits behind it.
+   ================================ */
+.dark-toggle,
+.dark .dark-toggle {
+  width: 1.375rem;
+  height: 1.375rem;
+  margin: -0.3125rem;               /* the larger hit area doesn't move the icon */
+  padding: 0.125rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-sizing: content-box;
+}
+.dt-icon { display: block; width: 1.125rem; height: 1.125rem; overflow: visible; }
+.dt-body { fill: currentColor; transform-box: fill-box; transform-origin: center; }
+.dt-rays line { stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.dt-rays { transform-box: view-box; transform-origin: 12px 12px; }
+.dt-bite { transform-box: view-box; }
+
+/* Light: the sun. */
+.dt-body { transform: scale(0.5); }
+.dt-bite { transform: translate(9px, -9px); }       /* the shadow waits off the disc */
+.dt-rays { transform: rotate(0deg) scale(1); opacity: 1; }
+
+/* Dark: the moon. */
+.dark .dt-body { transform: scale(1); }
+.dark .dt-bite { transform: translate(0, 0); }
+.dark .dt-rays { transform: rotate(45deg) scale(0.4); opacity: 0; }
+
+/* Animated only once the page is up (main.js adds .dt-ready), so a page that
+   opens in dark mode shows the moon at once instead of morphing into it. */
+.dt-ready .dt-body, .dt-ready .dt-bite, .dt-ready .dt-rays {
+  transition:
+    transform 0.55s cubic-bezier(0.34, 1.3, 0.5, 1),
+    opacity 0.3s ease;
+}
+.dark-toggle:hover .dt-rays { transform: rotate(22.5deg); }
+.dark .dark-toggle:hover .dt-rays { transform: rotate(45deg) scale(0.4); }
+.dark-toggle:focus-visible { outline: 2px solid #FF401A; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .dt-ready .dt-body, .dt-ready .dt-bite, .dt-ready .dt-rays { transition: opacity 0.2s ease; }
+}
