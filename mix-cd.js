@@ -579,7 +579,7 @@
     setCaseOpen(false);
     if (pos === orderPos) { if (!isPlaying) player.playVideo(); return; }
     // Let the case flip shut before the disc swaps.
-    setTimeout(() => loadTrack(pos, true, pos > orderPos ? 'next' : 'prev'), reduceMotion.matches ? 0 : 420);
+    setTimeout(() => loadTrack(pos, true, pos > orderPos ? 'next' : 'prev'), reduceMotion.matches ? 0 : 560);
   });
   root.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && root.classList.contains('is-flipped')) { setCaseOpen(false); trackBtn.focus(); }

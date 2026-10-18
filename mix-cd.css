@@ -286,27 +286,37 @@
           mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
 }
 
-/* ── Flip: the disc on the front, the jewel case on the back ───────────── */
-.cd-deck { perspective: 1600px; }
-.cd-flip {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.3, 0.7, 0.2, 1);
+/* ── Flip: the disc on the front, the jewel case on the back ─────────────
+   Two steps, each face with its own perspective: the disc turns to edge-on,
+   then the case turns in from edge-on (and the reverse to close). This
+   doesn't rely on preserve-3d / backface-visibility, which browsers flatten
+   when the disc's masks, blends and filters are inside them. */
+.cd-flip { position: absolute; inset: 0; }
+.cd-face { position: absolute; inset: 0; }
+.cd-face--front {
+  transform: perspective(1600px) rotateY(0deg);
+  visibility: visible;
+  transition: transform 0.34s cubic-bezier(0.15, 0.7, 0.3, 1) 0.22s, visibility 0s linear 0.22s;
 }
-.cd.is-flipped .cd-flip { transform: rotateY(180deg); }
-.cd-face {
-  position: absolute;
-  inset: 0;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+.cd.is-flipped .cd-face--front {
+  transform: perspective(1600px) rotateY(90deg);
+  visibility: hidden;
+  transition: transform 0.22s cubic-bezier(0.35, 0.15, 0.75, 0.55) 0s, visibility 0s linear 0.22s;
 }
 .cd-face--back {
-  transform: rotateY(180deg);
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: perspective(1600px) rotateY(-90deg);
+  visibility: hidden;
+  transition: transform 0.22s cubic-bezier(0.35, 0.15, 0.75, 0.55) 0s, visibility 0s linear 0.22s;
 }
+.cd.is-flipped .cd-face--back {
+  transform: perspective(1600px) rotateY(0deg);
+  visibility: visible;
+  transition: transform 0.34s cubic-bezier(0.15, 0.7, 0.3, 1) 0.22s, visibility 0s linear 0.22s;
+}
+.cd-face--static { transform: none; visibility: visible; transition: none; }
 .cd.is-flipped .cd-face--front,
 .cd:not(.is-flipped) .cd-face--back { pointer-events: none; }
 
@@ -747,5 +757,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cd-title-clip.is-ticking .cd-title { animation: none; }
-  .cd-flip { transition: none; }
+  .cd-face--front, .cd-face--back,
+  .cd.is-flipped .cd-face--front, .cd.is-flipped .cd-face--back { transition: none; }
 }
