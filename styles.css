@@ -3415,3 +3415,74 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
     .canvas-tile .gallery-card-visual { border-radius: 1.75rem; }
   }
 }
+
+/* ================================
+   EDGE TO EDGE — Safari on iPhone
+   Every page asks for viewport-fit=cover, so the page itself runs under the
+   status bar and the floating address bar instead of stopping short of them
+   in a white band. Anything pinned to an edge then steps in by the safe-area
+   inset for that edge, so it stays clear of the notch, the status bar, the
+   home indicator and, in landscape, the rounded corners.
+   ================================ */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+/* The canvas fills the largest the viewport gets — with the address bar
+   collapsed — so tiles are drawn behind the browser's bars too, not cut off
+   above them. Pinned to the top rather than inset on all sides, since the
+   bottom of the layout viewport is where the bar sits. */
+.canvas-stage {
+  inset: 0 0 auto 0;
+  height: 100vh;
+  height: 100lvh;
+}
+html.is-canvas,
+html.is-canvas body { height: 100vh; height: 100lvh; }
+
+/* The phone nav bar (and the homepage's at every width). */
+@media (max-width: 50.5625rem) {
+  .splash-nav {
+    padding-top: calc(0.625rem + var(--safe-top));
+    padding-left: calc(1.25rem + var(--safe-left));
+    padding-right: calc(1.25rem + var(--safe-right));
+  }
+  .nav-overlay-scroll { padding-top: calc(1.25rem + var(--safe-top)); padding-bottom: calc(2.5rem + var(--safe-bottom)); }
+  .nav-close-btn { top: calc(1.9375rem + var(--safe-top)); right: calc(1.25rem + var(--safe-right)); }
+  .splash-page { padding-left: var(--safe-left); padding-right: var(--safe-right); }
+}
+.nav-icon .splash-nav {
+  padding-top: calc(0.625rem + var(--safe-top));
+  padding-left: calc(1.25rem + var(--safe-left));
+  padding-right: calc(1.25rem + var(--safe-right));
+}
+.nav-icon .nav-overlay-scroll { padding-top: calc(1.25rem + var(--safe-top)); padding-bottom: calc(2.5rem + var(--safe-bottom)); }
+.nav-icon .nav-close-btn { top: calc(1.9375rem + var(--safe-top)); right: calc(1.25rem + var(--safe-right)); }
+.nav-icon .splash-hero > .hero-line,
+.nav-icon .splash-hero > .layout-toggle { top: var(--safe-top); }
+.nav-icon .splash-page { --page-top: calc(3.5rem + var(--safe-top)); }
+
+/* Bottom edge: the footer and the Music Box player sit above the home
+   indicator. */
+.splash-footer { bottom: calc(0.625rem + var(--safe-bottom)); }
+.miniplayer { bottom: calc(0.625rem + var(--safe-bottom)); }
+@media (max-width: 50.5625rem) {
+  .is-canvas .splash-footer {
+    padding-left: calc(1.25rem + var(--safe-left));
+    padding-right: calc(1.25rem + var(--safe-right));
+    padding-bottom: max(1.25rem, calc(0.75rem + var(--safe-bottom)));
+  }
+}
+
+/* Older full-height layouts: the small viewport, so nothing hides under the
+   address bar. */
+.page, .sidebar { height: 100vh; height: 100svh; }
+@media (max-width: 50.5625rem) {
+  /* The phone's page-top is the nav strip's clearance; the strip grew by the
+     top inset, so the clearance does too. */
+  :root { --page-top: calc(4rem + var(--safe-top)); }
+  .nav-icon .splash-page { --page-top: calc(4.25rem + var(--safe-top)); }
+}

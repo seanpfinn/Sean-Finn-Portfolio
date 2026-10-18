@@ -369,3 +369,10 @@
   .cs-slide, .cs-chapter, .cs-stage { transition: none; }
   .cs-v2:not(.pw-arrive) .cs-stage { animation: none; }
 }
+
+/* Edge to edge on iPhone (see "EDGE TO EDGE" in styles.css): the running
+   title clears the status bar like the nav it sits level with. */
+.cs-titlebar { top: var(--safe-top, 0px); }
+@media (max-width: 50.5625rem) {
+  .cs-titlebar { top: calc(0.5rem + var(--safe-top, 0px)); }
+}
