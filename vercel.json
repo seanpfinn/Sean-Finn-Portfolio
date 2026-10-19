@@ -9,7 +9,17 @@
     },
     {
       "source": "/cd-player",
-      "destination": "/mix-cd",
+      "destination": "/burned",
+      "permanent": true
+    },
+    {
+      "source": "/mix-cd",
+      "destination": "/burned",
+      "permanent": true
+    },
+    {
+      "source": "/mix-cd-player",
+      "destination": "/burned-player",
       "permanent": true
     }
   ]

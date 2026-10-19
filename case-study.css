@@ -818,7 +818,7 @@
   }
 }
 
-/* Live Mix CD (mix-cd.html "Try it" panel). The panel is a fixed
+/* Live Burned (burned.html "Try it" panel). The panel is a fixed
    48.75rem × 29.6875rem stage, so the player is laid out landscape: the disc
    on the left, title / scrubber / transport on the right. */
 .proj-panel-new.proj-panel--cdp { background: #ebebeb; }

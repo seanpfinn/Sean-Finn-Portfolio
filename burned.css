@@ -1,4 +1,4 @@
-/* Mix CD — a YouTube-playlist disc player.
+/* Burned — a YouTube-playlist disc player.
    Pair with cdplayer.js. Everything is scoped under .cd.
 
    Theme hooks:
@@ -194,7 +194,7 @@
   line-height: 1.05;
   pointer-events: none;
 }
-/* Per-track scrawl (mix-cd.js mixInk): color, angle, nudge, decoration. */
+/* Per-track scrawl (burned.js mixInk): color, angle, nudge, decoration. */
 .cd[data-disc="burned"] .cd-ink {
   color: var(--ink, #17171a);
   transform: translateY(calc(-50% + var(--ink-dy, 0%))) rotate(var(--ink-rot, -5deg));
@@ -282,7 +282,7 @@
 }
 /* Rainbow on the bare metal: mirror band and clear rim (and the whole top
    on a burned disc). Two opposed wedges, like light off a real CD. */
-/* Tilt light: mix-cd.js sets --cd-light-angle (deg), --cd-light-shift (%)
+/* Tilt light: burned.js sets --cd-light-angle (deg), --cd-light-shift (%)
    and --cd-light-k (0–1, how far from rest) on :root from the phone's
    orientation (or the mouse on desktop). The rainbow sweeps round the disc
    and the gloss slides across it, like a real CD catching the light. */
@@ -318,7 +318,7 @@
           mask: radial-gradient(closest-side, transparent 0 12.6%, #000 13%);
 }
 
-/* Scratch to scrub (see mix-cd.js). */
+/* Scratch to scrub (see burned.js). */
 .cd:not(.cd--showcase) .cd-face--front { cursor: grab; }
 .cd.is-scratching .cd-face--front { cursor: grabbing; }
 .cd:not(.cd--showcase) .cd-deck { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
@@ -731,7 +731,7 @@
 }
 .cd-bar-track { right: 0; background: var(--cd-rail); }
 .cd-bar-fill { width: 0; background: var(--cd-ink); transition: background-color 0.8s ease; }
-/* Tinted by the current cover (mix-cd.js sets --mix-h / --mix-s on :root). */
+/* Tinted by the current cover (burned.js sets --mix-h / --mix-s on :root). */
 .cd.is-tinted .cd-bar-fill,
 .cd.is-tinted .cd-bar-thumb { background: hsl(var(--mix-h) min(var(--mix-s), 65%) 40%); }
 .dark .cd.is-tinted .cd-bar-fill,

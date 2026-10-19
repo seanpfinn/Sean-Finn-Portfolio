@@ -649,7 +649,7 @@
       // { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
       // { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
-      { href: 'mix-cd.html',              title: 'Mix CD',      clear: false, img: 'assets/tiles/mix-cd.webp', cdTile: 'NMRhx71bGo4', bg: '#e5e5e5' },
+      { href: 'burned.html',              title: 'Burned',      clear: false, img: 'assets/tiles/burned.webp', cdTile: 'NMRhx71bGo4', bg: '#e5e5e5' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
       { href: 'clear-vault.html',            title: 'Vault',          clear: true, video: 'assets/gallery-vault-video.mp4',   bg: '#e1e1e1' },
@@ -1328,7 +1328,7 @@
 
 })();
 
-// ── Mix CD tile: pressed live from YouTube ──────────────────────────────
+// ── Burned tile: pressed live from YouTube ──────────────────────────────
 // Any <img data-cd-tile="VIDEO_ID"> (the home tile, the "more case studies"
 // card) starts as a blank printable disc and gets that video's cover art
 // printed onto it in a canvas: YouTube thumbnail in, finished tile out.
@@ -1345,7 +1345,7 @@
   });
   const art = load(`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`, true)
     .then((im) => im.naturalWidth > 120 ? im : load(`https://i.ytimg.com/vi/${id}/mqdefault.jpg`, true));
-  Promise.all([load('assets/tiles/mix-cd-disc.webp'), art]).then(([disc, cover]) => {
+  Promise.all([load('assets/tiles/burned-disc.webp'), art]).then(([disc, cover]) => {
     const W = disc.naturalWidth, H = disc.naturalHeight;
     const c = document.createElement('canvas');
     c.width = W; c.height = H;

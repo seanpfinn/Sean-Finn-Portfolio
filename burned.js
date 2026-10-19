@@ -1,4 +1,4 @@
-// Mix CD — a YouTube-playlist disc player.
+// Burned — a YouTube-playlist disc player.
 // Pair with cdplayer.css. The current track's cover art is printed onto a
 // compact disc (or stuck onto a burned CD-R, with the title written on in
 // marker). The disc spins up when playback starts and coasts to a stop when
@@ -294,7 +294,7 @@ function mixInk(inkEl, volEl, seed, label) {
   // Puts art on the disc. `instant` swaps it with no crossfade — used while
   // the disc is out of the drive.
   // ── Tint from the cover: the cover's main color tints the page and the
-  // progress bar (see --mix-h / --mix-s in mix-cd.css). Colorful pixels
+  // progress bar (see --mix-h / --mix-s in burned.css). Colorful pixels
   // count most; a black-and-white cover gives a neutral tint.
   const tintCache = {};
   function tintFrom(videoId) {
@@ -455,9 +455,9 @@ function mixInk(inkEl, volEl, seed, label) {
     msVid = vid;
     try {
       ms.metadata = new MediaMetadata({
-        title: title || 'Mix CD',
+        title: title || 'Burned',
         artist: artist || '',
-        album: 'Mix CD',
+        album: 'Burned',
         artwork: [
           { src: `https://i.ytimg.com/vi/${vid}/mqdefault.jpg`, sizes: '320x180', type: 'image/jpeg' },
           { src: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`, sizes: '480x360', type: 'image/jpeg' },
@@ -1182,7 +1182,7 @@ function mixInk(inkEl, volEl, seed, label) {
 // ── Tilt light ─────────────────────────────────────────────────────────────
 // The rainbow off the disc and its gloss follow how the phone is held, so
 // tilting it makes the CD catch the light. Drives three CSS variables on
-// :root (see .cd-iris / .cd-gloss in mix-cd.css). On desktop, the mouse
+// :root (see .cd-iris / .cd-gloss in burned.css). On desktop, the mouse
 // stands in for the tilt, more subtly. iOS asks permission for motion the
 // first time the player itself is tapped.
 (function () {

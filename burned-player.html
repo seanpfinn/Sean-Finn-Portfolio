@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Mix CD Player – Sean Finn</title>
-  <meta name="description" content="Mix CD, standalone: a YouTube playlist pressed onto a spinning CD. Press play." />
-  <link rel="canonical" href="https://www.seanpfinn.com/mix-cd-player" />
+  <title>Burned Player – Sean Finn</title>
+  <meta name="description" content="Burned, standalone: a YouTube playlist pressed onto a spinning CD. Press play." />
+  <link rel="canonical" href="https://www.seanpfinn.com/burned-player" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
   <meta name="theme-color" content="#ebebeb" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0f0f10" media="(prefers-color-scheme: dark)" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
-  <meta property="og:title" content="Mix CD Player – Sean Finn" />
+  <meta property="og:title" content="Burned Player – Sean Finn" />
   <meta property="og:description" content="A YouTube playlist pressed onto a spinning CD. Press play." />
-  <meta property="og:url" content="https://www.seanpfinn.com/mix-cd-player" />
-  <meta property="og:image" content="https://www.seanpfinn.com/assets/og/mix-cd.jpg" />
+  <meta property="og:url" content="https://www.seanpfinn.com/burned-player" />
+  <meta property="og:image" content="https://www.seanpfinn.com/assets/og/burned.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Mix CD Player – Sean Finn" />
+  <meta name="twitter:title" content="Burned Player – Sean Finn" />
   <meta name="twitter:description" content="A YouTube playlist pressed onto a spinning CD. Press play." />
-  <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/mix-cd.jpg" />
+  <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/burned.jpg" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <script>
     // Same theme switch as the rest of the site.
@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" />
-  <link rel="stylesheet" href="mix-cd.css" />
+  <link rel="stylesheet" href="burned.css" />
   <style>
     @font-face { font-family: 'Geist'; font-weight: 400; font-display: swap; src: url('assets/fonts/geist-sans-400.woff2') format('woff2'); }
     @font-face { font-family: 'Geist'; font-weight: 500; font-display: swap; src: url('assets/fonts/geist-sans-500.woff2') format('woff2'); }
@@ -317,14 +317,14 @@
 </head>
 <body>
   <header class="bar">
-    <a class="back" href="mix-cd.html">
+    <a class="back" href="burned.html">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Mix CD <span>· Case study</span>
+      Burned <span>· Case study</span>
     </a>
     <div class="tools">
       <div class="seg" role="group" aria-label="Disc face">
         <button type="button" data-disc="printed" class="is-active" aria-pressed="true">Printed</button>
-        <button type="button" data-disc="burned" aria-pressed="false">Burned</button>
+        <button type="button" data-disc="burned" aria-pressed="false">CD-R</button>
       </div>
       <button class="theme share" type="button" aria-label="Share this track">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
@@ -344,7 +344,7 @@
   <dialog class="burn" aria-labelledby="burn-h">
     <form class="burn-form" novalidate>
       <h2 id="burn-h">Burn your own</h2>
-      <p class="burn-sub">Paste a public or unlisted YouTube or YouTube Music playlist. You'll get your own Mix CD with a link to share.</p>
+      <p class="burn-sub">Paste a public or unlisted YouTube or YouTube Music playlist. You'll get your own burned CD with a link to share.</p>
       <label class="burn-field">
         <span>Playlist link</span>
         <input id="burn-list" name="list" type="url" inputmode="url" autocomplete="off" spellcheck="false"
@@ -356,7 +356,7 @@
       </label>
       <p class="burn-err" role="alert"></p>
       <div class="burn-actions">
-        <a class="burn-home" href="/mix-cd-player" hidden>Back to Sean's mix</a>
+        <a class="burn-home" href="/burned-player" hidden>Back to Sean's mix</a>
         <button type="button" class="burn-cancel">Cancel</button>
         <button type="submit" class="burn-go">Burn it</button>
       </div>
@@ -371,7 +371,7 @@
     <span class="keys">Spin the disc to scrub · swipe it to skip · <kbd>Space</kbd> play · <kbd>←</kbd> <kbd>→</kbd> skip · <kbd>L</kbd> track list</span>
   </footer>
 
-  <script src="mix-cd.js"></script>
+  <script src="burned.js"></script>
   <script>
     (function () {
       const player = document.getElementById('cd-player');
@@ -407,14 +407,14 @@
         toastT = setTimeout(() => toast.classList.remove('is-on'), 1800);
       };
       document.querySelector('.share').addEventListener('click', async () => {
-        const url = new URL('/mix-cd-player', location.origin);
+        const url = new URL('/burned-player', location.origin);
         const here = new URLSearchParams(location.search);
         if (here.get('list')) url.searchParams.set('list', here.get('list'));
         if (here.get('title')) url.searchParams.set('title', here.get('title'));
         if (nowVid) url.searchParams.set('track', nowVid);
         const t = player.dataset.nowTitle, a = player.dataset.nowArtist;
         const mixName = here.get('title');
-        const title = mixName ? `${mixName} · a Mix CD` : (t ? `${t}${a ? ' — ' + a : ''} · Mix CD` : 'Mix CD');
+        const title = mixName ? `${mixName} · Burned` : (t ? `${t}${a ? ' — ' + a : ''} · Burned` : 'Burned');
         if (navigator.share && window.matchMedia('(hover: none)').matches) {
           try { await navigator.share({ title, url: url.href }); } catch (err) {}
           return;
@@ -434,7 +434,7 @@
       const params = new URLSearchParams(location.search);
       if (params.get('list')) {
         const name = (params.get('title') || '').trim();
-        document.title = (name ? name + ' · ' : '') + 'Mix CD';
+        document.title = (name ? name + ' · ' : '') + 'Burned';
         document.querySelector('.burn-home').hidden = false;
       }
       const dlg = document.querySelector('.burn');
@@ -467,7 +467,7 @@
           listIn.focus();
           return;
         }
-        const u = new URL('/mix-cd-player', location.origin);
+        const u = new URL('/burned-player', location.origin);
         u.searchParams.set('list', id);
         const name = titleIn.value.trim().slice(0, 32);
         if (name) u.searchParams.set('title', name);
