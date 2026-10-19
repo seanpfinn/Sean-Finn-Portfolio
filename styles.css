@@ -3552,3 +3552,16 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
 @media (prefers-reduced-motion: reduce) {
   .dt-ready .dt-body, .dt-ready .dt-bite, .dt-ready .dt-rays { transition: opacity 0.2s ease; }
 }
+
+/* ── The homepage's chrome on every page ─────────────────────────────────
+   Each page with the site nav carries .nav-icon too: menu button top-left,
+   sun/moon top-right, the social links in the menu, and on desktop "Last
+   updated" bottom-left with the time and weather bottom-right. */
+@media (min-width: 50.625rem) {
+  .nav-icon .proj-footer { padding-left: 1.25rem; }   /* level with the menu button, as on the homepage */
+}
+/* About is one big draggable scene with the Music Box docked at the bottom
+   on a phone; the footer has no page to sit at the end of there. */
+@media (max-width: 50.5625rem) {
+  .about-footer { display: none; }
+}
