@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" class="nav-icon">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Room Editor – Sean Finn</title>
+  <meta name="description" content="A powder room in 3D that you can repaint live. Pick real paint colors, see them under four kinds of light, and leave with a shopping list." />
+  <link rel="canonical" href="https://www.seanpfinn.com/room-editor" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sean Finn" />
+  <meta property="og:title" content="Room Editor – Sean Finn" />
+  <meta property="og:description" content="A powder room in 3D that you can repaint live. Pick real paint colors, see them under four kinds of light, and leave with a shopping list." />
+  <meta property="og:url" content="https://www.seanpfinn.com/room-editor" />
+  <meta property="og:image" content="https://www.seanpfinn.com/assets/og/room-editor.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Room Editor – Sean Finn" />
+  <meta name="twitter:description" content="A powder room in 3D that you can repaint live. Pick real paint colors, see them under four kinds of light, and leave with a shopping list." />
+  <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/room-editor.jpg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="case-study.css" />
+  <link rel="stylesheet" href="case-layout.css" />
+  <link rel="stylesheet" href="board-layout.css" />
+  <link rel="expect" href="#cs-ready" blocking="render" />
+  <script src="page-transition.js"></script>
+  <style>
+    .proj-panel-new.proj-panel--room { background: #e8e3dc; }
+    .proj-panel--room img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .proj-panel--room-live { padding: 0; }
+    .proj-panel--room-live iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+    @media (max-width: 50.5625rem) { .proj-panel-new.proj-panel--room-live { height: 34rem; } }
+  </style>
+  <style>
+    html { overflow-y: scroll !important; height: auto !important; }
+    body { overflow: visible !important; height: auto !important; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
+</head>
+<body class="proj-page">
+  <!-- Phone edge treatment for Safari's floating bars (styles.css, "EDGES"). -->
+  <div class="edge-top" aria-hidden="true"></div>
+  <div class="edge-bottom" aria-hidden="true"></div>
+
+  <nav class="splash-nav blur-in" style="animation-delay:0s">
+          <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+        <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0C3.10457 0 4 0.89543 4 2Z" fill="currentColor"/>
+          <path d="M11 2C11 3.10457 10.1046 4 9 4C7.89543 4 7 3.10457 7 2C7 0.89543 7.89543 0 9 0C10.1046 0 11 0.89543 11 2Z" fill="currentColor"/>
+          <path d="M18 2C18 3.10457 17.1046 4 16 4C14.8954 4 14 3.10457 14 2C14 0.89543 14.8954 0 16 0C17.1046 0 18 0.89543 18 2Z" fill="currentColor"/>
+          <path d="M4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6C3.10457 6 4 6.89543 4 8Z" fill="currentColor"/>
+          <path d="M11 8C11 9.10457 10.1046 10 9 10C7.89543 10 7 9.10457 7 8C7 6.89543 7.89543 6 9 6C10.1046 6 11 6.89543 11 8Z" fill="currentColor"/>
+          <path d="M18 8C18 9.10457 17.1046 10 16 10C14.8954 10 14 9.10457 14 8C14 6.89543 14.8954 6 16 6C17.1046 6 18 6.89543 18 8Z" fill="currentColor"/>
+          <path d="M4 14C4 15.1046 3.10457 16 2 16C0.89543 16 0 15.1046 0 14C0 12.8954 0.89543 12 2 12C3.10457 12 4 12.8954 4 14Z" fill="currentColor"/>
+          <path d="M11 14C11 15.1046 10.1046 16 9 16C7.89543 16 7 15.1046 7 14C7 12.8954 7.89543 12 9 12C10.1046 12 11 12.8954 11 14Z" fill="currentColor"/>
+          <path d="M18 14C18 15.1046 17.1046 16 16 16C14.8954 16 14 15.1046 14 14C14 12.8954 14.8954 12 16 12C17.1046 12 18 12.8954 18 14Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="splash-nav-links" id="splash-nav-links">
+            <button class="nav-close-btn" id="nav-close-btn" aria-label="Close navigation">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 2L16 16M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="nav-overlay-scroll">
+      <a href="/" class="splash-nav-link">Home</a>
+      <div class="splash-nav-work-group">
+        <button class="splash-nav-work-btn" id="nav-work-btn" aria-expanded="false">
+          <span class="splash-nav-link">Projects</span>
+          <svg class="splash-nav-caret" id="nav-work-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-work-submenu-wrap" id="nav-work-submenu-wrap">
+          <div class="nav-work-submenu" id="nav-work-submenu">
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">CLEAR</span>
+              </div>
+              <div class="nav-company-projects">
+                <!-- <a href="clear-watchos-app.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  watchOS App
+                </a> -->
+                <!-- <a href="clear-referrals.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  CLEAR+ Guest Passes
+                </a> -->
+                <!-- <a href="clear-flight-sharing.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Flight Sharing
+                </a> -->
+                <!-- <a href="clear-onboarding.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  App Onboarding
+                </a> -->
+                <!-- <a href="clear-widgets.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Widgets
+                </a> -->
+                <!-- <a href="clear-messages.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Messages
+                </a> -->
+                <!-- <a href="clear-passkey-management.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Passkey Management
+                </a> -->
+                <a href="clear-live-activity.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Live Activities
+                </a>
+                <a href="clear-terminal-guide.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Terminal Guide
+                </a>
+                <a href="clear-location-details.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Locations
+                </a>
+                <a href="clear-vault.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Vault
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">FINREZ</span>
+              </div>
+              <div class="nav-company-projects">
+                <a href="spectra.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Spectra
+                </a>
+                <a href="ucrfc-club-hub.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  UCRFC Club Hub
+                </a>
+              </div>
+            </div>
+            <div class="nav-company-group">
+              <div class="nav-company-header">
+                <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="nav-company-label">PERSONAL</span>
+              </div>
+              <div class="nav-company-projects">
+                <!-- <a href="plate.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Plate
+                </a> -->
+                <a href="music-box.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Music Box
+                </a>
+                <a href="burned.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Burned
+                </a>
+                <a href="room-editor.html" class="nav-project-item">
+                  <svg class="nav-tree-icon" width="10" height="11" viewBox="0 0 10 11" fill="none" aria-hidden="true"><path d="M1.5 0.5V7H9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Room Editor
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="timeline.html" class="splash-nav-link">About</a>
+      <div class="nav-social" aria-label="Elsewhere">
+        <a href="mailto:sean@seanpfinn.com" class="nav-social-link">Email</a>
+        <a href="https://x.com/seanpfinn" class="nav-social-link" target="_blank" rel="noopener">X</a>
+        <a href="https://linkedin.com/in/seanpfinn" class="nav-social-link" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/seanpfinn" class="nav-social-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.spottedinprod.com/sean" class="nav-social-link" target="_blank" rel="noopener">SIP</a>
+      </div>
+      </div>
+        </div>
+    <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode"><svg class="dt-icon" viewBox="0 0 24 24" aria-hidden="true"><mask id="dt-bite"><rect width="24" height="24" fill="#fff"/><circle class="dt-bite" cx="17" cy="7" r="7" fill="#000"/></mask><circle class="dt-body" cx="12" cy="12" r="9" mask="url(#dt-bite)"/><g class="dt-rays"><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(0 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(45 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(90 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(135 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(180 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(225 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(270 12 12)"/><line x1="12" y1="1.75" x2="12" y2="3.75" transform="rotate(315 12 12)"/></g></svg></button>
+  </nav>
+
+  <main class="proj-col" style="animation-delay:0.05s">
+    <div class="proj-header-group">
+      <div class="proj-title-block">
+        <h1 class="proj-title-new">Room Editor</h1>
+        <p class="proj-subtitle-new">A powder room in 3D that you can repaint live. Pick real paint colors, see them under four kinds of light, and leave with a shopping list.</p>
+      </div>
+      <div class="proj-meta-row-new">
+        <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Year</span><span class="proj-meta-value">October 2026</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
+      </div>
+      <a href="room-editor-app.html" class="proj-dl-btn">Open the editor</a>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Context</h2>
+      <p class="proj-caption-body">Picking paint for a small room usually means taping chips to the wall and guessing. Room Editor rebuilds a real powder room in 3D, 5′6″ by 5′0″ with a 9′ ceiling, and lets you repaint every surface in it: walls, trim and crown, ceiling, door, wainscot, the vanity cabinet, even the porcelain.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/hero.webp" alt="The powder room rendered in 3D: painted walls, a vanity with a mirror, and a toilet" decoding="async" />
+      </div>
+      <p class="proj-image-caption">The room as it is, rendered live in the browser.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Problem</h2>
+      <p class="proj-caption-body">A two-inch chip under store lighting says little about a whole wall in a windowless room lit by vanity bulbs. Color shifts with the light, the finish and whatever sits next to it. The goal was to let someone see a scheme in the actual room before buying anything, and to know how much to buy once they do.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/compare.webp" alt="The room split between its original color and a new scheme" decoding="async" />
+      </div>
+      <p class="proj-image-caption">Drag the split across the room: the original on one side, your scheme on the other.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Role &amp; Approach</h2>
+      <p class="proj-caption-body">I designed and built it myself with Three.js. The room is the main view and the editor sits beside it, with three tabs: Edit for every surface, Schemes for saving and comparing, and Room &amp; estimate for light, size and how much to buy. Click anything in the room to select it, or jump between preset views: the corner, the sink wall, the toilet, standing inside and looking down.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/ui-edit.webp" alt="The editor with the Edit tab open beside the 3D room" decoding="async" />
+      </div>
+      <p class="proj-image-caption">The Edit tab: every surface, with its color, finish and deck.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Options</h2>
+      <p class="proj-caption-body">Colors come from three decks: a studio palette, plus the Sherwin-Williams and Benjamin Moore colors people ask for by name, each with its number. Walls take paint or wallpaper, finishes run from matte to semi-gloss, and fixtures have libraries of their own, from porcelain (bright white to 1957 pink) to floor tile, textiles and mirror frames.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/paper.webp" alt="The room with patterned wallpaper above the wainscot" decoding="async" />
+      </div>
+      <p class="proj-image-caption">Wallpaper above the wainscot, with paint below.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/navy.webp" alt="The room painted a deep navy" decoding="async" />
+      </div>
+      <p class="proj-image-caption">A dark scheme, carried up onto the ceiling.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Light</h2>
+      <p class="proj-caption-body">Four lighting moods: Vanity bulbs, warm 2700K and how the room really looks; Daylight, cool and close to the store; Evening, dimmed low and amber; and Color check, flat white light for judging true color. The same scheme can read as four different rooms.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/moods.webp" alt="The same scheme under four lighting moods" decoding="async" />
+      </div>
+      <p class="proj-image-caption">Vanity bulbs, Daylight, Evening and Color check, standing inside the room.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Room &amp; Estimate</h2>
+      <p class="proj-caption-body">Enter the room’s real size, measured wall to wall at the floor, and dimension lines show it in place. The estimate turns every painted surface into gallons or quarts and the wallpaper into rolls, and the whole scheme copies out as a shopping list, with a reminder to check a physical sample before buying.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--room">
+        <img src="assets/room-editor/ui-room.webp" alt="The Room tab with lighting, dimensions and the paint estimate" decoding="async" />
+      </div>
+      <p class="proj-image-caption">Room &amp; estimate: light, size and how much to buy.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Try it</h2>
+      <p class="proj-caption-body">This one is live. Orbit the room, click a surface and repaint it, then turn on Before / after and drag the split to compare it with the original. Schemes save on this device.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--embed proj-panel--room-live">
+        <iframe src="room-editor-app.html" title="Room Editor" loading="lazy"></iframe>
+      </div>
+      <p class="proj-image-caption">Not a mockup. Or <a href="room-editor-app.html">open it full screen</a>.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Summary</h2>
+      <p class="proj-caption-body">Room Editor turns a paint chip into a room. It answers the two questions that come before every can of paint: what will it look like in here, and how much do I need?</p>
+    </div>
+  </main>
+  <!-- Desktop: the Board (board-layout.js). Phones fall through to the
+       scrolling layout in case-layout.js. -->
+  <script src="board-layout.js"></script>
+  <script src="case-layout.js"></script>
+  <div id="cs-ready" hidden></div>
+
+  <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
+    <div class="sidebar-meta">
+      <p class="last-updated">Last updated: October 17th, 2026</p>
+      <p class="weather">
+        <span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span>
+        <span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script src="main.js"></script>
+  <script type="module" src="sound.js"></script>
+
+</body>
+</html>
