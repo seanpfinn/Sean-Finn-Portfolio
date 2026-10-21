@@ -236,21 +236,8 @@ body {
   line-height: 1.5;
   height: 100%;
   overflow: hidden;
-  cursor: none;
 }
 
-
-.custom-cursor {
-  position: fixed;
-  width: 0.75rem;
-  height: 0.75rem;
-  background: #FF401A;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.2s;
-}
 
 /* ================================
    DARK MODE TOGGLE
@@ -1639,9 +1626,6 @@ body {
    ================================ */
 @media (max-width: 50.5625rem) {
   .mobile-nav-bar { display: flex; }
-
-  body { cursor: auto; }
-  .custom-cursor { display: none; }
 
   .cta-secondary { justify-content: center; }
 

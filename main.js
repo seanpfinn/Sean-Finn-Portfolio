@@ -28,15 +28,6 @@
   });
   requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('dt-ready')));
 
-  // ── Custom cursor ────────────────────────────────────────────────────────
-  const cursor = document.createElement('div');
-  cursor.className = 'custom-cursor';
-  document.body.appendChild(cursor);
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top  = e.clientY + 'px';
-  });
-
   // ── Clock ────────────────────────────────────────────────────────────────
   function tick() {
     const now = new Date();
