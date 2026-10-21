@@ -192,10 +192,29 @@ const METAL={
 const SHEENS={flat:['Flat',.95],eggshell:['Eggshell',.72],satin:['Satin',.52],semigloss:['Semi-gloss',.3],gloss:['High Gloss',.12]};
 const LOWER={none:['None',3.25],frames:['Picture frame',3.25],batten:['Board & batten',3.6],beadboard:['Beadboard',3.5]};
 const STYLES={
-  mirror:{oval:'Oval',round:'Round',arch:'Arched',rect:'Rectangle'},
-  light:{bar3:'3-light bar',sconces:'Sconce pair',globes:'Globe bar'},
-  sink:{pedestal:'Pedestal',console:'Console',vanity:'Vanity'},
+  mirror:{oval:'Oval',round:'Round',arch:'Arched',rect:'Rectangle',pill:'Pill'},
+  light:{bar3:'3-light bar',sconces:'Sconce pair',globes:'Globe bar',linear:'Linear bar'},
+  sink:{pedestal:'Pedestal',console:'Console',vanity:'Vanity',floating:'Floating'},
+  toilet:{twopiece:'Two-piece',onepiece:'One-piece',wallhung:'Wall-hung'},
+  faucet:{widespread:'Widespread',single:'Single-hole',wall:'Wall-mount'},
+  towel:{ring:'Ring',bar:'Bar',hooks:'Hooks'},
+  tp:{bar:'Two-post',post:'Single post'},
+  knob:{knob:'Knob',lever:'Lever'},
+  crown:{none:'None',cove:'Cove',classic:'Classic',stacked:'Stacked'},
+  base:{slim:'Slim',standard:'Standard',tall:'Tall'},
+  casing:{flat:'Flat',backband:'Backband',craftsman:'Craftsman'},
+  upper:{none:'None',frames:'Picture frame',grid:'Grid'},
+  ceiling:{flat:'Flat',beadboard:'Beadboard',beams:'Beams'},
 };
+const STYLE_NAME={crown:'Crown',base:'Baseboard',casing:'Door casing',upper:'Upper wall',ceiling:'Ceiling'};
+const STYLE_NOTE={
+  crown:{none:'No crown. The wall meets the ceiling clean.',cove:'A simple 3½″ cove.',classic:'A 5½″ ogee crown.',stacked:'Crown over a frieze board and bead, about 9½″ deep.'},
+  base:{slim:'3½″ flat baseboard.',standard:'5″ baseboard with a cap.',tall:'7½″ baseboard with a cap and bead.'},
+  casing:{flat:'3¼″ flat casing.',backband:'Flat casing with a backband around the outside edge.',craftsman:'Flat sides under a deep header and cap.'},
+  upper:{none:'Paint or paper runs up to the crown.',frames:'Picture-frame molding on the upper walls, painted the wall color.',grid:'A grid of flat strips on the upper walls, painted the wall color.'},
+  ceiling:{flat:'A flat painted ceiling.',beadboard:'Grooved beadboard across the ceiling.',beams:'Two painted beams across the ceiling.'},
+};
+const CROWN_H={none:0,cove:.3,classic:.46,stacked:.8}, BASE_H={slim:.29,standard:.42,tall:.62}, CASE_W={flat:.28,backband:.3,craftsman:.33};
 const MOODS={
   vanity:{name:'Vanity bulbs',bulb:0xffd6a0,bulbI:18,glow:1,hemi:[0xfff4e6,0x6b5a48,.5],sun:[0xfff1e0,.7],fill:[0xffe4c4,5],exp:1.05},
   daylight:{name:'Daylight',bulb:0xf4f7ff,bulbI:4,glow:.25,hemi:[0xf2f6ff,0x8a8a8a,1.05],sun:[0xf4f8ff,1.6],fill:[0xeef3ff,9],exp:1.0},
@@ -206,23 +225,24 @@ const MOODS={
 const ITEMS=[
   {id:'walls',name:'Walls',kind:'paint',group:'Surfaces',def:{hex:'#ad9270',name:'Original Khaki',code:'',sheen:'eggshell',paper:null}},
   {id:'wainscot',name:'Wainscot',kind:'paint',group:'Surfaces',def:{hex:'#f1eee6',name:'Chalk White',code:'',sheen:'semigloss'},when:s=>s.styles.lower!=='none'},
-  {id:'trim',name:'Trim & crown',kind:'paint',group:'Surfaces',def:{hex:'#f3f1ec',name:'Trim White',code:'',sheen:'semigloss'}},
-  {id:'ceiling',name:'Ceiling',kind:'paint',group:'Surfaces',def:{hex:'#efeee9',name:'Ceiling White',code:'',sheen:'flat'}},
+  {id:'trim',name:'Trim & crown',kind:'paint',group:'Surfaces',def:{hex:'#f3f1ec',name:'Trim White',code:'',sheen:'semigloss'},styles:['crown','base','casing']},
+  {id:'ceiling',name:'Ceiling',kind:'paint',group:'Surfaces',def:{hex:'#efeee9',name:'Ceiling White',code:'',sheen:'flat'},styles:['ceiling']},
   {id:'door',name:'Door',kind:'paint',group:'Surfaces',def:{hex:'#f3f1ec',name:'Trim White',code:'',sheen:'semigloss'}},
   {id:'floor',name:'Floor tile',kind:'tile',group:'Surfaces',def:{hex:'#f2f1ec',name:'White Gloss'}},
   {id:'sink',name:'Sink',kind:'porcelain',group:'Fixtures',def:{hex:'#f4f3ef',name:'Bright White'},style:'sink'},
-  {id:'cabinet',name:'Vanity cabinet',kind:'paint',group:'Fixtures',def:{hex:'#2f5d5e',name:'Deep Lagoon',code:'',sheen:'satin'},when:s=>s.styles.sink==='vanity'},
-  {id:'toilet',name:'Toilet',kind:'porcelain',group:'Fixtures',def:{hex:'#f4f3ef',name:'Bright White'}},
-  {id:'faucet',name:'Faucet & hardware',kind:'metal',group:'Fixtures',def:{finish:'nickel'}},
+  {id:'cabinet',name:'Vanity cabinet',kind:'paint',group:'Fixtures',def:{hex:'#2f5d5e',name:'Deep Lagoon',code:'',sheen:'satin'},when:s=>hasCabinet(s)},
+  {id:'toilet',name:'Toilet',kind:'porcelain',group:'Fixtures',def:{hex:'#f4f3ef',name:'Bright White'},style:'toilet'},
+  {id:'faucet',name:'Faucet & hardware',kind:'metal',group:'Fixtures',def:{finish:'nickel'},style:'faucet'},
   {id:'light',name:'Vanity light',kind:'metal',group:'Fixtures',def:{finish:'nickel'},style:'light'},
   {id:'mirror',name:'Mirror',kind:'metal',group:'Fixtures',def:{finish:'none'},frameless:true,style:'mirror'},
-  {id:'towelring',name:'Towel ring',kind:'metal',group:'Fixtures',def:{finish:'nickel'}},
-  {id:'tp',name:'Paper holder',kind:'metal',group:'Fixtures',def:{finish:'nickel'}},
-  {id:'knob',name:'Door knob',kind:'metal',group:'Fixtures',def:{finish:'nickel'}},
+  {id:'towelring',name:'Towel holder',kind:'metal',group:'Fixtures',def:{finish:'nickel'},style:'towel'},
+  {id:'tp',name:'Paper holder',kind:'metal',group:'Fixtures',def:{finish:'nickel'},style:'tp'},
+  {id:'knob',name:'Door hardware',kind:'metal',group:'Fixtures',def:{finish:'nickel'},style:'knob'},
   {id:'plates',name:'Switch & outlet',kind:'metal',group:'Fixtures',def:{finish:'nickel'},plates:true},
   {id:'towel',name:'Hand towel',kind:'textile',group:'Decor',def:{hex:'#8c8580',name:'Gray Damask'}},
   {id:'frames',name:'Picture frames',kind:'frame',group:'Decor',def:{hex:'#b8955a',name:'Gold Leaf'}},
 ];
+const hasCabinet=s=>s.styles.sink==='vanity'||s.styles.sink==='floating';
 const BYID=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const WALLS={back:'Sink wall',left:'Towel wall',right:'Paper-holder wall',front:'Door wall'};
 const METAL_IDS=['faucet','light','mirror','towelring','tp','knob','plates'];
@@ -231,7 +251,7 @@ const METAL_IDS=['faucet','light','mirror','towelring','tp','knob','plates'];
 const KEY='powder-room-lab-v2';
 const clone=o=>JSON.parse(JSON.stringify(o));
 function defaults(){
-  const s={dims:{w:66,d:60,h:108},styles:{mirror:'oval',light:'bar3',sink:'pedestal',lower:'none'},items:{},walls:{},scope:'all'};
+  const s={dims:{w:66,d:60,h:108},styles:{mirror:'oval',light:'bar3',sink:'pedestal',lower:'none',toilet:'twopiece',faucet:'widespread',towel:'ring',tp:'bar',knob:'knob',crown:'classic',base:'standard',casing:'flat',upper:'none',ceiling:'flat'},items:{},walls:{},scope:'all'};
   for(const it of ITEMS) s.items[it.id]=clone(it.def);
   for(const w in WALLS) s.walls[w]=clone(BYID.walls.def);
   return s;
@@ -241,6 +261,7 @@ let state=defaults();
 const ui={tab:'edit',selected:'walls',lastWall:'back',deck:'Studio',q:'',compare:false,split:.5,measure:false,mood:'vanity'};
 function merge(base,p){ if(!p) return base; const s=clone(base);
   for(const k of ['dims','styles']) Object.assign(s[k],p[k]||{});
+  for(const k in s.styles){const opts=k==='lower'?LOWER:STYLES[k]; if(opts&&!(s.styles[k] in opts)) s.styles[k]=base.styles[k];}
   for(const id in s.items) if(p.items&&p.items[id]) Object.assign(s.items[id],p.items[id]);
   for(const w in s.walls) if(p.walls&&p.walls[w]) Object.assign(s.walls[w],p.walls[w]);
   if(p.scope) s.scope=p.scope; return s; }
@@ -335,23 +356,27 @@ function outline(style,pad){
   const pts=[];
   if(style==='oval'||style==='round'){const rx=(style==='oval'?.88:.95)+pad, ry=(style==='oval'?1.22:.95)+pad; for(let i=0;i<96;i++){const a=i/96*Math.PI*2; pts.push(new V2(Math.cos(a)*rx,Math.sin(a)*ry))}}
   else if(style==='arch'){const hw=.82+pad, bot=-1.3-pad, cy=.48; pts.push(new V2(-hw,bot),new V2(hw,bot)); for(let i=0;i<=48;i++){const a=i/48*Math.PI; pts.push(new V2(Math.cos(a)*hw,cy+Math.sin(a)*hw))}}
+  else if(style==='pill'){const r=.75+pad, c=1.3-.75; for(let i=0;i<=48;i++){const a=i/48*Math.PI; pts.push(new V2(Math.cos(a)*r,c+Math.sin(a)*r))} for(let i=0;i<=48;i++){const a=Math.PI+i/48*Math.PI; pts.push(new V2(Math.cos(a)*r,-c+Math.sin(a)*r))}}
   else {const hw=.9+pad, hh=1.2+pad, r=.1+pad*.6; [[hw-r,hh-r,0],[-hw+r,hh-r,.5],[-hw+r,-hh+r,1],[hw-r,-hh+r,1.5]].forEach(([x,y,s])=>{for(let i=0;i<=8;i++){const a=(s+i/16)*Math.PI; pts.push(new V2(x+Math.cos(a)*r,y+Math.sin(a)*r))}})}
   return pts;
 }
-const MIRROR_Y={oval:5.05,round:5.0,arch:5.15,rect:5.05}, MIRROR_TOP={oval:1.22,round:.95,arch:1.3,rect:1.2};
+const MIRROR_Y={oval:5.05,round:5.0,arch:5.15,rect:5.05,pill:5.1}, MIRROR_TOP={oval:1.22,round:.95,arch:1.3,rect:1.2,pill:1.3};
 const crownShape=(()=>{const s=new THREE.Shape(); s.moveTo(0,-.46); s.lineTo(.04,-.46); s.lineTo(.04,-.40); s.bezierCurveTo(.12,-.38,.22,-.30,.26,-.18); s.bezierCurveTo(.30,-.08,.38,-.06,.42,-.06); s.lineTo(.42,0); s.lineTo(0,0); s.closePath(); return s})();
+const coveShape=(()=>{const s=new THREE.Shape(); s.moveTo(0,-.3); s.lineTo(.03,-.3); s.quadraticCurveTo(.04,-.04,.3,-.03); s.lineTo(.3,0); s.lineTo(0,0); s.closePath(); return s})();
 
 /* ================= Build a room from a state ================= */
 function std(o){return new THREE.MeshStandardMaterial({envMapIntensity:.55,...o})}
 function porcelain(){return new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.18,clearcoat:1,clearcoatRoughness:.08,envMapIntensity:.8,side:THREE.DoubleSide})}
 function buildRoom(st){
-  const W=st.dims.w/12, D=st.dims.d/12, H=st.dims.h/12, BASE=.42, RAIL=LOWER[st.styles.lower][1];
+  const W=st.dims.w/12, D=st.dims.d/12, H=st.dims.h/12, BASE=BASE_H[st.styles.base]||.42, RAIL=LOWER[st.styles.lower][1], CW=CASE_W[st.styles.casing]||.28, CS=st.styles.crown, CH=CROWN_H[CS]||0;
   const b={root:new THREE.Group(),pick:[],walls:{},lights:[],glow:[],reflectors:[],areas:{upper:{},lower:{}},lf:{},W,D,H,st:st};
   const mesh=mk(b), box=(w,h,d,m,id,o)=>mesh(new THREE.BoxGeometry(w,h,d),m,id,o), rbox=(w,h,d,r,m,id,o)=>mesh(new RoundedBoxGeometry(w,h,d,3,r),m,id,o);
   const M=b.M={wall:{}};
   for(const w in WALLS) M.wall[w]=std({roughness:.72});
+  M.up={}; for(const w in WALLS) M.up[w]=std({roughness:.5});
   M.wainscot=std({roughness:.3}); M.bead=std({roughness:.3,map:TEX.bead,bumpMap:TEX.bead,bumpScale:.6});
-  M.trim=std({roughness:.3}); M.ceiling=std({roughness:.95}); M.door=std({roughness:.3}); M.cabinet=std({roughness:.5});
+  M.trim=std({roughness:.3});
+  if(st.styles.ceiling==='beadboard'){const t=TEX.bead.clone(); t.repeat.set(W,D); t.needsUpdate=true; b.ceilTex=t; M.ceiling=std({roughness:.95,map:t,bumpMap:t,bumpScale:.6});} else M.ceiling=std({roughness:.95}); M.door=std({roughness:.3}); M.cabinet=std({roughness:.5});
   M.sink=porcelain(); M.toilet=porcelain();
   for(const id of METAL_IDS) M[id]=std({metalness:1,roughness:.35,envMapIntensity:1.1});
   M.towel=std({roughness:1,map:TEX.towel,side:THREE.DoubleSide}); M.frames=std({roughness:.4,metalness:.6});
@@ -369,7 +394,7 @@ function buildRoom(st){
     left:{pos:[-W/2,0,0],rot:Math.PI/2,len:D,normal:[1,0,0],open:[]},
     right:{pos:[W/2,0,0],rot:-Math.PI/2,len:D,normal:[-1,0,0],open:[]},
   };
-  b.lowerMeshes=[]; let base=0,rail=0,molding=0,battens=0;
+  b.lowerMeshes=[]; let base=0,rail=0,molding=0,battens=0,upperLF=0;
   for(const [k,def] of Object.entries(defs)){
     const g=new THREE.Group(); g.position.set(...def.pos); g.rotation.y=def.rot; b.root.add(g); b.walls[k]=g;
     g.userData.normal=new THREE.Vector3(...def.normal); g.userData.center=new THREE.Vector3(def.pos[0],H/2,def.pos[2]);
@@ -377,9 +402,11 @@ function buildRoom(st){
     for(const r of rects(def.len,def.open,RAIL,H)){const p=mesh(wallPlane(...r),M.wall[k],'walls',{wall:k,cast:false}); p.position.set((r[0]+r[1])/2,(r[2]+r[3])/2,0); g.add(p); up+=(r[1]-r[0])*(r[3]-r[2]);}
     for(const r of rects(def.len,def.open,0,RAIL)){const p=mesh(wallPlane(...r),M.wall[k],'walls',{wall:k,cast:false}); p.position.set((r[0]+r[1])/2,(r[2]+r[3])/2,0); p.userData.lower=k; g.add(p); b.lowerMeshes.push(p); lo+=(r[1]-r[0])*(r[3]-r[2]);}
     b.areas.upper[k]=up; b.areas.lower[k]=lo;
-    const casingOpen=def.open.map(o=>({...o,u0:o.u0-.28,u1:o.u1+.28}));
-    for(const r of rects(def.len,casingOpen,0,BASE)){const L=r[1]-r[0]; base+=L; const bb=box(L,BASE,.06,M.trim,'trim'); bb.position.set((r[0]+r[1])/2,BASE/2,.03); g.add(bb); const cap=box(L,.04,.075,M.trim,'trim'); cap.position.set((r[0]+r[1])/2,BASE,.037); g.add(cap);}
-    const cg=new THREE.ExtrudeGeometry(crownShape,{depth:def.len,bevelEnabled:false,curveSegments:10}); cg.rotateY(-Math.PI/2); cg.translate(def.len/2,H,0); g.add(mesh(cg,M.trim,'trim',{cast:false}));
+    const casingOpen=def.open.map(o=>({...o,u0:o.u0-CW,u1:o.u1+CW}));
+    for(const r of rects(def.len,casingOpen,0,BASE)){const L=r[1]-r[0]; base+=L; const bb=box(L,BASE,.06,M.trim,'trim'); bb.position.set((r[0]+r[1])/2,BASE/2,.03); g.add(bb); if(st.styles.base!=='slim'){const cap=box(L,.04,.075,M.trim,'trim'); cap.position.set((r[0]+r[1])/2,BASE,.037); g.add(cap);}
+      if(st.styles.base==='tall'){const bead=box(L,.03,.07,M.trim,'trim',{cast:false}); bead.position.set((r[0]+r[1])/2,BASE-.14,.035); g.add(bead);}}
+    if(CS!=='none'){const cg=new THREE.ExtrudeGeometry(CS==='cove'?coveShape:crownShape,{depth:def.len,bevelEnabled:false,curveSegments:10}); cg.rotateY(-Math.PI/2); cg.translate(def.len/2,H,0); g.add(mesh(cg,M.trim,'trim',{cast:false}));}
+    if(CS==='stacked'){g.add(at(box(def.len,.28,.045,M.trim,'trim',{cast:false}),0,H-.46-.14,.0225)); g.add(at(box(def.len,.045,.08,M.trim,'trim',{cast:false}),0,H-.76,.04));}
     // lower-wall treatments
     const lw=st.styles.lower;
     if(lw!=='none'){
@@ -396,12 +423,29 @@ function buildRoom(st){
         for(const [a,c] of segs){const L=c-a, n=Math.max(1,Math.round(L/1.35)); for(let i=0;i<=n;i++){const u=a+L*i/n; const q=box(.25,RAIL-BASE,.045,M.wainscot,'wainscot'); q.position.set(u,(RAIL+BASE)/2,.023); g.add(q); battens++;}}
       }
     }
+    // upper-wall molding, painted the wall color
+    const upS=st.styles.upper;
+    if(upS!=='none'){
+      const g0=lw==='none'?BASE:RAIL+(lw==='batten'?.14:.07), g1=H-CH, t=.075, dd=.045;
+      const strip=(x,y,w,h)=>{const q=mesh(new THREE.BoxGeometry(w,h,dd),M.up[k],'walls',{wall:k,cast:false}); q.position.set(x,y,dd/2); g.add(q)};
+      if(upS==='frames'&&k!=='back'){const v0=g0+.3, v1=g1-.3;
+        if(v1-v0>1) for(const [a,c] of segsMinus(def.len,.08,casingOpen)){const L=c-a, n=Math.max(1,Math.round(L/2.2)), gap=.35, pw=(L-gap*(n+1))/n; if(pw<.6) continue;
+          for(let i=0;i<n;i++){const u0=a+gap+i*(pw+gap), u1=u0+pw; upperLF+=2*(pw+(v1-v0));
+            strip((u0+u1)/2,v1,pw+t,t); strip((u0+u1)/2,v0,pw+t,t); strip(u0,(v0+v1)/2,t,v1-v0); strip(u1,(v0+v1)/2,t,v1-v0);}}
+      }
+      if(upS==='grid'&&g1-g0>1){const rows=Math.max(2,Math.round((g1-g0)/1.35));
+        for(const [a,c] of segsMinus(def.len,0,casingOpen)){const L=c-a, n=Math.max(1,Math.round(L/1.35));
+          for(let i=1;i<n;i++){strip(a+L*i/n,(g0+g1)/2,t,g1-g0); upperLF+=g1-g0;}
+          for(let j=1;j<rows;j++){strip((a+c)/2,g0+(g1-g0)*j/rows,L,t); upperLF+=L;}}
+      }
+    }
   }
-  b.lf={baseboard:base,crown:2*(W+D),casing:2*(DOOR.h+.14)+DOOR.w+.56,rail,molding,battens:battens*(RAIL-BASE)};
+  b.lf={baseboard:base,crown:CS==='none'?0:2*(W+D),casing:2*(DOOR.h+.14)+DOOR.w+2*CW,rail,molding,battens:battens*(RAIL-BASE),upper:upperLF};
   b.areas.ceiling=W*D; b.areas.door=DOOR.w*DOOR.h;
   const floor=mesh(new THREE.PlaneGeometry(W,D),M.floor,'floor',{cast:false}); floor.rotation.x=-Math.PI/2; b.root.add(floor);
   b.ceil=new THREE.Group(); b.root.add(b.ceil);
   const ceil=mesh(new THREE.PlaneGeometry(W,D),M.ceiling,'ceiling',{cast:false}); ceil.rotation.x=Math.PI/2; ceil.position.y=H; b.ceil.add(ceil);
+  if(st.styles.ceiling==='beams') for(const z of [-D/6,D/6]){const bm=box(W,.32,.38,M.ceiling,'ceiling'); bm.position.set(0,H-.16,z); b.ceil.add(bm);}
   {const vx=W/2-1.45, vz=D/2-1.0; const v=box(.9,.04,.9,M.ceiling,'ceiling'); v.position.set(vx,H-.02,vz); b.ceil.add(v);
    for(let i=0;i<7;i++){const s=box(.78,.03,.035,M.grout,null,{cast:false}); s.position.set(vx,H-.045,vz-.36+i*.12); b.ceil.add(s);}}
 
@@ -426,6 +470,10 @@ function buildRoom(st){
     const bar=mesh(new THREE.CylinderGeometry(.025,.025,1.76,12),M.faucet,'faucet'); bar.rotation.z=Math.PI/2; bar.position.set(sinkX,.75,1.48); back.add(bar);
     for(const dx of [-.88,.88]){const s=mesh(new THREE.CylinderGeometry(.025,.025,1.45,12),M.faucet,'faucet'); s.rotation.x=Math.PI/2; s.position.set(sinkX+dx,.75,.76); back.add(s);}
     const tw=rbox(1.3,.04,1.0,.02,M.towel,'towel'); tw.position.set(sinkX,.79,.85); back.add(tw);
+  } else if(ss==='floating'){
+    const ch=topY-.22, bot=1.3, hh=ch-bot; back.add(at(rbox(SINK_W,hh,1.55,.015,M.cabinet,'cabinet'),sinkX,bot+hh/2,.78));
+    back.add(at(rbox(SINK_W-.1,hh-.1,.05,.012,M.cabinet,'cabinet'),sinkX,bot+hh/2,1.57));
+    const pull=mesh(new THREE.CapsuleGeometry(.018,.8,4,8),M.faucet,'faucet'); pull.rotation.z=Math.PI/2; pull.position.set(sinkX,ch-.22,1.62); back.add(pull);
   } else {
     const ch=topY-.22, cab=rbox(SINK_W,ch-.33,1.6,.015,M.cabinet,'cabinet'); cab.position.set(sinkX,.33+(ch-.33)/2,.8); back.add(cab);
     const toe=box(SINK_W-.12,.33,1.45,M.grout,null,{cast:false}); toe.position.set(sinkX,.165,.72); back.add(toe);
@@ -434,6 +482,21 @@ function buildRoom(st){
       const inset=rbox(.62,ch-.92,.03,.01,M.cabinet,'cabinet'); inset.position.set(sinkX+dx,.33+(ch-.33)/2,1.645); back.add(inset);
       const pull=mesh(new THREE.CapsuleGeometry(.018,.22,4,8),M.faucet,'faucet'); pull.position.set(sinkX+dx*.25,ch-.55,1.68); back.add(pull);}
   }
+  const fst=st.styles.faucet;
+  if(fst==='wall'){const fy=topY+.85, fx=sinkX;
+   const rose=mesh(new THREE.CylinderGeometry(.09,.09,.04,24),M.faucet,'faucet'); rose.rotation.x=Math.PI/2; rose.position.set(fx,fy,.02); back.add(rose);
+   const sp=mesh(new THREE.CylinderGeometry(.035,.035,.56,16),M.faucet,'faucet'); sp.rotation.x=Math.PI/2; sp.position.set(fx,fy,.3); back.add(sp);
+   const tip=mesh(new THREE.CylinderGeometry(.04,.035,.1,16),M.faucet,'faucet'); tip.position.set(fx,fy-.05,.56); back.add(tip);
+   for(const s of [-1,1]){const r=mesh(new THREE.CylinderGeometry(.075,.075,.04,24),M.faucet,'faucet'); r.rotation.x=Math.PI/2; r.position.set(fx+s*.42,fy,.02); back.add(r);
+     const st2=mesh(new THREE.CylinderGeometry(.035,.04,.1,16),M.faucet,'faucet'); st2.rotation.x=Math.PI/2; st2.position.set(fx+s*.42,fy,.08); back.add(st2);
+     const lev=mesh(new THREE.CapsuleGeometry(.022,.16,4,10),M.faucet,'faucet'); lev.rotation.z=Math.PI/2+s*.5; lev.position.set(fx+s*.49,fy+.06,.13); back.add(lev);}
+  } else if(fst==='single'){const fz=.24, fy=topY+.05, fx=sinkX;
+   const sp=new THREE.Group(); sp.position.set(fx,fy,fz); back.add(sp);
+   sp.add(at(mesh(new THREE.CylinderGeometry(.05,.065,.6,24),M.faucet,'faucet'),0,.3,0));
+   const neck=mesh(new THREE.TorusGeometry(.18,.032,12,30,Math.PI),M.faucet,'faucet'); neck.rotation.y=-Math.PI/2; neck.position.set(0,.6,.18); sp.add(neck);
+   sp.add(at(mesh(new THREE.CylinderGeometry(.038,.033,.08,16),M.faucet,'faucet'),0,.56,.36));
+   const lev=mesh(new THREE.CapsuleGeometry(.02,.2,4,10),M.faucet,'faucet'); lev.rotation.z=Math.PI/2; lev.position.set(.15,.42,0); sp.add(lev);
+  } else
   {const fz=.24, fy=topY+.05, fx=sinkX;
    const sp=new THREE.Group(); sp.position.set(fx,fy,fz); back.add(sp);
    const sb=mesh(new THREE.CylinderGeometry(.06,.075,.14,24),M.faucet,'faucet'); sb.position.y=.07; sp.add(sb);
@@ -465,6 +528,8 @@ function buildRoom(st){
     const ly=Math.min(Math.max(mirrorTop+.5,6.6),H-.9);
     const lg=new THREE.Group(); lg.position.set(sinkX,ly,0); back.add(lg);
     lg.add(at(rbox(.36,.22,.05,.02,M.light,'light'),0,0,.03));
+    if(ls==='linear'){lg.add(at(rbox(2.3,.13,.16,.04,M.light,'light'),0,0,.12)); lg.add(at(mesh(new THREE.BoxGeometry(2.2,.03,.11),M.opal,'light',{cast:false}),0,-.07,.12)); addBulb(back,sinkX,ly-.15,.5,18,true);}
+    else {
     const bar=mesh(new THREE.CylinderGeometry(.035,.035,2.0,16),M.light,'light'); bar.rotation.z=Math.PI/2; bar.position.z=.2; lg.add(bar);
     const arm=mesh(new THREE.CylinderGeometry(.03,.03,.2,12),M.light,'light'); arm.rotation.x=Math.PI/2; arm.position.z=.1; lg.add(arm);
     for(const x of [-.75,0,.75]){
@@ -475,30 +540,54 @@ function buildRoom(st){
         const bl=new THREE.Mesh(new THREE.SphereGeometry(.07,16,12),M.bulb); bl.position.set(x,-.3,.24); lg.add(bl);}
     }
     addBulb(back,sinkX,ls==='globes'?ly+.3:ly-.3,.6,18,true);
-  }
+  }}
   const plate=(g,x,y,type)=>{const p=rbox(.24,.38,.03,.012,M.plates,'plates'); p.position.set(x,y,.016); g.add(p);
     if(type==='outlet'){for(const dy of [.08,-.08]){const o=rbox(.12,.11,.02,.02,std({color:0xf1f0ec,roughness:.4}),'plates'); o.position.set(x,y+dy,.035); g.add(o);}}
     else {for(const dx of [-.05,.05]){const t=box(.03,.08,.06,M.plates,'plates'); t.position.set(x+dx,y,.05); t.rotation.x=.4; g.add(t);}}};
   plate(back,(sinkX+SINK_W/2+tankL)/2+.05,Math.max(3.6,RAIL+.42),'outlet');
   /* ---- toilet ---- */
   {const tx=toiletX;
+   const tst=st.styles.toilet; let tissueY=2.84;
+   if(tst==='twopiece'){
    back.add(at(rbox(1.6,1.18,.62,.08,M.toilet,'toilet'),tx,1.95,.33));
    back.add(at(rbox(1.7,.1,.72,.04,M.toilet,'toilet'),tx,2.58,.36));
    const lever=mesh(new THREE.CapsuleGeometry(.025,.18,4,10),M.faucet,'faucet'); lever.rotation.z=Math.PI/2; lever.position.set(tx-.62,2.25,.66); back.add(lever);
-   const prof=[[0,0],[.38,0],[.36,.1],[.3,.5],[.34,.8],[.5,1.05],[.56,1.22],[0,1.22]].map(p=>new V2(...p));
+   } else if(tst==='onepiece'){
+   back.add(at(rbox(1.45,.8,.74,.22,M.toilet,'toilet'),tx,1.72,.4));
+   back.add(at(rbox(1.5,.07,.78,.035,M.toilet,'toilet'),tx,2.14,.41));
+   const lever=mesh(new THREE.CapsuleGeometry(.025,.16,4,10),M.faucet,'faucet'); lever.rotation.z=Math.PI/2; lever.position.set(tx-.58,1.95,.79); back.add(lever); tissueY=2.39;
+   } else {
+   back.add(at(rbox(.6,.4,.03,.03,M.faucet,'faucet'),tx,3.15,.02)); back.add(at(rbox(.25,.3,.02,.02,M.faucet,'faucet'),tx-.13,3.15,.04)); back.add(at(rbox(.25,.3,.02,.02,M.faucet,'faucet'),tx+.13,3.15,.04)); tissueY=0;
+   }
+   const prof=(tst==='wallhung'?[[0,.5],[.3,.5],[.36,.62],[.36,.8],[.5,1.05],[.56,1.22],[0,1.22]]:[[0,0],[.38,0],[.36,.1],[.3,.5],[.34,.8],[.5,1.05],[.56,1.22],[0,1.22]]).map(p=>new V2(...p));
    const bowl=mesh(new THREE.LatheGeometry(prof,40),M.toilet,'toilet'); bowl.scale.set(1,1,1.3); bowl.position.set(tx,0,1.35); back.add(bowl);
-   back.add(at(rbox(.8,.9,.6,.12,M.toilet,'toilet'),tx,.95,.85));
+   back.add(tst==='wallhung'?at(rbox(.8,.62,.7,.12,M.toilet,'toilet'),tx,1.0,.75):at(rbox(.8,.9,.6,.12,M.toilet,'toilet'),tx,.95,.85));
    const seat=mesh(new THREE.TorusGeometry(.48,.07,12,40),M.toilet,'toilet'); seat.rotation.x=Math.PI/2; seat.scale.set(1,1.3,.5); seat.position.set(tx,1.27,1.38); back.add(seat);
    const tl=mesh(new THREE.CylinderGeometry(.54,.54,.05,40),M.toilet,'toilet'); tl.scale.set(1,1,1.32); tl.position.set(tx,1.33,1.36); back.add(tl);
    back.add(at(rbox(.7,.08,.18,.03,M.toilet,'toilet'),tx,1.3,.72));
-   const sup=mesh(new THREE.CylinderGeometry(.025,.025,.6,10),M.faucet,'faucet'); sup.position.set(tx-.55,.9,.25); sup.rotation.x=.25; back.add(sup);
-   const val=mesh(new THREE.CylinderGeometry(.06,.06,.12,14),M.faucet,'faucet'); val.rotation.x=Math.PI/2; val.position.set(tx-.55,.62,.06); back.add(val);
-   back.add(at(rbox(.42,.42,.42,.03,std({color:0x9fb6c2,roughness:.8}),null),tx-.35,2.84,.4));
+   if(tst!=='wallhung'){const sup=mesh(new THREE.CylinderGeometry(.025,.025,.6,10),M.faucet,'faucet'); sup.position.set(tx-.55,.9,.25); sup.rotation.x=.25; back.add(sup);
+   const val=mesh(new THREE.CylinderGeometry(.06,.06,.12,14),M.faucet,'faucet'); val.rotation.x=Math.PI/2; val.position.set(tx-.55,.62,.06); back.add(val);}
+   if(tissueY) back.add(at(rbox(.42,.42,.42,.03,std({color:0x9fb6c2,roughness:.8}),null),tx-.35,tissueY,.4));
    [[5.85,0],[4.55,1]].forEach(([y,ai])=>{const fg=new THREE.Group(); fg.position.set(tx,y,.04); back.add(fg); const fw=.92,fh=1.12,t=.08;
      [[0,fh/2,fw,t],[0,-fh/2,fw,t],[-fw/2,0,t,fh+t],[fw/2,0,t,fh+t]].forEach(([x,yy,w,h])=>fg.add(at(box(w,h,.06,M.frames,'frames'),x,yy,0)));
      fg.add(at(box(fw-.06,fh-.06,.01,M.mat,'frames',{cast:false}),0,0,-.01));
      fg.add(mesh(new THREE.PlaneGeometry(.5,.66),std({map:TEX.art[ai],roughness:.9}),'frames',{cast:false}));});}
   /* ---- towel wall ---- */
+  const tws=st.styles.towel;
+  if(tws==='bar'){const g=b.walls.left, u=D/2-1.35, y=4.35;
+   for(const s of [-1,1]){const r=mesh(new THREE.CylinderGeometry(.08,.08,.05,24),M.towelring,'towelring'); r.rotation.x=Math.PI/2; r.position.set(u+s*.8,y,.025); g.add(r);
+     const pst=mesh(new THREE.CylinderGeometry(.03,.03,.16,12),M.towelring,'towelring'); pst.rotation.x=Math.PI/2; pst.position.set(u+s*.8,y,.12); g.add(pst);}
+   const bar=mesh(new THREE.CylinderGeometry(.025,.025,1.66,14),M.towelring,'towelring'); bar.rotation.z=Math.PI/2; bar.position.set(u,y,.2); g.add(bar);
+   const tg=new THREE.PlaneGeometry(1.15,1.3,16,20); const p=tg.attributes.position; for(let i=0;i<p.count;i++){const x=p.getX(i); p.setZ(i,Math.sin(x*7)*.02);} tg.computeVertexNormals();
+   g.add(at(mesh(tg,M.towel,'towel'),u,y-.66,.25));
+   const fold=mesh(new THREE.CylinderGeometry(.055,.055,1.17,16),M.towel,'towel'); fold.rotation.z=Math.PI/2; fold.position.set(u,y,.2); g.add(fold);
+  } else if(tws==='hooks'){const g=b.walls.left, y=4.6;
+   [D/2-.75,D/2-1.4].forEach((u,i)=>{const r=mesh(new THREE.CylinderGeometry(.07,.07,.04,20),M.towelring,'towelring'); r.rotation.x=Math.PI/2; r.position.set(u,y,.02); g.add(r);
+     const h=mesh(new THREE.CapsuleGeometry(.022,.14,4,10),M.towelring,'towelring'); h.rotation.x=Math.PI/2; h.position.set(u,y,.11); g.add(h);
+     g.add(at(mesh(new THREE.SphereGeometry(.035,14,10),M.towelring,'towelring'),u,y+.03,.19));
+     if(i===0){const tg=new THREE.PlaneGeometry(.6,1.3,12,20); const p=tg.attributes.position; for(let k=0;k<p.count;k++){const x=p.getX(k),yy=p.getY(k); p.setX(k,x*(.55+.45*(.65-yy)/1.3)); p.setZ(k,Math.sin(x*9)*.025);} tg.computeVertexNormals();
+       g.add(at(mesh(tg,M.towel,'towel'),u,y-.62,.16)); const knot=mesh(new THREE.SphereGeometry(.08,14,10),M.towel,'towel'); knot.scale.set(1.4,.8,.7); knot.position.set(u,y-.02,.15); g.add(knot);}});
+  } else
   {const g=b.walls.left, u=D/2-.9, y=4.05;
    const rose=mesh(new THREE.CylinderGeometry(.11,.11,.06,24),M.towelring,'towelring'); rose.rotation.x=Math.PI/2; rose.position.set(u,y,.03); g.add(rose);
    const post=mesh(new THREE.CylinderGeometry(.03,.03,.14,12),M.towelring,'towelring'); post.rotation.x=Math.PI/2; post.position.set(u,y,.1); g.add(post);
@@ -508,8 +597,11 @@ function buildRoom(st){
    const fold=mesh(new THREE.CylinderGeometry(.05,.05,.64,16),M.towel,'towel'); fold.rotation.z=Math.PI/2; fold.position.set(u,y-.6,.18); g.add(fold);}
   /* ---- paper-holder wall ---- */
   {const g=b.walls.right, u=-D/2+1.5, y=2.25;
-   for(const s of [-1,1]){const r=mesh(new THREE.CylinderGeometry(.06,.06,.12,20),M.tp,'tp'); r.rotation.x=Math.PI/2; r.position.set(u+s*.3,y,.06); g.add(r);}
-   const bar=mesh(new THREE.CylinderGeometry(.022,.022,.62,12),M.tp,'tp'); bar.rotation.z=Math.PI/2; bar.position.set(u,y,.14); g.add(bar);
+   if(st.styles.tp==='post'){const r=mesh(new THREE.CylinderGeometry(.075,.075,.12,20),M.tp,'tp'); r.rotation.x=Math.PI/2; r.position.set(u+.3,y,.06); g.add(r);
+     const bar=mesh(new THREE.CylinderGeometry(.022,.022,.58,12),M.tp,'tp'); bar.rotation.z=Math.PI/2; bar.position.set(u+.02,y,.14); g.add(bar);
+     const end=mesh(new THREE.CylinderGeometry(.022,.022,.08,12),M.tp,'tp'); end.position.set(u-.27,y+.03,.14); g.add(end);}
+   else {for(const s of [-1,1]){const r=mesh(new THREE.CylinderGeometry(.06,.06,.12,20),M.tp,'tp'); r.rotation.x=Math.PI/2; r.position.set(u+s*.3,y,.06); g.add(r);}
+   const bar=mesh(new THREE.CylinderGeometry(.022,.022,.62,12),M.tp,'tp'); bar.rotation.z=Math.PI/2; bar.position.set(u,y,.14); g.add(bar);}
    const roll=mesh(new THREE.CylinderGeometry(.2,.2,.42,28),std({color:0xfbfbf8,roughness:.95}),'tp'); roll.rotation.z=Math.PI/2; roll.position.set(u,y-.06,.2); g.add(roll);
    plate(g,D/2-.5,4.0,'switch');}
   /* ---- door ---- */
@@ -518,18 +610,29 @@ function buildRoom(st){
    for(const c of [-.55,.55]) for(const [y,h] of [[5.0,1.95],[3.05,1.6],[1.02,1.45]]){
      g.add(at(rbox(.86,h,.05,.02,M.door,'door'),cx+c,y,.07));
      g.add(at(rbox(.66,h-.2,.06,.02,M.door,'door'),cx+c,y,.09));}
-   const cw=.28;
-   [[cx-DOOR.w/2-cw/2,DOOR.h/2+.07,cw,DOOR.h+.14],[cx+DOOR.w/2+cw/2,DOOR.h/2+.07,cw,DOOR.h+.14],[cx,DOOR.h+.14+cw/2-.07,DOOR.w+cw*2,cw]].forEach(([x,y,w,h])=>g.add(at(rbox(w,h,.07,.02,M.trim,'trim'),x,y,.035)));
+   const cw=CW, cas=st.styles.casing;
+   if(cas==='craftsman'){
+     for(const s of [-1,1]) g.add(at(box(cw,DOOR.h+.1,.07,M.trim,'trim'),cx+s*(DOOR.w/2+cw/2),(DOOR.h+.1)/2,.035));
+     g.add(at(box(DOOR.w+cw*2+.06,.42,.08,M.trim,'trim'),cx,DOOR.h+.1+.21,.04));
+     g.add(at(box(DOOR.w+cw*2+.22,.07,.13,M.trim,'trim'),cx,DOOR.h+.1+.42+.035,.065));
+     g.add(at(box(DOOR.w+cw*2+.14,.04,.1,M.trim,'trim'),cx,DOOR.h+.1+.42-.01,.06));
+   } else {
+     [[cx-DOOR.w/2-cw/2,DOOR.h/2+.07,cw,DOOR.h+.14],[cx+DOOR.w/2+cw/2,DOOR.h/2+.07,cw,DOOR.h+.14],[cx,DOOR.h+.14+cw/2-.07,DOOR.w+cw*2,cw]].forEach(([x,y,w,h])=>g.add(at(rbox(w,h,.07,.02,M.trim,'trim'),x,y,.035)));
+     if(cas==='backband'){const top=DOOR.h+.07+cw;
+       for(const s of [-1,1]) g.add(at(box(.07,top,.12,M.trim,'trim'),cx+s*(DOOR.w/2+cw-.035),top/2,.06));
+       g.add(at(box(DOOR.w+cw*2,.07,.12,M.trim,'trim'),cx,top-.035,.06));}
+   }
    const kx=cx+DOOR.w/2-.24;
    const rose=mesh(new THREE.CylinderGeometry(.1,.1,.04,24),M.knob,'knob'); rose.rotation.x=Math.PI/2; rose.position.set(kx,3.0,.07); g.add(rose);
    const stem=mesh(new THREE.CylinderGeometry(.04,.05,.14,16),M.knob,'knob'); stem.rotation.x=Math.PI/2; stem.position.set(kx,3.0,.15); g.add(stem);
-   const kn=mesh(new THREE.SphereGeometry(.12,24,16),M.knob,'knob'); kn.scale.set(1,1,.8); kn.position.set(kx,3.0,.27); g.add(kn);
+   if(st.styles.knob==='lever'){const lv=mesh(new THREE.CapsuleGeometry(.035,.4,6,12),M.knob,'knob'); lv.rotation.z=Math.PI/2; lv.position.set(kx-.2,3.0,.24); g.add(lv);}
+   else {const kn=mesh(new THREE.SphereGeometry(.12,24,16),M.knob,'knob'); kn.scale.set(1,1,.8); kn.position.set(kx,3.0,.27); g.add(kn);}
    for(const y of [.9,3.4,5.9]) g.add(at(box(.05,.32,.03,M.knob,'knob'),cx-DOOR.w/2+.02,y,.06));}
   b.root.traverse(o=>{if(o.isMesh&&o.geometry&&!o.geometry.attributes.normal) o.geometry.computeVertexNormals()});
   applyState(b,st); applyMood(b);
   return b;
 }
-function disposeBuild(b){ if(!b) return; scene.remove(b.root);
+function disposeBuild(b){ if(!b) return; scene.remove(b.root); if(b.ceilTex) b.ceilTex.dispose();
   b.root.traverse(o=>{ if(o.geometry) o.geometry.dispose(); });
   b.reflectors.forEach(r=>{r.getRenderTarget&&r.getRenderTarget().dispose(); r.material.dispose();});
   Object.values(b.M).forEach(m=>{ if(m.dispose) m.dispose(); else Object.values(m).forEach(x=>x.dispose&&x.dispose()); });
@@ -544,6 +647,7 @@ function applyState(b,st){
     if(s.paper){ const t=paperTex(s.paper,s.hex); if(m.map!==t){m.map=t; m.needsUpdate=true;} m.color.set(0xffffff); m.roughness=s.paper.id==='grasscloth'?.95:.8; }
     else { if(m.map){m.map=null; m.needsUpdate=true;} paint(m,s); } }
   for(const id of ['wainscot','trim','ceiling','door','cabinet']) paint(M[id],st.items[id]);
+  for(const w in WALLS){const s=st.walls[w]; paint(M.up[w],s.paper?st.items.trim:s);}
   M.bead.color.set(st.items.wainscot.hex); M.bead.roughness=M.wainscot.roughness;
   M.floor.color.set(st.items.floor.hex); M.sink.color.set(st.items.sink.hex); M.toilet.color.set(st.items.toilet.hex);
   M.towel.color.set(st.items.towel.hex); M.frames.color.set(st.items.frames.hex);
@@ -670,6 +774,7 @@ const body=document.getElementById('tabbody');
 function renderTab(){const top=body.parentElement.scrollTop; body.innerHTML=''; ({edit:renderEdit,schemes:renderSchemes,room:renderRoom})[ui.tab](); body.parentElement.scrollTop=top}
 
 /* ---------- Edit tab ---------- */
+const styleKeys=it=>it.styles||(it.style?[it.style]:[]);
 function renderEdit(){
   if(BYID[ui.selected].when&&!BYID[ui.selected].when(state)) ui.selected='walls';
   const it=BYID[ui.selected], s=cur_(ui.selected);
@@ -692,11 +797,17 @@ function renderEdit(){
     head.append(el('div',{class:'eyebrow'},'Lower wall'));
     head.append(seg('Lower wall',Object.entries(LOWER).map(([k,v])=>[k,v[0]]),state.styles.lower,k=>{state.styles.lower=k; rebuild('cur'); save(); renderTab(); if(k!=='none') flash('wainscot')}));
     head.append(el('p',{class:'note'},({none:'Paint or paper runs floor to crown.',frames:'Chair rail at 39″ with picture-frame panels below.',batten:'Board and batten to 43″ with a picture ledge on top.',beadboard:'Grooved beadboard to 42″ under a chair rail.'})[state.styles.lower]));
+    head.append(el('div',{class:'eyebrow'},'Upper wall'));
+    head.append(seg('Upper wall',Object.entries(STYLES.upper),state.styles.upper,k=>setStyle('upper',k)));
+    head.append(el('p',{class:'note'},STYLE_NOTE.upper[state.styles.upper]+(state.styles.upper!=='none'&&s.paper?' Over wallpaper it takes the trim color.':'')));
   }
-  if(it.style){head.append(el('div',{class:'eyebrow'},'Style')); head.append(seg('Style',Object.entries(STYLES[it.style]),state.styles[it.style],k=>setStyle(it.style,k)));}
+  const keys=styleKeys(it);
+  keys.forEach(key=>{const nm=keys.length>1||STYLE_NAME[key]?(STYLE_NAME[key]||'Style'):'Style';
+    head.append(el('div',{class:'eyebrow'},nm)); head.append(seg(nm,Object.entries(STYLES[key]),state.styles[key],k=>setStyle(key,k)));
+    if(STYLE_NOTE[key]) head.append(el('p',{class:'note'},STYLE_NOTE[key][state.styles[key]]));});
   if(it.kind==='paint'&&!(ui.selected==='walls'&&s.paper)){head.append(el('div',{class:'eyebrow'},'Sheen')); head.append(seg('Sheen',Object.entries(SHEENS).map(([k,[n]])=>[k,n]),s.sheen||'eggshell',k=>setVal({sheen:k})));}
   const def=ui.selected==='walls'?BYID.walls.def:it.def;
-  head.append(el('button',{class:'linkish',onclick:()=>{ if(it.style) state.styles[it.style]=FILMED.styles[it.style]; setVal(clone(def),{rebuildCur:!!it.style}); }},'Revert to original'));
+  head.append(el('button',{class:'linkish',onclick:()=>{ keys.forEach(k=>state.styles[k]=FILMED.styles[k]); if(ui.selected==='walls') state.styles.upper=FILMED.styles.upper; setVal(clone(def),{rebuildCur:keys.length>0||ui.selected==='walls'}); }},'Revert to original'));
   body.append(head);
 
   const sw=el('div',{class:'sec'});
@@ -758,7 +869,7 @@ function estimate(){
   add('p|'+state.items.door.hex+state.items.door.name,label('door'),state.items.door.hex,b.areas.door*1.15,'Door, inside face');
   add('p|'+tr.hex+tr.name,label('trim'),tr.hex,trimLF*.45,'Trim & crown');
   if(lw!=='none'){const ws=state.items.wainscot; add('p|'+ws.hex+ws.name,label('wainscot',ws),ws.hex,(lf.rail+lf.molding+lf.battens)*.4,'Rail & moldings');}
-  if(state.styles.sink==='vanity'){const c=state.items.cabinet; add('p|'+c.hex+c.name,label('cabinet'),c.hex,32,'Vanity cabinet');}
+  if(hasCabinet(state)){const c=state.items.cabinet; add('p|'+c.hex+c.name,label('cabinet'),c.hex,32,'Vanity cabinet');}
   return {rows:[...rows.values()],lf};
 }
 function renderRoom(){
@@ -783,7 +894,7 @@ function renderRoom(){
   rows.forEach(r=>{const buy=r.kind==='paper'?[Math.max(1,Math.ceil(r.sqft/ROLL))+' double roll'+(Math.ceil(r.sqft/ROLL)>1?'s':'')]:buyPaint(r.sqft);
     tb.append(el('tr',{},el('td',{},el('span',{class:'dot',style:'background:'+r.css}),r.label,el('small',{},[...r.what].join(', '))),el('td',{},Math.round(r.sqft)+' sq ft'),el('td',{},buy[0])))});
   tbl.append(tb); E.append(el('div',{class:'estwrap'},tbl));
-  const trimBits=[`baseboard ${Math.round(lf.baseboard)} ft`,`crown ${Math.round(lf.crown)} ft`,`door casing ${Math.round(lf.casing)} ft`]; if(lf.rail) trimBits.push(`chair rail ${Math.round(lf.rail)} ft`); if(lf.molding) trimBits.push(`panel molding ${Math.round(lf.molding)} ft`); if(lf.battens) trimBits.push(`battens ${Math.round(lf.battens)} ft`);
+  const trimBits=[`baseboard ${Math.round(lf.baseboard)} ft`,...(lf.crown?[`crown ${Math.round(lf.crown)} ft`]:[]),`door casing ${Math.round(lf.casing)} ft`]; if(lf.upper) trimBits.push(`upper-wall molding ${Math.round(lf.upper)} ft`); if(lf.rail) trimBits.push(`chair rail ${Math.round(lf.rail)} ft`); if(lf.molding) trimBits.push(`panel molding ${Math.round(lf.molding)} ft`); if(lf.battens) trimBits.push(`battens ${Math.round(lf.battens)} ft`);
   E.append(el('p',{class:'note'},`Trim and molding: ${trimBits.join(' · ')}. Add about 10% for cuts.`));
   E.append(el('p',{class:'note'},`Assumes two coats at ${COVER} sq ft per gallon, and ${ROLL} usable sq ft per double roll of wallpaper after pattern matching. The door counts as a wall opening.`));
   const toast=el('div',{class:'toast',id:'toast'});
@@ -796,10 +907,11 @@ function copyList(rows,lf){
   for(const r of rows){const buy=r.kind==='paper'?Math.max(1,Math.ceil(r.sqft/ROLL))+' double rolls':buyPaint(r.sqft)[0]; lines.push(`- ${r.label}: ${buy} (${Math.round(r.sqft)} sq ft) — ${[...r.what].join(', ')}`)}
   lines.push('','SHEENS'); for(const w in WALLS){const s=state.walls[w]; if(!s.paper) lines.push(`- ${WALLS[w]}: ${SHEENS[s.sheen||'eggshell'][0]}`)}
   for(const id of ['trim','ceiling','door']) lines.push(`- ${BYID[id].name}: ${SHEENS[state.items[id].sheen||'eggshell'][0]}`);
-  lines.push('','FIXTURES',`- Sink: ${STYLES.sink[state.styles.sink]}, ${state.items.sink.name}`,`- Toilet: ${state.items.toilet.name}`,`- Mirror: ${STYLES.mirror[state.styles.mirror]}, ${label('mirror',state.items.mirror)}`,`- Vanity light: ${STYLES.light[state.styles.light]}, ${label('light',state.items.light)}`);
-  for(const id of ['faucet','towelring','tp','knob','plates']) lines.push(`- ${BYID[id].name}: ${label(id,state.items[id])}`);
+  const st_=state.styles;
+  lines.push('','FIXTURES',`- Sink: ${STYLES.sink[st_.sink]}, ${state.items.sink.name}`,`- Toilet: ${STYLES.toilet[st_.toilet]}, ${state.items.toilet.name}`,`- Mirror: ${STYLES.mirror[st_.mirror]}, ${label('mirror',state.items.mirror)}`,`- Vanity light: ${STYLES.light[st_.light]}, ${label('light',state.items.light)}`);
+  lines.push(`- Faucet: ${STYLES.faucet[st_.faucet]}, ${label('faucet',state.items.faucet)}`,`- Towel holder: ${STYLES.towel[st_.towel]}, ${label('towelring',state.items.towelring)}`,`- Paper holder: ${STYLES.tp[st_.tp]}, ${label('tp',state.items.tp)}`,`- Door hardware: ${STYLES.knob[st_.knob]}, ${label('knob',state.items.knob)}`,`- Switch & outlet: ${label('plates',state.items.plates)}`);
   lines.push(`- Floor tile: ${state.items.floor.name}`);
-  lines.push('','TRIM',`- Baseboard ${Math.round(lf.baseboard)} ft, crown ${Math.round(lf.crown)} ft, casing ${Math.round(lf.casing)} ft`+(lf.rail?`, chair rail ${Math.round(lf.rail)} ft`:'')+(lf.molding?`, panel molding ${Math.round(lf.molding)} ft`:''));
+  lines.push('','TRIM & MOLDING',`- Crown: ${STYLES.crown[st_.crown]}`+(lf.crown?` (${Math.round(lf.crown)} ft)`:''),`- Baseboard: ${STYLES.base[st_.base]} (${Math.round(lf.baseboard)} ft)`,`- Door casing: ${STYLES.casing[st_.casing]} (${Math.round(lf.casing)} ft)`,`- Lower wall: ${LOWER[st_.lower][0]}`+(lf.rail?`, chair rail ${Math.round(lf.rail)} ft`:'')+(lf.molding?`, panel molding ${Math.round(lf.molding)} ft`:'')+(lf.battens?`, battens ${Math.round(lf.battens)} ft`:''),`- Upper wall: ${STYLES.upper[st_.upper]}`+(lf.upper?` (${Math.round(lf.upper)} ft)`:''),`- Ceiling: ${STYLES.ceiling[st_.ceiling]}`);
   const text=lines.join('\n'), t=document.getElementById('toast');
   const fallback=()=>{const ta=el('textarea',{class:'copybox',readonly:'','aria-label':'Shopping list'}); ta.value=text; t.replaceWith(ta); ta.select()};
   try{navigator.clipboard.writeText(text).then(()=>{t.textContent='Shopping list copied.'},fallback)}catch(e){fallback()}
