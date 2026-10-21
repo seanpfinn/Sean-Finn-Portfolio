@@ -3565,3 +3565,63 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
 @media (max-width: 50.5625rem) {
   .about-footer { display: none; }
 }
+
+/* ================================
+   EDGES — phones
+   Safari on iPhone tints its floating status and address bars from what's
+   pinned at the very top and bottom of the page. A thin solid strip in the
+   page's background color sits at each edge (mostly off-screen, 5px showing)
+   so the bars take on the page color instead of whatever is scrolling past,
+   and a 48px fade from that color carries the page into them, so content
+   dissolves under the bars rather than being cut off. Light and dark follow
+   --bg.
+   ================================ */
+.edge-top,
+.edge-bottom { display: none; }
+
+@media (max-width: 50.5625rem) {
+  :root {
+    --edge-top-background: var(--bg);
+    --edge-bottom-background: var(--bg);
+  }
+  .edge-top,
+  .edge-bottom { display: block; }
+
+  .edge-top::after,
+  .edge-bottom::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 12px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .edge-top::after {
+    top: -7px;
+    background: var(--edge-top-background);
+  }
+  .edge-bottom::after {
+    bottom: -7px;
+    background: var(--edge-bottom-background);
+  }
+
+  .edge-top::before,
+  .edge-bottom::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 48px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .edge-top::before {
+    top: 5px;
+    background: linear-gradient(to bottom, var(--edge-top-background), transparent);
+  }
+  .edge-bottom::before {
+    bottom: 5px;
+    background: linear-gradient(to top, var(--edge-bottom-background), transparent);
+  }
+}
