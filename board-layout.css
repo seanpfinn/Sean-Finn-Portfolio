@@ -1,0 +1,196 @@
+/* ================================
+   CASE STUDY — THE BOARD (desktop)
+   board-layout.js lays the case study out as a pannable board: a header
+   card, then each chapter as a note pinned beside its frames. These styles
+   only apply once it has (html.bd-on); phones keep the scrolling layout.
+   ================================ */
+html.bd-on,
+html.bd-on body { overflow: hidden; height: 100%; overscroll-behavior: none; }
+.bd-on .proj-col { display: none !important; }
+
+.bd-stage {
+  --board: #f4f4f5;
+  --dot: rgba(0, 0, 0, 0.09);
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background-color: var(--board);
+  /* The board's dot grid; board-layout.js scales and shifts it with the view. */
+  background-image: radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+}
+.dark .bd-stage { --board: #0e0e10; --dot: rgba(255, 255, 255, 0.07); }
+.bd-stage.is-dragging { cursor: grabbing; }
+
+.bd-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.bd-item { position: absolute; }
+
+/* The header card. */
+.bd-head {
+  width: 460px;
+  box-sizing: border-box;
+  padding: 2rem 2rem 2.25rem;
+  border-radius: 1.75rem;
+  background: var(--bg);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.05), 0 1.25rem 3rem -1.5rem rgba(0, 0, 0, 0.18);
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: auto;
+}
+.bd-head .proj-title-new { font-size: 2.75rem; line-height: 1; letter-spacing: -0.06rem; }
+
+/* A chapter's note. */
+.bd-note {
+  width: 340px;
+  box-sizing: border-box;
+  padding: 1.375rem 1.5rem 1.5rem;
+  border-radius: 1.25rem;
+  background: var(--bg);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.05), 0 0.75rem 2rem -1rem rgba(0, 0, 0, 0.16);
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: auto;
+}
+.dark .bd-head,
+.dark .bd-note { box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.08), 0 1rem 2.5rem -1rem rgba(0, 0, 0, 0.6); background: #17171a; }
+.bd-num {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: #FF401A;
+}
+.bd-note .proj-caption { margin: 0; padding: 0; max-width: none; }
+.bd-note .proj-caption-label { margin: 0 0 0.5rem; }
+.bd-note .proj-caption-body { margin: 0; }
+
+/* A frame: the panel at its native size, with its caption underneath. */
+.bd-frame { width: 780px; cursor: zoom-in; }
+.bd-frame.is-live { cursor: auto; }
+.bd-frame .proj-panel-group { margin: 0; gap: 0.625rem; }
+.bd-frame .proj-panel-new {
+  border-radius: 1.5rem;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 1.5rem 3.5rem -2rem rgba(0, 0, 0, 0.25);
+}
+.bd-frame .proj-image-caption {
+  margin: 0.5rem 0.25rem 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+/* More case studies, as the last stop. */
+.bd-more {
+  width: 900px;
+  box-sizing: border-box;
+  padding: 1.75rem;
+  border-radius: 1.75rem;
+  background: var(--bg);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.05), 0 1.25rem 3rem -1.5rem rgba(0, 0, 0, 0.18);
+}
+.dark .bd-more { background: #17171a; }
+.bd-more .proj-more { margin: 0; padding: 0; border: 0; }
+
+/* Things settle in on arrival; the window being landed on is already there. */
+.bd-enter { animation: bdIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes bdIn { from { opacity: 0; transform: translateY(14px); } }
+
+/* The project's name, centered in the top bar. */
+.bd-title {
+  position: fixed;
+  top: var(--safe-top, 0px);
+  left: 10rem;
+  right: 10rem;
+  z-index: 210;
+  min-height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  color: var(--text);
+  pointer-events: none;
+}
+
+/* Chapter pill: previous, where you are (click for the whole board), next. */
+.bd-pill {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1.25rem + var(--safe-bottom, 0px));
+  z-index: 210;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.3125rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(1.25rem) saturate(180%);
+          backdrop-filter: blur(1.25rem) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 0.5px rgba(0, 0, 0, 0.06), 0 0.75rem 2rem -0.75rem rgba(0, 0, 0, 0.25);
+}
+.dark .bd-pill { background: rgba(28, 28, 32, 0.66); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 0.5px rgba(255, 255, 255, 0.08), 0 0.75rem 2rem -0.75rem rgba(0, 0, 0, 0.6); }
+.bd-pill button {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 999px;
+  height: 2.25rem;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.bd-pill button:hover { background: rgba(0, 0, 0, 0.05); }
+.dark .bd-pill button:hover { background: rgba(255, 255, 255, 0.08); }
+.bd-step { width: 2.25rem; display: grid; place-items: center; }
+.bd-step svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.bd-step:disabled { opacity: 0.25; cursor: default; background: none !important; }
+.bd-where {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  gap: 0.5rem;
+  min-width: 11rem;
+  justify-content: center;
+  padding: 0 0.875rem;
+  font-family: var(--font);
+  font-size: 0.875rem;
+}
+.bd-where-num { font-family: var(--mono); font-size: 0.6875rem; color: #FF401A; }
+.bd-where-num:empty { display: none; }
+
+/* The map: every card and frame as a block, the view as an outline. */
+.bd-map {
+  --map-ink: rgba(0, 0, 0, 0.16);
+  --map-view: #FF401A;
+  position: fixed;
+  right: 1.25rem;
+  bottom: calc(3.25rem + var(--safe-bottom, 0px));
+  z-index: 210;
+  width: 184px;
+  height: 76px;
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(1rem);
+          backdrop-filter: blur(1rem);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.06), 0 0.5rem 1.5rem -0.75rem rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+.dark .bd-map { --map-ink: rgba(255, 255, 255, 0.2); background: rgba(28, 28, 32, 0.66); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bd-enter { animation: none; }
+}

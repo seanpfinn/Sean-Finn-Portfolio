@@ -12,6 +12,7 @@
 // waits for before it is revealed.
 (function () {
   var col = document.querySelector('body.proj-page .proj-col');
+  if (window.BOARD_ACTIVE) return;          // board-layout.js has the page
   if (!col || !col.querySelector('.proj-panel-new')) return;
 
   var PANEL_W = 780;   // the panels' native size (48.75rem × 29.6875rem);
