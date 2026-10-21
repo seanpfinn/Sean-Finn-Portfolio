@@ -3609,3 +3609,32 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
     background: linear-gradient(to top, var(--edge-bottom-background), transparent);
   }
 }
+
+/* Burned tile: the disc (with its cover art) turns; the sheen on it stays still. */
+.cd-live-disc,
+.cd-live-sheen {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 73.9%;
+  aspect-ratio: 1;
+  width: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cd-live-disc[hidden], .cd-live-sheen[hidden] { display: none; }
+.cd-live-disc { animation: cdLiveSpin 5s linear infinite; }
+.cd-live-sheen {
+  border-radius: 50%;
+  background: conic-gradient(from 210deg, transparent 0deg, rgba(255,150,210,.32) 30deg, rgba(140,215,255,.32) 55deg, rgba(255,235,150,.28) 80deg, transparent 115deg, transparent 180deg, rgba(160,255,210,.26) 225deg, rgba(190,160,255,.3) 250deg, transparent 290deg);
+  mix-blend-mode: soft-light;
+  -webkit-mask: radial-gradient(circle closest-side, transparent 39%, #000 41%, #000 96%, transparent 97.5%);
+          mask: radial-gradient(circle closest-side, transparent 39%, #000 41%, #000 96%, transparent 97.5%);
+}
+@keyframes cdLiveSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-live-disc { animation: none; }
+}

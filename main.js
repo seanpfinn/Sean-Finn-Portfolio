@@ -640,7 +640,7 @@
       // { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
       // { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
-      { href: 'burned.html',              title: 'Burned',      clear: false, video: 'assets/tiles/burned.mp4', bg: '#e5e5e5' },
+      { href: 'burned.html',              title: 'Burned',      clear: false, img: 'assets/tiles/burned.webp', cdTile: 'NMRhx71bGo4', bg: '#e5e5e5' },
       { href: 'room-editor.html',            title: 'Room Editor',    clear: false, video: 'assets/tiles/room-editor.mp4',  bg: '#e8e3dc' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
@@ -657,7 +657,7 @@
 
     const media = (p) => p.video
       ? `<video class="gv-video" src="${p.video}" muted loop playsinline preload="metadata" data-play-in-view></video>`
-      : `<img class="gv-video" src="${p.img}"${p.cdTile ? ` data-cd-tile="${p.cdTile}"` : ''} alt="" />`;
+      : `<img class="gv-video" src="${p.img}"${p.cdTile ? ` data-cd-tile="${p.cdTile}"` : ''} alt="" />${p.cdTile ? '<img class="cd-live-disc" alt="" hidden /><span class="cd-live-sheen" aria-hidden="true" hidden></span>' : ''}`;
     const tag = (p) => p.clear
       ? `<img class="gallery-card-logo gcl-clear" src="assets/logo-clear.svg" alt="CLEAR" />`
       : `<span class="gallery-card-company">Personal</span>`;
@@ -1320,10 +1320,13 @@
 
 })();
 
-// ── Burned tile: pressed live from YouTube ──────────────────────────────
+// ── Burned tile: pressed live from YouTube, and spinning ────────────────
 // Any <img data-cd-tile="VIDEO_ID"> (the home tile, the "more case studies"
-// card) starts as a blank printable disc and gets that video's cover art
-// printed onto it in a canvas: YouTube thumbnail in, finished tile out.
+// card) starts as a blank printable disc. Once that video's cover art loads
+// from YouTube, two layers are pressed in a canvas: the still backdrop (the
+// art's bloom and the disc's shadow) and the disc itself with the art printed
+// on it, which spins in the sibling .cd-live-disc. The .cd-live-sheen on top
+// stays still, the way light sits on a real CD while it turns.
 (function () {
   if (!document.querySelector('img[data-cd-tile]')) return;
   const first = document.querySelector('img[data-cd-tile]');
@@ -1337,17 +1340,18 @@
   });
   const art = load(`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`, true)
     .then((im) => im.naturalWidth > 120 ? im : load(`https://i.ytimg.com/vi/${id}/mqdefault.jpg`, true));
+  const blob = (c, type, q) => new Promise((res) => c.toBlob((b) => res(b ? URL.createObjectURL(b) : null), type, q));
   Promise.all([load('assets/tiles/burned-disc.webp'), art]).then(([disc, cover]) => {
     const W = disc.naturalWidth, H = disc.naturalHeight;
-    const c = document.createElement('canvas');
-    c.width = W; c.height = H;
-    const g = c.getContext('2d');
     const cx = W / 2, cy = H / 2, R = H * (300 / 812);   // disc radius in the base image
     const s = Math.min(cover.naturalWidth, cover.naturalHeight);
     const sx = (cover.naturalWidth - s) / 2, sy = (cover.naturalHeight - s) / 2;
+    // The still backdrop: a soft bloom of the art, then the disc for its shadow.
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
     g.fillStyle = '#e5e5e5';
     g.fillRect(0, 0, W, H);
-    // Soft bloom of the art behind the disc: draw it tiny, then scale it up.
     const t = document.createElement('canvas');
     t.width = t.height = 12;
     t.getContext('2d').drawImage(cover, sx, sy, s, s, 0, 0, 12, 12);
@@ -1361,27 +1365,46 @@
     fade.addColorStop(1, 'rgba(229,229,229,1)');
     g.fillStyle = fade;
     g.fillRect(0, 0, W, H);
-    // The blank disc, then the art printed on its face (38–97% of the radius).
     g.drawImage(disc, 0, 0);
-    g.save();
-    g.beginPath();
-    g.arc(cx, cy, R * 0.968, 0, Math.PI * 2);
-    g.arc(cx, cy, R * 0.382, 0, Math.PI * 2, true);
-    g.clip();
-    g.globalCompositeOperation = 'multiply';
-    g.drawImage(cover, sx, sy, s, s, cx - R, cy - R, R * 2, R * 2);
-    g.restore();
-    c.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const apply = (root) => root.querySelectorAll(`img[data-cd-tile="${id}"]`).forEach((im) => { im.src = url; });
-      apply(document);
-      // Tiles the home canvas clones later pick it up too.
-      new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach((n) => {
-        if (n.nodeType !== 1) return;
-        if (n.matches && n.matches(`img[data-cd-tile="${id}"]`)) n.src = url;
-        else if (n.querySelectorAll) apply(n);
-      }))).observe(document.body, { childList: true, subtree: true });
-    }, 'image/jpeg', 0.9);
+    // The disc that turns: the blank disc cut to its edge, art printed on its
+    // face (38–97% of the radius).
+    const S = Math.ceil(R * 2) + 2, o = S / 2;
+    const d = document.createElement('canvas');
+    d.width = d.height = S;
+    const dg = d.getContext('2d');
+    dg.beginPath();
+    dg.arc(o, o, R + 0.5, 0, Math.PI * 2);
+    dg.clip();
+    dg.drawImage(disc, cx - o, cy - o, S, S, 0, 0, S, S);
+    dg.beginPath();
+    dg.arc(o, o, R * 0.968, 0, Math.PI * 2);
+    dg.arc(o, o, R * 0.382, 0, Math.PI * 2, true);
+    dg.clip();
+    dg.globalCompositeOperation = 'multiply';
+    dg.drawImage(cover, sx, sy, s, s, o - R, o - R, R * 2, R * 2);
+    return Promise.all([blob(c, 'image/jpeg', 0.9), blob(d, 'image/png')]);
+  }).then(([bgUrl, discUrl]) => {
+    if (!bgUrl || !discUrl) return;
+    const press = (im) => {
+      const vis = im.parentElement;
+      const spin = vis && vis.querySelector('.cd-live-disc');
+      const sheen = vis && vis.querySelector('.cd-live-sheen');
+      if (!spin) { im.src = bgUrl; return; }
+      spin.onload = () => {
+        im.src = bgUrl;
+        spin.hidden = false;
+        if (sheen) sheen.hidden = false;
+        vis.classList.add('cd-live');
+      };
+      spin.src = discUrl;
+    };
+    const apply = (root) => root.querySelectorAll(`img[data-cd-tile="${id}"]`).forEach(press);
+    apply(document);
+    // Tiles the home canvas clones later pick it up too.
+    new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach((n) => {
+      if (n.nodeType !== 1) return;
+      if (n.matches && n.matches(`img[data-cd-tile="${id}"]`)) press(n);
+      else if (n.querySelectorAll) apply(n);
+    }))).observe(document.body, { childList: true, subtree: true });
   }).catch(() => {});   // the blank disc stays as the fallback
 })();
