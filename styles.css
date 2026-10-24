@@ -2193,7 +2193,7 @@ body {
 /* Visual panel */
 .gallery-card-visual {
   aspect-ratio: 16 / 9;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
@@ -2208,7 +2208,7 @@ body {
    eases into the straight edge instead of meeting it at a seam. A squircle
    reads tighter than a circle of the same radius, hence the larger value. */
 @supports (corner-shape: squircle) {
-  .gallery-card-visual { corner-shape: squircle; border-radius: 2.25rem; }
+  .gallery-card-visual { corner-shape: squircle; border-radius: 1.5rem; }
 }
 .dark .gallery-card-visual {
   box-shadow:
@@ -3123,7 +3123,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   }
   .is-canvas .splash-footer .social-links,
   .is-canvas .splash-footer .sidebar-meta { pointer-events: auto; }
-  .canvas-tile .gallery-card-visual { border-radius: 1.125rem; }
+  .canvas-tile .gallery-card-visual { border-radius: 0.75rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .canvas-tile.is-entering > * { animation: none; }
@@ -3409,7 +3409,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 }
 @supports (corner-shape: squircle) {
   @media (max-width: 50.5625rem) {
-    .canvas-tile .gallery-card-visual { border-radius: 1.75rem; }
+    .canvas-tile .gallery-card-visual { border-radius: 1.125rem; }
   }
 }
 

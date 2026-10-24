@@ -134,8 +134,8 @@ window.cursorTag = window.cursorTag || (function () {
     // Big windows: about a third of a wide screen, most of a phone's width.
     tw = Math.round(W < 810 ? W * 0.66 : Math.max(300, Math.min(520, W * 0.3)));
     th = tw * 9 / 16;
-    cw = tw * 1.28;                    // air between columns
-    ch = th + tw * 0.26;               // visual and gap; no captions on the canvas
+    cw = tw * 1.16;                    // air between columns
+    ch = th + tw * 0.16;               // visual and gap; no captions on the canvas
     field.style.setProperty('--tile-w', tw + 'px');
     if (fx || fy) { pan.x = CX - fx * cw; pan.y = CY - fy * ch; }
   }
