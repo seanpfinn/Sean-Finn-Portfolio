@@ -3050,10 +3050,15 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.2); }
 @media (max-width: 50.5625rem) {
   .canvas-stage { --frost-tint: rgba(255, 255, 255, 0.26); }   /* more text sits on it here */
-  .canvas-frost:nth-child(1) { --reach: 7rem; --side: 7%; }
-  .canvas-frost:nth-child(2) { --reach: 4rem; --side: 4%; }
-  .canvas-frost:nth-child(3) { --reach: 2rem; --side: 1.5%; }
+  /* Phones: the frost hugs the bars. A long reach dragged the blur well into
+     the tiles above the footer and smeared dark ones downward. */
+  .canvas-frost:nth-child(1) { --reach: 2.75rem; --side: 5%; --blur: blur(4px); }
+  .canvas-frost:nth-child(2) { --reach: 1.75rem; --side: 3%; --blur: blur(10px) saturate(1.15); }
+  .canvas-frost:nth-child(3) { --reach: 1rem;    --side: 1%; --blur: blur(20px) saturate(1.3); }
 }
+/* The intro line is pinned into the top bar from inside the hero, so the
+   hero has to sit above the phone edge fades or the line fades with them. */
+.nav-icon.is-canvas .splash-hero { z-index: 211; pointer-events: none; }
 
 .canvas-field { position: absolute; inset: 0; }
 
