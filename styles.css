@@ -216,6 +216,9 @@ body[data-miniplayer] { --page-bottom: 10rem; }
 
 .blur-in {
   animation: blurIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Backwards only: once it lands, nothing is left holding a filter or a
+     transform, which kept text rasterized (soft in Safari) for good. */
+  animation-fill-mode: backwards;
 }
 
 .card-deal {
@@ -3039,22 +3042,30 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   -webkit-mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
           mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
 }
-.canvas-frost:nth-child(1) { --hold: 0px; --reach: 12rem; --side: 10%; --blur: blur(6px); }
-.canvas-frost:nth-child(2) { --hold: 0px; --reach: 7rem;  --side: 6%;  --blur: blur(16px) saturate(1.2); }
-.canvas-frost:nth-child(3) { --hold: 0px; --reach: 3.5rem; --side: 3%; --blur: blur(32px) saturate(1.4); --tint: var(--frost-tint); }
+.canvas-frost:nth-child(1) { --hold: 0px; --reach: 12rem; --side: 10%; --blur: blur(8px) saturate(1.1); }
+.canvas-frost:nth-child(2) { --hold: 0px; --reach: 7rem;  --side: 6%;  --blur: blur(18px) saturate(1.2) brightness(1.03); --tint: var(--frost-tint-soft); }
+.canvas-frost:nth-child(3) { --hold: 0px; --reach: 3.5rem; --side: 3%; --blur: blur(34px) saturate(1.3) brightness(1.06); --tint: var(--frost-tint); }
+/* Chromium can bend what's behind the glass (an SVG displacement in the
+   backdrop filter, set up in home-canvas.js); Safari keeps the frost. */
+.glass-refract .canvas-frost:nth-child(1) { --blur: url(#frost-refract) blur(6px) saturate(1.1); }
+.glass-refract .canvas-frost:nth-child(2) { --blur: url(#frost-refract) blur(16px) saturate(1.2) brightness(1.03); }
 .canvas-stage {
   --clear-top: 12%;
   --clear-bottom: 8%;
-  --frost-tint: rgba(255, 255, 255, 0.18);
+  --frost-tint: rgba(250, 250, 250, 0.52);
+  --frost-tint-soft: rgba(250, 250, 250, 0.12);
 }
-.dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.2); }
+.dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.52); --frost-tint-soft: rgba(9, 9, 11, 0.14); }
 @media (max-width: 50.5625rem) {
-  .canvas-stage { --frost-tint: rgba(255, 255, 255, 0.26); }   /* more text sits on it here */
+  .canvas-stage { --frost-tint: rgba(250, 250, 250, 0.55); --frost-tint-soft: rgba(250, 250, 250, 0.18); }   /* more text sits on it here */
+  .dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.55); --frost-tint-soft: rgba(9, 9, 11, 0.18); }
   /* Phones: the frost hugs the bars. A long reach dragged the blur well into
      the tiles above the footer and smeared dark ones downward. */
-  .canvas-frost:nth-child(1) { --reach: 2.75rem; --side: 5%; --blur: blur(4px); }
-  .canvas-frost:nth-child(2) { --reach: 1.75rem; --side: 3%; --blur: blur(10px) saturate(1.15); }
-  .canvas-frost:nth-child(3) { --reach: 1rem;    --side: 1%; --blur: blur(20px) saturate(1.3); }
+  .canvas-frost:nth-child(1) { --reach: 2.75rem; --side: 5%; --blur: blur(5px) saturate(1.1); }
+  .canvas-frost:nth-child(2) { --reach: 1.75rem; --side: 3%; --blur: blur(12px) saturate(1.2) brightness(1.03); }
+  .canvas-frost:nth-child(3) { --reach: 1rem;    --side: 1%; --blur: blur(22px) saturate(1.3) brightness(1.06); }
+  .glass-refract .canvas-frost:nth-child(1) { --blur: url(#frost-refract) blur(4px) saturate(1.1); }
+  .glass-refract .canvas-frost:nth-child(2) { --blur: url(#frost-refract) blur(10px) saturate(1.2) brightness(1.03); }
 }
 /* The intro line is pinned into the top bar from inside the hero, so the
    hero has to sit above the phone edge fades or the line fades with them. */
@@ -3130,6 +3141,8 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   .is-canvas .splash-footer .sidebar-meta { pointer-events: auto; }
   .canvas-tile .gallery-card-visual { border-radius: 0.75rem; }
 }
+/* The bars sit above the phone edge fades, so their text isn't washed out. */
+.is-canvas .splash-footer { z-index: 211; }
 @media (prefers-reduced-motion: reduce) {
   .canvas-tile.is-entering > * { animation: none; }
 }

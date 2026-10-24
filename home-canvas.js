@@ -158,6 +158,22 @@ window.cursorTag = window.cursorTag || (function () {
     });
   }
   stage.appendChild(frost);
+  // Refraction for browsers that take an SVG filter in backdrop-filter
+  // (Chromium). A slow, low-frequency displacement bends the tiles seen
+  // through the frame like poured glass. Safari and Firefox keep the frost.
+  if (/Chrome\//.test(navigator.userAgent) && !/Firefox\//.test(navigator.userAgent)) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('width', '0'); svg.setAttribute('height', '0');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.position = 'absolute';
+    svg.innerHTML = '<filter id="frost-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="7" result="n"/>' +
+      '<feGaussianBlur in="n" stdDeviation="6" result="s"/>' +
+      '<feDisplacementMap in="SourceGraphic" in2="s" scale="46" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    document.body.appendChild(svg);
+    document.documentElement.classList.add('glass-refract');
+  }
 
   var live = new Map();                 // "j,i" -> tile on the field
   var spare = cards.map(function () { return []; });   // off-field, per project
