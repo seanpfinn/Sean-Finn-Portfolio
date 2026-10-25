@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Burned – Sean Finn</title>
-  <meta name="description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <meta name="description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays. On the web, iPhone and iPhone Duo." />
   <link rel="canonical" href="https://www.seanpfinn.com/burned" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
   <meta property="og:title" content="Burned – Sean Finn" />
-  <meta property="og:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <meta property="og:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays. On the web, iPhone and iPhone Duo." />
   <meta property="og:url" content="https://www.seanpfinn.com/burned" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og/burned.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -22,7 +22,7 @@
   <meta property="og:video:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Burned – Sean Finn" />
-  <meta name="twitter:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays." />
+  <meta name="twitter:description" content="Music Box, burned to disc: each track's cover art printed on a CD that spins while it plays. On the web, iPhone and iPhone Duo." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/burned.jpg" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
@@ -38,6 +38,11 @@
   <style>
     html { overflow-y: scroll !important; height: auto !important; }
     body { overflow: visible !important; height: auto !important; }
+    .proj-btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-self: flex-start; }
+    .proj-dl-btn.proj-dl-btn--ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--border, rgba(0,0,0,.14)); }
+    .dark .proj-dl-btn.proj-dl-btn--ghost { box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+    .proj-panel-new.proj-panel--shot { background: #ebe9e6; }
+    .proj-panel--shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PC6GDRNEB8"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PC6GDRNEB8');</script>
@@ -186,14 +191,17 @@
     <div class="proj-header-group">
       <div class="proj-title-block">
         <h1 class="proj-title-new">Burned</h1>
-        <p class="proj-subtitle-new">Music Box, burned to disc. Each track's cover art is printed on a CD that spins while it plays.</p>
+        <p class="proj-subtitle-new">Music Box, burned to disc. Each track's cover art is printed on a CD that spins while it plays, on the web and now as an app for iPhone and iPhone Duo.</p>
       </div>
       <div class="proj-meta-row-new">
         <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
         <div class="proj-meta-item"><span class="proj-meta-label">Year</span><span class="proj-meta-value">October 2026</span></div>
-        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web</span></div>
+        <div class="proj-meta-item"><span class="proj-meta-label">Platform</span><span class="proj-meta-value">Web, iPhone</span></div>
       </div>
-      <a href="burned-player.html" class="proj-dl-btn">Open the player</a>
+      <div class="proj-btn-row">
+        <a href="https://www.burned-cd.com" class="proj-dl-btn" target="_blank" rel="noopener">Burned for iPhone</a>
+        <a href="burned-player.html" class="proj-dl-btn proj-dl-btn--ghost">Open the web player</a>
+      </div>
     </div>
 
     <div class="proj-caption">
@@ -294,13 +302,80 @@
     </div>
 
     <div class="proj-caption">
+      <h2 class="proj-caption-label">iPhone</h2>
+      <p class="proj-caption-body">Burned is now an app. The disc fills the screen and works the way a disc should: tap it to play or pause, turn it with your finger to scrub, and flick it off the side to skip, left for forward and right for back. Flip it over for the jewel case and pick any song. The phone’s motion sensors move the light, so the disc catches it as you tilt.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/iphone-set.webp" alt="Four Burned screens on iPhone: a printed disc, a blank CD-R, the jewel-case track list and the Burn your own sheet" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">The four App Store screens: a printed disc, a blank CD-R, the track list, and burning your own.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Burn your own</h2>
+      <p class="proj-caption-body">Tap the flame, paste any public or unlisted playlist from YouTube or YouTube Music, give it a name and tap Burn. The name is written on the disc in marker, a little crooked. Share the mix and the link opens in the app or on the web, on the same song.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">iPhone Duo</h2>
+      <p class="proj-caption-body">Unfold an iPhone Duo and Burned opens like a jewel case: the booklet and the video on one side, the disc in its tray on the other. The booklet is the J-card, with the mix written out in marker, and tapping a song drops the next disc onto the spindle.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/duo-1.webp" alt="Burned unfolded on iPhone Duo: the booklet on the left, the disc on the right" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Unfolded, it’s a jewel case.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">The hinge</h2>
+      <p class="proj-caption-body">The app reads the hinge. Close it partway and the lid casts its shadow across the disc, and the light on the disc shifts as the hinge moves. Stand it sideways on a table and the disc stands up on top, with the controls below. Folded, the outer screen is a pocket CD player.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/duo-2.webp" alt="Burned half-folded on iPhone Duo, the lid's shadow across the disc" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Half-folded, the lid’s shadow falls across the disc.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/duo-folded.webp" alt="Burned on the folded iPhone Duo's outer screen" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Folded, it’s a CD player.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Launch</h2>
+      <p class="proj-caption-body">The app has its own site at burned-cd.com. Its features are written out as liner notes, a J-card track list with the iPhone Duo features as bonus tracks; pick one and the phone beside it plays that screen. A press kit carries the App Store screenshots, the product page header and the icon. There are no accounts, no ads and no tracking, and a privacy policy and support page say so plainly.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/site-hero.webp" alt="The burned-cd.com landing page: Your playlist, on a spinning CD" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">burned-cd.com.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--shot">
+        <img src="assets/burned-app/site-liner.webp" alt="The liner notes section: a J-card track list next to a phone" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Liner notes: every feature on the J-card, with the iPhone Duo features as bonus tracks.</p>
+    </div>
+
+    <div class="proj-caption">
       <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">Burned is Music Box with a body. The engine is unchanged; the interface is an object you watch. Each song changes the disc's art, and the spin and stillness follow the playback.</p>
+      <p class="proj-caption-body">Burned is Music Box with a body. The engine is unchanged; the interface is an object you watch, and now one you can hold. Each song changes the disc's art, the spin and stillness follow the playback, and on iPhone Duo the whole phone becomes the case.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Next Steps</h2>
-      <p class="proj-caption-body">Live and iterating. The eject-and-load swap between tracks and the jewel-case track list both shipped in this round.</p>
+      <p class="proj-caption-body">The web player is live. Burned for iPhone is coming to the App Store, published by Finrez, with its site, press kit, privacy policy and support page ready for launch.</p>
     </div>
   </main>
   <!-- Desktop: the Board (board-layout.js). Phones fall through to the
