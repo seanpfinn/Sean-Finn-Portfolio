@@ -640,7 +640,7 @@
       // { href: 'clear-passkeys.html',         title: 'Passkeys',       clear: true, video: 'assets/gallery-passkeys.mp4',      bg: '#efefef' },
       // { href: 'clear-live-activity.html',    title: 'Live Activities',clear: true, video: 'assets/gallery-live-activity.mp4', bg: '#e1e1e1' },
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
-      { href: 'burned.html',              title: 'Burned',      clear: false, img: 'assets/tiles/burned.webp', cdTile: 'NMRhx71bGo4', bg: '#e5e5e5' },
+      { href: 'burned.html',              title: 'Burned',      clear: false, video: 'assets/tiles/burned.mp4', bg: '#dfb795' },
       { href: 'room-editor.html',            title: 'Room Editor',    clear: false, video: 'assets/tiles/room-editor.mp4',  bg: '#e8e3dc' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
