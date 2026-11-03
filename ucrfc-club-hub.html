@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>UCRFC Club Hub – Sean Finn</title>
-  <meta name="description" content="A season hub for an amateur rugby club — match week, availability, and paperwork in one dashboard." />
+  <meta name="description" content="A website and season hub for an amateur rugby club: register, pay dues, and answer for Saturday in one place." />
   <meta name="robots" content="noindex" />
   <link rel="canonical" href="https://www.seanpfinn.com/ucrfc-club-hub" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
   <meta property="og:title" content="UCRFC Club Hub – Sean Finn" />
-  <meta property="og:description" content="A season hub for an amateur rugby club — match week, availability, and paperwork in one dashboard." />
+  <meta property="og:description" content="A website and season hub for an amateur rugby club: register, pay dues, and answer for Saturday in one place." />
   <meta property="og:url" content="https://www.seanpfinn.com/ucrfc-club-hub" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og/ucrfc-club-hub.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -23,7 +23,7 @@
   <meta property="og:video:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="UCRFC Club Hub – Sean Finn" />
-  <meta name="twitter:description" content="A season hub for an amateur rugby club — match week, availability, and paperwork in one dashboard." />
+  <meta name="twitter:description" content="A website and season hub for an amateur rugby club: register, pay dues, and answer for Saturday in one place." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/ucrfc-club-hub.jpg" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
@@ -182,7 +182,7 @@
     <div class="proj-header-group">
       <div class="proj-title-block">
         <h1 class="proj-title-new">UCRFC Club Hub</h1>
-        <p class="proj-subtitle-new">A season hub for an amateur rugby club &mdash; match week, availability, and paperwork in one dashboard.</p>
+        <p class="proj-subtitle-new">A website and season hub for an amateur rugby club: register, pay dues, and answer for Saturday in one place.</p>
       </div>
       <div class="proj-meta-row-new">
         <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value"><img class="proj-meta-logo" src="assets/logo-finrez.svg" alt="Finrez" decoding="async" /></span></div>
@@ -192,11 +192,10 @@
     </div>
 
     <!-- ===================================================================
-         DRAFT COPY — written from the Figma design only.
-         Everything below describes what the screens show. It does NOT
-         contain the real project narrative: your actual role, the team,
-         timeline, research, tradeoffs, or outcomes/metrics.
-         Replace before removing the noindex tag in <head>.
+         DRAFT COPY — updated Nov 3, 2026 from the UCRFC-Website and
+         UCRFC-Hub repos (what shipped and what the screens show). Still
+         missing: research, outcomes and metrics. Review before removing
+         the noindex tag in <head>.
          =================================================================== -->
 
     <div class="proj-caption">
@@ -215,32 +214,149 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Role &amp; Approach</h2>
-      <p class="proj-caption-body">A Finrez engagement, and the Club Hub is one piece of it. The same scope covered the club&rsquo;s brand guidelines, its public website, dues collection through Stripe, an SMS channel for match-week notices, and the integration with TeamSnap the club was already living in. Designing the hub after those decisions rather than before them is why it behaves like a front door instead of another destination: the fixture, the availability question and the paperwork are the only things it asks a player to deal with, and everything that already had a home &mdash; rosters, payments, messaging &mdash; stayed where it was and got surfaced.</p>
+      <p class="proj-caption-body">A Finrez engagement covering the club&rsquo;s brand guidelines, its public website, season dues through Stripe, text and email alerts, and the Club Hub. The website is the front door for anyone new: who the club is, when it plays, how to join. The hub is where members live once they have. Each one asks only for what its visitor came to do, and the two hand off at sign-up and dues.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">The website</h2>
+      <p class="proj-caption-body">The latest round rebuilt the home page around match day. The hero opens on a slow push-in over the squad, with drifting fog and scroll parallax, the club&rsquo;s numbers along the bottom and a news ticker under them. League schedule is a single row of match cards that scrolls sideways, with the next card peeking in on a phone.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/web-hero.webp" alt="The Mudturtles home page hero: We are Mudturtles, View calendar, club stats and a news ticker" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">The home page hero: one call to action, the club&rsquo;s numbers and a news ticker.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/web-schedule.webp" alt="League schedule as a row of match cards with scores and crests, above Latest announcements" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">League schedule and announcements.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Type</h2>
+      <p class="proj-caption-body">Headlines moved to Orbitron Black with a same-color stroke that makes the face heavier than the font ships, and body text to Barlow, self-hosted. H2s scaled up, buttons took the same stroke, and every page now ends on the home page footer.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Registration</h2>
+      <p class="proj-caption-body">Joining used to be a link to a payment page. It is now two steps on every page of the site: choose a division and team, say who is playing and how to reach you, then pay season dues. Dues are $500 a season through Stripe, and a small banner holds back until a visitor has scrolled past the first section before it asks.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/web-register.webp" alt="Find your team: a registration form with Division, Team and Registering choices, beside three numbered steps" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Step one of two: division, team, and who is playing.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/web-dues.webp" alt="Your season starts here: $500 per season, with what dues cover: league registration, field access, club insurance and coaching" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">What dues cover, said plainly next to the price.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Alerts</h2>
+      <p class="proj-caption-body">Game-day updates, cancellations and club news go out by text and email. The sign-up asks for a number or an address and a team &mdash; youth, men&rsquo;s, women&rsquo;s or the whole club &mdash; so a parent of a U12 player doesn&rsquo;t get the men&rsquo;s side&rsquo;s weather calls.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/web-alerts.webp" alt="Never miss game day: an alerts sign-up form with team choices" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Alerts, by team.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">The hub</h2>
+      <p class="proj-caption-body">The hub now has real accounts: sign-up with email confirmation, password reset and sessions that persist. One account covers a household, so a parent registers every child from the same login. Anyone who just wants to look can open a demo account.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-signin.webp" alt="The Season Hub sign-in: One club. One hub., with a create-account form and a demo account" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">One account per household.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Process</h2>
-      <p class="proj-caption-body">The dashboard is organized around match week. The fixture leads &mdash; opponent, kickoff, ground, and arrival time &mdash; and the availability question sits directly under it as three buttons: In, Maybe, Out. Social proof (&ldquo;twenty-two others have answered&rdquo;) and a stated selection deadline do the chasing that a coach used to do manually. Around it sit the player&rsquo;s own season &mdash; tries, training percentage, caps &mdash; the last result, the next three fixtures with inline availability, and a paperwork checklist that shows what is on file against what is due.</p>
+      <p class="proj-caption-body">The dashboard is organized around match week. The fixture leads &mdash; opponent, kickoff, ground, and arrival time &mdash; and the availability question sits directly under it as three buttons: In, Maybe, Out. Social proof (&ldquo;twenty-two others have answered&rdquo;) and a stated selection deadline do the chasing that a coach used to do manually. Around it sit the player&rsquo;s own season, the last result, the next three fixtures with inline availability, and a paperwork checklist that shows what is on file against what is due. Outstanding dues sit in a bar across the top with one button to pay.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-dashboard.webp" alt="The player dashboard: match week against the Fairfield Yankees, In / Maybe / Out, season stats and paperwork" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Match week, from the player&rsquo;s side.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Roles</h2>
+      <p class="proj-caption-body">The same hub changes with who signs in. Players see their own season. Coaches get squad status &mdash; who&rsquo;s available, who hasn&rsquo;t answered, training attendance &mdash; and can nudge everyone unanswered at once. Admins see the whole club: registrations by program, compliance, dues collected and outstanding, and a composer that sends an alert by push and SMS.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-coach.webp" alt="Coach view: squad status with availability counts and a grid of players marked In, Maybe or Out" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Coach: squad status before Thursday&rsquo;s selection.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-admin.webp" alt="Admin view: club overview with registered members, compliance, dues collected and a club alert composer" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Admin: the whole club on one screen.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Roster</h2>
+      <p class="proj-caption-body">The roster shows numbers, positions, caps and paperwork status. Player photos are cropped square and shrunk in the browser, kept in private storage behind one-hour links, and only show to teammates if the family ticked the photo release.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-roster.webp" alt="The roster: a grid of numbered player cards with positions, caps and paperwork status" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">The roster, filterable by forwards, backs and paperwork due.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Dues and data</h2>
+      <p class="proj-caption-body">Paying opens Stripe Checkout. The price lives in the database, never in the browser, and a signed webhook from Stripe marks a player paid, or unpaid again after a full refund. Row-level security means a player only ever reads their own registration; coaches and admins read the rest, and no browser can change a role or mark dues paid.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media" style="background:#0b0b12;">
+        <img src="assets/ucrfc/hub-paperwork.webp" alt="The paperwork table: registration, waiver, concussion protocol and dues status for each player" style="width:100%; height:100%; object-fit:cover; object-position:top; display:block;" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Paperwork: what&rsquo;s on file and what&rsquo;s owed.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">User Journey</h2>
-      <p class="proj-caption-body">A player signs in, sees the fixture, taps In, and clears whatever paperwork is outstanding &mdash; registration, medical waiver, concussion protocol, dues &mdash; without leaving the page. Role tabs for player, coach, and admin change what the same hub exposes.</p>
+      <p class="proj-caption-body">A parent finds the club on the website, picks a team and sends their details, then pays dues. On the hub they create one account for the household, finish each child&rsquo;s registration, add a photo, and from then on the week comes down to one tap: In.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Constraints</h2>
-      <p class="proj-caption-body">The club is run by volunteers, which sets the ceiling on everything. Nothing here can require an administrator who is paid to maintain it, so the hub had to replace a coach&rsquo;s spreadsheet without becoming a second system he has to keep current. It also could not ask the club to abandon TeamSnap, which the squad already uses and which holds the roster of record &mdash; so the hub reads alongside it rather than competing with it. Dues run through Stripe for the same reason: money handled by a service the treasurer can audit without the club owning any of it. And a player&rsquo;s side of it has to work on a phone, one-handed, in the two minutes between a notification and putting the phone back in a pocket &mdash; which is the real constraint the availability question is designed against.</p>
+      <p class="proj-caption-body">The club is run by volunteers, which sets the ceiling on everything. Nothing here can need a paid administrator, so the hub connects to its services with one script in about fifteen minutes, runs on free tiers at a club this size, and until it&rsquo;s connected falls back to the demo instead of breaking. Money is handled by Stripe, which a treasurer can audit without the club holding any of it. And a player&rsquo;s side has to work on a phone, one-handed, in the two minutes between a notification and putting the phone away &mdash; the real constraint the availability question is designed against.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">The Club Hub collapses a season&rsquo;s worth of admin into one dashboard, and makes the weekly availability question something a player answers in a single tap.</p>
+      <p class="proj-caption-body">The website turns a visitor into a registered player in two steps, and the hub turns a season&rsquo;s worth of admin into one dashboard where the weekly question is a single tap.</p>
     </div>
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Next Steps</h2>
-      <p class="proj-caption-body">TODO &mdash; what shipped, whether the club is using it, and what is still open.</p>
+      <p class="proj-caption-body">The website&rsquo;s latest round shipped November 1. In the hub, accounts, registrations, dues and photos are built and run on the demo until the club connects Supabase and Stripe. Schedule, availability, messages and standings still show sample data, and are next.</p>
     </div>
   </main>
   <script src="case-layout.js"></script>
