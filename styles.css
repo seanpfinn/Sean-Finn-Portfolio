@@ -2993,6 +2993,9 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .canvas-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .canvas-frost { position: absolute; inset: 0; pointer-events: none; }
 .frost-edge {
+  /* How far each strip runs past where its frost fades out (see .t). Kept
+     short: every extra pixel is blurred again on every frame. */
+  --over: 2.5rem;
   position: absolute;
   pointer-events: none;
   background: var(--tint, transparent);
@@ -3001,20 +3004,20 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 }
 .frost-edge.t {
   top: 0; left: 0; right: 0;
-  /* Each strip runs 4rem past where its frost has faded out, and the mask
+  /* Each strip runs var(--over) past where its frost has faded out, and the mask
      hides that overhang. A backdrop blur only samples inside its own box,
      so a strip that ended where the frost ends would blur less and less
      toward that edge and leave a faint line; with the overhang the blur
      near the visible edge takes in what's beyond it. */
-  height: calc(var(--clear-top) + var(--reach) + 4rem);
-  -webkit-mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
-          mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
+  height: calc(var(--clear-top) + var(--reach) + var(--over));
+  -webkit-mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - var(--over)));
+          mask-image: linear-gradient(to bottom, #000 max(0px, calc(var(--clear-top) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-top) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - var(--over)));
 }
 .frost-edge.b {
   bottom: 0; left: 0; right: 0;
-  height: calc(var(--clear-bottom) + var(--reach) + 4rem);
-  -webkit-mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
-          mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - 4rem));
+  height: calc(var(--clear-bottom) + var(--reach) + var(--over));
+  -webkit-mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - var(--over)));
+          mask-image: linear-gradient(to top, #000 max(0px, calc(var(--clear-bottom) - var(--hold))), rgba(0,0,0,0.7) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.25), rgba(0,0,0,0.38) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.5), rgba(0,0,0,0.12) calc(var(--clear-bottom) - var(--hold) + (var(--reach) + var(--hold)) * 0.75), transparent calc(100% - var(--over)));
 }
 /* The side strips run the full height and fade in below the top band (and
    out above the bottom one) instead of starting abruptly where it ends,
@@ -3023,7 +3026,7 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
 .frost-edge.r {
   top: 0;
   bottom: 0;
-  width: calc(var(--side) + 4rem);
+  width: calc(var(--side) + var(--over));
   --fade: linear-gradient(to bottom,
             transparent max(0px, calc(var(--clear-top) - 1rem)),
             #000 calc(var(--clear-top) + var(--reach)),
@@ -3042,13 +3045,8 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   -webkit-mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
           mask-image: linear-gradient(to left, #000, transparent calc(100% - 4rem)), var(--fade);
 }
-.canvas-frost:nth-child(1) { --hold: 0px; --reach: 12rem; --side: 10%; --blur: blur(8px) saturate(1.1); }
-.canvas-frost:nth-child(2) { --hold: 0px; --reach: 7rem;  --side: 6%;  --blur: blur(18px) saturate(1.2) brightness(1.03); --tint: var(--frost-tint-soft); }
-.canvas-frost:nth-child(3) { --hold: 0px; --reach: 3.5rem; --side: 3%; --blur: blur(34px) saturate(1.3) brightness(1.06); --tint: var(--frost-tint); }
-/* Chromium can bend what's behind the glass (an SVG displacement in the
-   backdrop filter, set up in home-canvas.js); Safari keeps the frost. */
-.glass-refract .canvas-frost:nth-child(1) { --blur: url(#frost-refract) blur(6px) saturate(1.1); }
-.glass-refract .canvas-frost:nth-child(2) { --blur: url(#frost-refract) blur(16px) saturate(1.2) brightness(1.03); }
+.canvas-frost:nth-child(1) { --hold: 0px; --reach: 10rem; --side: 8%; --blur: blur(12px) saturate(1.15); --tint: var(--frost-tint-soft); }
+.canvas-frost:nth-child(2) { --hold: 0px; --reach: 3.5rem; --side: 3%; --blur: blur(28px) saturate(1.3) brightness(1.06); --tint: var(--frost-tint); }
 .canvas-stage {
   --clear-top: 12%;
   --clear-bottom: 8%;
@@ -3061,11 +3059,8 @@ html.is-canvas body { position: fixed; inset: 0; width: 100%; }
   .dark .canvas-stage { --frost-tint: rgba(9, 9, 11, 0.55); --frost-tint-soft: rgba(9, 9, 11, 0.18); }
   /* Phones: the frost hugs the bars. A long reach dragged the blur well into
      the tiles above the footer and smeared dark ones downward. */
-  .canvas-frost:nth-child(1) { --reach: 2.75rem; --side: 5%; --blur: blur(5px) saturate(1.1); }
-  .canvas-frost:nth-child(2) { --reach: 1.75rem; --side: 3%; --blur: blur(12px) saturate(1.2) brightness(1.03); }
-  .canvas-frost:nth-child(3) { --reach: 1rem;    --side: 1%; --blur: blur(22px) saturate(1.3) brightness(1.06); }
-  .glass-refract .canvas-frost:nth-child(1) { --blur: url(#frost-refract) blur(4px) saturate(1.1); }
-  .glass-refract .canvas-frost:nth-child(2) { --blur: url(#frost-refract) blur(10px) saturate(1.2) brightness(1.03); }
+  .canvas-frost:nth-child(1) { --reach: 2.5rem; --side: 4%; --blur: blur(8px) saturate(1.15); }
+  .canvas-frost:nth-child(2) { --reach: 1rem;   --side: 1%; --blur: blur(20px) saturate(1.3) brightness(1.06); }
 }
 /* The intro line is pinned into the top bar from inside the hero, so the
    hero has to sit above the phone edge fades or the line fades with them. */
@@ -3656,3 +3651,24 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
 @media (prefers-reduced-motion: reduce) {
   .cd-live-disc { animation: none; }
 }
+
+/* "Try it" embeds: a poster with a button until the app is asked for. */
+.live-start {
+  position: absolute; inset: 0; z-index: 2;
+  display: grid; place-items: center;
+  border: 0; padding: 0; cursor: pointer;
+  background: #111 center / cover no-repeat;
+  transition: opacity 0.35s ease;
+}
+.live-start span {
+  font: 500 0.875rem/1 var(--font);
+  color: #fff;
+  padding: 0.75rem 1.125rem;
+  border-radius: 999px;
+  background: rgba(20, 20, 24, 0.55);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+.live-start:hover span { background: rgba(20, 20, 24, 0.7); }
+.live-start.is-gone { opacity: 0; pointer-events: none; }

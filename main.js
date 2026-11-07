@@ -79,8 +79,14 @@
 
   (async function loadWeather() {
     try {
-      const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit&timezone=America/New_York');
-      const data = await res.json();
+      // One lookup per 15 minutes per tab, not one per page view.
+      let data = null;
+      try { const c = JSON.parse(sessionStorage.getItem('wx') || 'null'); if (c && Date.now() - c.t < 9e5) data = c.d; } catch (e) {}
+      if (!data) {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current=temperature_2m,weather_code,is_day&temperature_unit=fahrenheit&timezone=America/New_York');
+        data = await res.json();
+        try { sessionStorage.setItem('wx', JSON.stringify({ t: Date.now(), d: data })); } catch (e) {}
+      }
       const c = data.current;
       const [label, iconKey] = weatherInfo(c.weather_code, c.is_day);
       const temp = Math.round(c.temperature_2m) + '°F';
@@ -179,6 +185,21 @@
     }
   }, { passive: true });
 
+  // ── Live embeds wait for a click ────────────────────────────────────────
+  // The 3D apps in "Try it" are heavy (WebGL, CDN libraries). They load only
+  // when someone asks for them, not with the page.
+  document.querySelectorAll('.live-start').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const fr = btn.parentElement.querySelector('iframe[data-src]');
+      if (!fr) return;
+      fr.src = fr.dataset.src;
+      fr.removeAttribute('data-src');
+      btn.classList.add('is-gone');
+      setTimeout(() => btn.remove(), 400);
+    });
+  });
+
   // ── GitHub tooltip ───────────────────────────────────────────────────────
   const ghLinks = document.querySelectorAll('a[href="https://github.com/seanpfinn"]');
   if (ghLinks.length) {
@@ -186,7 +207,7 @@
     tip.className = 'gh-tooltip';
     tip.innerHTML = `
       <div class="gh-tip-header">
-        <img class="gh-tip-avatar" src="https://avatars.githubusercontent.com/u/193159120?v=4" alt="" />
+        <img class="gh-tip-avatar" data-src="https://avatars.githubusercontent.com/u/193159120?v=4" alt="" />
         <div class="gh-tip-meta">
           <span class="gh-tip-user">seanpfinn</span>
           <span class="gh-tip-stat"><span class="gh-tip-count">–</span> contributions <span class="gh-tip-range">in the last 90 days</span></span>
@@ -440,13 +461,23 @@
       tip.style.top  = (r.top - th - 10) + 'px';
     }
 
-    loadGH();
+    // Nothing is fetched until someone reaches for a GitHub link: the link
+    // lives in the menu on every page, and most visits never hover it.
+    function warmGH() {
+      const av = tip.querySelector('.gh-tip-avatar');
+      if (av && av.dataset.src) { av.src = av.dataset.src; delete av.dataset.src; }
+      loadGH();
+    }
+    ghLinks.forEach(link => {
+      link.addEventListener('pointerenter', warmGH, { once: true });
+      link.addEventListener('focus', warmGH, { once: true });
+    });
 
     // Keep the tooltip open while the cursor is over it (not just the link), so
     // the grid can be hovered. A small close delay bridges the gap between the
     // link and the tooltip floating above it.
     let hideTimer = 0;
-    function showTip(link) { clearTimeout(hideTimer); tip.classList.add('is-visible'); positionTip(link); }
+    function showTip(link) { warmGH(); clearTimeout(hideTimer); tip.classList.add('is-visible'); positionTip(link); }
     function scheduleHide() { hideTimer = setTimeout(() => tip.classList.remove('is-visible'), 160); }
 
     ghLinks.forEach(link => {
