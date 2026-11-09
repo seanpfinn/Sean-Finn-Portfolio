@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pickguard Bench</title>
+<meta name="description" content="Preview body finishes, pickguard materials and cuts, and hardware on an original offset-style guitar.">
+<link rel="canonical" href="https://www.seanpfinn.com/pickguard-bench-app">
+<meta property="og:type" content="video.other">
+<meta property="og:site_name" content="Pickguard Bench">
+<meta property="og:title" content="Pickguard Bench">
+<meta property="og:description" content="Preview body finishes, pickguard materials and cuts, and hardware on an original offset-style guitar.">
+<meta property="og:url" content="https://www.seanpfinn.com/pickguard-bench-app">
+<meta property="og:image" content="https://www.seanpfinn.com/assets/og/pickguard-bench.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pickguard Bench previewer showing a pink guitar with a tortoise pickguard">
+<meta property="og:video" content="https://www.seanpfinn.com/assets/og/pickguard-bench.mp4">
+<meta property="og:video:secure_url" content="https://www.seanpfinn.com/assets/og/pickguard-bench.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="1200">
+<meta property="og:video:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pickguard Bench">
+<meta name="twitter:description" content="Swap finishes, pickguards and hardware on an original guitar.">
+<meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/pickguard-bench.jpg">
+<style>
+@font-face{font-family:'Big Shoulders Display';font-style:normal;font-weight:600;font-display:swap;src:url('assets/pickguard/fonts/big-shoulders-display-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'Big Shoulders Display';font-style:normal;font-weight:800;font-display:swap;src:url('assets/pickguard/fonts/big-shoulders-display-latin-800-normal.woff2') format('woff2')}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:400;font-display:swap;src:url('assets/pickguard/fonts/figtree-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:500;font-display:swap;src:url('assets/pickguard/fonts/figtree-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:600;font-display:swap;src:url('assets/pickguard/fonts/figtree-latin-600-normal.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('assets/pickguard/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('assets/pickguard/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2')}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
+<style>
+/* Layout: a lit spray-booth stage on the left, a luthier's build ticket on the right; stacks on phones. */
+:root{
+  --bg:#E6E8EC; --panel:#F6F7F9; --ink:#16181C; --muted:#5B616C; --line:#CBD0D8; --stage:#D9DCE2;
+  --accent:#E6BDB5;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111317; --panel:#191C22; --ink:#ECEEF2; --muted:#8C93A1; --line:#2B3039; --stage:#0B0C0F; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317; --panel:#191C22; --ink:#ECEEF2; --muted:#8C93A1; --line:#2B3039; --stage:#0B0C0F; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.app{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,440px);min-height:100%;}
+.stage{position:relative;display:grid;place-items:center;overflow:hidden;
+  background:
+    radial-gradient(60% 55% at 50% 58%, color-mix(in oklab,var(--accent) 38%,transparent), transparent 70%),
+    radial-gradient(120% 90% at 50% 0%, color-mix(in oklab,var(--ink) 6%,transparent), transparent 60%),
+    var(--stage);
+  padding-block:24px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:16px;
+  transition:background-color .4s;position:sticky;top:0;height:100vh;align-self:start}
+.stage::after{content:"";position:absolute;left:10%;right:10%;bottom:6%;height:28px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,0,0,.35),transparent);filter:blur(6px);pointer-events:none}
+#gtr{width:min(100%,520px);height:auto;max-height:84vh;position:relative;z-index:1;filter:drop-shadow(0 18px 24px rgba(0,0,0,.28))}
+.stamp{position:absolute;left:max(20px,env(safe-area-inset-left,0px));top:20px;z-index:2;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stamp b{display:block;font-family:var(--f-display);font-size:34px;line-height:1;letter-spacing:.01em;color:var(--ink);text-transform:uppercase;font-weight:800}
+
+.panel{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;gap:22px;
+  padding-block:28px 32px; padding-left:24px; padding-right:max(24px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--f-display);font-weight:800;font-size:44px;line-height:.95;margin:0;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+.lede{margin:8px 0 0;color:var(--muted);max-width:36ch}
+fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+legend{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0;margin-bottom:10px;display:flex;justify-content:space-between;width:100%}
+legend span:last-child{color:var(--ink)}
+.sr{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.chip{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--muted);text-align:center}
+.dot{width:44px;height:44px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);transition:transform .15s}
+.dot::after{content:"";position:absolute;inset:4px 10px auto 6px;height:14px;border-radius:50%;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0));}
+.chip:hover .dot{transform:translateY(-2px)}
+input:checked + .chip{color:var(--ink);font-weight:600}
+input:checked + .chip .dot, input:checked + .chip .tile{outline:2px solid var(--ink);outline-offset:3px}
+input:focus-visible + .chip .dot, input:focus-visible + .chip .tile, input:focus-visible + .seg{outline:2px dashed var(--ink);outline-offset:3px}
+
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{width:100%;aspect-ratio:16/10;max-width:100%;border-radius:6px;overflow:hidden;display:block;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.tile svg{width:100%;height:100%;display:block}
+.tiles .chip{align-items:stretch;text-align:left}
+
+.segs{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.segs > div{flex:1;display:flex}
+.seg{flex:1;text-align:center;padding:7px 8px;border-radius:999px;cursor:pointer;font-size:13px;color:var(--muted);transition:background .15s,color .15s}
+input:checked + .seg{background:var(--ink);color:var(--panel);font-weight:600}
+
+.sheet{margin-top:auto;border:1px dashed var(--line);border-radius:4px;padding:14px 16px;font-family:var(--f-mono);font-size:12.5px;position:relative}
+.sheet h2{font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px;display:flex;justify-content:space-between}
+.sheet h2 span{font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.sheet dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0}
+.sheet dt{color:var(--muted)} .sheet dd{margin:0;min-width:0}
+.row{display:flex;gap:10px;align-items:center}
+button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:8px 16px;cursor:pointer}
+button:hover{background:var(--ink);color:var(--panel)}
+button:focus-visible{outline:2px dashed var(--ink);outline-offset:3px}
+.note{font-size:12px;color:var(--muted)}
+#guardG{transition:opacity .18s}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .stage{position:relative;height:auto;min-height:0;padding-right:max(16px,env(safe-area-inset-right,0px))}
+  #gtr{width:min(100%,380px);max-height:none}
+  .panel{border-left:0;border-top:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  h1{font-size:38px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="stage" aria-label="Guitar preview">
+    <div class="stamp">Now in the booth<b id="stampName">Conch</b></div>
+    <svg id="gtr" viewBox="0 0 400 640" role="img" aria-label="Guitar body with selected finish and pickguard">
+      <defs>
+        <path id="bodyPath" d="M172 250 C150 250 130 215 118 175 C112 152 98 140 84 150 C50 175 40 240 52 300 C62 330 82 350 74 385 C64 420 30 450 34 515 C38 575 110 608 200 606 C290 604 352 585 364 525 C372 480 340 445 334 405 C330 375 352 350 352 300 C352 250 330 215 300 205 C280 200 268 215 262 230 C255 245 240 250 228 250 Z"/>
+        <clipPath id="bodyClip"><use href="#bodyPath"/></clipPath>
+        <clipPath id="guardClip"><path id="guardClipPath" d=""/></clipPath>
+
+        <linearGradient id="bodyGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop id="bg0" offset="0"/><stop id="bg1" offset=".5"/><stop id="bg2" offset="1"/>
+        </linearGradient>
+        <radialGradient id="burst" cx=".5" cy=".64" r=".62">
+          <stop offset="0" stop-color="#F2B640"/><stop offset=".42" stop-color="#D9821C"/>
+          <stop offset=".7" stop-color="#8E2A12"/><stop offset=".9" stop-color="#2A0F08"/><stop offset="1" stop-color="#120604"/>
+        </radialGradient>
+        <radialGradient id="vignette" cx=".5" cy=".6" r=".6">
+          <stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/>
+        </radialGradient>
+        <linearGradient id="gloss" x1="0" y1="0" x2="1" y2=".6">
+          <stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="anodized" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#9C7224"/><stop offset=".35" stop-color="#E9C870"/><stop offset=".6" stop-color="#C69A3E"/><stop offset="1" stop-color="#8A6220"/>
+        </linearGradient>
+        <linearGradient id="blackGuard" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2A2B2E"/><stop offset=".5" stop-color="#121214"/><stop offset="1" stop-color="#1C1D20"/>
+        </linearGradient>
+        <linearGradient id="neckGrad" x1="0" x2="1">
+          <stop offset="0" stop-color="#3A2418"/><stop offset=".5" stop-color="#5A3826"/><stop offset="1" stop-color="#3A2418"/>
+        </linearGradient>
+        <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".22" stop-color="#fff" stop-opacity="1"/>
+        </linearGradient>
+        <mask id="neckMask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="640"><rect width="400" height="640" fill="url(#fade)"/></mask>
+        <radialGradient id="hwChrome" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#C9CED6"/><stop offset="1" stop-color="#7E848E"/></radialGradient>
+        <radialGradient id="hwGold" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFF1C4"/><stop offset=".5" stop-color="#D3AB55"/><stop offset="1" stop-color="#8C6A24"/></radialGradient>
+        <radialGradient id="hwBlack" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#6A6D73"/><stop offset=".5" stop-color="#2A2C30"/><stop offset="1" stop-color="#0E0F11"/></radialGradient>
+
+        <!-- material generators -->
+        <filter id="fTortoise" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.011 0.028" numOctaves="4" seed="11"/>
+          <feColorMatrix values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1"/>
+          <feComponentTransfer><feFuncR type="linear" slope="2.6" intercept="-.8"/><feFuncG type="linear" slope="2.6" intercept="-.8"/><feFuncB type="linear" slope="2.6" intercept="-.8"/></feComponentTransfer>
+          <feComponentTransfer>
+            <feFuncR type="table" tableValues=".04 .05 .09 .3 .58 .72"/>
+            <feFuncG type="table" tableValues=".018 .022 .04 .12 .27 .36"/>
+            <feFuncB type="table" tableValues=".01 .012 .02 .035 .07 .1"/>
+          </feComponentTransfer>
+        </filter>
+        <filter id="fMint" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.045 0.016" numOctaves="3" seed="4"/>
+          <feColorMatrix values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1"/>
+          <feComponentTransfer><feFuncR type="linear" slope="2.4" intercept="-.7"/><feFuncG type="linear" slope="2.4" intercept="-.7"/><feFuncB type="linear" slope="2.4" intercept="-.7"/></feComponentTransfer>
+          <feComponentTransfer>
+            <feFuncR type="table" tableValues=".74 .83 .92 .97"/>
+            <feFuncG type="table" tableValues=".86 .92 .97 1"/>
+            <feFuncB type="table" tableValues=".78 .85 .9 .94"/>
+          </feComponentTransfer>
+        </filter>
+        <filter id="fPearl" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05 0.018" numOctaves="3" seed="21"/>
+          <feColorMatrix values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1"/>
+          <feComponentTransfer><feFuncR type="linear" slope="2.4" intercept="-.7"/><feFuncG type="linear" slope="2.4" intercept="-.7"/><feFuncB type="linear" slope="2.4" intercept="-.7"/></feComponentTransfer>
+          <feComponentTransfer>
+            <feFuncR type="table" tableValues=".82 .9 .97 1"/>
+            <feFuncG type="table" tableValues=".83 .9 .96 .99"/>
+            <feFuncB type="table" tableValues=".86 .93 .99 1"/>
+          </feComponentTransfer>
+        </filter>
+        <filter id="fFlake" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="1" seed="3"/>
+          <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  3 0 0 0 -1.7"/>
+        </filter>
+        <filter id="guardShadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="1.6" stdDeviation="1.4" flood-color="#000" flood-opacity=".4"/>
+        </filter>
+      </defs>
+
+      <!-- body -->
+      <g>
+        <use href="#bodyPath" id="bodyFill" fill="url(#bodyGrad)"/>
+        <g clip-path="url(#bodyClip)">
+          <rect id="flake" width="400" height="640" filter="url(#fFlake)" opacity="0"/>
+          <rect width="400" height="640" fill="url(#vignette)" transform="translate(0 0)"/>
+          <path d="M60 230 C80 170 120 150 150 160 C110 210 92 300 104 420 C70 380 50 300 60 230 Z" fill="url(#gloss)" opacity=".45"/>
+        </g>
+        <use href="#bodyPath" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/>
+      </g>
+
+      <!-- pickguard -->
+      <g id="guardG" filter="url(#guardShadow)"></g>
+
+      <!-- neck -->
+      <g mask="url(#neckMask)">
+        <rect x="176" y="-10" width="48" height="312" rx="2" fill="url(#neckGrad)"/>
+        <g id="frets"></g>
+      </g>
+
+      <!-- hardware -->
+      <g id="hw"></g>
+    </svg>
+  </section>
+
+  <aside class="panel">
+    <header>
+      <h1>Pickguard Bench</h1>
+      <p class="lede">Try a body finish against every guard in the drawer. The build ticket updates as you go.</p>
+    </header>
+
+    <fieldset>
+      <legend><span>Body finish</span><span id="finLabel"></span></legend>
+      <div class="chips" id="finishes"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span>Guard material</span><span id="matLabel"></span></legend>
+      <div class="tiles" id="materials"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span>Guard cut</span></legend>
+      <div class="segs" id="cuts"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span>Hardware</span></legend>
+      <div class="segs" id="hardware"></div>
+    </fieldset>
+
+    <div class="sheet" aria-live="polite">
+      <h2>Build ticket <span id="code"></span></h2>
+      <dl>
+        <dt>Finish</dt><dd id="sFin"></dd>
+        <dt>Guard</dt><dd id="sGuard"></dd>
+        <dt>Cut</dt><dd id="sCut"></dd>
+        <dt>Hardware</dt><dd id="sHw"></dd>
+      </dl>
+    </div>
+    <div class="row"><button id="shuffle" type="button">Shuffle combo</button><span class="note">Original body design for previewing.</span></div>
+  </aside>
+</div>
+
+<script>
+const FINISHES=[
+ {id:"conch",name:"Conch",hex:"#E6BDB5",type:"Gloss poly"},
+ {id:"tidepool",name:"Tidepool",hex:"#8FC9B9",type:"Gloss poly"},
+ {id:"bone",name:"Bone",hex:"#ECE4CF",type:"Gloss poly"},
+ {id:"sodium",name:"Sodium",hex:"#E2702A",type:"Gloss poly"},
+ {id:"ink",name:"Ink Metallic",hex:"#24427A",type:"Metallic flake",flake:true},
+ {id:"oxblood",name:"Oxblood",hex:"#6E1F27",type:"Metallic flake",flake:true},
+ {id:"graphite",name:"Graphite",hex:"#2C2E33",type:"Satin poly"},
+ {id:"burst",name:"Ember Burst",hex:"#C76A1C",type:"3-tone burst",burst:true},
+];
+const MATERIALS=[
+ {id:"tortoise",name:"Tortoise",spec:"4-ply · .090 in",fill:{filter:"fTortoise"},edge:["#F1E8D4","#151515","#F1E8D4"],pu:"cream"},
+ {id:"mint",name:"Mint pearl",spec:"4-ply · .090 in",fill:{filter:"fMint"},edge:["#F4F1E8","#151515","#E9F0E6"],pu:"cream"},
+ {id:"pearl",name:"White pearl",spec:"4-ply · .090 in",fill:{filter:"fPearl"},edge:["#FFFFFF","#151515","#F2F2F2"],pu:"cream"},
+ {id:"parchment",name:"Parchment",spec:"3-ply W/B/W · .090 in",fill:{color:"#EDE4CC"},edge:["#F6F0DE","#151515","#EDE4CC"],pu:"cream"},
+ {id:"black",name:"Black",spec:"3-ply B/W/B · .090 in",fill:{color:"url(#blackGuard)"},edge:["#151515","#F2F2F2","#151515"],pu:"black"},
+ {id:"gold",name:"Gold anodized",spec:"1-ply aluminum · .040 in",fill:{color:"url(#anodized)"},edge:["#6E521B"],pu:"black"},
+];
+const CUTS=[{id:"full",name:"Full sweep"},{id:"minimal",name:"Teardrop"},{id:"none",name:"No guard"}];
+const HW=[{id:"chrome",name:"Nickel",g:"hwChrome"},{id:"gold",name:"Gold",g:"hwGold"},{id:"black",name:"Black",g:"hwBlack"}];
+const GUARD_PATHS={
+ full:"M172 254 C150 254 128 220 118 182 C110 160 96 152 88 160 C64 185 58 240 66 296 C72 336 92 352 86 386 C80 420 62 450 70 500 C78 540 120 558 170 553 L258 541 C298 535 314 510 304 480 C296 452 300 424 296 396 L290 300 C288 272 262 254 228 254 Z",
+ minimal:"M160 352 C122 358 98 420 108 474 C118 522 160 532 170 500 L170 372 C170 360 167 352 160 352 Z"
+};
+
+const state={finish:"conch",material:"tortoise",cut:"full",hw:"chrome"};
+try{Object.assign(state,JSON.parse(localStorage.getItem("pgb")||"{}"))}catch(e){}
+
+const NS="http://www.w3.org/2000/svg";
+const $=id=>document.getElementById(id);
+function mix(hex,t,to){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const c=to==="w"?255:0;
+  r=Math.round(r+(c-r)*t);g=Math.round(g+(c-g)*t);b=Math.round(b+(c-b)*t);return `rgb(${r},${g},${b})`}
+const find=(arr,id)=>arr.find(x=>x.id===id)||arr[0];
+
+function matSwatch(m){
+  const fill=m.fill.filter?`<rect width="160" height="100" filter="url(#${m.fill.filter})"/>`:`<rect width="160" height="100" fill="${m.fill.color}"/>`;
+  return `<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${fill}
+    <path d="M0 0 L160 0 L160 100 L0 100Z" fill="none" stroke="${m.edge[0]}" stroke-width="6"/>
+    <path d="M0 0 L160 0 L160 100 L0 100Z" fill="none" stroke="${m.edge[1]||m.edge[0]}" stroke-width="3"/></svg>`;
+}
+function buildControls(){
+  $("finishes").innerHTML=FINISHES.map(f=>{
+    const bg=f.burst?"radial-gradient(circle at 50% 60%,#F2B640,#D9821C 40%,#8E2A12 70%,#1A0805)":`linear-gradient(135deg,${mix(f.hex,.2,"w")},${f.hex} 55%,${mix(f.hex,.25,"b")})`;
+    return `<div><input class="sr" type="radio" name="finish" id="fin-${f.id}" value="${f.id}"><label class="chip" for="fin-${f.id}"><span class="dot" style="background:${bg}"></span>${f.name}</label></div>`}).join("");
+  $("materials").innerHTML=MATERIALS.map(m=>`<div><input class="sr" type="radio" name="material" id="mat-${m.id}" value="${m.id}"><label class="chip" for="mat-${m.id}"><span class="tile">${matSwatch(m)}</span>${m.name}</label></div>`).join("");
+  $("cuts").innerHTML=CUTS.map(c=>`<div><input class="sr" type="radio" name="cut" id="cut-${c.id}" value="${c.id}"><label class="seg" for="cut-${c.id}">${c.name}</label></div>`).join("");
+  $("hardware").innerHTML=HW.map(h=>`<div><input class="sr" type="radio" name="hw" id="hw-${h.id}" value="${h.id}"><label class="seg" for="hw-${h.id}">${h.name}</label></div>`).join("");
+  document.querySelectorAll('input[type=radio]').forEach(i=>i.addEventListener("change",()=>{state[i.name]=i.value;render(true)}));
+}
+
+function drawFrets(){
+  let y=296,gap=17,html="";const dots=[3,5,7,9,12];let k=0;const pos=[];
+  while(y>-10){pos.push(y);y-=gap;gap*=1.055;}
+  // fret 1 is farthest from body; count from top
+  pos.reverse().forEach((p,i)=>{html+=`<rect x="176" y="${p.toFixed(1)}" width="48" height="1.6" fill="#C9CCD2"/>`});
+  for(let i=0;i<pos.length-1;i++){const fretNo=24-(pos.length-1-i);const cy=(pos[i]+pos[i+1])/2;
+    if(fretNo===12||fretNo===24){html+=`<circle cx="192" cy="${cy}" r="2.4" fill="#EDE6D6"/><circle cx="208" cy="${cy}" r="2.4" fill="#EDE6D6"/>`}
+    else if([15,17,19,21].includes(fretNo)){html+=`<circle cx="200" cy="${cy}" r="2.4" fill="#EDE6D6"/>`}}
+  $("frets").innerHTML=html;
+}
+
+function renderGuard(){
+  const g=$("guardG"),m=find(MATERIALS,state.material),cut=state.cut;
+  if(cut==="none"){g.innerHTML="";return}
+  const d=GUARD_PATHS[cut];$("guardClipPath").setAttribute("d",d);
+  const widths=m.edge.length===3?[6,4,2]:[2.5];
+  let s=m.edge.map((c,i)=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${widths[i]}" stroke-linejoin="round"/>`).join("");
+  s+=m.fill.filter?`<g clip-path="url(#guardClip)"><rect width="400" height="640" filter="url(#${m.fill.filter})"/></g>`
+                  :`<path d="${d}" fill="${m.fill.color}"/>`;
+  s+=`<g clip-path="url(#guardClip)"><rect width="400" height="640" fill="url(#gloss)" opacity=".18"/></g>`;
+  // screws
+  const screws=cut==="full"?[[118,190],[76,262],[82,350],[78,450],[120,540],[200,548],[290,520],[296,430],[288,320],[246,262]]:[[118,420],[150,370],[150,505]];
+  s+=screws.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="url(#${find(HW,state.hw).g})" stroke="rgba(0,0,0,.4)" stroke-width=".5"/>`).join("");
+  g.innerHTML=s;
+}
+
+function renderHW(){
+  const h=find(HW,state.hw),m=find(MATERIALS,state.material),hw=`url(#${h.g})`;
+  const puCol=state.cut==="none"?(["bone","conch","tidepool"].includes(state.finish)?"black":"cream"):m.pu;
+  const cover=puCol==="cream"?"#F0E8D2":"#1A1A1C",coverEdge=puCol==="cream"?"#C9BE9F":"#000";
+  let s="";
+  [335,432].forEach(cy=>{
+    s+=`<rect x="164" y="${cy-16}" width="72" height="32" rx="8" fill="${cover}" stroke="${coverEdge}" stroke-width="1"/>`;
+    for(let i=0;i<6;i++){s+=`<circle cx="${181+i*7.6}" cy="${cy}" r="2.2" fill="${hw}"/>`}
+  });
+  // bridge
+  s+=`<rect x="160" y="490" width="80" height="24" rx="3" fill="${hw}" stroke="rgba(0,0,0,.45)" stroke-width=".8"/>`;
+  for(let i=0;i<6;i++){s+=`<rect x="${173+i*9.4}" y="494" width="7" height="14" rx="1.5" fill="${hw}" stroke="rgba(0,0,0,.35)" stroke-width=".6"/>`}
+  // knobs + switch
+  [[318,470],[334,512],[312,552]].forEach(([x,y])=>{s+=`<circle cx="${x}" cy="${y+1.5}" r="12.5" fill="rgba(0,0,0,.35)"/><circle cx="${x}" cy="${y}" r="12" fill="${hw}" stroke="rgba(0,0,0,.4)" stroke-width=".8"/><circle cx="${x}" cy="${y}" r="5" fill="none" stroke="rgba(0,0,0,.18)"/>`});
+  s+=`<rect x="98" y="206" width="22" height="12" rx="6" fill="${hw}" stroke="rgba(0,0,0,.4)" stroke-width=".6"/><rect x="107" y="196" width="4" height="14" rx="2" fill="#F0E8D2"/>`;
+  // strings
+  for(let i=0;i<6;i++){const xb=176.5+i*9.4,xt=184+i*6.4,w=1.25-i*.13;
+    s+=`<line x1="${xt}" y1="-10" x2="${xb}" y2="500" stroke="#E7E9EE" stroke-width="${w.toFixed(2)}" mask="url(#neckMask)" opacity=".9"/>`}
+  $("hw").innerHTML=s;
+}
+
+function render(anim){
+  const f=find(FINISHES,state.finish),m=find(MATERIALS,state.material),c=find(CUTS,state.cut),h=find(HW,state.hw);
+  if(f.burst){$("bodyFill").setAttribute("fill","url(#burst)")}
+  else{$("bodyFill").setAttribute("fill","url(#bodyGrad)");
+    $("bg0").setAttribute("stop-color",mix(f.hex,.18,"w"));$("bg1").setAttribute("stop-color",f.hex);$("bg2").setAttribute("stop-color",mix(f.hex,.22,"b"));}
+  $("flake").setAttribute("opacity",f.flake?".35":"0");
+  document.documentElement.style.setProperty("--accent",f.hex);
+  const g=$("guardG");
+  if(anim){g.style.opacity=0;setTimeout(()=>{renderGuard();renderHW();g.style.opacity=1},140)}else{renderGuard();renderHW()}
+  ["finish","material","cut","hw"].forEach(k=>{const el=document.querySelector(`input[name=${k}][value="${state[k]}"]`);if(el)el.checked=true});
+  $("stampName").textContent=f.name;
+  $("finLabel").textContent=f.type;
+  $("matLabel").textContent=c.id==="none"?"—":m.spec;
+  $("sFin").textContent=`${f.name} · ${f.type}`;
+  $("sGuard").textContent=c.id==="none"?"None":`${m.name} · ${m.spec}`;
+  $("sCut").textContent=c.name;
+  $("sHw").textContent=h.name;
+  $("code").textContent=`PGB-${f.id.slice(0,3)}-${c.id==="none"?"XXX":m.id.slice(0,3)}-${c.id[0]}${h.id[0]}`.toUpperCase();
+  try{localStorage.setItem("pgb",JSON.stringify(state))}catch(e){}
+}
+
+$("shuffle").addEventListener("click",()=>{
+  const pick=a=>a[Math.floor(Math.random()*a.length)].id;
+  state.finish=pick(FINISHES);state.material=pick(MATERIALS);state.cut=Math.random()<.8?(Math.random()<.65?"full":"minimal"):"none";state.hw=pick(HW);render(true);
+});
+buildControls();drawFrets();render(false);
+</script>
+</body>
+</html>
