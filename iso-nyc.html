@@ -227,7 +227,12 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Light</h2>
-      <p class="proj-caption-body">A physically based sky drives everything else: the sun’s color, the ambient light, the fog and the reflections in the river. Twilight, stars, the moon, city glow and moving cloud layers blend in on top. A 24-hour scrubber, its track painted with the sky’s own colors, runs the day, and sunrise and sunset fall at the real late-October times for New York.</p>
+      <p class="proj-caption-body">The scene renders in linear light, the way a camera sensor sees it, in half-float buffers with real highlight energy. Exposure is metered and adapts over about a second, like an eye stepping outside, and an AgX tone curve rolls the highlights off before a little chromatic aberration, vignette and grain finish the frame. Bloom only comes from things that are actually bright.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Sky</h2>
+      <p class="proj-caption-body">The sky is a physical model of the atmosphere: Rayleigh, Mie and ozone scattering over a curved earth, plus the light that scatters more than once, worked out on the CPU into small lookup textures. The same model drives the sun’s color, the ambient light and the reflections, so noon comes out blue, golden hour glares, and dusk goes purple over orange. A 24-hour scrubber, its track painted with the sky’s own colors, runs the day at real late-October New York times.</p>
     </div>
 
     <div class="proj-panel-group">
@@ -241,7 +246,12 @@
       <div class="proj-panel-new proj-panel--media proj-panel--iso proj-panel--wide">
         <img src="assets/iso-nyc/night.webp" alt="East River at night: lit windows, the Empire State Building in orange, the subway glowing underneath" decoding="async" loading="lazy" />
       </div>
-      <p class="proj-image-caption">Night. The Empire State Building is orange for Halloween week.</p>
+      <p class="proj-image-caption">Night. The street, platforms and tunnel are lit by their own fixtures. The Empire State Building is orange for Halloween week.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Air</h2>
+      <p class="proj-caption-body">Haze thickens toward the ground and takes the color of the sky behind it, so the skyline dissolves into the horizon instead of fading to grey, and glows on the side facing the sun.</p>
     </div>
 
     <div class="proj-caption">
@@ -282,7 +292,7 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Underground</h2>
-      <p class="proj-caption-body">Below the street, five tiled platforms are lit only by their own fluorescent fixtures. A stainless-steel train runs through every ten to twenty seconds over a track pit with ballast and rails, and the cut shows the ground in section: asphalt, concrete, then earth.</p>
+      <p class="proj-caption-body">Below the street, five tiled platforms are lit only by their own fluorescent fixtures, computed in the materials themselves instead of as dozens of point lights, the same way the street lamps and tunnel lamps are. A stainless-steel train runs through every ten to twenty seconds over a track pit with ballast and rails, and the cut shows the ground in section: asphalt, concrete, then earth.</p>
     </div>
 
     <div class="proj-panel-group">
@@ -294,7 +304,7 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Try it</h2>
-      <p class="proj-caption-body">This one is live. Scrub the day, change the weather, or drag to look along the river. It is a heavy scene, with bloom, a reflected river, soft shadows and depth in every window, so older phones run it slowly.</p>
+      <p class="proj-caption-body">This one is live. Scrub the day, change the weather, or drag to look along the river. It is a heavy scene, with a full HDR pipeline, a reflected river, soft shadows and depth in every window, so older phones run it slowly.</p>
     </div>
 
     <div class="proj-panel-group">
