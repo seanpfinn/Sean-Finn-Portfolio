@@ -673,7 +673,7 @@
       { href: 'music-box.html',              title: 'Music Box',      clear: false, video: 'assets/music-box.mp4',            bg: '#e5e5e5' },
       { href: 'burned.html',              title: 'Burned',      clear: false, video: 'assets/tiles/burned.mp4', bg: '#dfb795' },
       { href: 'room-editor.html',            title: 'Room Editor',    clear: false, video: 'assets/tiles/room-editor.mp4',  bg: '#e8e3dc' },
-      { href: 'iso-nyc.html',             title: 'East River',     clear: false, video: 'assets/tiles/iso-nyc.mp4', bg: '#0a0e19' },
+      { href: 'metrarium.html',             title: 'Metrarium',      clear: false, video: 'assets/tiles/metrarium.mp4', bg: '#0a0e19' },
       { href: 'pickguard-bench.html',     title: 'Pickguard Bench', clear: false, video: 'assets/tiles/pickguard-bench.mp4', bg: '#e4e7ec' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },

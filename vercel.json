@@ -21,6 +21,16 @@
       "source": "/mix-cd-player",
       "destination": "/burned-player",
       "permanent": true
+    },
+    {
+      "source": "/iso-nyc",
+      "destination": "/metrarium",
+      "permanent": true
+    },
+    {
+      "source": "/iso-nyc-app",
+      "destination": "https://metrarium.vercel.app",
+      "permanent": true
     }
   ],
   "headers": [
