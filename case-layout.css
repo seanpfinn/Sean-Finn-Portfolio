@@ -328,7 +328,8 @@
   }
   .cs-body { display: flex; flex-direction: column; align-items: stretch; }
   .cs-story, .cs-side { display: contents; }
-  .cs-v2 .proj-header-group { order: 1; max-width: none; padding-top: 1.25rem; padding-bottom: 0.5rem; }
+  .cs-v2 .proj-header-group { order: 1; max-width: none; padding-top: 1.25rem; padding-bottom: 2.5rem; }
+  .cs-v2 .proj-dl-btn { margin-top: 0.25rem; }
   .cs-stage-wrap {
     order: 0;
     top: 3.25rem;
@@ -342,7 +343,7 @@
   }
   .cs-stage, .cs-strip { max-width: none; }
   .cs-stage { border-radius: 0.75rem; }
-  .cs-chapter { order: 2; min-height: calc(var(--n, 1) * 46vh); padding-top: 1.75rem; }
+  .cs-chapter { order: 2; min-height: calc(var(--n, 1) * 46vh); padding-top: 2.25rem; }
   .cs-chapter:last-of-type { padding-bottom: 30vh; }
   .cs-v2 .proj-caption-body,
   .cs-v2 .cs-note { padding-left: 0; margin-left: 0; }

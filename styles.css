@@ -3583,6 +3583,9 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
   }
   .edge-top,
   .edge-bottom { display: block; }
+  /* Case studies scroll long text to the very bottom of the screen: the
+     bottom fade washed out the last lines and left a gap above Safari's bar. */
+  body:has(.proj-col) .edge-bottom { display: none; }
 
   .edge-top::after,
   .edge-bottom::after {
