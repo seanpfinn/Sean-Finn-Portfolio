@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Metrarium – Sean Finn</title>
-  <meta name="description" content="A photoreal Manhattan skyline from the Brooklyn waterfront, built in Three.js, with a 24-hour sky, six kinds of weather and a subway running underneath." />
+  <meta name="description" content="A metro terrarium: the Manhattan skyline from the Brooklyn waterfront, sealed in a live Three.js scene with a 24-hour sky, six kinds of weather and a subway running underneath." />
   <link rel="canonical" href="https://www.seanpfinn.com/metrarium" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
   <meta property="og:title" content="Metrarium" />
-  <meta property="og:description" content="A photoreal Manhattan skyline from the Brooklyn waterfront, built in Three.js, with a 24-hour sky, six kinds of weather and a subway running underneath." />
+  <meta property="og:description" content="A metro terrarium: the Manhattan skyline from the Brooklyn waterfront, sealed in a live Three.js scene with a 24-hour sky, six kinds of weather and a subway running underneath." />
   <meta property="og:url" content="https://www.seanpfinn.com/metrarium" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og/metrarium.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -22,7 +22,7 @@
   <meta property="og:video:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Metrarium" />
-  <meta name="twitter:description" content="A photoreal Manhattan skyline from the Brooklyn waterfront, built in Three.js, with a 24-hour sky, six kinds of weather and a subway running underneath." />
+  <meta name="twitter:description" content="A metro terrarium: the Manhattan skyline from the Brooklyn waterfront, sealed in a live Three.js scene with a 24-hour sky, six kinds of weather and a subway running underneath." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/metrarium.jpg" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
@@ -198,7 +198,7 @@
     <div class="proj-header-group">
       <div class="proj-title-block">
         <h1 class="proj-title-new">Metrarium</h1>
-        <p class="proj-subtitle-new">A photoreal Manhattan skyline from the Brooklyn waterfront, built in Three.js, with a 24-hour sky, six kinds of weather and a subway running underneath.</p>
+        <p class="proj-subtitle-new">A metro terrarium: the Manhattan skyline from the Brooklyn waterfront, sealed in a live Three.js scene with a 24-hour sky, six kinds of weather and a subway running underneath.</p>
       </div>
       <div class="proj-meta-row-new">
         <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
@@ -300,6 +300,11 @@
         <img src="assets/metrarium/golden-hour.webp" alt="Metrarium at golden hour, a train passing through the cut-away subway" decoding="async" loading="lazy" />
       </div>
       <p class="proj-image-caption">Golden hour, with a train passing.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Performance</h2>
+      <p class="proj-caption-body">A scene this dense started at about 7,000 draw calls a frame. Everything that doesn’t move is now baked into place and merged by material when the page loads, about 1,570 meshes into 162, and the river’s reflection skips anything that could never appear in it. A frame is roughly 600 draw calls. If a device still can’t hold about 45 fps, a governor steps quality down once, resolution first, then reflection and shadow detail.</p>
     </div>
 
     <div class="proj-caption">
