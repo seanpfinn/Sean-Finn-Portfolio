@@ -675,6 +675,7 @@
       { href: 'room-editor.html',            title: 'Room Editor',    clear: false, video: 'assets/tiles/room-editor.mp4',  bg: '#e8e3dc' },
       { href: 'metrarium.html',             title: 'Metrarium',      clear: false, video: 'assets/tiles/metrarium.mp4', bg: '#0a0e19' },
       { href: 'pickguard-bench.html',     title: 'Pickguard Bench', clear: false, video: 'assets/tiles/pickguard-bench.mp4', bg: '#e4e7ec' },
+      { href: 'abode.html',               title: 'Abode',          clear: false, video: 'assets/tiles/abode.mp4', bg: '#eef1f3' },
       { href: 'clear-terminal-guide.html',   title: 'Terminal Guide', clear: true, video: 'assets/terminal-guide.mp4',       bg: '#e5e5e5' },
       { href: 'clear-location-details.html', title: 'Locations',      clear: true, video: 'assets/gallery-location-search.mp4', bg: '#e1e1e1' },
       { href: 'clear-vault.html',            title: 'Vault',          clear: true, video: 'assets/gallery-vault-video.mp4',   bg: '#e1e1e1' },
