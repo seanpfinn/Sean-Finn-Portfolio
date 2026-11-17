@@ -194,3 +194,10 @@ html.bd-on body { overflow: hidden; height: 100%; overscroll-behavior: none; }
 @media (prefers-reduced-motion: reduce) {
   .bd-enter { animation: none; }
 }
+
+/* Spanning a fold (Viewport Segments): the title centers on the left half and
+   the chapter pill on the right, so neither sits in the crease. */
+@media (horizontal-viewport-segments: 2) {
+  .bd-title { left: 0; right: auto; width: env(viewport-segment-width 0 0); }
+  .bd-pill { left: calc(env(viewport-segment-left 1 0) + env(viewport-segment-width 1 0) / 2); }
+}

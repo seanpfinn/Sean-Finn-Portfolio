@@ -16,7 +16,15 @@
 // Phones keep the scrolling layout: this bows out, and case-layout.js (loaded
 // next) runs as on every other project.
 (function () {
-  if (!matchMedia('(min-width: 50.625rem)').matches) return;
+  // Desktop only. A foldable (iPhone Duo) or a resized window can cross the
+  // breakpoint mid-visit: the board and the scrolling layout are built from
+  // the same markup in different ways, so crossing it reloads the page into
+  // the right one instead of leaving a board squeezed onto a phone screen.
+  var wideQ = matchMedia('(min-width: 50.625rem)');
+  var wideAtLoad = wideQ.matches;
+  var onWide = function (e) { if (e.matches !== wideAtLoad) location.reload(); };
+  if (wideQ.addEventListener) wideQ.addEventListener('change', onWide); else wideQ.addListener(onWide);
+  if (!wideAtLoad) return;
   var col = document.querySelector('body.proj-page .proj-col');
   if (!col || !col.querySelector('.proj-panel-new')) return;
   window.BOARD_ACTIVE = true;

@@ -356,3 +356,24 @@
     align-items: center;
   }
 }
+
+/* ── Short desktop windows (iPhone Duo unfolded is about 890 × 626) ──────
+   The fixed footer would sit on the story and the header's button. */
+@media (min-width: 50.625rem) and (max-height: 47.5rem) {
+  .cs-v2 .proj-footer { display: none; }
+  .cs-v2 .proj-col { padding-top: calc(var(--page-top) - 1rem); }
+}
+
+/* ── Spanning a fold (Viewport Segments) ─────────────────────────────────
+   On a foldable that reports two side-by-side segments, the story takes
+   the left half and the stage the right, so nothing sits in the crease. */
+@media (min-width: 50.625rem) and (horizontal-viewport-segments: 2) {
+  .cs-v2 .proj-col { margin-left: 0; margin-right: 0; max-width: none; }
+  .cs-body {
+    grid-template-columns: env(viewport-segment-width 0 0) env(viewport-segment-width 1 0);
+    column-gap: calc(env(viewport-segment-left 1 0) - env(viewport-segment-right 0 0));
+  }
+  .cs-story { padding-left: max(var(--nav-clear-left, 4rem), 1.5rem); padding-right: 2rem; }
+  .cs-side { padding: 0 1.5rem; }
+  .nav-icon .cs-titlebar { left: 0; width: env(viewport-segment-width 0 0); }
+}

@@ -3766,3 +3766,22 @@ html.is-canvas body { height: 100vh; height: 100lvh; }
 @media (max-width: 50.5625rem) { .nav-close-btn { display: grid; } }
 .nav-icon .nav-close-btn { display: grid; }
 .nav-close-btn { margin: -0.8125rem -0.8125rem 0 0; }
+
+/* ================================
+   FOLDABLES (iPhone Duo)
+   Unfolded, the inner screen is about 890 × 626: wide enough for the desktop
+   layouts but short. Folded, the outer screen is about 466 wide and Safari can
+   put its controls along a side, so fixed bars keep to the side insets.
+   On a browser that reports the fold (Viewport Segments), the homepage's
+   line moves off the crease into the left half.
+   ================================ */
+@media (min-width: 50.625rem) and (max-height: 47.5rem) {
+  .nav-icon .splash-hero > .hero-line { font-size: 0.8125rem; }
+}
+@media (horizontal-viewport-segments: 2) {
+  .nav-icon .splash-hero > .hero-line {
+    left: 4rem;
+    right: auto;
+    width: calc(env(viewport-segment-width 0 0) - 5rem);
+  }
+}
