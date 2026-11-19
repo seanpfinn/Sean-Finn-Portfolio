@@ -1,0 +1,242 @@
+/* ================================
+   CASE STUDIES — TL;DR / DETAILED
+   case-tldr.js builds the TL;DR from the page's own write-up and lays it over
+   the detailed view as a full-screen sheet. html.tldr-on shows it.
+   ================================ */
+
+/* ── The toggle ────────────────────────────────────────────────────────── */
+.view-toggle {
+  --vt-bg: #f2f2f2;
+  --vt-on: #000;
+  --vt-on-text: #fff;
+  --vt-text: #555;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-self: flex-start;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--vt-bg);
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.dark .view-toggle { --vt-bg: #1c1c1f; --vt-on: #fafafa; --vt-on-text: #09090b; --vt-text: #a1a1aa; }
+.view-toggle button {
+  appearance: none;
+  border: 0;
+  background: none;
+  margin: 0;
+  padding: 0.5rem 1.125rem;
+  min-width: 6rem;
+  border-radius: 999px;
+  font: 500 0.9375rem/1 var(--font);
+  letter-spacing: -0.01em;
+  color: var(--vt-text);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.view-toggle button[aria-selected="true"] { color: var(--vt-on-text); }
+.view-toggle button:focus-visible { outline: 2px solid #FF401A; outline-offset: 2px; }
+.view-toggle-thumb {
+  position: absolute;
+  z-index: -1;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc(50% - 0.25rem);
+  border-radius: 999px;
+  background: var(--vt-on);
+  box-shadow: 0 0.25rem 0.75rem -0.25rem rgba(0, 0, 0, 0.35);
+  transition: transform 0.45s cubic-bezier(0.3, 1.25, 0.4, 1);
+}
+.view-toggle[data-active="detailed"] .view-toggle-thumb { transform: translateX(100%); }
+@media (prefers-reduced-motion: reduce) { .view-toggle-thumb { transition: none; } }
+
+/* It floats in the top bar, centered on the menu and theme icons, and takes
+   the place of the running title (the title is right there in the header). */
+.view-toggle--float {
+  --vt-bg: rgba(238, 238, 239, 0.8);
+  position: fixed;
+  top: calc(0.125rem + var(--safe-top, 0px));
+  left: 50%;
+  z-index: 8002;
+  transform: translateX(-50%);
+  padding: 0.1875rem;
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  animation: vtIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  transition: opacity 0.25s ease;
+}
+.dark .view-toggle--float { --vt-bg: rgba(30, 30, 33, 0.78); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.08); }
+@keyframes vtIn { from { opacity: 0; transform: translate(-50%, -0.5rem); } }
+.view-toggle--float button { padding: 0 0.875rem; min-width: 5.25rem; height: 1.625rem; font-size: 0.8125rem; }
+.view-toggle--float .view-toggle-thumb { top: 0.1875rem; bottom: 0.1875rem; left: 0.1875rem; width: calc(50% - 0.1875rem); }
+html:has(.splash-nav.menu-open) .view-toggle--float { opacity: 0; pointer-events: none; }
+html.has-view-toggle .bd-title,
+html.has-view-toggle .cs-titlebar { display: none; }
+@media (max-width: 50.5625rem) {
+  .view-toggle--float { top: calc(0.1875rem + var(--safe-top, 0px)); }
+  .view-toggle--float button { height: 2.125rem; min-width: 5.75rem; font-size: 0.875rem; }
+}
+@media (prefers-reduced-motion: reduce) { .view-toggle--float { animation: none; } }
+
+/* ── The sheet ─────────────────────────────────────────────────────────── */
+.tldr { display: none; }
+html.tldr-on,
+html.tldr-on body { overflow: hidden; }
+html.tldr-on .tldr {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 40;                         /* over the board and the story, under the top bar */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg);
+}
+/* The top bar's backing, so the pictures scroll away under the controls. */
+html.tldr-on .tldr::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: block;
+  height: calc(3.25rem + var(--safe-top, 0px));
+  margin-bottom: calc(-3.25rem - var(--safe-top, 0px));
+  background: linear-gradient(var(--bg) 45%, transparent);
+  pointer-events: none;
+}
+/* Things that belong to the detailed view step aside. */
+html.tldr-on .bd-pill,
+html.tldr-on .bd-map,
+html.tldr-on .cs-titlebar,
+html.tldr-on .proj-footer { visibility: hidden; }
+
+.tldr-inner {
+  box-sizing: border-box;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: calc(4.5rem + var(--safe-top, 0px)) clamp(1.25rem, 4vw, 3rem) calc(5rem + var(--safe-bottom, 0px));
+  animation: tldrIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes tldrIn { from { opacity: 0; transform: translateY(0.75rem); } }
+@media (prefers-reduced-motion: reduce) { .tldr-inner { animation: none; } }
+
+/* Header: toggle, then the write-up's own header (title, line, meta, button). */
+.tldr-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.tldr-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 3rem;
+  row-gap: 1.25rem;
+}
+.tldr-header .proj-title-block { grid-column: 1 / -1; }
+.tldr-header .proj-title-new { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 0.95; letter-spacing: -0.04em; margin: 0; }
+.tldr-header .proj-subtitle-new { max-width: 40rem; margin-top: 0.875rem; }
+.tldr-header .proj-meta-row-new { margin: 0; }
+.tldr-header .proj-dl-btn,
+.tldr-header .proj-btn-row { justify-self: end; margin: 0; }
+
+/* The lead picture, full width. */
+.tldr-hero { margin: 0 0 1.25rem; }
+.tldr .proj-panel-new {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 780 / 475;
+  margin: 0;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+.tldr .proj-panel-new.proj-panel--wide { aspect-ratio: 1600 / 700; }
+.tldr-hero .proj-panel-new { border-radius: 1.5rem; }
+
+/* Three one-liners: what was wrong, what was done, what came of it. */
+.tldr-takeaways {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 3rem;
+}
+.tldr-take {
+  padding: 1.125rem 1.25rem 1.25rem;
+  border-radius: 1.125rem;
+  background: var(--surface, #f4f4f5);
+}
+.dark .tldr-take { background: #17171a; }
+.tldr-take-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FF401A;
+}
+.tldr-take-body { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--text); text-wrap: pretty; }
+
+/* The rest of the pictures, two up, with a chapter tag and a line each. */
+.tldr-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.25rem;
+}
+.tldr-grid.is-single { grid-template-columns: minmax(0, 1fr); }
+.tldr-shot { margin: 0; min-width: 0; }
+.tldr-shot:nth-child(3n + 1):last-child { grid-column: 1 / -1; }
+.tldr-shot-cap {
+  display: flex;
+  gap: 0.625rem;
+  align-items: baseline;
+  margin: 0.75rem 0.125rem 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+.tldr-shot-chapter {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.tldr-more { display: flex; justify-content: center; margin: 3.5rem 0 1rem; }
+.tldr-go {
+  appearance: none;
+  border: 0;
+  padding: 0.875rem 1.375rem;
+  border-radius: 999px;
+  background: var(--vt-bg, #f2f2f2);
+  font: 500 0.9375rem/1 var(--font);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.tldr-go:hover { background: #e7e7e9; }
+.dark .tldr-go { background: #1c1c1f; }
+.dark .tldr-go:hover { background: #26262a; }
+.tldr-go span { display: inline-block; transition: transform 0.25s ease; }
+.tldr-go:hover span { transform: translateX(0.2rem); }
+.tldr .proj-more { margin-top: 3rem; }
+
+/* Phones: one column, the header stacked. */
+@media (max-width: 50.5625rem) {
+  .tldr-inner { padding-top: calc(4.25rem + var(--safe-top, 0px)); }
+  .tldr-header { grid-template-columns: minmax(0, 1fr); }
+  .tldr-header .proj-dl-btn,
+  .tldr-header .proj-btn-row { justify-self: start; }
+  .tldr-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .tldr-takeaways { margin-bottom: 2.25rem; }
+  .tldr .proj-panel-new { border-radius: 1rem; }
+}

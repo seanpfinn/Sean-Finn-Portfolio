@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="case-study.css" />
   <link rel="stylesheet" href="case-layout.css" />
+  <link rel="stylesheet" href="case-tldr.css" />
   <link rel="stylesheet" href="board-layout.css" />
   <link rel="expect" href="#cs-ready" blocking="render" />
   <script src="page-transition.js"></script>
@@ -318,10 +319,12 @@
       <p class="proj-caption-body">Sync the board across devices, use real walking routes instead of the estimate, and flag price drops on listings already on the board.</p>
     </div>
   </main>
+  <script>window.__csSrc=document.querySelector('main.proj-col').cloneNode(true);</script>
   <!-- Desktop: the Board (board-layout.js). Phones fall through to the
        scrolling layout in case-layout.js. -->
   <script src="board-layout.js"></script>
   <script src="case-layout.js"></script>
+  <script src="case-tldr.js"></script>
   <div id="cs-ready" hidden></div>
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">

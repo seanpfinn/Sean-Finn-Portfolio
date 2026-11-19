@@ -718,7 +718,7 @@
     const vidObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const vid = entry.target;
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !document.documentElement.classList.contains('tldr-on')) {
           if (vid.ended) vid.currentTime = 0;
           vid.play().catch(() => {});
         } else {
