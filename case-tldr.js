@@ -13,12 +13,10 @@
   var col = document.querySelector('.proj-col');
   if (!src || !col) return;
 
-  var KEY = 'cs-view';
   var root = document.documentElement;
   var q = new URLSearchParams(location.search).get('view');
-  var mode = q === 'detailed' || q === 'tldr' ? q : (function () {
-    try { return localStorage.getItem(KEY) || 'tldr'; } catch (e) { return 'tldr'; }
-  })();
+  // Every visit opens on the TL;DR; ?view=detailed links straight to the rest.
+  var mode = q === 'detailed' ? 'detailed' : 'tldr';
 
   function el(tag, cls, html) {
     var n = document.createElement(tag);
@@ -252,7 +250,6 @@
       dispatchEvent(new Event('resize'));
     }
     if (user) {
-      try { localStorage.setItem(KEY, mode); } catch (e) {}
       try { var u = new URL(location.href); u.searchParams.delete('view'); history.replaceState(history.state, '', u); } catch (e) {}
     }
   }

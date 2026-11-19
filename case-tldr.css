@@ -105,10 +105,14 @@ html.tldr-on .tldr::before {
   top: 0;
   z-index: 3;
   display: block;
-  height: calc(3.25rem + var(--safe-top, 0px));
-  margin-bottom: calc(-3.25rem - var(--safe-top, 0px));
-  background: linear-gradient(var(--bg) 45%, transparent);
+  --bar: calc(2.5rem + var(--safe-top, 0px));   /* solid through the icon row */
+  height: calc(var(--bar) + 1.25rem);
+  margin-bottom: calc(-1 * (var(--bar) + 1.25rem));
+  background: linear-gradient(var(--bg) var(--bar), transparent);
   pointer-events: none;
+}
+@media (max-width: 50.5625rem) {
+  html.tldr-on .tldr::before { --bar: calc(3.125rem + var(--safe-top, 0px)); }
 }
 /* Things that belong to the detailed view step aside. */
 html.tldr-on .bd-pill,
