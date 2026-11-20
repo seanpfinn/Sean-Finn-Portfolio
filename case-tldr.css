@@ -84,6 +84,30 @@ html.has-view-toggle .cs-titlebar { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .view-toggle--float { animation: none; } }
 
+/* The case study's name, centered under the toggle. */
+.vt-title {
+  position: fixed;
+  top: calc(2.5rem + var(--safe-top, 0px));
+  left: 50%;
+  z-index: 8002;
+  max-width: min(70vw, 28rem);
+  transform: translateX(-50%);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: 500 0.8125rem/1.25rem var(--font);
+  letter-spacing: -0.005em;
+  color: var(--text);
+  pointer-events: none;
+  animation: vtIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  transition: opacity 0.25s ease;
+}
+html:has(.splash-nav.menu-open) .vt-title { opacity: 0; }
+@media (max-width: 50.5625rem) {
+  .vt-title { top: calc(2.875rem + var(--safe-top, 0px)); font-size: 0.875rem; }
+}
+@media (prefers-reduced-motion: reduce) { .vt-title { animation: none; } }
+
 /* ── The sheet ─────────────────────────────────────────────────────────── */
 .tldr { display: none; }
 html.tldr-on,
@@ -105,14 +129,14 @@ html.tldr-on .tldr::before {
   top: 0;
   z-index: 3;
   display: block;
-  --bar: calc(2.5rem + var(--safe-top, 0px));   /* solid through the icon row */
+  --bar: calc(3.875rem + var(--safe-top, 0px));   /* solid through the icon row */
   height: calc(var(--bar) + 1.25rem);
   margin-bottom: calc(-1 * (var(--bar) + 1.25rem));
   background: linear-gradient(var(--bg) var(--bar), transparent);
   pointer-events: none;
 }
 @media (max-width: 50.5625rem) {
-  html.tldr-on .tldr::before { --bar: calc(3.125rem + var(--safe-top, 0px)); }
+  html.tldr-on .tldr::before { --bar: calc(4.375rem + var(--safe-top, 0px)); }
 }
 /* Things that belong to the detailed view step aside. */
 html.tldr-on .bd-pill,
@@ -124,7 +148,7 @@ html.tldr-on .proj-footer { visibility: hidden; }
   box-sizing: border-box;
   max-width: 72rem;
   margin: 0 auto;
-  padding: calc(4.5rem + var(--safe-top, 0px)) clamp(1.25rem, 4vw, 3rem) calc(5rem + var(--safe-bottom, 0px));
+  padding: calc(5.75rem + var(--safe-top, 0px)) clamp(1.25rem, 4vw, 3rem) calc(5rem + var(--safe-bottom, 0px));
   animation: tldrIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes tldrIn { from { opacity: 0; transform: translateY(0.75rem); } }
@@ -236,11 +260,16 @@ html.tldr-on .proj-footer { visibility: hidden; }
 
 /* Phones: one column, the header stacked. */
 @media (max-width: 50.5625rem) {
-  .tldr-inner { padding-top: calc(4.25rem + var(--safe-top, 0px)); }
+  .tldr-inner { padding-top: calc(5.5rem + var(--safe-top, 0px)); }
   .tldr-header { grid-template-columns: minmax(0, 1fr); }
   .tldr-header .proj-dl-btn,
   .tldr-header .proj-btn-row { justify-self: start; }
   .tldr-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .tldr-takeaways { margin-bottom: 2.25rem; }
   .tldr .proj-panel-new { border-radius: 1rem; }
+}
+
+/* Desktop write-ups without the board start below the toggle and its title. */
+@media (min-width: 50.625rem) {
+  html.cs-v2.has-view-toggle:not(.board-on) { --page-top: calc(4.5rem + var(--safe-top, 0px)); }
 }

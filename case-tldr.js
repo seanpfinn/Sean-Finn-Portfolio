@@ -164,6 +164,14 @@
   var bar = toggle();
   bar.classList.add('view-toggle--float');
   document.body.appendChild(bar);
+  // The case study's name, right under the toggle.
+  var h1 = src.querySelector('.proj-title-new');
+  if (h1) {
+    var vt = el('div', 'vt-title');
+    vt.setAttribute('aria-hidden', 'true');
+    vt.textContent = text(h1);
+    document.body.appendChild(vt);
+  }
   root.classList.add('has-view-toggle');
 
   // "More case studies" is added by main.js after this; copy it in once it is.
