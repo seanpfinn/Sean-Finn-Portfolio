@@ -76,7 +76,7 @@
   }
   var takeaways = [];
   [[[/^(problem|challenge)/i], 'Problem'],
-   [[/(approach|process)/i, /(role|options|finishes|the mark)/i], 'Approach'],
+   [[/(approach|process)/i, /(role|options|bodies|finishes|the mark)/i], 'Approach'],
    [[/^(outcome|result|impact)/i, /^summary/i, /^before/i], 'Outcome']].forEach(function (t) {
     var c = null;
     for (var i = 0; !c && i < t[0].length; i++) c = pick(t[0][i]);

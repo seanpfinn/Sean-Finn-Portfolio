@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Pickguard Bench – Sean Finn</title>
-  <meta name="description" content="An interactive previewer for trying body finishes and pickguards on an original offset-style guitar." />
+  <meta name="description" content="An interactive previewer for trying body shapes, finishes, pickguards and straps on five original guitars." />
   <link rel="canonical" href="https://www.seanpfinn.com/pickguard-bench" />
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Sean Finn" />
   <meta property="og:title" content="Pickguard Bench" />
-  <meta property="og:description" content="An interactive previewer for trying body finishes and pickguards on an original offset-style guitar." />
+  <meta property="og:description" content="An interactive previewer for trying body shapes, finishes, pickguards and straps on five original guitars." />
   <meta property="og:url" content="https://www.seanpfinn.com/pickguard-bench" />
   <meta property="og:image" content="https://www.seanpfinn.com/assets/og/pickguard-bench.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -22,7 +22,7 @@
   <meta property="og:video:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Pickguard Bench" />
-  <meta name="twitter:description" content="An interactive previewer for trying body finishes and pickguards on an original offset-style guitar." />
+  <meta name="twitter:description" content="An interactive previewer for trying body shapes, finishes, pickguards and straps on five original guitars." />
   <meta name="twitter:image" content="https://www.seanpfinn.com/assets/og/pickguard-bench.jpg" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles.css" />
@@ -36,6 +36,9 @@
     .proj-panel-new.proj-panel--pg { background: #e4e7ec; }
     .dark .proj-panel-new.proj-panel--pg { background: #111317; }
     .proj-panel--pg img, .proj-panel--pg video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .proj-panel-new.proj-panel--pg-fit, .dark .proj-panel-new.proj-panel--pg-fit { background: #d2d5dd; }
+    .proj-panel--pg-fit img { inset: auto 0; top: 50%; height: auto; transform: translateY(-50%); -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 97%, transparent); mask-image: linear-gradient(transparent, #000 10%, #000 97%, transparent); }
+    .proj-panel--pg-tall img { inset: 0 auto; top: 0; left: 50%; width: auto; height: 100%; transform: translateX(-50%); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
     .proj-panel--pg-live { padding: 0; }
     .proj-panel--pg-live iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
     @media (max-width: 50.5625rem) { .proj-panel-new.proj-panel--pg-live { height: 40rem; } }
@@ -203,7 +206,7 @@
     <div class="proj-header-group">
       <div class="proj-title-block">
         <h1 class="proj-title-new">Pickguard Bench</h1>
-        <p class="proj-subtitle-new">An interactive previewer for trying body finishes and pickguards on an original offset-style guitar.</p>
+        <p class="proj-subtitle-new">An interactive previewer for trying body shapes, finishes, pickguards and straps on five original guitars.</p>
       </div>
       <div class="proj-meta-row-new">
         <div class="proj-meta-item"><span class="proj-meta-label">Company</span><span class="proj-meta-value">Personal</span></div>
@@ -215,14 +218,26 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Context</h2>
-      <p class="proj-caption-body">A pickguard is chosen against a body color you never see next to it until the guitar is built. Pickguard Bench puts an original offset-style body on the bench and lets you try every guard in the drawer against every finish, with the hardware to match.</p>
+      <p class="proj-caption-body">A guard is usually picked without seeing it next to the final body color, never mind the strap. Pickguard Bench lets you try every guard against every finish and body shape, with matching hardware and a strap to finish the look.</p>
     </div>
 
     <div class="proj-panel-group">
-      <div id="proj-hero" class="proj-panel-new proj-panel--media proj-panel--pg">
-        <video src="assets/pickguard/bench.mp4" poster="assets/pickguard/bench-poster.webp" muted loop playsinline preload="metadata" data-play-in-view aria-label="Pickguard Bench cycling through finishes, guards and hardware"></video>
+      <div id="proj-hero" class="proj-panel-new proj-panel--media proj-panel--pg proj-panel--pg-fit">
+        <img src="assets/pickguard/bodies-straps.webp" alt="Five guitars side by side, each with a strap: Drift in Conch with a Saddle strap, Twin in Oxblood with Seatbelt, Notch in Tidepool with Sunset, Comet in Ink Metallic with Suede, and Bell in Ember Burst with Saddle" decoding="async" fetchpriority="high" />
       </div>
-      <p class="proj-image-caption">Finish, guard, cut and hardware, one change at a time.</p>
+      <p class="proj-image-caption">Five bodies, four straps.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">Bodies</h2>
+      <p class="proj-caption-body">Five original body shapes: Drift, an offset; Twin, a double cutaway; Notch, a faceted single cut; Comet, with one swept horn; and Bell, a hollow body with no cutaway. Each has its own full and teardrop guards and its own knob and switch layout. The guard screws are placed along each edge automatically, so a new shape only needs its outline.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--pg">
+        <video src="assets/pickguard/bench.mp4" poster="assets/pickguard/bench-poster.webp" muted loop playsinline preload="metadata" data-play-in-view aria-label="Pickguard Bench changing body shape, finish, guard and strap"></video>
+      </div>
+      <p class="proj-image-caption">Body, finish, guard and strap, one change at a time.</p>
     </div>
 
     <div class="proj-caption">
@@ -257,8 +272,32 @@
     </div>
 
     <div class="proj-caption">
+      <h2 class="proj-caption-label">Straps</h2>
+      <p class="proj-caption-body">Four straps, or none: Saddle in stitched leather, Seatbelt in nylon webbing, Sunset in woven cotton, and Suede. Each one hangs from a button on the horn, runs behind the body and comes back to a button at the tail. Every body puts its horn button in a different spot. The stitching and the woven stripes are stacked strokes along a single path, and the buttons match the hardware.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--pg">
+        <img src="assets/pickguard/strap-detail.webp" alt="Close-up of a Sunset woven strap tab and gold strap button on the horn of an orange Comet body" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">The Sunset weave, hung from a gold button.</p>
+    </div>
+
+    <div class="proj-caption">
+      <h2 class="proj-caption-label">The panel</h2>
+      <p class="proj-caption-body">The controls sit in a frosted glass panel. Collapse it to a slim bar and the guitar scales up to fill the screen. You can keep shuffling from the bar without opening anything.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--pg">
+        <img src="assets/pickguard/strap-panel.webp" alt="Pickguard Bench on desktop: a Conch Drift with a Saddle strap, beside the glass panel showing the Strap row and a build ticket that lists the strap" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">The Strap row and the ticket that records it.</p>
+    </div>
+
+    <div class="proj-caption">
       <h2 class="proj-caption-label">Light</h2>
-      <p class="proj-caption-body">The guitar is inline SVG with no image assets. Tortoise and pearloid are generated with turbulence filters, so every guard has real grain. Body shading, metallic flake, clearcoat gloss and an edge vignette are layered over the paint and clipped to the body’s outline, which is what makes a flat drawing read as a lacquered guitar.</p>
+      <p class="proj-caption-body">The guitar is inline SVG with no image assets. Tortoise and pearloid are generated with turbulence filters, so every guard has real grain. Body shading, metallic flake, clearcoat gloss and an edge vignette are layered over the paint and clipped to the body’s outline, which is what makes a flat drawing read as a lacquered guitar. The tortoise, pearloid and metal-flake textures are generated once as images when the page loads, so editing stays smooth on a phone.</p>
     </div>
 
     <div class="proj-panel-group">
@@ -270,7 +309,14 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Build ticket</h2>
-      <p class="proj-caption-body">Every combination writes a build ticket: finish, guard, cut and hardware, with an order code built from the spec. Shuffle picks a random combo, and the last one you made is still there when you come back.</p>
+      <p class="proj-caption-body">Each combination generates a ticket with an order code that records the body, finish, guard, cut, hardware and strap. Shuffle picks a random build, including the body and strap, and your last build is saved.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--pg proj-panel--pg-fit proj-panel--pg-tall">
+        <img src="assets/pickguard/phone-strap.webp" alt="Pickguard Bench on a phone: a Tidepool Notch with a Sunset strap above the glass sheet, scrolled to the Strap row" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">On a phone, scrolled to the straps.</p>
     </div>
 
     <div class="proj-panel-group">
@@ -294,6 +340,13 @@
 
     <div class="proj-panel-group">
       <div class="proj-panel-new proj-panel--media proj-panel--pg">
+        <img src="assets/pickguard/twin-sunset-dark.webp" alt="Graphite Twin body with a gold anodized guard, black hardware and a Sunset strap, in dark mode" decoding="async" loading="lazy" />
+      </div>
+      <p class="proj-image-caption">Graphite, gold anodized and Sunset, in the dark.</p>
+    </div>
+
+    <div class="proj-panel-group">
+      <div class="proj-panel-new proj-panel--media proj-panel--pg">
         <img src="assets/pickguard/graphite-none.webp" alt="Satin Graphite body with no guard and black hardware, in dark mode" decoding="async" loading="lazy" />
       </div>
       <p class="proj-image-caption">Graphite with no guard.</p>
@@ -301,7 +354,7 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Try it</h2>
-      <p class="proj-caption-body">This one is live. Pick a finish, open the drawer, and shuffle until something looks right.</p>
+      <p class="proj-caption-body">This one is live. Pick a body and a finish, open the drawer, hang a strap, and shuffle until something looks right.</p>
     </div>
 
     <div class="proj-panel-group">
@@ -313,7 +366,7 @@
 
     <div class="proj-caption">
       <h2 class="proj-caption-label">Summary</h2>
-      <p class="proj-caption-body">Pickguard Bench answers the question every guitar build stalls on, which guard goes with this finish, before anything is cut.</p>
+      <p class="proj-caption-body">It answers which guard, and which strap, fit a finish before anything is cut.</p>
     </div>
   </main>
   <script>window.__csSrc=document.querySelector('main.proj-col').cloneNode(true);</script>
@@ -326,7 +379,7 @@
 
   <footer class="splash-footer proj-footer blur-in" style="animation-delay:0.1s">
     <div class="sidebar-meta">
-      <p class="last-updated">Last updated: October 17th, 2026</p>
+      <p class="last-updated">Last updated: November 20th, 2026</p>
       <p class="weather">
         <span>New York &bull; <span id="clock">12:00:00 PM</span>, <span class="weather-temp">87&deg;F</span>, <span class="weather-cond">Mainly clear</span></span>
         <span class="weather-icon" role="img" aria-label="Mainly clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.5v2.2M12 20.3v2.2M1.5 12h2.2M20.3 12h2.2M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6M19.5 4.5l-1.6 1.6M6.1 17.9l-1.6 1.6"/></svg></span>
