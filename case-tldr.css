@@ -84,7 +84,8 @@ html.has-view-toggle .cs-titlebar { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .view-toggle--float { animation: none; } }
 
-/* The case study's name, centered under the toggle. */
+/* The case study's name, centered under the toggle. It shows only once the
+   big title has scrolled away (case-tldr.js sets html.vt-titled). */
 .vt-title {
   position: fixed;
   top: calc(2.5rem + var(--safe-top, 0px));
@@ -99,14 +100,16 @@ html.has-view-toggle .cs-titlebar { display: none; }
   letter-spacing: -0.005em;
   color: var(--text);
   pointer-events: none;
-  animation: vtIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-  transition: opacity 0.25s ease;
+  opacity: 0;
+  transform: translate(-50%, -0.375rem);
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
+html.vt-titled .vt-title { opacity: 1; transform: translate(-50%, 0); }
 html:has(.splash-nav.menu-open) .vt-title { opacity: 0; }
 @media (max-width: 50.5625rem) {
   .vt-title { top: calc(2.875rem + var(--safe-top, 0px)); font-size: 0.875rem; }
 }
-@media (prefers-reduced-motion: reduce) { .vt-title { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .vt-title { transition: opacity 0.2s ease; transform: translateX(-50%) !important; } }
 
 /* ── The sheet ─────────────────────────────────────────────────────────── */
 .tldr { display: none; }
@@ -148,7 +151,7 @@ html.tldr-on .proj-footer { visibility: hidden; }
   box-sizing: border-box;
   max-width: 72rem;
   margin: 0 auto;
-  padding: calc(5.75rem + var(--safe-top, 0px)) clamp(1.25rem, 4vw, 3rem) calc(5rem + var(--safe-bottom, 0px));
+  padding: calc(4.5rem + var(--safe-top, 0px)) clamp(1.25rem, 4vw, 3rem) calc(5rem + var(--safe-bottom, 0px));
   animation: tldrIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes tldrIn { from { opacity: 0; transform: translateY(0.75rem); } }
@@ -260,7 +263,7 @@ html.tldr-on .proj-footer { visibility: hidden; }
 
 /* Phones: one column, the header stacked. */
 @media (max-width: 50.5625rem) {
-  .tldr-inner { padding-top: calc(5.5rem + var(--safe-top, 0px)); }
+  .tldr-inner { padding-top: calc(4.25rem + var(--safe-top, 0px)); }
   .tldr-header { grid-template-columns: minmax(0, 1fr); }
   .tldr-header .proj-dl-btn,
   .tldr-header .proj-btn-row { justify-self: start; }

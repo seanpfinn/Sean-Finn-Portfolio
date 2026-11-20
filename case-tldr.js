@@ -172,6 +172,21 @@
     vt.textContent = text(h1);
     document.body.appendChild(vt);
   }
+
+  // Show that name only once the view's own big title has gone under the bar.
+  var gone = { tldr: false, detailed: false };
+  function syncTitle() { root.classList.toggle('vt-titled', !!gone[mode]); }
+  if ('IntersectionObserver' in window) {
+    var titleIO = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var which = sheet.contains(e.target) ? 'tldr' : 'detailed';
+        gone[which] = !e.isIntersecting && e.boundingClientRect.top < innerHeight / 2;
+      });
+      syncTitle();
+    }, { rootMargin: '-72px 0px 0px 0px' });
+    var big = [sheet.querySelector('.proj-title-new'), col.querySelector('.proj-title-new') || document.querySelector('.proj-header-group .proj-title-new')];
+    big.forEach(function (n) { if (n) titleIO.observe(n); });
+  }
   root.classList.add('has-view-toggle');
 
   // "More case studies" is added by main.js after this; copy it in once it is.
@@ -239,11 +254,12 @@
       });
     });
     claimHero(on);
+    if (typeof syncTitle === 'function') syncTitle();
     if (on) {
       // Remember what the write-up was playing, to pick it back up after.
       resume = detailedVideos().filter(function (v) { return !v.paused || v.autoplay; });
       resume.forEach(function (v) { v.pause(); });
-      if (user) sheet.scrollTop = 0;
+      if (user) { sheet.scrollTop = 0; gone.tldr = false; }
     } else {
       sheet.querySelectorAll('video').forEach(function (v) { v.pause(); });
       // Wake the write-up's videos that are on screen (they paused while hidden).
